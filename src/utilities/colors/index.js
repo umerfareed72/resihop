@@ -21,5 +21,6 @@ export const colors = {
   nav_Color: '#7de2bb',
   inactive_nav_color: '#919191',
   black: 'black',
-  light_green:'#E5F9F1'
+  light_green: '#E5F9F1',
+  green: '#47B000',
 };
