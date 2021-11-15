@@ -129,5 +129,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     borderRadius: 20,
     marginHorizontal: 5,
+
   },
 });
