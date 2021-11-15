@@ -1,13 +1,13 @@
 import React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
-import { Button } from 'react-native-elements/dist/buttons/Button';
-import { landing_img } from '../assets';
-import {Header} from '../components';
-import ChooseLanguage from '../components/ChooseLanguage';
-import {Container} from '../components/Container';
-import { theme } from '../theme/theme';
+import {Button} from 'react-native-elements/dist/buttons/Button';
+import {landing_img} from '../../assets';
+import {Header} from '../../components';
+import ChooseLanguage from '../../components/ChooseLanguage';
+import {Container} from '../../components/Container';
+import {theme} from '../../theme/theme';
 
-function languageSelect() {
+function languageSelect({navigation}) {
   return (
     <>
       <Header showLeft={false} />
@@ -32,6 +32,7 @@ function languageSelect() {
               buttonStyle={theme.Button.buttonStyle}
               titleStyle={theme.Button.titleStyle}
               onPress={() => {
+                navigation?.navigate('Payment');
                 // if (forUpdate) {
                 //   showToast('Language Got Updated');
                 //   Navigation.pop(HOME_NAV_ID);
