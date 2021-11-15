@@ -1,13 +1,13 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, View} from 'react-native';
+import MainStackNavigator from './src/navigations/MainStackNavigator';
 
 const App = () => {
   return (
-    <View>
-      <Text></Text>
+    <View style={{flex: 1}}>
+      <MainStackNavigator />
     </View>
   );
 };
 
 export default App;
-
