@@ -1,4 +1,3 @@
-
 export const size = {
   huge: 50,
   xxxtitle: 38,
@@ -26,5 +25,6 @@ export const size = {
 };
 
 export const family = {
-  
+  product_sans_bold: 'product_sans_bold',
+  product_sans_regular: 'product_sans_regular',
 };
