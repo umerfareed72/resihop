@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 const colors = {
   primary: '#71B900',
@@ -69,7 +69,7 @@ export const theme = {
     },
     backgroundColor: 'transparent',
     centerComponent: {
-      style: { fontFamily: fonts.regular, fontSize: 20, letterSpacing: 0 },
+      style: {fontFamily: fonts.regular, fontSize: 20, letterSpacing: 0},
     },
   },
   View: {
@@ -86,8 +86,8 @@ export const theme = {
     },
   },
   Button: {
-    loadingProps: { color: colors.white },
-    gradientBtnLoadingProp: { color: colors.white },
+    loadingProps: {color: colors.white},
+    gradientBtnLoadingProp: {color: colors.white},
     titleStyle: {
       color: colors.white,
       fontFamily: fonts.bold,
@@ -225,8 +225,8 @@ export const theme = {
       fontFamily: fonts.regular,
     },
     placeholderTextColor: colors.lightGray,
-    errorStyle: { color: colors.error, fontFamily: fonts.regular },
-    errorRedStyle: { color: colors.error, fontFamily: fonts.regular },
+    errorStyle: {color: colors.error, fontFamily: fonts.regular},
+    errorRedStyle: {color: colors.error, fontFamily: fonts.regular},
     maxFontSizeMultiplier: maxFontSize,
     allowFontScaling: allowFontScaling,
     selectable: false,
@@ -256,23 +256,23 @@ export const theme = {
   },
 
   Picker: {
-    itemStyle: { borderRadius: 1 },
+    itemStyle: {borderRadius: 1},
   },
   Image: {
-    placeholderStyle: { backgroundColor: 'transparent' },
-    IconStyle: { width: 20, height: 20, resizeMode: 'contain', padding: 10 },
-    AvatarStyle: { width: 70, height: 70, resizeMode: 'contain' },
-    BiometricStyle: { width: 30, height: 30, resizeMode: 'contain' },
+    placeholderStyle: {backgroundColor: 'transparent'},
+    IconStyle: {width: 20, height: 20, resizeMode: 'contain', padding: 10},
+    AvatarStyle: {width: 70, height: 70, resizeMode: 'contain'},
+    BiometricStyle: {width: 30, height: 30, resizeMode: 'contain'},
   },
   Avatar: {
-    placeholderStyle: { backgroundColor: 'transparent' },
-    overlayContainerStyle: { backgroundColor: 'transparent' },
+    placeholderStyle: {backgroundColor: 'transparent'},
+    overlayContainerStyle: {backgroundColor: 'transparent'},
   },
   Card: {
-    containerStyle: { borderRadius: 10 },
+    containerStyle: {borderRadius: 10},
   },
   Divider: {
-    style: { height: 1.2 },
+    style: {height: 1.2},
   },
   ListItem: {
     titleStyle: {

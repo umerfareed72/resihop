@@ -23,4 +23,5 @@ export const colors = {
   black: 'black',
   light_green: '#E5F9F1',
   green: '#47B000',
+  dropShadow: '#007BD233',
 };

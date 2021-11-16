@@ -1,13 +1,16 @@
+import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
-import { Button } from 'react-native-elements/dist/buttons/Button';
-import { landing_img } from '../assets';
+import {Button} from 'react-native-elements/dist/buttons/Button';
+import {landing_img} from '../assets';
 import {Header} from '../components';
 import ChooseLanguage from '../components/ChooseLanguage';
 import {Container} from '../components/Container';
-import { theme } from '../theme/theme';
+import {theme} from '../theme/theme';
 
 function languageSelect() {
+  let navigation = useNavigation();
+
   return (
     <>
       <Header showLeft={false} />
@@ -40,6 +43,7 @@ function languageSelect() {
                 //     ? Navigation.push(INTRO_NAV_ID, WalkThroughScreen)
                 //     : goToLandingUser();
                 // }
+                navigation.navigate('PassengerHome');
               }}
               // disabled={language === undefined}
               disabledStyle={theme.Button.disabledStyle}
