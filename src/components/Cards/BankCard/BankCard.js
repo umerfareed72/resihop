@@ -11,10 +11,14 @@ export const BankCard = ({onPress, value, boxType, name, cardno}) => {
         <View style={styles.imageContainer}>
           <Image style={styles.imageStyle} source={appImages.visa} />
           <CheckBox
-            tintColor={colors.green}
+            disabled={false}
             value={value}
+            onFillColor={colors.green}
+            onCheckColor={colors.white}
             onValueChange={onPress}
-            boxType={boxType}
+            tintColors={{true: '#47B000', false: 'gray'}}
+            onTintColor={colors.white}
+            style={styles.checkBoxLeftStyle}
           />
         </View>
         <Text style={styles.textStyle}>{name}</Text>
@@ -32,12 +36,16 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   content: {
-    padding: 10,
+    padding: 15,
+  },
+  checkBoxLeftStyle: {
+    width: 20,
+    height: 20,
   },
   textStyle: {
     color: colors.light_black,
     fontSize: size.normal,
-    paddingVertical: 2,
+    paddingVertical: 5,
   },
   imageStyle: {
     width: 46,

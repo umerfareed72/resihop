@@ -106,7 +106,7 @@ const index = ({navigation}) => {
                 onPress={() => {
                   setCardScreen(true);
                 }}
-                bgColor={colors.green}
+                bgColor={colors.g1}
                 title={I18n.t('pay_with_card')}
                 txtColor={colors.white}
               />
