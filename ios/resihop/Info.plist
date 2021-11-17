@@ -53,6 +53,8 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>product_sans_bold.ttf</string>
+		<string>product_sans_regular.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>

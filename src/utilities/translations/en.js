@@ -49,4 +49,6 @@ export default {
   my_payment_method: 'My Payment Methods',
   add_card: 'Add Card',
   credit_card: 'Credit/Debit Card',
+  wallet_balance:'Wallet Balance',
+  add_cards:'Add Money'
 };

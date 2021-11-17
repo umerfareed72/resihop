@@ -62,10 +62,12 @@ const index = ({navigation}) => {
             style={styles.linearGradient}>
             <View style={styles.rowAlign}>
               <View style={styles.leftContainer}>
-                <Text style={styles.header2Text}>Wallet Balance</Text>
+                <Text style={styles.header2Text}>
+                  {I18n.t('wallet_balance')}
+                </Text>
                 <TouchableOpacity style={styles.btnStyle}>
                   <Image source={appIcons.filter} style={styles.btnImage} />
-                  <Text style={styles.btntext}>Add Money</Text>
+                  <Text style={styles.btntext}>{I18n.t('add_cards')}</Text>
                 </TouchableOpacity>
               </View>
               <Text style={styles.header2Bold}>00.00 SEK</Text>
@@ -77,7 +79,7 @@ const index = ({navigation}) => {
           />
           <PaymentButtons
             bgColor={colors.green}
-            title={'Add Card'}
+            title={I18n.t('add_cards')}
             txtColor={colors.white}
           />
           <PaymentButtons
@@ -85,7 +87,7 @@ const index = ({navigation}) => {
             title={'Pay From Wallet'}
             txtColor={colors.white}
           />
-          <AddCard/>
+          <AddCard />
         </View>
       </View>
     </>

@@ -25,7 +25,8 @@ export const colors = {
   error: '#d44447',
   green: '#47B000',
   gradientBoxColor: ['#7BD6FF', '#48ABF2', '#5797E9'],
-  blue:'#007BD2',
+  blue: '#007BD2',
   // gray
-  g1:'#C5C5C5'
+  g1: '#C5C5C5',
+  dropShadow: '#007BD233',
 };

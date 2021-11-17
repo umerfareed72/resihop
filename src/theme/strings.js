@@ -44,3 +44,14 @@ export const dummy_ipsum_msg_small = `Lorem ipsum dolor sit amet, consetetur sad
 const app_name = 'RES IHOP';
 // PERMISSION SAYINGS
 export const CAMERA_PERMISSION_TEXT = `Allow ${app_name} to access this device's Camera for image capturing with Consent`;
+
+//Passenger Home
+export const passenger_home = 'Passenger Home';
+export const switch_driver = 'Switch to Driver';
+export const create_ride = 'Create Ride';
+export const recurring_ride = 'My Recurring Rides';
+export const city_to_city = 'City to City Rides';
+export const upcoming_rides = 'My Upcoming Rides';
+export const lorem =
+  'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod';
+export const first_ride = 'Create your First Ride';
