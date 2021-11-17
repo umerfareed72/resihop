@@ -10,6 +10,7 @@ import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {appIcons, colors} from '../../../../utilities';
 import LinearGradient from 'react-native-linear-gradient';
+import AddCard from './AddCard';
 
 const index = ({navigation}) => {
   const [cardScreen, setCardScreen] = useState(true);
@@ -84,6 +85,7 @@ const index = ({navigation}) => {
             title={'Pay From Wallet'}
             txtColor={colors.white}
           />
+          <AddCard/>
         </View>
       </View>
     </>

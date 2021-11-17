@@ -1,14 +1,16 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import styles from './style';
+import {CardField, useStripe} from '@stripe/stripe-react-native';
 
 const AddCard = () => {
-    return (
-        <View>
-            <Text></Text>
-        </View>
-    )
-}
+  return (
+    <View>
+      <View>
+        <Text style={styles.h1}>Add Card</Text>
+      </View>
+    </View>
+  );
+};
 
-export default AddCard
-
-const styles = StyleSheet.create({})
+export default AddCard;
