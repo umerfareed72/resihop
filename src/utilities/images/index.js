@@ -8,3 +8,6 @@ export const appIcons = {
   cityRide: require('../../assets/icons/png/homeIcons/cityRide.png'),
   noUpcomingRide: require('../../assets/icons/png/no_upcoming_ride.png'),
 };
+export const appImages = {
+  visa: require('../../assets/images/visa.png'),
+};

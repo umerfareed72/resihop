@@ -1,6 +1,6 @@
 export {colors} from './colors';
 export {WP, HP} from './responsive';
-export {appIcons} from './images';
+export {appIcons,appImages} from './images';
 export {baseURL} from './routes';
 export {size, family} from './sizes';
 
