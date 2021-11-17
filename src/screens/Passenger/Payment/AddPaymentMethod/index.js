@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import {
+  BankCard,
   CustomHeader,
   Header,
   PaymentButtons,
@@ -11,9 +12,12 @@ import styles from './style';
 import {appIcons, colors} from '../../../../utilities';
 import LinearGradient from 'react-native-linear-gradient';
 import AddCard from './AddCard';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 
 const index = ({navigation}) => {
-  const [cardScreen, setCardScreen] = useState(true);
+  const [cardScreen, setCardScreen] = useState(false);
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
   return (
     <>
       <CustomHeader
@@ -21,7 +25,7 @@ const index = ({navigation}) => {
         backButton={true}
         navigation={navigation}
       />
-      <View style={styles.container}>
+      <KeyboardAwareScrollView style={styles.container}>
         <View style={styles.contentContainer}>
           <View style={styles.header}>
             <TouchableOpacity
@@ -62,32 +66,59 @@ const index = ({navigation}) => {
             style={styles.linearGradient}>
             <View style={styles.rowAlign}>
               <View style={styles.leftContainer}>
-                <Text style={styles.header2Text}>Wallet Balance</Text>
+                <Text style={styles.header2Text}>
+                  {I18n.t('wallet_balance')}
+                </Text>
                 <TouchableOpacity style={styles.btnStyle}>
                   <Image source={appIcons.filter} style={styles.btnImage} />
-                  <Text style={styles.btntext}>Add Money</Text>
+                  <Text style={styles.btntext}>{I18n.t('add_cards')}</Text>
                 </TouchableOpacity>
               </View>
               <Text style={styles.header2Bold}>00.00 SEK</Text>
             </View>
           </LinearGradient>
+          <BankCard
+            name={'John Doe'}
+            cardno={1234}
+            value={toggleCheckBox}
+            onPress={setToggleCheckBox}
+            boxType={'circle'}
+          />
+
           <PaymentHistory
             title={'Transaction History'}
             image={appIcons.mobiledata}
           />
-          <PaymentButtons
-            bgColor={colors.green}
-            title={'Add Card'}
-            txtColor={colors.white}
-          />
-          <PaymentButtons
-            bgColor={colors.g1}
-            title={'Pay From Wallet'}
-            txtColor={colors.white}
-          />
-          <AddCard/>
+          {cardScreen && (
+            <AddCard
+              onPressCard={() => {
+                setCardScreen(false);
+              }}
+              onPressWallet={() => {
+                setCardScreen(false);
+              }}
+              title={I18n.t('add_card')}
+            />
+          )}
+          {!cardScreen && (
+            <View style={{paddingTop: 30}}>
+              <PaymentButtons
+                onPress={() => {
+                  setCardScreen(true);
+                }}
+                bgColor={colors.green}
+                title={I18n.t('pay_with_card')}
+                txtColor={colors.white}
+              />
+              <PaymentButtons
+                bgColor={colors.g1}
+                title={I18n.t('pay_with_wallet')}
+                txtColor={colors.white}
+              />
+            </View>
+          )}
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </>
   );
 };

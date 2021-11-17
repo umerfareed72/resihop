@@ -16,8 +16,10 @@
 		5D3F7E56274442CD0090954B /* product_sans_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D3F7E55274442CD0090954B /* product_sans_regular.ttf */; };
 		5D3F7E58274442D60090954B /* product_sans_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D3F7E57274442D60090954B /* product_sans_bold.ttf */; };
 		5EED09075BDB45A70549396C /* libPods-resihop-resihopTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AFB07C71AD63BD0F21FDF456 /* libPods-resihop-resihopTests.a */; };
+		6580C7ED042D4C6FACDD0652 /* product_sans_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45482EDE87DC4621B7E4979C /* product_sans_regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E22DA7B811532126ECF23AD1 /* libPods-resihop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D318C7280BDFB2F6BD838A6D /* libPods-resihop.a */; };
+		E35734B516E445FBBAB482BB /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,7 @@
 		2EA36FF8D2A54CD981EA31F5 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		3C83A1079ECB4ABCBA31A42C /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		43EE5865A7A8ED4A9352C326 /* Pods-resihop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-resihop.release.xcconfig"; path = "Target Support Files/Pods-resihop/Pods-resihop.release.xcconfig"; sourceTree = "<group>"; };
+		45482EDE87DC4621B7E4979C /* product_sans_regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = product_sans_regular.ttf; path = ../src/assets/fonts/product_sans_regular.ttf; sourceTree = "<group>"; };
 		48151D394B2C3CB9A6A728C9 /* Pods-resihop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-resihop.debug.xcconfig"; path = "Target Support Files/Pods-resihop/Pods-resihop.debug.xcconfig"; sourceTree = "<group>"; };
 		5D3F7E51274439C40090954B /* product_sans_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = product_sans_bold.ttf; path = ../src/assets/fonts/product_sans_bold.ttf; sourceTree = "<group>"; };
 		5D3F7E52274439C40090954B /* product_sans_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = product_sans_regular.ttf; path = ../src/assets/fonts/product_sans_regular.ttf; sourceTree = "<group>"; };
@@ -300,6 +303,8 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				5D3F7E58274442D60090954B /* product_sans_bold.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				E35734B516E445FBBAB482BB /* BuildFile in Resources */,
+				6580C7ED042D4C6FACDD0652 /* product_sans_regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

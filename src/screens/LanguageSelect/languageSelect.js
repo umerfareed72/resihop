@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
@@ -7,7 +8,9 @@ import ChooseLanguage from '../../components/ChooseLanguage';
 import {Container} from '../../components/Container';
 import {theme} from '../../theme/theme';
 
-function languageSelect({navigation}) {
+function languageSelect() {
+  let navigation = useNavigation();
+
   return (
     <>
       <Header showLeft={false} />
@@ -41,6 +44,7 @@ function languageSelect({navigation}) {
                 //     ? Navigation.push(INTRO_NAV_ID, WalkThroughScreen)
                 //     : goToLandingUser();
                 // }
+                navigation.navigate('PassengerHome');
               }}
               // disabled={language === undefined}
               disabledStyle={theme.Button.disabledStyle}

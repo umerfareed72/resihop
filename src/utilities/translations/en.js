@@ -49,4 +49,11 @@ export default {
   my_payment_method: 'My Payment Methods',
   add_card: 'Add Card',
   credit_card: 'Credit/Debit Card',
+  wallet_balance: 'Wallet Balance',
+  add_cards: 'Add Money',
+  cardholder_name: 'Cardholder Name',
+  card_number: 'Card Number',
+  add_card_info: 'Save your card to autopay for your ride payments',
+  pay_with_wallet: 'SEK 35 Pay From Wallet',
+  pay_with_card: 'SEK 35 Pay From Card',
 };

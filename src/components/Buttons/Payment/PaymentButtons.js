@@ -7,6 +7,7 @@ export const PaymentButtons = ({onPress, title, bgColor, txtColor}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
+        onPress={onPress}
         style={[styles.btnContainer, {backgroundColor: bgColor}]}>
         <Text style={[styles.btnText, {color: txtColor}]}>{title}</Text>
       </TouchableOpacity>
