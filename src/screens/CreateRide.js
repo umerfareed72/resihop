@@ -184,7 +184,9 @@ const CreateRide = () => {
       <KeyboardAvoidingView
         keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableOpacity style={styles.nextBtnContainer}>
+        <TouchableOpacity
+          style={styles.nextBtnContainer}
+          onPress={() => navigation.navigate('StartLocation')}>
           <Text style={styles.nextTxt}>Next</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
