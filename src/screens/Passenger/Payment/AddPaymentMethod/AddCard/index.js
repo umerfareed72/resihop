@@ -6,12 +6,14 @@ import {colors, size} from '../../../../../utilities';
 import {PaymentButtons, PaymentInput} from '../../../../../components';
 import I18n from '../../../../../utilities/translations';
 
-const AddCard = ({title, onPressCard,onPressWallet}) => {
+const AddCard = ({title, onPressCard, onPressWallet,btn}) => {
   return (
     <View>
-      <View style={styles.h1container}>
-        <Text style={styles.h1}>{title}</Text>
-      </View>
+      {title && (
+        <View style={styles.h1container}>
+          <Text style={styles.h1}>{title}</Text>
+        </View>
+      )}
       <View style={styles.fieldContainer}>
         <CardField
           placeholder={{
@@ -35,20 +37,25 @@ const AddCard = ({title, onPressCard,onPressWallet}) => {
       <View>
         <Text style={styles.infoStyle}>{I18n.t('add_card_info')}</Text>
       </View>
-      <View style={{paddingTop: 30}}>
-        <PaymentButtons
-          onPress={onPressCard}
-          bgColor={colors.green}
-          title={I18n.t('add_card')}
-          txtColor={colors.white}
-        />
-        <PaymentButtons
-        onPress={onPressWallet}
-          bgColor={colors.g1}
-          title={'Pay From Wallet'}
-          txtColor={colors.white}
-        />
-      </View>
+      {btn && (
+        <View style={{paddingVertical: 30}}>
+          <View style={{paddingVertical: 20}}>
+            <PaymentButtons
+              onPress={onPressCard}
+              bgColor={colors.green}
+              title={I18n.t('add_card')}
+              txtColor={colors.white}
+            />
+          </View>
+
+          <PaymentButtons
+            onPress={onPressWallet}
+            bgColor={colors.g1}
+            title={'Pay From Wallet'}
+            txtColor={colors.white}
+          />
+        </View>
+      )}
     </View>
   );
 };

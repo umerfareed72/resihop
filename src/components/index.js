@@ -10,3 +10,8 @@ export * from './Buttons/Payment/PaymentButtons';
 export * from './AppInput/PaymentInput/PaymentInput';
 //Cards
 export * from './Cards/BankCard/BankCard';
+export * from './Cards/TransHistoryCard/TransHistory';
+
+//Modals
+
+export * from './Modal/DeleteCard/DeleteCardModal';

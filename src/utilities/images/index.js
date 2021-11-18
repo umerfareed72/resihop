@@ -7,6 +7,7 @@ export const appIcons = {
   recurringRide: require('../../assets/icons/png/homeIcons/recurringRide.png'),
   cityRide: require('../../assets/icons/png/homeIcons/cityRide.png'),
   noUpcomingRide: require('../../assets/icons/png/no_upcoming_ride.png'),
+  cancel: require('../../assets/icons/png/cancel.png'),
 };
 export const appImages = {
   visa: require('../../assets/images/visa.png'),

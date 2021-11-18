@@ -45,20 +45,20 @@ export const CustomHeader = ({
           <View style={styles.wrapper2}>
             {btnImage ? (
               <TouchableOpacity
-                onPress={onPress}
+                onPress={onPress1}
                 hitSlop={styles.hitSlope}
-                style={[styles.btnImageContainer]}>
-                <Image style={styles.headerImage} source={btnImage} />
+                style={styles.btnImageContainer1}>
+                <Image style={styles.headerImage1} source={btnImage1} />
               </TouchableOpacity>
             ) : (
               false
             )}
             {btnImage1 ? (
               <TouchableOpacity
-                onPress={onPress1}
+                onPress={onPress}
                 hitSlop={styles.hitSlope}
-                style={styles.btnImageContainer1}>
-                <Image style={styles.headerImage1} source={btnImage1} />
+                style={[styles.btnImageContainer]}>
+                <Image style={styles.headerImage} source={btnImage} />
               </TouchableOpacity>
             ) : (
               false
@@ -83,6 +83,8 @@ const styles = StyleSheet.create({
     padding: WP('5'),
   },
   wrapper2: {
+    alignItems: 'center',
+    paddingTop: 10,
     flexDirection: 'row',
   },
   contentContainer: {
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   header: {
-    color:colors.black,
+    color: colors.black,
     fontSize: size.xxlarge,
     fontWeight: 'bold',
   },
@@ -108,8 +110,8 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   headerImage1: {
-    height: 25,
-    width: 25,
+    height: 20,
+    width: 20,
     resizeMode: 'contain',
     tintColor: colors.white,
   },
@@ -131,19 +133,19 @@ const styles = StyleSheet.create({
   },
   btnImageContainer: {
     backgroundColor: colors.green,
-    borderRadius: 30,
-    height: 30,
-    width: 30,
+    borderRadius: 25,
+    height: 25,
+    width: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 10,
   },
   btnImageContainer1: {
     backgroundColor: colors.green,
-    borderRadius: 30,
-    height: 30,
-    width: 30,
+    borderRadius: 25,
+    height: 25,
+    width: 25,
     alignItems: 'center',
     justifyContent: 'center',
+    marginHorizontal: 10,
   },
 });

@@ -3,27 +3,22 @@ import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {family, size} from '../../../utilities';
 
-export const PaymentButtons = ({onPress, title, bgColor, txtColor}) => {
+export const PaymentButtons = ({onPress, title, bgColor, txtColor, width}) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        onPress={onPress}
-        style={[styles.btnContainer, {backgroundColor: bgColor}]}>
-        <Text style={[styles.btnText, {color: txtColor}]}>{title}</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.btnContainer, {backgroundColor: bgColor, width: width}]}>
+      <Text style={[styles.btnText, {color: txtColor}]}>{title}</Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-  },
   btnContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 56,
-    borderRadius: 16,
+    borderRadius: 14,
   },
   btnText: {
     fontSize: size.normal,

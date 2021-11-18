@@ -56,4 +56,15 @@ export default {
   add_card_info: 'Save your card to autopay for your ride payments',
   pay_with_wallet: 'SEK 35 Pay From Wallet',
   pay_with_card: 'SEK 35 Pay From Card',
+  card_detail: 'Card Details',
+  edit_card: 'Edit Card',
+  remove_card: 'Remove Card',
+  set_default_card: 'Set as Default Card',
+  delete_h2: 'Are you sure you want to Remove this card?',
+  delete_h1: 'Remove Card',
+  yes: 'Yes',
+  no: 'No',
+  save_card: 'Save Card',
+  trnsaction_history:'Transaction History',
+  
 };
