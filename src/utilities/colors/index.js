@@ -24,4 +24,9 @@ export const colors = {
   light_green: '#E5F9F1',
   green: '#47B000',
   dropShadow: '#007BD233',
+  btnGray: '#C5C5C5',
+  inputTxtGray: '#777777',
+  greyBorder: '#EEEEEE',
+  blue: '#007BD2',
+  txtBlack: '#101010',
 };

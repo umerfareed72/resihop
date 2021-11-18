@@ -19,8 +19,11 @@ import {
 } from '../theme/strings';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/core';
 
 const PassengerHome = () => {
+  let navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Top Header */}
@@ -92,7 +95,9 @@ const PassengerHome = () => {
 
       <Text style={styles.Txt}>{lorem}</Text>
 
-      <TouchableOpacity style={styles.createRideBtnContainer}>
+      <TouchableOpacity
+        style={styles.createRideBtnContainer}
+        onPress={() => navigation.navigate('CreateRide')}>
         <Text style={styles.btnTxt}>{first_ride}</Text>
       </TouchableOpacity>
     </SafeAreaView>

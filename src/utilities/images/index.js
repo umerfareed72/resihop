@@ -7,4 +7,6 @@ export const appIcons = {
   recurringRide: require('../../assets/icons/png/homeIcons/recurringRide.png'),
   cityRide: require('../../assets/icons/png/homeIcons/cityRide.png'),
   noUpcomingRide: require('../../assets/icons/png/no_upcoming_ride.png'),
+  seatBlue: require('../../assets/icons/png/seat_blue.png'),
+  calendar: require('../../assets/icons/png/calendar.png'),
 };
