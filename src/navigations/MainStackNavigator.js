@@ -4,7 +4,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import Payment from './stacks/PaymentStack';
 import languageSelect from '../screens/LanguageSelect/languageSelect';
-import PassengerHome from '../screens/PassengerHome';
+import PassengerHome from '../screens/Passenger/Home/PassengerHome';
+import CardDetail from '../screens/Passenger/Payment/AddPaymentMethod/CardDetail';
+import EditCard from '../screens/Passenger/Payment/AddPaymentMethod/EditCard';
+import TransactionHistory from '../screens/Passenger/Payment/PaymentHistory';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +30,22 @@ function MainStackNavigator() {
           name="Payment"
           component={Payment}
         />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="CardDetail"
+          component={CardDetail}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="EditCard"
+          component={EditCard}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="TransactionHistory"
+          component={TransactionHistory}
+        />
+
         <Stack.Screen
           options={{headerShown: false}}
           name="PassengerHome"

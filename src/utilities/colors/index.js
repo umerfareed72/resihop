@@ -31,5 +31,6 @@ export const colors = {
   // gray
   g1: '#C5C5C5',
   g2:'#818181',
+  g3:'#898989',
   dropShadow: '#007BD233',
 };

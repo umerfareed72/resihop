@@ -4,10 +4,17 @@ import LinearGradient from 'react-native-linear-gradient';
 import {family, size, appImages, colors} from '../../../utilities';
 import CheckBox from '@react-native-community/checkbox';
 
-export const BankCard = ({onPress, value, boxType, name, cardno}) => {
+export const BankCard = ({
+  onPress,
+  value,
+  boxType,
+  name,
+  cardno,
+  onPressCard,
+}) => {
   return (
     <LinearGradient colors={colors.gradientpaidCard} style={styles.container}>
-      <View style={styles.content}>
+      <TouchableOpacity onPress={onPressCard} style={styles.content}>
         <View style={styles.imageContainer}>
           <Image style={styles.imageStyle} source={appImages.visa} />
           <CheckBox
@@ -23,7 +30,7 @@ export const BankCard = ({onPress, value, boxType, name, cardno}) => {
         </View>
         <Text style={styles.textStyle}>{name}</Text>
         <Text style={styles.textStyle}>****{cardno}</Text>
-      </View>
+      </TouchableOpacity>
     </LinearGradient>
   );
 };

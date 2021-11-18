@@ -81,16 +81,23 @@ const index = ({navigation}) => {
             name={'John Doe'}
             cardno={1234}
             value={toggleCheckBox}
+            onPressCard={() => {
+              navigation?.navigate('CardDetail');
+            }}
             onPress={setToggleCheckBox}
             boxType={'circle'}
           />
 
           <PaymentHistory
+            onPress={() => {
+              navigation?.navigate('TransactionHistory');
+            }}
             title={'Transaction History'}
             image={appIcons.mobiledata}
           />
           {cardScreen && (
             <AddCard
+              btn={true}
               onPressCard={() => {
                 setCardScreen(false);
               }}
@@ -101,15 +108,17 @@ const index = ({navigation}) => {
             />
           )}
           {!cardScreen && (
-            <View style={{paddingTop: 30}}>
-              <PaymentButtons
-                onPress={() => {
-                  setCardScreen(true);
-                }}
-                bgColor={colors.g1}
-                title={I18n.t('pay_with_card')}
-                txtColor={colors.white}
-              />
+            <View style={{paddingVertical: 30}}>
+              <View style={{paddingVertical: 20}}>
+                <PaymentButtons
+                  onPress={() => {
+                    setCardScreen(true);
+                  }}
+                  bgColor={colors.g1}
+                  title={I18n.t('pay_with_card')}
+                  txtColor={colors.white}
+                />
+              </View>
               <PaymentButtons
                 bgColor={colors.g1}
                 title={I18n.t('pay_with_wallet')}

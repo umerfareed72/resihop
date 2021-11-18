@@ -5,7 +5,7 @@ export const PaymentHistory = ({title, image, onPress}) => {
   return (
     <>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.btnContainer}>
+        <TouchableOpacity onPress={onPress} style={styles.btnContainer}>
           <Image style={styles.imageStyle} source={image} />
         </TouchableOpacity>
         <Text style={styles.titleStyle}>{title}</Text>

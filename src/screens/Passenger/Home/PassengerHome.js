@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {colors, appIcons} from '../utilities';
+import {colors, appIcons} from '../../../utilities';
 import {
   passenger_home,
   create_ride,
@@ -16,13 +16,15 @@ import {
   upcoming_rides,
   lorem,
   first_ride,
-} from '../theme/strings';
+} from '../../../theme/strings';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
+import MyStatusBar from '../../../components/Header/statusBar';
 
-const PassengerHome = (props) => {
+const PassengerHome = props => {
   return (
     <SafeAreaView style={styles.container}>
+      <MyStatusBar />
       {/* Top Header */}
 
       <View style={styles.passengerHeader}>
@@ -92,7 +94,11 @@ const PassengerHome = (props) => {
 
       <Text style={styles.Txt}>{lorem}</Text>
 
-      <TouchableOpacity onPress={()=>{props?.navigation?.navigate('Payment')}} style={styles.createRideBtnContainer}>
+      <TouchableOpacity
+        onPress={() => {
+          props?.navigation?.navigate('Payment');
+        }}
+        style={styles.createRideBtnContainer}>
         <Text style={styles.btnTxt}>{first_ride}</Text>
       </TouchableOpacity>
     </SafeAreaView>
