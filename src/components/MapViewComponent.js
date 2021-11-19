@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import MapView, {
   PROVIDER_GOOGLE,
   Marker,
@@ -12,11 +18,24 @@ const MapViewComponent = () => {
   const [longitude, setLongitude] = useState(0);
 
   useEffect(() => {
+    getLocation();
+  }, []);
+
+  const getLocation = async () => {
+    let permission;
+
     try {
-      const permission = Geolocation.requestAuthorization('whenInUse');
-      if (permission) {
+      if (Platform.OS === 'ios') {
+        permission = Geolocation.requestAuthorization('whenInUse');
+      } else {
+        permission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        );
+      }
+      if (permission && permission === 'granted') {
         Geolocation.getCurrentPosition(
           position => {
+            console.log('Position', position);
             setLatitude(position.coords.latitude);
             setLongitude(position.coords.longitude);
           },
@@ -30,26 +49,22 @@ const MapViewComponent = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
-
-  const regionChanged = region => {
-    console.log(region);
   };
 
   return (
     <MapView
       provider={PROVIDER_GOOGLE}
       region={{
-        latitude: 31.524909,
-        longitude: 74.34291,
-        latitudeDelta: 0.0009,
-        longitudeDelta: 0.0009,
+        latitude: latitude, //31.524909,
+        longitude: longitude, //74.34291,
+        latitudeDelta: 0.009,
+        longitudeDelta: 0.009,
       }}
-      onRegionChange={regionChanged}
+      //onRegionChange={regionChanged}
       zoomEnabled={true}
       zoomControlEnabled={true}
       style={{...StyleSheet.absoluteFillObject}}>
-      <Marker coordinate={{latitude: 31.524909, longitude: 74.34291}} />
+      <Marker coordinate={{latitude: latitude, longitude: longitude}} />
     </MapView>
   );
 };
