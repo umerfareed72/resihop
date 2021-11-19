@@ -14,6 +14,7 @@ import {colors, appIcons} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
+import MyStatusBar from '../components/Header/statusBar';
 
 const CreateRide = () => {
   let navigation = useNavigation();
@@ -27,6 +28,7 @@ const CreateRide = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <MyStatusBar />
       <View style={styles.createHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image

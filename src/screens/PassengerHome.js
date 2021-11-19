@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import {colors, appIcons} from '../utilities';
 import {
@@ -20,6 +21,7 @@ import {
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/core';
+import MyStatusBar from '../components/Header/statusBar';
 
 const PassengerHome = () => {
   let navigation = useNavigation();
@@ -27,7 +29,7 @@ const PassengerHome = () => {
   return (
     <SafeAreaView style={styles.container}>
       {/* Top Header */}
-
+      <MyStatusBar backgroundColor={colors.white} />
       <View style={styles.passengerHeader}>
         <TouchableOpacity>
           <HamburgerMenu name="menu" size={26} color={colors.green} />
