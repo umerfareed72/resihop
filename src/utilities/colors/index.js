@@ -29,4 +29,5 @@ export const colors = {
   greyBorder: '#EEEEEE',
   blue: '#007BD2',
   txtBlack: '#101010',
+  lineGray: '#DFDFDF',
 };

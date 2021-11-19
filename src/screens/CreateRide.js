@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -9,15 +9,18 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import {colors, appIcons} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import MyStatusBar from '../components/Header/statusBar';
+import FavouriteLocations from './FavouriteLocations';
 
 const CreateRide = () => {
   let navigation = useNavigation();
+  const favourteLocationRef = useRef(null);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
@@ -73,7 +76,12 @@ const CreateRide = () => {
             </View>
           </View>
           <View style={styles.switchWrapper}>
-            <HeartIcon name="heart" size={30} color={colors.btnGray} />
+            <HeartIcon
+              name="heart"
+              size={30}
+              color={colors.btnGray}
+              onPress={() => favourteLocationRef.current.open()}
+            />
             <View style={styles.locationSwitch} />
             <HeartIcon name="heart" size={30} color={colors.btnGray} />
           </View>
@@ -182,6 +190,7 @@ const CreateRide = () => {
             </View>
           </>
         ) : null}
+        <FavouriteLocations favourteLocationRef={favourteLocationRef} />
       </ScrollView>
       <KeyboardAvoidingView
         keyboardVerticalOffset={15}

@@ -8,7 +8,7 @@ const StartLocation = () => {
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor={'transparent'} />
-      <MapViewComponent modalName={'returnTrip'} />
+      <MapViewComponent modalName={'startLocation'} />
     </View>
   );
 };
