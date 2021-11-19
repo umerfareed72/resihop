@@ -16,12 +16,17 @@
     "axios": "^0.24.0",
     "react": "17.0.2",
     "react-native": "0.66.3",
+    "react-native-animated-pagination-dots": "^0.1.72",
+    "react-native-countdown-timer-hooks": "^1.0.3",
+    "react-native-country-picker-modal": "^2.0.0",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-pager-view": "^5.4.9",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
     "react-native-svg": "^12.1.1",
-    "react-native-vector-icons": "^9.0.0"
+    "react-native-vector-icons": "^9.0.0",
+    "reactotron-react-native": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
