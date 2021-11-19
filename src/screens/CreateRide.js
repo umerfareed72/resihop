@@ -209,7 +209,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    marginTop: 12,
   },
   backArrow: {
     height: 15,

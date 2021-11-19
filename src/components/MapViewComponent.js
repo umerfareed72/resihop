@@ -14,7 +14,7 @@ import {appIcons, colors} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const MapViewComponent = ({modalName}) => {
+const MapViewComponent = ({modalName, addfavrouiteAddressRef}) => {
   let navigation = useNavigation();
 
   const [latitude, setLatitude] = useState(0);
@@ -63,8 +63,8 @@ const MapViewComponent = ({modalName}) => {
       <MapView
         provider={PROVIDER_GOOGLE}
         region={{
-          latitude: latitude, //31.524909,
-          longitude: longitude, //74.34291,
+          latitude: Platform.OS === 'ios' ? 31.524909 : latitude,
+          longitude: Platform.OS === 'ios' ? 74.34291 : longitude,
           latitudeDelta: 0.009,
           longitudeDelta: 0.009,
         }}
@@ -149,7 +149,9 @@ const MapViewComponent = ({modalName}) => {
             <TouchableOpacity style={styles.favLocationBtn}>
               <Text style={styles.favLocationBtnTxt}>Office</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.favLocationBtn}>
+            <TouchableOpacity
+              style={styles.favLocationBtn}
+              onPress={() => addfavrouiteAddressRef.current.open()}>
               <Text style={styles.favLocationBtnTxt}>Other</Text>
             </TouchableOpacity>
           </View>
