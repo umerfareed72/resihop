@@ -6,7 +6,7 @@ import {app_logo} from '../../assets';
 import {colors, family, size} from '../../utilities';
 import {Divider} from 'react-native-elements/dist/divider/Divider';
 
-const NotificationList = props => {
+const NotificationList = ({navigation}) => {
   const imagePath = require('../../assets/icons/png/app_logo.png');
   const data = [
     {
@@ -56,7 +56,11 @@ const NotificationList = props => {
 
   return (
     <>
-      <CustomHeader title={'Notifications'} backButton={true} />
+      <CustomHeader
+        navigation={navigation}
+        title={'Notifications'}
+        backButton={true}
+      />
 
       <SafeAreaView style={styles.container}>
         <FlatList
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
   notifyItem: {
     flexDirection: 'row',
     backgroundColor: colors.white,
-    minHeight: 150,
+    minHeight: 120,
   },
   imageContainer: {
     flex: 0.3,
@@ -97,12 +101,12 @@ const styles = StyleSheet.create({
   titleTextStyle: {
     fontSize: size.xsmall,
     color: colors.light_black,
-    fontFamily: family.product_sans_bold,
+    // fontFamily: family.product_sans_bold,
   },
   descriptionTextStyle: {
     fontSize: size.xxsmall,
     marginVertical: 10,
-    fontFamily: family.product_sans_regular,
+    // fontFamily: family.product_sans_regular,
     color: colors.grimmyGray,
   },
 });

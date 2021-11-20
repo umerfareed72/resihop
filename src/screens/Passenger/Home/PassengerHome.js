@@ -24,88 +24,95 @@ import MyStatusBar from '../../../components/Header/statusBar';
 
 const PassengerHome = ({navigation}) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <MyStatusBar />
-      {/* Top Header */}
-      <MyStatusBar backgroundColor={colors.white} />
-      <View style={styles.passengerHeader}>
-        <TouchableOpacity>
-          <HamburgerMenu
-            name="menu"
-            size={26}
-            color={colors.green}
-            onPress={() => navigation.toggleDrawer()}
-          />
-        </TouchableOpacity>
-        <Text style={{fontSize: 16}}>{passenger_home}</Text>
-        <TouchableOpacity>
-          <Bell name="bell" size={24} color={colors.green} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.switchToDriverBtnContainer}>
-          <Text style={{fontSize: 13, color: colors.white}}>
-            Switch to Driver
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <>
+      <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
 
-      {/* Cards */}
-
-      <View style={styles.cardMainContainer}>
-        <View style={styles.cardContainer}>
-          <Image source={appIcons.homeIconBg} style={styles.homeCards} />
-          <View style={styles.interiorContainer}>
-            <Image
-              source={appIcons.createRide}
-              style={styles.cardInterior}
-              resizeMode="contain"
+      <SafeAreaView style={styles.container}>
+        {/* Top Header */}
+        <View style={styles.passengerHeader}>
+          <TouchableOpacity>
+            <HamburgerMenu
+              name="menu"
+              size={26}
+              color={colors.green}
+              onPress={() => navigation.toggleDrawer()}
             />
-            <Text style={[styles.cardTxt, {marginTop: 14}]}>{create_ride}</Text>
+          </TouchableOpacity>
+          <Text style={{fontSize: 16}}>{passenger_home}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('NotificationList');
+            }}>
+            <Bell name="bell" size={24} color={colors.green} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.switchToDriverBtnContainer}>
+            <Text style={{fontSize: 13, color: colors.white}}>
+              Switch to Driver
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Cards */}
+
+        <View style={styles.cardMainContainer}>
+          <View style={styles.cardContainer}>
+            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <View style={styles.interiorContainer}>
+              <Image
+                source={appIcons.createRide}
+                style={styles.cardInterior}
+                resizeMode="contain"
+              />
+              <Text style={[styles.cardTxt, {marginTop: 14}]}>
+                {create_ride}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.cardContainer}>
+            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <View style={styles.interiorContainer}>
+              <Image
+                source={appIcons.recurringRide}
+                style={styles.cardInterior}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardTxt}>{recurring_ride}</Text>
+            </View>
+          </View>
+          <View style={styles.cardContainer}>
+            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <View style={styles.interiorContainer}>
+              <Image
+                source={appIcons.cityRide}
+                style={styles.cardInterior}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardTxt}>{city_to_city}</Text>
+            </View>
           </View>
         </View>
-        <View style={styles.cardContainer}>
-          <Image source={appIcons.homeIconBg} style={styles.homeCards} />
-          <View style={styles.interiorContainer}>
-            <Image
-              source={appIcons.recurringRide}
-              style={styles.cardInterior}
-              resizeMode="contain"
-            />
-            <Text style={styles.cardTxt}>{recurring_ride}</Text>
+
+        {/* upcoming Rides */}
+
+        <View style={styles.upcomingRidesMainContainer}>
+          <Text style={styles.upcomingTxt}>{upcoming_rides} </Text>
+          <View style={styles.ellipsesContainer}>
+            <View style={styles.ellipses} />
+            <View style={styles.ellipses} />
           </View>
         </View>
-        <View style={styles.cardContainer}>
-          <Image source={appIcons.homeIconBg} style={styles.homeCards} />
-          <View style={styles.interiorContainer}>
-            <Image
-              source={appIcons.cityRide}
-              style={styles.cardInterior}
-              resizeMode="contain"
-            />
-            <Text style={styles.cardTxt}>{city_to_city}</Text>
-          </View>
-        </View>
-      </View>
 
-      {/* upcoming Rides */}
+        <Image source={appIcons.noUpcomingRide} style={styles.noUpcomingRide} />
 
-      <View style={styles.upcomingRidesMainContainer}>
-        <Text style={styles.upcomingTxt}>{upcoming_rides} </Text>
-        <View style={styles.ellipsesContainer}>
-          <View style={styles.ellipses} />
-          <View style={styles.ellipses} />
-        </View>
-      </View>
+        <Text style={styles.Txt}>{lorem}</Text>
 
-      <Image source={appIcons.noUpcomingRide} style={styles.noUpcomingRide} />
-
-      <Text style={styles.Txt}>{lorem}</Text>
-
-      <TouchableOpacity
-        style={styles.createRideBtnContainer}
-        onPress={() => navigation.navigate('CreateRide')}>
-        <Text style={styles.btnTxt}>{first_ride}</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+        <TouchableOpacity
+          style={styles.createRideBtnContainer}
+          onPress={() => navigation.navigate('CreateRide')}>
+          <Text style={styles.btnTxt}>{first_ride}</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </>
   );
 };
 
@@ -128,6 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '90%',
     alignSelf: 'center',
+    marginTop: 20,
   },
   homeCards: {
     width: 100,

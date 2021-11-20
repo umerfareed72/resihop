@@ -19,3 +19,6 @@ export * from './Cards/TransHistoryCard/PaymentCard';
 
 export * from './Modal/DeleteCard/DeleteCardModal';
 export * from './Modal/AddWallet/AddWalletModal';
+export * from './Modal/FilterModal/PaymentFilterModal';
+export * from './Modal/SortModal/SortModal';
+export * from './Modal/FilterModal/RideFilterModal';
