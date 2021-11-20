@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, Platform, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, size} from '../../../utilities';
+import {drawerIcons} from '../../../utilities/images';
 
 export const TransHistoryCard = () => {
   return (
@@ -14,7 +15,19 @@ export const TransHistoryCard = () => {
         </LinearGradient>
       </View>
       <View style={styles.centerContainer}>
-        <Text style={styles.h2}>Refund</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={styles.h2}>Refund</Text>
+          <Image
+            style={{
+              height: 12,
+              width: 17,
+              resizeMode: 'contain',
+              marginHorizontal: 10,
+            }}
+            source={drawerIcons.my_payment_methods}
+          />
+        </View>
+
         <Text style={styles.h3}>18:00, 12 June 2020</Text>
       </View>
       <View style={styles.rightContainer}>
@@ -54,6 +67,7 @@ const styles = StyleSheet.create({
     height: 17,
     width: 22,
     resizeMode: 'contain',
+    tintColor: colors.white,
   },
   imageContainer: {
     height: 20,
