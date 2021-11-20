@@ -2,35 +2,42 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {norway_flag, tick_green_bg, uk} from '../assets';
+import {lang} from '../screens/shared-types';
 
 import {theme} from '../theme';
 
 const ChooseLanguage = ({onSelected}) => {
+  const [selected, setSelected] = useState(lang);
+  const eng = lang.English;
+  const norsk = lang.Norska;
+  const selectedNorsk = selected === norsk;
+  const selectedEnglish = selected === eng;
+
   return (
     <View>
       <TouchableOpacity
-        style={[styles.selectCon, /* selectedNorsk && */ styles.selectedCon]}
+        style={[styles.selectCon, selectedNorsk && styles.selectedCon]}
         onPress={() => {
-        //   setSelected(norsk);
-        //   onSelected(norsk);
+          setSelected(norsk);
+          onSelected(norsk);
         }}>
         <Text
-          style={[theme.Text.h4Normal, /* selectedNorsk && */ styles.selectedText]}>
-          {/* {norsk} */}
+          style={[theme.Text.h4Normal, selectedNorsk && styles.selectedText]}>
+          {norsk}
         </Text>
-        <SvgXml xml={/* selectedNorsk ? tick_green_bg : */ norway_flag} />
+        <SvgXml xml={selectedNorsk ? tick_green_bg : norway_flag} />
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.selectCon, /* selectedEnglish && */ styles.selectedCon]}
+        style={[styles.selectCon, selectedEnglish && styles.selectedCon]}
         onPress={() => {
-        //   setSelected(eng);
-        //   onSelected(eng);
+          setSelected(eng);
+          onSelected(eng);
         }}>
         <Text
-          style={[theme.Text.h4Normal, /* selectedEnglish && */ styles.selectedText]}>
-          {/* {eng} */}
+          style={[theme.Text.h4Normal, selectedEnglish && styles.selectedText]}>
+          {eng}
         </Text>
-        <SvgXml xml={/* selectedEnglish ? tick_green_bg : */ uk} />
+        <SvgXml xml={selectedEnglish ? tick_green_bg : uk} />
       </TouchableOpacity>
     </View>
   );
