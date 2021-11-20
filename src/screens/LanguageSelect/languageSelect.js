@@ -1,64 +1,52 @@
-import {useNavigation} from '@react-navigation/core';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
 import {landing_img} from '../../assets';
 import {Header} from '../../components';
 import ChooseLanguage from '../../components/ChooseLanguage';
 import {Container} from '../../components/Container';
+import {next} from '../../theme/strings';
 import {theme} from '../../theme/theme';
 
-function languageSelect() {
-  let navigation = useNavigation();
+function languageSelect(props) {
+  const [language, setLanguage] = useState('');
 
   return (
-    <>
-      <Header showLeft={false} />
-      <Container>
-        <View>
-          <View style={styles.imgCon}>
-            <Image source={landing_img} style={styles.img} />
-          </View>
-
-          <Text style={[theme.Text.h1Bold, styles.heading]}>
-            Select Your Language
-          </Text>
-          <View>
-            <ChooseLanguage
-              onSelected={lang => {
-                setLanguage(lang);
-              }}
-            />
-
-            <Button
-              // title={forUpdate ? 'Update Language' : next}
-              buttonStyle={theme.Button.buttonStyle}
-              titleStyle={theme.Button.titleStyle}
-              onPress={() => {
-                navigation?.navigate('Payment');
-                // if (forUpdate) {
-                //   showToast('Language Got Updated');
-                //   Navigation.pop(HOME_NAV_ID);
-                // } else {
-                //   isFirstTime
-                //     ? Navigation.push(INTRO_NAV_ID, WalkThroughScreen)
-                //     : goToLandingUser();
-                // }
-                navigation.navigate('PassengerHome');
-              }}
-              // disabled={language === undefined}
-              disabledStyle={theme.Button.disabledStyle}
-              disabledTitleStyle={theme.Button.disabledTitleStyle}
-              containerStyle={{
-                width: '90%',
-                alignSelf: 'center',
-                marginTop: 30,
-              }}
-            />
-          </View>
+    <Container>
+      <View>
+        <View style={styles.imgCon}>
+          <Image source={landing_img} style={styles.img} />
         </View>
-      </Container>
-    </>
+
+        <Text style={[theme.Text.h1Bold, styles.heading]}>
+          Select Your Language
+        </Text>
+        <View>
+          <ChooseLanguage
+            onSelected={lang => {
+              setLanguage(lang);
+            }}
+          />
+
+          <Button
+            title={next}
+            buttonStyle={theme.Button.buttonStyle}
+            titleStyle={theme.Button.titleStyle}
+            onPress={() => {
+              props.navigation.navigate('WalkThrough');
+            }}
+            disabled={language === ''}
+            disabledStyle={theme.Button.disabledStyle}
+            disabledTitleStyle={theme.Button.disabledTitleStyle}
+            containerStyle={{
+              width: '90%',
+              alignSelf: 'center',
+              marginTop: 30,
+            }}
+          />
+        </View>
+      </View>
+    </Container>
   );
 }
 
