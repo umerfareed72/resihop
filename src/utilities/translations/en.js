@@ -65,6 +65,8 @@ export default {
   yes: 'Yes',
   no: 'No',
   save_card: 'Save Card',
-  trnsaction_history:'Transaction History',
-  
+  trnsaction_history: 'Transaction History',
+  withdraw: 'Withdraw',
+  balance: 'Balance',
+  wp_title: 'Enter Amount you Want to Withdraw',
 };

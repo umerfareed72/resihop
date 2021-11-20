@@ -12,7 +12,7 @@ import walkThrough from '../screens/walkThrough';
 import landingUser from '../screens/landingUser';
 import CreateRide from '../screens/CreateRide';
 import StartLocation from '../screens/StartLocation';
-
+import WithDrawPayment from '../screens/Passenger/Payment/AddPaymentMethod/WithdrawPayment';
 const Stack = createStackNavigator();
 
 function MainStackNavigator() {
@@ -34,6 +34,12 @@ function MainStackNavigator() {
           name="Payment"
           component={Payment}
         />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="WithDrawPayment"
+          component={WithDrawPayment}
+        />
+
         <Stack.Screen
           options={{headerShown: false}}
           name="CardDetail"

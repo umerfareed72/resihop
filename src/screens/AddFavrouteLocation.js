@@ -15,8 +15,6 @@ const AddFavrouteLocation = ({addfavrouiteAddressRef}) => {
     <RBSheet
       ref={addfavrouiteAddressRef}
       height={329}
-      closeOnDragDown={true}
-      closeOnPressMask={false}
       customStyles={{
         wrapper: {
           backgroundColor: 'rgba(16,16,16,0.5)',

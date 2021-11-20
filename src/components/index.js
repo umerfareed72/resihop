@@ -8,10 +8,14 @@ export * from './Cards/TransHistoryCard/TransHistory';
 export * from './Buttons/Payment/PaymentButtons';
 //App Inputs
 export * from './AppInput/PaymentInput/PaymentInput';
+export * from './AppInput/ModalInput/BlockInput';
+
 //Cards
 export * from './Cards/BankCard/BankCard';
 export * from './Cards/TransHistoryCard/TransHistory';
+export * from './Cards/TransHistoryCard/PaymentCard';
 
 //Modals
 
 export * from './Modal/DeleteCard/DeleteCardModal';
+export * from './Modal/AddWallet/AddWalletModal';

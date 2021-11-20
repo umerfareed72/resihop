@@ -17,7 +17,7 @@ import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import MyStatusBar from '../components/Header/statusBar';
 import FavouriteLocations from './FavouriteLocations';
-import { CustomHeader } from '../components';
+import {CustomHeader} from '../components';
 
 const CreateRide = () => {
   let navigation = useNavigation();
@@ -32,8 +32,12 @@ const CreateRide = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader backButton={true} navigation={navigation} title={'Create Ride'}/>
-          <ScrollView showsVerticalScrollIndicator={false}>
+      <CustomHeader
+        backButton={true}
+        navigation={navigation}
+        title={'Create Ride'}
+      />
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.tripBtnWrapper}>
           <TouchableOpacity style={styles.tripBtnContainer}>
             <Text style={styles.btnTxt}>Single Trip</Text>
@@ -365,6 +369,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '80%',
     borderRadius: 15,
+    marginBottom: 20,
     alignSelf: 'center',
   },
   nextTxt: {

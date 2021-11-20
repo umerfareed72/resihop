@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import {
+  AddWalletModal,
   BankCard,
   CustomHeader,
   Header,
   PaymentButtons,
+  PaymentCard,
   PaymentHistory,
 } from '../../../../components';
 import I18n from '../../../../utilities/translations';
@@ -17,7 +19,19 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 const index = ({navigation}) => {
   const [cardScreen, setCardScreen] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [paymentSuccess, setpaymentSuccessonSuccess] = useState(false);
+  const [paymentFailed, setpaymentSuccessonFailed] = useState(false);
+  const [addMoney, onAddMoney] = useState(true);
 
+  const modalRef = useRef(null);
+  const onPressModalButton = () => {
+    if (addMoney) {
+      setpaymentSuccessonFailed(true);
+      onAddMoney(false);
+    } else {
+      modalRef?.current?.close();
+    }
+  };
   return (
     <>
       <CustomHeader
@@ -61,22 +75,17 @@ const index = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <LinearGradient
-            colors={colors.gradientBoxColor}
-            style={styles.linearGradient}>
-            <View style={styles.rowAlign}>
-              <View style={styles.leftContainer}>
-                <Text style={styles.header2Text}>
-                  {I18n.t('wallet_balance')}
-                </Text>
-                <TouchableOpacity style={styles.btnStyle}>
-                  <Image source={appIcons.filter} style={styles.btnImage} />
-                  <Text style={styles.btntext}>{I18n.t('add_cards')}</Text>
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.header2Bold}>00.00 SEK</Text>
-            </View>
-          </LinearGradient>
+          <PaymentCard
+            onPressAddMoney={() => {
+              modalRef?.current?.open();
+            }}
+            title={I18n.t('wallet_balance')}
+            add_Money={I18n.t('add_cards')}
+            onPress={() => {
+              navigation?.navigate('WithDrawPayment');
+            }}
+          />
+
           <BankCard
             name={'John Doe'}
             cardno={1234}
@@ -128,6 +137,28 @@ const index = ({navigation}) => {
           )}
         </View>
       </KeyboardAwareScrollView>
+      <AddWalletModal
+        btnText={'OK'}
+        title={'Add Money to Wallet'}
+        addMoney={addMoney}
+        onSuccess={paymentSuccess}
+        onFailed={paymentFailed}
+        onPress={() => {
+          onPressModalButton();
+        }}
+        icon={appIcons.cancel}
+        h1={
+          paymentFailed
+            ? 'Your amount exceeds Balance'
+            : '' || paymentSuccess
+            ? 'Money Withdrawal Successful!'
+            : ''
+        }
+        show={modalRef}
+        h2={
+          'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
+        }
+      />
     </>
   );
 };
