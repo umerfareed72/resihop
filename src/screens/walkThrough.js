@@ -11,15 +11,16 @@ import {
   walkthrough_msg_one,
   welcome_to_resihop_msg,
 } from '../theme/strings';
+import {appIcons} from '../utilities/images';
 
 const introData = [
   {
     key: '1',
-    img: walkthrough_img_one,
+    img: appIcons.walkthrough_img_one,
   },
   {
     key: '2',
-    img: walkthrough_img_two,
+    img: appIcons.walkthrough_img_two,
   },
 ];
 

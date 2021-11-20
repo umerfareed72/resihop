@@ -1,21 +1,34 @@
-// import * as React from 'react';
-// import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import * as React from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+import landingUser from '../../screens/landingUser';
+import walkThrough from '../../screens/walkThrough';
+import languageSelect from '../../screens/LanguageSelect/languageSelect';
 
-// import Login from '../../screens/Auth/Login';
-// import SignUp from '../../screens/Auth/SignUp';
+const Stack = createStackNavigator();
 
-// const Stack = createNativeStackNavigator();
+function AuthStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="LanguageSelect"
+      screenOptions={{headerShown: false}}>
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="LanguageSelect"
+        component={languageSelect}
+      />
 
-// function AuthStack(props) {
-//   return (
-//     <Stack.Navigator
-//       initialRouteName="Login"
-//       screenOptions={{headerShown: false}}>
-//       <Stack.Screen name="Login" component={Login} />
-//       <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="WalkThrough"
+        component={walkThrough}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="LandingUser"
+        component={landingUser}
+      />
+    </Stack.Navigator>
+  );
+}
 
-//     </Stack.Navigator>
-//   );
-// }
-
-// export default AuthStack;
+export default AuthStack;

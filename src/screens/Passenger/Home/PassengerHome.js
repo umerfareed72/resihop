@@ -30,7 +30,12 @@ const PassengerHome = ({navigation}) => {
       <MyStatusBar backgroundColor={colors.white} />
       <View style={styles.passengerHeader}>
         <TouchableOpacity>
-          <HamburgerMenu name="menu" size={26} color={colors.green} />
+          <HamburgerMenu
+            name="menu"
+            size={26}
+            color={colors.green}
+            onPress={() => navigation.toggleDrawer()}
+          />
         </TouchableOpacity>
         <Text style={{fontSize: 16}}>{passenger_home}</Text>
         <TouchableOpacity>
