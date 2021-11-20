@@ -8,6 +8,7 @@ import PassengerHome from '../screens/Passenger/Home/PassengerHome';
 import CardDetail from '../screens/Passenger/Payment/AddPaymentMethod/CardDetail';
 import EditCard from '../screens/Passenger/Payment/AddPaymentMethod/EditCard';
 import TransactionHistory from '../screens/Passenger/Payment/PaymentHistory';
+import NotificationList from '../screens/NotificationList/NotificationList';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ function MainStackNavigator() {
           name="Splash"
           component={splash}
         />
+
         <Stack.Screen
           options={{headerShown: false}}
           name="LanguageSelect"
@@ -50,6 +52,11 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="PassengerHome"
           component={PassengerHome}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="NotificationList"
+          component={NotificationList}
         />
       </Stack.Navigator>
     </NavigationContainer>
