@@ -9,8 +9,16 @@ import CardDetail from '../screens/Passenger/Payment/AddPaymentMethod/CardDetail
 import EditCard from '../screens/Passenger/Payment/AddPaymentMethod/EditCard';
 import TransactionHistory from '../screens/Passenger/Payment/PaymentHistory';
 import NotificationList from '../screens/NotificationList/NotificationList';
+import {DrawerNavigator} from './DrawerNav';
 
 const Stack = createStackNavigator();
+const appStack = () => {
+  return (
+    <Stack.Navigator headerMode={'none'} initialRouteName={'Dashboard'}>
+      <Stack.Screen name={'Dashboard'} component={DrawerNavigator} />
+    </Stack.Navigator>
+  );
+};
 
 function MainStackNavigator() {
   return (
@@ -50,8 +58,8 @@ function MainStackNavigator() {
 
         <Stack.Screen
           options={{headerShown: false}}
-          name="PassengerHome"
-          component={PassengerHome}
+          name="App"
+          component={appStack}
         />
         <Stack.Screen
           options={{headerShown: false}}

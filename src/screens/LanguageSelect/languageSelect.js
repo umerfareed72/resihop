@@ -35,7 +35,7 @@ function languageSelect() {
               buttonStyle={theme.Button.buttonStyle}
               titleStyle={theme.Button.titleStyle}
               onPress={() => {
-                navigation?.navigate('Payment');
+                // navigation?.navigate('Payment');
                 // if (forUpdate) {
                 //   showToast('Language Got Updated');
                 //   Navigation.pop(HOME_NAV_ID);
@@ -44,7 +44,7 @@ function languageSelect() {
                 //     ? Navigation.push(INTRO_NAV_ID, WalkThroughScreen)
                 //     : goToLandingUser();
                 // }
-                navigation.navigate('PassengerHome');
+                navigation.navigate('App');
               }}
               // disabled={language === undefined}
               disabledStyle={theme.Button.disabledStyle}

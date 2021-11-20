@@ -21,7 +21,7 @@ import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 
-const PassengerHome = props => {
+const PassengerHome = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <MyStatusBar />
@@ -29,7 +29,12 @@ const PassengerHome = props => {
 
       <View style={styles.passengerHeader}>
         <TouchableOpacity>
-          <HamburgerMenu name="menu" size={26} color={colors.green} />
+          <HamburgerMenu
+            name="menu"
+            size={26}
+            color={colors.green}
+            onPress={() => navigation.toggleDrawer()}
+          />
         </TouchableOpacity>
         <Text style={{fontSize: 16}}>{passenger_home}</Text>
         <TouchableOpacity>
