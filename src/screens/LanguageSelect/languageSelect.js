@@ -7,6 +7,7 @@ import ChooseLanguage from '../../components/ChooseLanguage';
 import {Container} from '../../components/Container';
 import {next} from '../../theme/strings';
 import {theme} from '../../theme/theme';
+import {appIcons, drawerIcons} from '../../utilities/images';
 
 function languageSelect(props) {
   const [language, setLanguage] = useState('');
@@ -15,7 +16,7 @@ function languageSelect(props) {
     <Container>
       <View>
         <View style={styles.imgCon}>
-          <Image source={landing_img} style={styles.img} />
+          <Image source={appIcons.landing_img} style={styles.img} />
         </View>
 
         <Text style={[theme.Text.h1Bold, styles.heading]}>

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {View, Image, StyleSheet} from 'react-native';
 import {app_logo} from '../../assets';
-import {colors} from '../../utilities';
+import {appImages, colors} from '../../utilities';
 import I18n from '../../utilities/translations';
 import MyStatusBar from '../../components/Header/statusBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,14 +24,14 @@ function splash(props) {
       //   navigation.replace('Auth');
       //   // navigation.replace('App', {screen: 'Cart'});
       // }
-      props.navigation.replace('LanguageSelect');
+      props.navigation.replace('AuthStack');
     }, 2000);
   };
 
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
-      <Image source={app_logo} resizeMode={'contain'} />
+      <Image source={appImages.app_logo} resizeMode={'contain'} />
     </View>
   );
 }

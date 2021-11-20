@@ -8,9 +8,26 @@ export const appIcons = {
   cityRide: require('../../assets/icons/png/homeIcons/cityRide.png'),
   noUpcomingRide: require('../../assets/icons/png/no_upcoming_ride.png'),
   cancel: require('../../assets/icons/png/cancel.png'),
+  landing_img: require('../../assets/icons/png/landingImg.png'),
+  drawerIcon: require('../../assets/icons/png/homeIcons/recurringRide.png'),
+  walkthrough_img_one: require('../../assets/icons/png/walkthroughimg1.png'),
+  walkthrough_img_two: require('../../assets/icons/png/walkthroughimg2.png'),
+  landing_user_img: require('../../assets/icons/png/landingUserImg.png'),
 };
 export const appImages = {
   visa: require('../../assets/images/visa.png'),
   seatBlue: require('../../assets/icons/png/seat_blue.png'),
   calendar: require('../../assets/icons/png/calendar.png'),
+  app_logo: require('../../assets/icons/png/app_logo.png'),
+};
+export const drawerIcons = {
+  Favourites: require('../../assets/icons/png/drawerIcons/Favourites.png'),
+  invite: require('../../assets/icons/png/drawerIcons/invite.png'),
+  logout: require('../../assets/icons/png/drawerIcons/logout.png'),
+  my_contribution: require('../../assets/icons/png/drawerIcons/my_contribution.png'),
+  my_payment_methods: require('../../assets/icons/png/drawerIcons/my_payment_methods.png'),
+  offers: require('../../assets/icons/png/drawerIcons/offers.png'),
+  reports: require('../../assets/icons/png/drawerIcons/reports.png'),
+  rides_history: require('../../assets/icons/png/drawerIcons/rides_history.png'),
+  settings: require('../../assets/icons/png/drawerIcons/settings.png'),
 };

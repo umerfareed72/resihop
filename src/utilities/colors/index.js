@@ -22,16 +22,17 @@ export const colors = {
   input_selection_color_white: '#ffffff',
   input_selection_color_black: '#000000',
   black: '#000000',
-  light_black:'#101010',
+  light_black: '#101010',
   error: '#d44447',
   green: '#47B000',
   gradientBoxColor: ['#7BD6FF', '#48ABF2', '#5797E9'],
-  gradientpaidCard:['#E2FCFF','#F1F9FF'],
+  gradientpaidCard: ['#E2FCFF', '#F1F9FF'],
   blue: '#007BD2',
+  grimmyGray: '#777777',
   // gray
   g1: '#C5C5C5',
-  g2:'#818181',
-  g3:'#898989',
+  g2: '#818181',
+  g3: '#898989',
   dropShadow: '#007BD233',
   btnGray: '#C5C5C5',
   inputTxtGray: '#777777',
@@ -39,4 +40,7 @@ export const colors = {
   blue: '#007BD2',
   txtBlack: '#101010',
   lineGray: '#DFDFDF',
+
+  //greens
+  light_green: '#F6FFEF',
 };

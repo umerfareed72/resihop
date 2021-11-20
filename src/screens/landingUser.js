@@ -21,6 +21,7 @@ import {
   welcome_to_resihop_msg,
 } from '../theme/strings';
 import {appIcons, colors} from '../utilities';
+import {drawerIcons} from '../utilities/images';
 
 function landingUser({navigation}) {
   return (
@@ -28,7 +29,7 @@ function landingUser({navigation}) {
       <View
         style={{width: '100%', height: '100%', backgroundColor: colors.white}}>
         <ImageBackground
-          source={landing_user_img}
+          source={appIcons.landing_user_img}
           style={styles.imgCon}
           imageStyle={{height: '100%'}}
           resizeMode={'cover'}>
@@ -53,7 +54,7 @@ function landingUser({navigation}) {
             buttonStyle={theme.Button.buttonStyle}
             titleStyle={theme.Button.titleStyle}
             onPress={() => {
-              navigation.navigate('CreateRide');
+              navigation.navigate('PassengerDashboard');
             }}
             disabledStyle={theme.Button.disabledStyle}
             disabledTitleStyle={theme.Button.disabledTitleStyle}
@@ -67,7 +68,7 @@ function landingUser({navigation}) {
           <Button
             title={sign_up}
             onPress={() => {
-              navigation.navigate('Payment');
+              navigation.navigate('PassengerDashboard');
             }}
             buttonStyle={[theme.Button.buttonStyle, styles.signUpButton]}
             titleStyle={[theme.Button.titleStyle, styles.signUpBtnText]}
