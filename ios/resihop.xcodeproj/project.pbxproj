@@ -11,8 +11,8 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		5D3F7E53274439C40090954B /* product_sans_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D3F7E51274439C40090954B /* product_sans_bold.ttf */; };
-		5D3F7E56274442CD0090954B /* product_sans_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D3F7E55274442CD0090954B /* product_sans_regular.ttf */; };
+		5DA708942748FADF00E07C77 /* product_sans_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DA708922748FA8300E07C77 /* product_sans_bold.ttf */; };
+		5DA708952748FAE600E07C77 /* product_sans_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5DA708932748FACF00E07C77 /* product_sans_regular.ttf */; };
 		5EED09075BDB45A70549396C /* libPods-resihop-resihopTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AFB07C71AD63BD0F21FDF456 /* libPods-resihop-resihopTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E22DA7B811532126ECF23AD1 /* libPods-resihop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D318C7280BDFB2F6BD838A6D /* libPods-resihop.a */; };
@@ -49,10 +49,8 @@
 		43EE5865A7A8ED4A9352C326 /* Pods-resihop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-resihop.release.xcconfig"; path = "Target Support Files/Pods-resihop/Pods-resihop.release.xcconfig"; sourceTree = "<group>"; };
 		45482EDE87DC4621B7E4979C /* product_sans_regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = product_sans_regular.ttf; path = ../src/assets/fonts/product_sans_regular.ttf; sourceTree = "<group>"; };
 		48151D394B2C3CB9A6A728C9 /* Pods-resihop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-resihop.debug.xcconfig"; path = "Target Support Files/Pods-resihop/Pods-resihop.debug.xcconfig"; sourceTree = "<group>"; };
-		5D3F7E51274439C40090954B /* product_sans_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = product_sans_bold.ttf; path = ../src/assets/fonts/product_sans_bold.ttf; sourceTree = "<group>"; };
-		5D3F7E52274439C40090954B /* product_sans_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = product_sans_regular.ttf; path = ../src/assets/fonts/product_sans_regular.ttf; sourceTree = "<group>"; };
-		5D3F7E55274442CD0090954B /* product_sans_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = product_sans_regular.ttf; path = ../src/assets/fonts/product_sans_regular.ttf; sourceTree = "<group>"; };
-		5D3F7E57274442D60090954B /* product_sans_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = product_sans_bold.ttf; path = ../src/assets/fonts/product_sans_bold.ttf; sourceTree = "<group>"; };
+		5DA708922748FA8300E07C77 /* product_sans_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = product_sans_bold.ttf; path = ../src/assets/fonts/product_sans_bold.ttf; sourceTree = "<group>"; };
+		5DA708932748FACF00E07C77 /* product_sans_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = product_sans_regular.ttf; path = ../src/assets/fonts/product_sans_regular.ttf; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = resihop/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9616CB0E3014942D556CEC87 /* Pods-resihop-resihopTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-resihop-resihopTests.debug.xcconfig"; path = "Target Support Files/Pods-resihop-resihopTests/Pods-resihop-resihopTests.debug.xcconfig"; sourceTree = "<group>"; };
 		999026AAF6E9452FAE21E370 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
@@ -148,8 +146,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				5D3F7E51274439C40090954B /* product_sans_bold.ttf */,
-				5D3F7E52274439C40090954B /* product_sans_regular.ttf */,
 				13B07FAE1A68108700A75B9A /* resihop */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* resihopTests */,
@@ -176,6 +172,8 @@
 		9C6AEDA4B8EA4DE29625975A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5DA708922748FA8300E07C77 /* product_sans_bold.ttf */,
+				5DA708932748FACF00E07C77 /* product_sans_regular.ttf */,
 				0D943A3BE6EC4D9795136503 /* AntDesign.ttf */,
 				1C2D5277ADFD4DDD8D7520D5 /* Entypo.ttf */,
 				D6DAA7C5E6F5450A8D235E29 /* EvilIcons.ttf */,
@@ -183,11 +181,9 @@
 				3C83A1079ECB4ABCBA31A42C /* FontAwesome.ttf */,
 				F88024A2C8A0480B8DEF2443 /* FontAwesome5_Brands.ttf */,
 				C121BE1009714A8AAF34E11C /* FontAwesome5_Regular.ttf */,
-				5D3F7E57274442D60090954B /* product_sans_bold.ttf */,
 				BDBE008CE68744D3A2018175 /* FontAwesome5_Solid.ttf */,
 				29B23967D5BC4D73BCF98D2C /* Fontisto.ttf */,
 				CEAFB2C50B244525B7C9DF7A /* Foundation.ttf */,
-				5D3F7E55274442CD0090954B /* product_sans_regular.ttf */,
 				D716541D2050483F98ECC668 /* Ionicons.ttf */,
 				C30CD14D431E4FEA964E0DBC /* MaterialCommunityIcons.ttf */,
 				F85ADDEFEC184964B37D5758 /* MaterialIcons.ttf */,
@@ -305,8 +301,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D3F7E53274439C40090954B /* product_sans_bold.ttf in Resources */,
-				5D3F7E56274442CD0090954B /* product_sans_regular.ttf in Resources */,
+				5DA708952748FAE600E07C77 /* product_sans_regular.ttf in Resources */,
+				5DA708942748FADF00E07C77 /* product_sans_bold.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E35734B516E445FBBAB482BB /* (null) in Resources */,

@@ -22,6 +22,6 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: size.normal,
-    fontFamily: family.product_sans_bold,
+    // fontFamily: family.product_sans_bold,
   },
 });

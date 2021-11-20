@@ -5,11 +5,14 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
 import {Button, Icon, Text} from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
 import {landing_user_img} from '../assets';
-import {Header} from '../components';
+import {CustomHeader, Header} from '../components';
 import {Container} from '../components/Container';
+import MyStatusBar from '../components/Header/statusBar';
 import {theme} from '../theme';
 import {
   dummy_ipsum_msg,
@@ -17,26 +20,27 @@ import {
   sign_up,
   welcome_to_resihop_msg,
 } from '../theme/strings';
+import {appIcons, colors} from '../utilities';
 
 function landingUser({navigation}) {
   return (
-    <Container paddingBottom={200} padding={0}>
-      <Header showLeft={false} />
-      <View style={{width: '100%', height: '100%'}}>
+    <>
+      <View
+        style={{width: '100%', height: '100%', backgroundColor: colors.white}}>
         <ImageBackground
           source={landing_user_img}
           style={styles.imgCon}
           imageStyle={{height: '100%'}}
           resizeMode={'cover'}>
+          <MyStatusBar backgroundColor={'transparent'} />
           <TouchableOpacity
             onPress={() => {
-              //   goToRootStack();
+              navigation?.goBack();
             }}
-            style={styles.backIcon}>
-            <Icon name={'arrowleft'} type={'antdesign'} />
+            style={{paddingTop: 30, paddingHorizontal: 20}}>
+            <Image source={appIcons.backArrow} style={styles.imageStyle} />
           </TouchableOpacity>
         </ImageBackground>
-
         <Text style={[theme.Text.h1Bold, styles.heading]}>
           {welcome_to_resihop_msg}
         </Text>
@@ -63,7 +67,7 @@ function landingUser({navigation}) {
           <Button
             title={sign_up}
             onPress={() => {
-              //   Navigation.push(AUTH_NAV_ID, SignUpScreen);
+              navigation.navigate('Payment');
             }}
             buttonStyle={[theme.Button.buttonStyle, styles.signUpButton]}
             titleStyle={[theme.Button.titleStyle, styles.signUpBtnText]}
@@ -76,7 +80,7 @@ function landingUser({navigation}) {
           />
         </View>
       </View>
-    </Container>
+    </>
   );
 }
 
@@ -107,5 +111,10 @@ const styles = StyleSheet.create({
   },
   signUpBtnText: {
     color: theme.colors.black,
+  },
+  imageStyle: {
+    height: 20,
+    width: 20,
+    resizeMode: 'contain',
   },
 });

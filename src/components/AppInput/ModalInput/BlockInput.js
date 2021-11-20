@@ -5,7 +5,7 @@ import {TextInput} from 'react-native';
 import {StyleSheet, Text, View} from 'react-native';
 import {family, colors, WP, size} from '../../../utilities';
 
-export const PaymentInput = ({
+export const BlockInput = ({
   title,
   placeholder,
   placeholderTextColor,
@@ -39,7 +39,7 @@ export const PaymentInput = ({
           editable={editable}
           keyboardType={keyboardType}
           placeholderTextColor={placeholderTextColor}
-          style={[styles.inputStyle]}
+          style={[styles.inputStyle, {fontSize: size.h6}]}
           onChangeText={onChangeText}
           value={value}
           onBlur={onBlur}
@@ -72,11 +72,13 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   inputContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.g2,
+    borderWidth: 1,
+    borderBottomColor: colors.light_black,
     width: '100%',
-    height: 50,
+    height: 60,
     justifyContent: 'center',
+    borderRadius: 14,
+    paddingHorizontal: 10,
   },
   inputStyle: {
     fontSize: size.small,

@@ -86,8 +86,9 @@ export default StyleSheet.create({
     // fontFamily: family.product_sans_regular,
   },
   header2Bold: {
-    fontFamily: family.product_sans_bold,
+    // fontFamily: family.product_sans_bold,
     paddingHorizontal: 20,
+    fontWeight: '900',
     fontSize: size.h3,
     color: colors.white,
   },

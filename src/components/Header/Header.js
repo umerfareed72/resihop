@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Header as RneHeader, Icon, Text} from 'react-native-elements';
-import { fonts, theme } from '../../theme/theme';
+import {fonts, theme} from '../../theme/theme';
 
 const Header = ({
   showRight = true,
@@ -46,7 +46,7 @@ const Header = ({
                   theme.Text.h4Normal,
                   {
                     fontSize: 20,
-                    fontFamily: fonts.bold,
+                    // fontFamily: fonts.bold,
                   },
                 ]}>
                 {leftText}
@@ -129,6 +129,5 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     borderRadius: 20,
     marginHorizontal: 5,
-
   },
 });

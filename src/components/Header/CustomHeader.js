@@ -13,11 +13,22 @@ export const CustomHeader = ({
   onPressBtn,
   btnImage1,
   onPress1,
+  barColor,
+  headerColor,
 }) => {
   return (
     <>
-      <MyStatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
-      <View style={styles.container}>
+      <MyStatusBar
+        backgroundColor={barColor ? barColor : colors.white}
+        barStyle={'dark-content'}
+      />
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: headerColor ? headerColor : colors?.white,
+          },
+        ]}>
         <View style={styles.wrapper}>
           <View style={styles.contentContainer}>
             {backButton ? (
@@ -73,7 +84,6 @@ export const CustomHeader = ({
 const styles = StyleSheet.create({
   container: {
     height: WP('17'),
-    backgroundColor: colors.white,
     justifyContent: 'center',
   },
   wrapper: {

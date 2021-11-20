@@ -14,7 +14,7 @@ export const BankCard = ({
 }) => {
   return (
     <LinearGradient colors={colors.gradientpaidCard} style={styles.container}>
-      <TouchableOpacity onPress={onPressCard} style={styles.content}>
+      <View style={styles.content}>
         <View style={styles.imageContainer}>
           <Image style={styles.imageStyle} source={appImages.visa} />
           <CheckBox
@@ -28,9 +28,11 @@ export const BankCard = ({
             style={styles.checkBoxLeftStyle}
           />
         </View>
-        <Text style={styles.textStyle}>{name}</Text>
-        <Text style={styles.textStyle}>****{cardno}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={onPressCard}>
+          <Text style={styles.textStyle}>{name}</Text>
+          <Text style={styles.textStyle}>****{cardno}</Text>
+        </TouchableOpacity>
+      </View>
     </LinearGradient>
   );
 };
