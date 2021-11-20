@@ -10,6 +10,8 @@ import EditCard from '../screens/Passenger/Payment/AddPaymentMethod/EditCard';
 import TransactionHistory from '../screens/Passenger/Payment/PaymentHistory';
 import walkThrough from '../screens/walkThrough';
 import landingUser from '../screens/landingUser';
+import CreateRide from '../screens/CreateRide';
+import StartLocation from '../screens/StartLocation';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +61,16 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="LandingUser"
           component={landingUser}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="CreateRide"
+          component={CreateRide}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="StartLocation"
+          component={StartLocation}
         />
       </Stack.Navigator>
     </NavigationContainer>

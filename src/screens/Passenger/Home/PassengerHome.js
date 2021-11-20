@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import {colors, appIcons} from '../../../utilities';
 import {
@@ -21,12 +22,12 @@ import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 
-const PassengerHome = props => {
+const PassengerHome = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <MyStatusBar />
       {/* Top Header */}
-
+      <MyStatusBar backgroundColor={colors.white} />
       <View style={styles.passengerHeader}>
         <TouchableOpacity>
           <HamburgerMenu name="menu" size={26} color={colors.green} />
@@ -95,10 +96,8 @@ const PassengerHome = props => {
       <Text style={styles.Txt}>{lorem}</Text>
 
       <TouchableOpacity
-        onPress={() => {
-          props?.navigation?.navigate('Payment');
-        }}
-        style={styles.createRideBtnContainer}>
+        style={styles.createRideBtnContainer}
+        onPress={() => navigation.navigate('CreateRide')}>
         <Text style={styles.btnTxt}>{first_ride}</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -109,7 +108,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    marginTop: 23,
   },
   switchToDriverBtnContainer: {
     backgroundColor: colors.green,

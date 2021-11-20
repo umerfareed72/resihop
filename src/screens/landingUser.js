@@ -18,64 +18,64 @@ import {
   welcome_to_resihop_msg,
 } from '../theme/strings';
 
-function landingUser() {
+function landingUser({navigation}) {
   return (
     <Container paddingBottom={200} padding={0}>
       <Header showLeft={false} />
-        <View style={{width: '100%', height: '100%'}}>
-          <ImageBackground
-            source={landing_user_img}
-            style={styles.imgCon}
-            imageStyle={{height: '100%'}}
-            resizeMode={'cover'}>
-            <TouchableOpacity
-              onPress={() => {
-                //   goToRootStack();
-              }}
-              style={styles.backIcon}>
-              <Icon name={'arrowleft'} type={'antdesign'} />
-            </TouchableOpacity>
-          </ImageBackground>
+      <View style={{width: '100%', height: '100%'}}>
+        <ImageBackground
+          source={landing_user_img}
+          style={styles.imgCon}
+          imageStyle={{height: '100%'}}
+          resizeMode={'cover'}>
+          <TouchableOpacity
+            onPress={() => {
+              //   goToRootStack();
+            }}
+            style={styles.backIcon}>
+            <Icon name={'arrowleft'} type={'antdesign'} />
+          </TouchableOpacity>
+        </ImageBackground>
 
-          <Text style={[theme.Text.h1Bold, styles.heading]}>
-            {welcome_to_resihop_msg}
+        <Text style={[theme.Text.h1Bold, styles.heading]}>
+          {welcome_to_resihop_msg}
+        </Text>
+        <View>
+          <Text style={[theme.Text.h4Normal, styles.sayingText]}>
+            {dummy_ipsum_msg}
           </Text>
-          <View>
-            <Text style={[theme.Text.h4Normal, styles.sayingText]}>
-              {dummy_ipsum_msg}
-            </Text>
-            <Button
-              title={login}
-              buttonStyle={theme.Button.buttonStyle}
-              titleStyle={theme.Button.titleStyle}
-              onPress={() => {
-                //   Navigation.push(AUTH_NAV_ID, SignInScreen);
-              }}
-              disabledStyle={theme.Button.disabledStyle}
-              disabledTitleStyle={theme.Button.disabledTitleStyle}
-              containerStyle={{
-                width: '90%',
-                alignSelf: 'center',
-                marginTop: 30,
-              }}
-            />
+          <Button
+            title={login}
+            buttonStyle={theme.Button.buttonStyle}
+            titleStyle={theme.Button.titleStyle}
+            onPress={() => {
+              navigation.navigate('CreateRide');
+            }}
+            disabledStyle={theme.Button.disabledStyle}
+            disabledTitleStyle={theme.Button.disabledTitleStyle}
+            containerStyle={{
+              width: '90%',
+              alignSelf: 'center',
+              marginTop: 30,
+            }}
+          />
 
-            <Button
-              title={sign_up}
-              onPress={() => {
-                //   Navigation.push(AUTH_NAV_ID, SignUpScreen);
-              }}
-              buttonStyle={[theme.Button.buttonStyle, styles.signUpButton]}
-              titleStyle={[theme.Button.titleStyle, styles.signUpBtnText]}
-              disabledTitleStyle={theme.Button.disabledTitleStyle}
-              containerStyle={{
-                width: '90%',
-                alignSelf: 'center',
-                marginTop: 20,
-              }}
-            />
-          </View>
+          <Button
+            title={sign_up}
+            onPress={() => {
+              //   Navigation.push(AUTH_NAV_ID, SignUpScreen);
+            }}
+            buttonStyle={[theme.Button.buttonStyle, styles.signUpButton]}
+            titleStyle={[theme.Button.titleStyle, styles.signUpBtnText]}
+            disabledTitleStyle={theme.Button.disabledTitleStyle}
+            containerStyle={{
+              width: '90%',
+              alignSelf: 'center',
+              marginTop: 20,
+            }}
+          />
         </View>
+      </View>
     </Container>
   );
 }
