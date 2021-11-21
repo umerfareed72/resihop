@@ -11,17 +11,19 @@ import {
   KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
-import {colors, appIcons} from '../utilities';
+import {colors, appIcons, appImages} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import MyStatusBar from '../components/Header/statusBar';
 import FavouriteLocations from './FavouriteLocations';
 import {CustomHeader} from '../components';
+import CalendarSheet from './CalendarSheet';
 
 const CreateRide = () => {
   let navigation = useNavigation();
   const favourteLocationRef = useRef(null);
+  const calendarSheetRef = useRef(null);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
@@ -111,10 +113,12 @@ const CreateRide = () => {
             placeholderTextColor={colors.btnGray}
             value={date}
             onChangeText={setDate}
+            onPressOut={() => calendarSheetRef.current.open()}
+            onPressIn={() => Keyboard.dismiss()}
             style={[styles.noLater, {marginRight: 11}]}
           />
           <Image
-            source={appIcons.calendar}
+            source={appImages.calendar}
             resizeMode="contain"
             style={styles.calendarIcon}
           />
@@ -129,6 +133,7 @@ const CreateRide = () => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
+        <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -188,7 +193,7 @@ const CreateRide = () => {
         <FavouriteLocations favourteLocationRef={favourteLocationRef} />
       </ScrollView>
       <KeyboardAvoidingView
-        keyboardVerticalOffset={15}
+        //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
@@ -329,7 +334,7 @@ const styles = StyleSheet.create({
     width: 18,
     position: 'absolute',
     right: 22,
-    top: 11,
+    top: 13,
   },
   selectionInputWrapper: {
     flexDirection: 'row',
