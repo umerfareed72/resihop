@@ -8,6 +8,8 @@ import Privacy from '../screens/Privacy/Privacy';
 import {DrawerNavigator} from './PassengerDrawerNav';
 import AboutUs from '../screens/AboutUs/AboutUs';
 import Settings from '../screens/Settings/Settings';
+import Help from '../screens/Help/Help';
+
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
   return (
@@ -23,6 +25,11 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Help"
+          component={Help}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="Settings"

@@ -40,6 +40,7 @@ export const colors = {
   blue: '#007BD2',
   txtBlack: '#101010',
   lineGray: '#DFDFDF',
+  gray_shade: '#6F6F6F',
 
   //greens
   light_green: '#F6FFEF',
