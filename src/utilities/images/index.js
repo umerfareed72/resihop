@@ -13,12 +13,14 @@ export const appIcons = {
   walkthrough_img_one: require('../../assets/icons/png/walkthroughimg1.png'),
   walkthrough_img_two: require('../../assets/icons/png/walkthroughimg2.png'),
   landing_user_img: require('../../assets/icons/png/landingUserImg.png'),
+  share_icon: require('../../assets/icons/png/share.png'),
 };
 export const appImages = {
   visa: require('../../assets/images/visa.png'),
   seatBlue: require('../../assets/icons/png/seat_blue.png'),
   calendar: require('../../assets/icons/png/calendar.png'),
   app_logo: require('../../assets/icons/png/app_logo.png'),
+  valley: require('../../assets/images/valley.png'),
 };
 export const drawerIcons = {
   Favourites: require('../../assets/icons/png/drawerIcons/Favourites.png'),

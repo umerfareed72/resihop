@@ -14,6 +14,7 @@ export * from './AppInput/ModalInput/BlockInput';
 export * from './Cards/BankCard/BankCard';
 export * from './Cards/TransHistoryCard/TransHistory';
 export * from './Cards/TransHistoryCard/PaymentCard';
+export * from './Cards/ContributionCard';
 
 //Modals
 

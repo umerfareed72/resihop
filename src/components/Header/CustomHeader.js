@@ -59,7 +59,7 @@ export const CustomHeader = ({
                 onPress={onPress1}
                 hitSlop={styles.hitSlope}
                 style={styles.btnImageContainer1}>
-                <Image style={styles.headerImage1} source={btnImage1} />
+                <Image style={styles.headerImage1} source={btnImage} />
               </TouchableOpacity>
             ) : (
               false
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     resizeMode: 'contain',
-    tintColor: colors.white,
+    // tintColor: colors.white,
   },
   headerImage: {
     height: 10,
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnImageContainer1: {
-    backgroundColor: colors.green,
+    // backgroundColor: colors.green,
     borderRadius: 25,
     height: 25,
     width: 25,

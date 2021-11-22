@@ -9,6 +9,8 @@ import {DrawerNavigator} from './PassengerDrawerNav';
 import AboutUs from '../screens/AboutUs/AboutUs';
 import Settings from '../screens/Settings/Settings';
 import Help from '../screens/Help/Help';
+import Faq from '../screens/Faq/Faq';
+import Contribution from '../screens/Contribution/Contribuion';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -25,6 +27,17 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Contribution"
+          component={Contribution}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Faq"
+          component={Faq}
+        />
+
         <Stack.Screen
           options={{headerShown: false}}
           name="Help"
