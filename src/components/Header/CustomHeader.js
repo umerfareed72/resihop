@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   wrapper2: {
     alignItems: 'center',
-    paddingTop: 10,
+    // paddingTop: 10,
     flexDirection: 'row',
   },
   contentContainer: {
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingRight: 20,
-    paddingTop: 5,
+    // paddingTop: 5,
   },
   header: {
     color: colors.black,
