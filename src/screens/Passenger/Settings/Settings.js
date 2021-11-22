@@ -49,7 +49,7 @@ const Settings = ({navigation}) => {
     },
     {
       title: 'FAQs',
-      onPress: () => alert('Clicked'),
+      onPress: () => navigation.navigate('Faq'),
     },
     {
       title: 'About Us',

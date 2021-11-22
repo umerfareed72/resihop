@@ -15,6 +15,7 @@ export * from './Cards/BankCard/BankCard';
 export * from './Cards/TransHistoryCard/TransHistory';
 export * from './Cards/RideHistoryCard/RideHistory';
 export * from './Cards/TransHistoryCard/PaymentCard';
+export * from './Cards/ContributionCard';
 
 //Modals
 

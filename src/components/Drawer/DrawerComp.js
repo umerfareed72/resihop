@@ -57,21 +57,30 @@ const DrawerComponent = ({navigation}) => {
       icon: drawerIcons.offers,
       label: 'Offers',
       onPress: () => {
-        // navigation.navigate('Logout');
+        // navigation.push('Invite', {
+        //   routeName: 'Invite',
+        // });
+        navigation.closeDrawer();
       },
     },
     {
       icon: drawerIcons.invite,
       label: 'Invite',
       onPress: () => {
-        // navigation.navigate('Logout');
+        navigation.push('Invite', {
+          routeName: 'Invite',
+        });
+        navigation.closeDrawer();
       },
     },
     {
       icon: drawerIcons.my_contribution,
       label: 'My Contribution',
       onPress: () => {
-        // navigation.navigate('Logout');
+        navigation.push('Contribution', {
+          routeName: 'Contribution',
+        });
+        navigation.closeDrawer();
       },
     },
     {
@@ -86,7 +95,6 @@ const DrawerComponent = ({navigation}) => {
       label: 'Log out',
       onPress: () => {
         navigation.closeDrawer();
-
         modalRef?.current?.open();
       },
     },
