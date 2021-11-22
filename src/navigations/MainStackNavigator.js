@@ -3,12 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
-import Terms from '../screens/Terms/Terms';
-import Privacy from '../screens/Privacy/Privacy';
 import {DrawerNavigator} from './PassengerDrawerNav';
-import AboutUs from '../screens/AboutUs/AboutUs';
-import Settings from '../screens/Settings/Settings';
-import Help from '../screens/Help/Help';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -25,33 +20,6 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Help"
-          component={Help}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Settings"
-          component={Settings}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="About Us"
-          component={AboutUs}
-        />
-
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Privacy"
-          component={Privacy}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Terms"
-          component={Terms}
-        />
-
         <Stack.Screen
           options={{headerShown: false}}
           name="Splash"

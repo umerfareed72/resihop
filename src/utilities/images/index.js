@@ -1,6 +1,7 @@
 export const appIcons = {
   backArrow: require('../../assets/icons/png/backArrow.png'),
   filter: require('../../assets/icons/png/filter.png'),
+  plus: require('../../assets/icons/png/plus.png'),
   mobiledata: require('../../assets/icons/png/mobiledata.png'),
   homeIconBg: require('../../assets/icons/png/homeIcons/home_icon_bg.png'),
   createRide: require('../../assets/icons/png/homeIcons/createRide.png'),
@@ -16,6 +17,8 @@ export const appIcons = {
 };
 export const appImages = {
   visa: require('../../assets/images/visa.png'),
+  user: require('../../assets/images/user.png'),
+
   seatBlue: require('../../assets/icons/png/seat_blue.png'),
   calendar: require('../../assets/icons/png/calendar.png'),
   app_logo: require('../../assets/icons/png/app_logo.png'),

@@ -14,14 +14,14 @@ const TermsView = ({title, description}) => {
 const styles = StyleSheet.create({
   titleText: {
     fontSize: size.xxlarge,
-    fontFamily: family.product_sans_bold,
+    // fontFamily: family.product_sans_bold,
     color: colors.light_black,
   },
   descriptionText: {
     marginVertical: HP('2'),
     fontSize: size.small,
     color: colors.light_black,
-    fontFamily: family.product_sans_regular,
+    // fontFamily: family.product_sans_regular,
   },
 });
 

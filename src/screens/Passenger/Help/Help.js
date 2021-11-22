@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {CustomHeader} from '../../components';
-import {colors, family, HP, size} from '../../utilities';
+import {CustomHeader} from '../../../components';
+import {colors, family, HP, size} from '../../../utilities';
 import {Divider, Icon} from 'react-native-elements';
 
-const Help = () => {
+const Help = ({navigation}) => {
   //useState here
   const [data, setData] = useState([
     {
@@ -130,7 +130,7 @@ const Help = () => {
               <Text
                 style={{
                   fontSize: size.normal,
-                  fontFamily: family.product_sans_bold,
+                  // fontFamily: family.product_sans_bold,
                   color: colors.white,
                 }}>
                 Submit
@@ -145,7 +145,11 @@ const Help = () => {
 
   return (
     <>
-      <CustomHeader title="Help & Support" backButton={true} />
+      <CustomHeader
+        navigation={navigation}
+        title="Help & Support"
+        backButton={true}
+      />
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <View style={styles.mainContainer}>
@@ -170,7 +174,7 @@ const styles = StyleSheet.create({
   },
   reportText: {
     fontSize: size.normal,
-    fontFamily: family.product_sans_bold,
+    // fontFamily: family.product_sans_bold,
     color: colors.blue,
     marginVertical: HP('1'),
   },
@@ -181,12 +185,12 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: size.normal,
-    fontFamily: family.product_sans_regular,
+    // fontFamily: family.product_sans_regular,
     color: colors.light_black,
   },
   descriptionText: {
     fontSize: size.xxsmall,
-    fontFamily: family.product_sans_regular,
+    // fontFamily: family.product_sans_regular,
     color: colors.gray_shade,
   },
 });

@@ -6,10 +6,16 @@ import TransactionHistory from '../../screens/Passenger/Payment/PaymentHistory';
 import CreateRide from '../../screens/CreateRide';
 import StartLocation from '../../screens/StartLocation';
 import WithDrawPayment from '../../screens/Passenger/Payment/AddPaymentMethod/WithdrawPayment';
-import NotificationList from '../../screens/NotificationList/NotificationList';
+import NotificationList from '../../screens/Passenger/NotificationList/NotificationList';
 import AddCard from '../../screens/Passenger/Payment/AddPaymentMethod/AddCard';
 import CardDetail from '../../screens/Passenger/Payment/AddPaymentMethod/CardDetail';
 import Payment from '../../screens/Passenger/Payment/AddPaymentMethod';
+import Help from '../../screens/Passenger/Help/Help';
+import Terms from '../../screens/Passenger/Terms/Terms';
+import Privacy from '../../screens/Passenger/Privacy/Privacy';
+import Settings from '../../screens/Passenger/Settings/Settings';
+import AboutUs from '../../screens/Passenger/AboutUs/AboutUs';
+import RideHistory from '../../screens/Passenger/Rides/RideHistory';
 
 const Stack = createStackNavigator();
 
@@ -71,6 +77,37 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="NotificationList"
         component={NotificationList}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Help"
+        component={Help}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Settings"
+        component={Settings}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AboutUs"
+        component={AboutUs}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Privacy"
+        component={Privacy}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Terms"
+        component={Terms}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="RideHistory"
+        component={RideHistory}
       />
     </Stack.Navigator>
   );

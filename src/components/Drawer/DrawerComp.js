@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,14 +13,18 @@ import {ListItem} from 'react-native-elements';
 import {Icon} from 'react-native-elements';
 import {appImages, drawerIcons} from '../../utilities/images';
 import MyStatusBar from '../Header/statusBar';
+import {LogoutModal} from '../Modal/LogoutModal/LogoutModal';
+import I18n from '../../utilities/translations';
 
 const DrawerComponent = ({navigation}) => {
+  const modalRef = useRef(null);
+
   const list = [
     {
       icon: drawerIcons.rides_history,
       label: 'Rides History',
       onPress: () => {
-        alert('Coming Soon');
+        navigation?.navigate('RideHistory');
         navigation.closeDrawer();
       },
     },
@@ -74,17 +78,20 @@ const DrawerComponent = ({navigation}) => {
       icon: drawerIcons.settings,
       label: 'Settings',
       onPress: () => {
-        // navigation.navigate('Logout');
+        navigation.navigate('Settings');
       },
     },
     {
       icon: drawerIcons.logout,
       label: 'Log out',
       onPress: () => {
-        // navigation.navigate('Logout');
+        navigation.closeDrawer();
+
+        modalRef?.current?.open();
       },
     },
   ];
+
   return (
     <>
       <MyStatusBar
@@ -139,6 +146,23 @@ const DrawerComponent = ({navigation}) => {
             </ListItem>
           ))}
         </ScrollView>
+        {
+          <LogoutModal
+            h1={I18n.t('logout')}
+            h2={I18n.t('logout_text')}
+            onPress={() => {
+              modalRef?.current?.close();
+              navigation.navigate('AuthStack');
+            }}
+            btnText={I18n.t('yes')}
+            btnText2={I18n.t('cancel')}
+            show={modalRef}
+            icon={drawerIcons.logout}
+            onPress2={() => {
+              modalRef.current?.close();
+            }}
+          />
+        }
       </SafeAreaView>
     </>
   );
@@ -147,7 +171,7 @@ const DrawerComponent = ({navigation}) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    width: WP('70'),
+    // width: WP('70'),
     backgroundColor: colors.light_green,
   },
   userInfoContainer: {

@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {CustomHeader} from '../../components';
-import {colors, family, HP, size} from '../../utilities';
+import {CustomHeader} from '../../../components';
+import {colors, family, HP, size, WP} from '../../../utilities';
 import {Icon} from 'react-native-elements';
 
-const Settings = () => {
+const Settings = ({navigation}) => {
   const ItemsView = ({data}) => {
     console.log('data value on items view  ', data);
 
@@ -33,11 +33,11 @@ const Settings = () => {
   let data = [
     {
       title: 'Language',
-      onPress: () => alert('Clicked'),
+      onPress: () => navigation.navigate('LanguageSelect'),
     },
     {
       title: 'Help & Support',
-      onPress: () => alert('Clicked'),
+      onPress: () => navigation.navigate('Help'),
     },
     {
       title: 'Notifications Settings',
@@ -53,15 +53,15 @@ const Settings = () => {
     },
     {
       title: 'About Us',
-      onPress: () => alert('Clicked'),
+      onPress: () => navigation.navigate('AboutUs'),
     },
     {
       title: 'Terms & Conditions',
-      onPress: () => alert('Clicked'),
+      onPress: () => navigation.navigate('Terms'),
     },
     {
       title: 'Privacy Policy',
-      onPress: () => alert('Clicked'),
+      onPress: () => navigation.navigate('Privacy'),
     },
     {
       title: 'Rate Us',
@@ -75,8 +75,13 @@ const Settings = () => {
 
   return (
     <>
-      <CustomHeader title="Settings" backButton={true} />
-      <SafeAreaView style={styles.container}>
+      <CustomHeader
+        title="Settings"
+        backButton={true}
+        navigation={navigation}
+      />
+
+      <View style={styles.container}>
         <ScrollView>
           <View style={styles.settingsContentContainer}>
             {data.map(item => (
@@ -85,7 +90,7 @@ const Settings = () => {
             <Text style={styles.versionText}>1.0.0</Text>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </>
   );
 };
@@ -96,8 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   settingsContentContainer: {
-    // marginVertical: HP('2'),
-    marginHorizontal: HP('2.5'),
+    paddingHorizontal: WP('5'),
   },
   itemView: {
     marginVertical: HP('2'),
@@ -108,12 +112,12 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: size.normal,
-    fontFamily: family.product_sans_regular,
+    // fontFamily: family.product_sans_regular,
     color: colors.light_black,
   },
   versionText: {
     fontSize: size.normal,
-    fontFamily: family.product_sans_regular,
+    // fontFamily: family.product_sans_regular,
     color: colors.g1,
   },
 });

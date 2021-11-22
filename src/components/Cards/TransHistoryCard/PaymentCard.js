@@ -24,7 +24,7 @@ export const PaymentCard = ({title, add_Money, onPress, onPressAddMoney}) => {
               <TouchableOpacity
                 onPress={onPressAddMoney}
                 style={styles.btnStyle}>
-                <Image source={appIcons.filter} style={styles.btnImage} />
+                <Image source={appIcons.plus} style={styles.btnImage} />
                 <Text style={styles.btntext}>{add_Money}</Text>
               </TouchableOpacity>
             ) : (
@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
   },
   btnImage: {
     tintColor: colors.blue,
-    height: 11,
-    width: 11,
+    height: 10,
+    width: 10,
     marginRight: 5,
   },
   header2Text: {
