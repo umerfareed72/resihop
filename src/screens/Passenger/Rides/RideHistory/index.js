@@ -15,7 +15,7 @@ import {
   SortModal,
   TransHistoryCard,
 } from '../../../../components';
-import {appIcons, appImages} from '../../../../utilities';
+import {appIcons, appImages, colors} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 //Data
@@ -113,14 +113,16 @@ const index = ({navigation}) => {
         backButton={true}
         title={I18n.t('ride_history')}
         navigation={navigation}
-        btnImage={appIcons.filter}
+        btnImage1={appIcons.filter}
+        height3={10}
+        width3={20}
         onPress={() => {
           filterModalRef.current.open();
         }}
         onPress1={() => {
           sortModalRef.current.open();
         }}
-        btnImage1={appIcons.mobiledata}
+        btnImage={appIcons.mobiledata}
       />
       <View style={styles.container}>
         <View style={styles.contentContainer}>
