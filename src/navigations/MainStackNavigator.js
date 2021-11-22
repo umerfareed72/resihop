@@ -11,6 +11,7 @@ import Settings from '../screens/Settings/Settings';
 import Help from '../screens/Help/Help';
 import Faq from '../screens/Faq/Faq';
 import Contribution from '../screens/Contribution/Contribuion';
+import Invite from '../screens/Invite/Invite';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -27,6 +28,11 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Invite"
+          component={Invite}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="Contribution"

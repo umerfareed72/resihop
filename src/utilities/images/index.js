@@ -21,6 +21,7 @@ export const appImages = {
   calendar: require('../../assets/icons/png/calendar.png'),
   app_logo: require('../../assets/icons/png/app_logo.png'),
   valley: require('../../assets/images/valley.png'),
+  inviteImage: require('../../assets/icons/png/invite_prop.png'),
 };
 export const drawerIcons = {
   Favourites: require('../../assets/icons/png/drawerIcons/Favourites.png'),
