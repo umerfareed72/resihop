@@ -57,6 +57,13 @@ const Help = () => {
       descripion:
         'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
     },
+    {
+      id: 7,
+      title: 'Lorem ipsum dolor sit amet, consetetur',
+      expanded: false,
+      descripion:
+        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
+    },
   ]);
 
   //methods here
