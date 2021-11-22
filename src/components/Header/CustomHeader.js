@@ -15,6 +15,10 @@ export const CustomHeader = ({
   onPress1,
   barColor,
   headerColor,
+  tintColor3,
+  bg3Color,
+  height3,
+  width3,
 }) => {
   return (
     <>
@@ -59,7 +63,7 @@ export const CustomHeader = ({
                 onPress={onPress1}
                 hitSlop={styles.hitSlope}
                 style={styles.btnImageContainer1}>
-                <Image style={styles.headerImage1} source={btnImage1} />
+                <Image style={[styles.headerImage1]} source={btnImage} />
               </TouchableOpacity>
             ) : (
               false
@@ -68,8 +72,21 @@ export const CustomHeader = ({
               <TouchableOpacity
                 onPress={onPress}
                 hitSlop={styles.hitSlope}
-                style={[styles.btnImageContainer]}>
-                <Image style={styles.headerImage} source={btnImage} />
+                style={[
+                  styles.btnImageContainer,
+                  {backgroundColor: bg3Color ? bg3Color : colors.green},
+                ]}>
+                <Image
+                  style={[
+                    styles.headerImage,
+                    {
+                      tintColor: tintColor3 ? tintColor3 : colors?.white,
+                      height: height3,
+                      width: width3,
+                    },
+                  ]}
+                  source={btnImage1}
+                />
               </TouchableOpacity>
             ) : (
               false

@@ -1,34 +1,32 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView, View, StyleSheet, Image, Text} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import {CustomHeader} from '../../components/Header/CustomHeader';
-import {app_logo} from '../../assets';
-import {colors, family, size} from '../../utilities';
+import {CustomHeader} from '../../../components/Header/CustomHeader';
+import {appImages, colors, family, size} from '../../../utilities';
 import {Divider} from 'react-native-elements/dist/divider/Divider';
 
 const NotificationList = ({navigation}) => {
-  const imagePath = require('../../assets/icons/png/app_logo.png');
   const data = [
     {
-      image: imagePath,
+      image: appImages.app_logo,
       title: 'Lorem ipsum dolor sit amet',
       description:
         'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
     },
     {
-      image: imagePath,
+      image: appImages.app_logo,
       title: 'Lorem ipsum dolor sit amet',
       description:
         'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
     },
     {
-      image: imagePath,
+      image: appImages.app_logo,
       title: 'Lorem ipsum dolor sit amet',
       description:
         'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
     },
     {
-      image: imagePath,
+      image: appImages.app_logo,
       title: 'Lorem ipsum dolor sit amet',
       description:
         'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
