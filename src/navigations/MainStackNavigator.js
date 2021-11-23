@@ -3,6 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
+import Offers from '../screens/Offers/Offers';
+import Reports from '../screens/Reports/Reports';
 import {DrawerNavigator} from './PassengerDrawerNav';
 
 const Stack = createStackNavigator();
@@ -20,6 +22,16 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Reports"
+          component={Reports}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Offers"
+          component={Offers}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="Splash"

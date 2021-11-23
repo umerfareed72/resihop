@@ -46,4 +46,7 @@ export const colors = {
   dark_red: '#BF2A2A',
   //greens
   light_green: '#F6FFEF',
+
+  offerCardColor: ['#BEFF8D', '#EFFFDE'],
+  reportCardColor: ['#9ADFFF', '#3AADFF', '#4094FF'],
 };

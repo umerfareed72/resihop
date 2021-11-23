@@ -15,6 +15,7 @@ export const appIcons = {
   walkthrough_img_two: require('../../assets/icons/png/walkthroughimg2.png'),
   landing_user_img: require('../../assets/icons/png/landingUserImg.png'),
   share_icon: require('../../assets/icons/png/share.png'),
+  car_icon: require('../../assets/icons/png/driver/driver_recurring_ride.png'),
 };
 export const appImages = {
   visa: require('../../assets/images/visa.png'),
