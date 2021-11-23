@@ -26,6 +26,7 @@ import {
 import {Button, Icon, Input, Text} from 'react-native-elements';
 import Chips from '../../components/Chips';
 import GenderChips from '../../components/GenderChips';
+import UploadImage from '../../components/UploadImage';
 
 const user = {
   Passenger: 'Passenger',
@@ -39,7 +40,7 @@ const gender = {
   Other: 'Other',
 };
 
-function PersonalDetails() {
+function PersonalDetails(props) {
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
   const [pic, setPic] = useState(undefined);
@@ -187,15 +188,19 @@ function PersonalDetails() {
                     setGenderType(chips[0].text);
                   }}
                 />
-                {/* <UploadImage
-                  getPicUri={(asset: Asset) => {
+                <UploadImage
+                  getPicUri={asset => {
                     setPic(asset);
                   }}
-                /> */}
+                />
+                
                 <Button
                   title={next}
-                  onPress={() => handleSubmit()}
-                  disabled={!pic || !isValid}
+                  onPress={() =>
+                    props.navigation.navigate('PassengerDashboard')
+                  }
+                  //   onPress={() => handleSubmit()}
+                  //   disabled={!pic || !isValid}
                   icon={
                     <Icon
                       name={'arrowright'}
@@ -217,7 +222,6 @@ function PersonalDetails() {
                     marginTop: 20,
                   }}
                 />
-                {/*)}*/}
               </View>
             </>
           )}
