@@ -54,7 +54,7 @@ function landingUser({navigation}) {
             buttonStyle={theme.Button.buttonStyle}
             titleStyle={theme.Button.titleStyle}
             onPress={() => {
-              navigation.navigate('PassengerDashboard');
+              navigation.navigate('SignInScreen');
             }}
             disabledStyle={theme.Button.disabledStyle}
             disabledTitleStyle={theme.Button.disabledTitleStyle}
