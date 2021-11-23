@@ -33,6 +33,8 @@ export const colors = {
   g1: '#C5C5C5',
   g2: '#818181',
   g3: '#898989',
+  g4: '#777777',
+  g5: '#A1A1A1',
   dropShadow: '#007BD233',
   btnGray: '#C5C5C5',
   inputTxtGray: '#777777',
@@ -40,7 +42,8 @@ export const colors = {
   blue: '#007BD2',
   txtBlack: '#101010',
   lineGray: '#DFDFDF',
-
+  gray_shade: '#6F6F6F',
+  dark_red: '#BF2A2A',
   //greens
   light_green: '#F6FFEF',
 };

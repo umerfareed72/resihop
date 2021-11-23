@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {Header} from '../../components';
+import {CustomHeader, Header} from '../../components';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
 import {mobile_number, sign_in} from '../../theme/strings';
@@ -21,6 +21,23 @@ function signIn(props) {
         />
       </View>
     </Container>
+=======
+import {Divider} from 'react-native-elements/dist/divider/Divider';
+
+function signIn(props) {
+  return (
+    <>
+      <CustomHeader navigation={props?.navigation} backButton={true} />
+      <Container padding={0}>
+        <View style={styles.viewCon}>
+          <Text style={[theme.Text.h1Bold, styles.heading]}>
+            {_.startCase(sign_in)}
+          </Text>
+          <Text style={[theme.Text.h2Bold]}>{_.startCase(mobile_number)}</Text>
+          <OtpValidator />
+        </View>
+      </Container>
+    </>
   );
 }
 
