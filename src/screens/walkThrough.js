@@ -15,11 +15,11 @@ import {appIcons} from '../utilities/images';
 
 const introData = [
   {
-    key: '1',
+    key: '0',
     img: appIcons.walkthrough_img_one,
   },
   {
-    key: '2',
+    key: '1',
     img: appIcons.walkthrough_img_two,
   },
 ];
@@ -79,6 +79,7 @@ function walkThrough(props) {
             data={introData}
             expandingDotWidth={30}
             //@ts-ignore
+
             scrollX={scrollX}
             inActiveDotOpacity={0.6}
             activeDotColor={theme.colors.primary}
