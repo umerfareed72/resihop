@@ -1,11 +1,12 @@
-import {Fab} from 'native-base';
-import React, {Component} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Image,
   SafeAreaView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
+  Keyboard,
   View,
 } from 'react-native';
 
@@ -13,9 +14,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import {CustomHeader} from '../../components/Header/CustomHeader';
 import {colors, family, HP, size} from '../../utilities';
 import {appImages, appIcons} from '../../utilities';
-import style from '../Passenger/Payment/AddPaymentMethod/AddCard/style';
+import CalendarSheet from '../CalendarSheet';
 
 const Reports = () => {
+  const calendarSheetRef = useRef(null);
+  const [date, setDate] = useState();
   return (
     <>
       <CustomHeader title="Reports" backButton={true} />
@@ -70,15 +73,136 @@ const Reports = () => {
                 <Text style={styles.buttonMonthText}>Last 1 Year</Text>
               </TouchableOpacity>
             </View>
+
+            <View style={styles.rangeContainer}>
+              <Text style={styles.downloadReport}>Select Range</Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: colors.light_black,
+                  borderRadius: 30,
+                  width: 160,
+                  height: 30,
+                  marginVertical: HP('2'),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={styles.promoStyleReplica}>
+                  Select Calendar Year
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <>
+                <TextInput
+                  placeholder="Start Date"
+                  placeholderTextColor={colors.btnGray}
+                  value={date}
+                  onChangeText={setDate}
+                  onPressOut={() => calendarSheetRef.current.open()}
+                  onPressIn={() => Keyboard.dismiss()}
+                  style={[styles.noLater, {marginRight: 11}]}
+                />
+                <Image
+                  source={appImages.calendar}
+                  resizeMode="contain"
+                  style={styles.calendarIcon}
+                />
+              </>
+              <>
+                <TextInput
+                  placeholder="End Date"
+                  placeholderTextColor={colors.btnGray}
+                  value={date}
+                  onChangeText={setDate}
+                  onPressOut={() => calendarSheetRef.current.open()}
+                  onPressIn={() => Keyboard.dismiss()}
+                  style={[styles.noLater, {marginRight: 11}]}
+                />
+                <Image
+                  source={appImages.calendar}
+                  resizeMode="contain"
+                  style={styles.calendarIcon}
+                />
+              </>
+            </View>
+            <Text
+              style={{
+                color: colors.g1,
+                marginVertical: HP(2),
+                fontFamily: family.product_sans_regular,
+                fontSize: size.xsmall,
+              }}>
+              Select Atleast 1 Month Time Bracket
+            </Text>
+            <View
+              style={{
+                marginHorizontal: HP('2'),
+                marginVertical: HP('2'),
+                borderRadius: 13,
+                backgroundColor: '#E9FFD9',
+              }}>
+              <Text
+                style={{
+                  fontSize: size.tiny,
+                  fontFamily: family.product_sans_regular,
+                  color: colors.light_black,
+                  textAlign: 'center',
+                  marginHorizontal: HP('1'),
+                  marginVertical: HP('2'),
+                }}>
+                Your Earning/Spending Report has been successfully sent to your
+                registered email address.
+              </Text>
+            </View>
           </View>
-          <View style={styles.containerTwo}></View>
+          <View style={styles.containerTwo}>
+            <TouchableOpacity
+              style={{
+                borderRadius: 15,
+                height: HP('7'),
+                width: '100%',
+                backgroundColor: colors.green,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: size.normal,
+                  // fontFamily: family.product_sans_bold,
+                  color: colors.white,
+                }}>
+                Download Report
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
+
+      <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  calendarIcon: {
+    height: 18,
+    //   width: 18,
+    position: 'relative',
+    right: 60,
+    top: 13,
+  },
+  noLater: {
+    height: 44,
+    width: 140,
+    borderWidth: 1,
+    borderColor: colors.greyBorder,
+    borderRadius: 10,
+    paddingLeft: 16,
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.inputTxtGray,
+  },
   downloadReport: {
     marginVertical: HP('2'),
     fontSize: size.normal,
@@ -87,6 +211,11 @@ const styles = StyleSheet.create({
   },
   monthButtonContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  rangeContainer: {
+    flexDirection: 'row',
+    marginVertical: HP('2'),
     justifyContent: 'space-between',
   },
   buttonMonthText: {
@@ -117,6 +246,8 @@ const styles = StyleSheet.create({
   },
   containerTwo: {
     flex: 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
     // backgroundColor: 'pink',
   },
   tabContainer: {
@@ -215,6 +346,12 @@ const styles = StyleSheet.create({
   },
   promoStyle: {
     marginLeft: HP('2'),
+    fontSize: size.xsmall,
+    fontFamily: family.product_sans_regular,
+    color: colors.white,
+  },
+  promoStyleReplica: {
+    // marginLeft: HP('2'),
     fontSize: size.xsmall,
     fontFamily: family.product_sans_regular,
     color: colors.white,
