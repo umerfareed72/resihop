@@ -4,6 +4,7 @@ import landingUser from '../../screens/landingUser';
 import walkThrough from '../../screens/walkThrough';
 import languageSelect from '../../screens/LanguageSelect/languageSelect';
 import SignIn from '../../screens/SignInScreen/SignIn';
+import Pledge from '../../screens/Pledge';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,11 @@ function AuthStack(props) {
         options={{headerShown: false}}
         name="SignInScreen"
         component={SignIn}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Pledge"
+        component={Pledge}
       />
     </Stack.Navigator>
   );

@@ -33,7 +33,10 @@ function landingUser({navigation}) {
           style={styles.imgCon}
           imageStyle={{height: '100%'}}
           resizeMode={'cover'}>
-          <MyStatusBar backgroundColor={'transparent'} />
+          <MyStatusBar
+            backgroundColor={'transparent'}
+            barStyle={'dark-content'}
+          />
           <TouchableOpacity
             onPress={() => {
               navigation?.goBack();
@@ -54,7 +57,7 @@ function landingUser({navigation}) {
             buttonStyle={theme.Button.buttonStyle}
             titleStyle={theme.Button.titleStyle}
             onPress={() => {
-              navigation.navigate('SignInScreen');
+              navigation.navigate('Pledge');
             }}
             disabledStyle={theme.Button.disabledStyle}
             disabledTitleStyle={theme.Button.disabledTitleStyle}

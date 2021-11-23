@@ -44,7 +44,7 @@ function OtpValidator() {
       ToastAndroid.show(please_enter_phone_msg, ToastAndroid.LONG);
       return;
     }
-    setOtpArea(true)
+    setOtpArea(true);
     const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
     reactotron.log(phone);
     reactotron.log(phoneNum);

@@ -6,6 +6,8 @@ export * from './Titles/PaymentHistory';
 export * from './Cards/TransHistoryCard/TransHistory';
 //Buttons
 export * from './Buttons/Payment/PaymentButtons';
+export * from './Buttons/AgreeButton';
+
 //App Inputs
 export * from './AppInput/PaymentInput/PaymentInput';
 export * from './AppInput/ModalInput/BlockInput';
@@ -16,9 +18,10 @@ export * from './Cards/TransHistoryCard/TransHistory';
 export * from './Cards/RideHistoryCard/RideHistory';
 export * from './Cards/TransHistoryCard/PaymentCard';
 export * from './Cards/ContributionCard';
+export * from './Cards/Pledge/PledgeCard';
 
-//OTP 
-export * from '../components/OtpValidator'
+//OTP
+export * from '../components/OtpValidator';
 
 //Modals
 
