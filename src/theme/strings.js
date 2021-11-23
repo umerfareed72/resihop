@@ -37,7 +37,7 @@ export const by_clicking_bank_id_text = `By Clicking “Sign with Bank ID" butto
 export const i_agree_to_res_ihop = 'I agree to RES IHOP';
 export const terms_and_condition_text = 'Terms and Conditions';
 export const walkthrough_msg_one = `Offer empty places in the car on the way to work and get compensation from those who travel. Don't worry, we take care of all connections, you just input you route.`;
-export const dummy_ipsum_msg = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,`;
+export const dummy_ipsum_msg = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,`;
 export const dummy_ipsum_msg_small = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`;
 
 //APP NAME

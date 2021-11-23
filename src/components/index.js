@@ -15,6 +15,9 @@ export * from './Cards/BankCard/BankCard';
 export * from './Cards/TransHistoryCard/TransHistory';
 export * from './Cards/TransHistoryCard/PaymentCard';
 
+//OTP 
+export * from '../components/OtpValidator'
+
 //Modals
 
 export * from './Modal/DeleteCard/DeleteCardModal';

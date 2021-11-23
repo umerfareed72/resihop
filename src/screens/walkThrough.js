@@ -40,25 +40,21 @@ function walkThrough(props) {
     outputRange: [0, introData.length * width],
   });
 
-  const onPageScroll = React.useMemo(
-    () => {
-      Animated.event <
-        PagerViewOnPageScrollEvent >
-        [
-          {
-            nativeEvent: {
-              offset: scrollOffsetAnimatedValue,
-              position: positionAnimatedValue,
-            },
-          },
-        ],
+  const onPageScroll = React.useMemo(() => {
+    Animated.event <
+      PagerViewOnPageScrollEvent >
+      [
         {
-          useNativeDriver: false,
-        };
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  );
+          nativeEvent: {
+            offset: scrollOffsetAnimatedValue,
+            position: positionAnimatedValue,
+          },
+        },
+      ],
+      {
+        useNativeDriver: false,
+      };
+  });
   return (
     <Container padding={0} flexGrow={2} paddingBottom={100} bounce={false}>
       <View style={{height: '100%', width: '100%'}}>
