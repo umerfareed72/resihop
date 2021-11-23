@@ -68,7 +68,7 @@ function landingUser({navigation}) {
           <Button
             title={sign_up}
             onPress={() => {
-              navigation.navigate('PassengerDashboard');
+              navigation.navigate('SignUpScreen');
             }}
             buttonStyle={[theme.Button.buttonStyle, styles.signUpButton]}
             titleStyle={[theme.Button.titleStyle, styles.signUpBtnText]}

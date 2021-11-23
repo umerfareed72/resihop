@@ -16,6 +16,7 @@ const Header = ({
   rightText,
   rightAction,
   leftAction,
+  marginTop
 }) => {
   return (
     <RneHeader
@@ -30,6 +31,7 @@ const Header = ({
                 width: 300,
                 justifyContent: 'flex-start',
                 alignItems: 'center',
+                marginTop: marginTop
               },
             ]}>
             <Icon
