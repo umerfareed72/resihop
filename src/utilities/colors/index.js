@@ -43,6 +43,7 @@ export const colors = {
   txtBlack: '#101010',
   lineGray: '#DFDFDF',
   txtGray: '#A1A1A1',
+  blueLocation: '#41D5F9',
 
   //greens
   light_green: '#F6FFEF',

@@ -39,6 +39,33 @@ const MapViewComponent = ({
     getLocation();
   }, []);
 
+  let customMarkers = [
+    {
+      id: 1,
+      latitude: 31.526219,
+      longitude: 74.342077,
+      text: '20 SEK | 20 M',
+    },
+    {
+      id: 2,
+      latitude: 31.523227,
+      longitude: 74.34243,
+      text: '20 SEK | 20 M',
+    },
+    {
+      id: 3,
+      latitude: 31.525761,
+      longitude: 74.346379,
+      text: '20 SEK | 20 M',
+    },
+    {
+      id: 4,
+      latitude: 31.523259,
+      longitude: 74.347673,
+      text: '20 SEK | 20 M',
+    },
+  ];
+
   const getLocation = async () => {
     let permission;
 
@@ -73,8 +100,8 @@ const MapViewComponent = ({
       <MapView
         provider={PROVIDER_GOOGLE}
         region={{
-          latitude: Platform.OS === 'ios' ? 31.524909 : latitude,
-          longitude: Platform.OS === 'ios' ? 74.34291 : longitude,
+          latitude: 31.524909,
+          longitude: 74.34291,
           latitudeDelta: 0.009,
           longitudeDelta: 0.009,
         }}
@@ -82,7 +109,25 @@ const MapViewComponent = ({
         zoomEnabled={true}
         zoomControlEnabled={true}
         style={{...StyleSheet.absoluteFillObject}}>
-        <Marker coordinate={{latitude: latitude, longitude: longitude}} />
+        <Marker
+          coordinate={{
+            latitude: 31.524909,
+            longitude: 74.34291,
+          }}>
+          <View style={styles.currenLocation} />
+        </Marker>
+        {customMarkers.map(item => (
+          <Marker
+            key={item.id}
+            coordinate={{
+              latitude: item.latitude,
+              longitude: item.longitude,
+            }}>
+            <View style={styles.driverMarker}>
+              <Text style={{color: colors.white}}>{item.text}</Text>
+            </View>
+          </Marker>
+        ))}
       </MapView>
 
       {modalName === 'startLocation' ||
@@ -428,6 +473,22 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     marginTop: 20,
+  },
+  currenLocation: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    backgroundColor: colors.blueLocation,
+    borderWidth: 2,
+    borderColor: colors.white,
+  },
+  driverMarker: {
+    height: 28,
+    paddingHorizontal: 10,
+    backgroundColor: colors.blue,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
