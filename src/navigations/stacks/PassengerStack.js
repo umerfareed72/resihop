@@ -11,6 +11,7 @@ import AddCard from '../../screens/Passenger/Payment/AddPaymentMethod/AddCard';
 import CardDetail from '../../screens/Passenger/Payment/AddPaymentMethod/CardDetail';
 import Payment from '../../screens/Passenger/Payment/AddPaymentMethod';
 import StartMatching from '../../screens/StartMatching';
+import AvailableDrivers from '../../screens/AvailableDrivers';
 
 const Stack = createStackNavigator();
 
@@ -77,6 +78,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="StartMatching"
         component={StartMatching}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AvailableDrivers"
+        component={AvailableDrivers}
       />
     </Stack.Navigator>
   );

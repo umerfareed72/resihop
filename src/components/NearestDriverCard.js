@@ -2,10 +2,10 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {appIcons, appImages, colors} from '../utilities';
 
-const NearestDriverCard = ({setAvailableDrivers}) => {
+const NearestDriverCard = ({setModal}) => {
   useEffect(() => {
     const interval = setTimeout(() => {
-      setAvailableDrivers(true);
+      setModal('available');
     }, 1000);
 
     return () => {

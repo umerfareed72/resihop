@@ -14,8 +14,16 @@ import {appIcons, appImages, colors} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CustomHeader} from './Header/CustomHeader';
+import StartMatchingSheet from './StartMatchingSheet';
+import NearestDriverCard from './NearestDriverCard';
+import AvailableDrivers from './AvailableDriversCard';
 
-const MapViewComponent = ({modalName, addfavrouiteAddressRef}) => {
+const MapViewComponent = ({
+  modalName,
+  addfavrouiteAddressRef,
+  rideModals,
+  setModal,
+}) => {
   let navigation = useNavigation();
 
   const [latitude, setLatitude] = useState(0);
@@ -76,7 +84,9 @@ const MapViewComponent = ({modalName, addfavrouiteAddressRef}) => {
         <Marker coordinate={{latitude: latitude, longitude: longitude}} />
       </MapView>
 
-      {modalName && (
+      {modalName === 'startLocation' ||
+      modalName === 'destination' ||
+      modalName === 'returnTrip' ? (
         <View style={styles.upperModalContainer}>
           <CustomHeader
             backButton={true}
@@ -238,7 +248,14 @@ const MapViewComponent = ({modalName, addfavrouiteAddressRef}) => {
             <Text style={styles.nextTxt}>Next</Text>
           </TouchableOpacity>
         </View>
-      )}
+      ) : null}
+      {rideModals === 'startMatching' ? (
+        <StartMatchingSheet setModal={setModal} />
+      ) : rideModals === 'finding' ? (
+        <NearestDriverCard setModal={setModal} />
+      ) : rideModals === 'available' ? (
+        <AvailableDrivers />
+      ) : null}
     </>
   );
 };

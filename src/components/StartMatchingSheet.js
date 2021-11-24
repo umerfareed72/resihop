@@ -2,11 +2,8 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Slider from '@react-native-community/slider';
 import {colors} from '../utilities';
-import {useNavigation} from '@react-navigation/core';
 
-const StartMatchingSheet = ({setNearestDriver}) => {
-  let navigation = useNavigation();
-
+const StartMatchingSheet = ({setModal}) => {
   const [sliderValue, setSliderValue] = useState(0);
 
   return (
@@ -31,7 +28,7 @@ const StartMatchingSheet = ({setNearestDriver}) => {
       </View>
       <TouchableOpacity
         style={styles.btnWrapper}
-        onPress={() => setNearestDriver(true)}>
+        onPress={() => setModal('finding')}>
         <Text style={styles.btnTxt}>Start Matching</Text>
       </TouchableOpacity>
     </View>

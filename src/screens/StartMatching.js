@@ -4,19 +4,17 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import MyStatusBar from '../components/Header/statusBar';
 import MapViewComponent from '../components/MapViewComponent';
 import {appIcons, colors} from '../utilities';
-import StartMatchingSheet from './StartMatchingSheet';
-import NearestDriverCard from './NearestDriverCard';
-import AvailableDrivers from './AvailableDrivers';
 
 const StartMatching = () => {
   let navigation = useNavigation();
   const [nearestDriver, setNearestDriver] = useState(false);
   const [availableDrivers, setAvailableDrivers] = useState(false);
+  const [modal, setModal] = useState('startMatching');
 
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor="transparent" />
-      <MapViewComponent />
+      <MapViewComponent rideModals={modal} setModal={setModal} />
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => navigation.goBack()}>
@@ -26,13 +24,16 @@ const StartMatching = () => {
           style={styles.arrowBack}
         />
       </TouchableOpacity>
-      {!nearestDriver ? (
+      {/* {!nearestDriver ? (
         <StartMatchingSheet setNearestDriver={setNearestDriver} />
       ) : availableDrivers ? (
-        <AvailableDrivers />
+        <AvailableDriversCard
+          setAvailableDrivers={setAvailableDrivers}
+          setNearestDriver={setNearestDriver}
+        />
       ) : (
         <NearestDriverCard setAvailableDrivers={setAvailableDrivers} />
-      )}
+      )} */}
     </View>
   );
 };
