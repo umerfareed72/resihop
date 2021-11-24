@@ -1,5 +1,6 @@
 export * from './Header/Header';
 export * from './Header/CustomHeader';
+export * from './Loading'
 //Titles
 export * from './Titles/PaymentHistory';
 

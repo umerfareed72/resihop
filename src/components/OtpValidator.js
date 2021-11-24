@@ -18,8 +18,10 @@ import {
 } from '../theme/strings';
 import reactotron from 'reactotron-react-native';
 import CountDownTimer from 'react-native-countdown-timer-hooks';
+import {useNavigation} from '@react-navigation/native';
 
-function OtpValidator() {
+const OtpValidator = ({isSignUp}) => {
+  const navigation = useNavigation();
   const [country, setCountry] = useState();
   const [phoneNum, setPhoneNum] = useState('');
   const [countDown, setCountDown] = useState(30);
@@ -48,10 +50,10 @@ function OtpValidator() {
     const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
     reactotron.log(phone);
     reactotron.log(phoneNum);
-    // if (isSignUp) {
-    //   goToPersonalDetailScreen(country, phoneNum);
+    // if (!isSignUp) {
+
     // } else {
-    //   goToHome();
+    //   // goToHome();
     // }
   };
 
@@ -117,7 +119,11 @@ function OtpValidator() {
         <View style={styles.otpCon}>
           <Text style={[theme.Text.h2Bold]}>{verify_code}</Text>
           <Input
-            onChangeText={text => text.length === 6}
+            onChangeText={text => {
+              if (text.length === 6) {
+                navigation.navigate('PersonalDetails');
+              }
+            }}
             keyboardAppearance="light"
             placeholder={'OTP'}
             maxLength={6}
@@ -149,7 +155,7 @@ function OtpValidator() {
       )}
     </View>
   );
-}
+};
 
 export default OtpValidator;
 
