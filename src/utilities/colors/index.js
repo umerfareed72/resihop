@@ -44,8 +44,11 @@ export const colors = {
   lineGray: '#DFDFDF',
   gray_shade: '#6F6F6F',
   dark_red: '#BF2A2A',
+  red: '#FF1616',
   //greens
   light_green: '#F6FFEF',
+  favouriteTabColor: '#ECFFDF',
+  favouriteBorderColor: '#F2F2F2',
 
   offerCardColor: ['#BEFF8D', '#EFFFDE'],
   reportCardColor: ['#9ADFFF', '#3AADFF', '#4094FF'],

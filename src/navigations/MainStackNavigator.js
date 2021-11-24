@@ -5,6 +5,7 @@ import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
 import Offers from '../screens/Offers/Offers';
 import Reports from '../screens/Reports/Reports';
+import Favourites from '../screens/Favourites/Favourites';
 import {DrawerNavigator} from './PassengerDrawerNav';
 
 const Stack = createStackNavigator();
@@ -22,6 +23,11 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Favourites"
+          component={Favourites}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="Reports"

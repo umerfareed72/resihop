@@ -16,9 +16,12 @@ export * from './Cards/TransHistoryCard/TransHistory';
 export * from './Cards/RideHistoryCard/RideHistory';
 export * from './Cards/TransHistoryCard/PaymentCard';
 export * from './Cards/ContributionCard';
+export * from './Cards/FavouritesCard/FavDriver';
+export * from './Cards/FavouritesCard/FavPassenger';
+export * from './Cards/FavouritesCard/FavLocation';
 
-//OTP 
-export * from '../components/OtpValidator'
+//OTP
+export * from '../components/OtpValidator';
 
 //Modals
 
