@@ -17,6 +17,7 @@ export const appIcons = {
 export const appImages = {
   visa: require('../../assets/images/visa.png'),
   seatBlue: require('../../assets/icons/png/seat_blue.png'),
+  seatGreen: require('../../assets/icons/png/seat_green.png'),
   calendar: require('../../assets/icons/png/calendar.png'),
   app_logo: require('../../assets/icons/png/app_logo.png'),
 };

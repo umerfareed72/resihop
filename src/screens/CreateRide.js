@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   tripBtnWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 32,
+    marginTop: 10,
     justifyContent: 'space-between',
     width: '85%',
     alignSelf: 'center',

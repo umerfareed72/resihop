@@ -10,6 +10,7 @@ import NotificationList from '../../screens/NotificationList/NotificationList';
 import AddCard from '../../screens/Passenger/Payment/AddPaymentMethod/AddCard';
 import CardDetail from '../../screens/Passenger/Payment/AddPaymentMethod/CardDetail';
 import Payment from '../../screens/Passenger/Payment/AddPaymentMethod';
+import StartMatching from '../../screens/StartMatching';
 
 const Stack = createStackNavigator();
 
@@ -71,6 +72,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="NotificationList"
         component={NotificationList}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="StartMatching"
+        component={StartMatching}
       />
     </Stack.Navigator>
   );

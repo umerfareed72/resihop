@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {appIcons, colors} from '../utilities';
+import {appIcons, appImages, colors} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CustomHeader} from './Header/CustomHeader';
@@ -158,7 +158,7 @@ const MapViewComponent = ({modalName, addfavrouiteAddressRef}) => {
                 {seats.map(seat => (
                   <Image
                     key={seat}
-                    source={appIcons.seatBlue}
+                    source={appImages.seatBlue}
                     resizeMode="contain"
                     style={styles.seat}
                   />
@@ -214,7 +214,7 @@ const MapViewComponent = ({modalName, addfavrouiteAddressRef}) => {
                   style={[styles.noLater, {marginRight: 11}]}
                 />
                 <Image
-                  source={appIcons.calendar}
+                  source={appImages.calendar}
                   resizeMode="contain"
                   style={styles.calendarIcon}
                 />
@@ -234,7 +234,7 @@ const MapViewComponent = ({modalName, addfavrouiteAddressRef}) => {
                     : 25,
               },
             ]}
-            onPress={() => navigation.navigate('StartLocation')}>
+            onPress={() => navigation.navigate('StartMatching')}>
             <Text style={styles.nextTxt}>Next</Text>
           </TouchableOpacity>
         </View>
