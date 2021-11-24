@@ -77,15 +77,15 @@ const styles = StyleSheet.create({
   header2Text: {
     fontSize: size.xsmall,
     color: colors.white,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
   },
   btntext: {
     color: colors.blue,
     fontSize: size.xxsmall,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
   },
   header2Bold: {
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
     paddingHorizontal: 20,
     fontSize: size.h3,
     color: colors.white,

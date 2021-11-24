@@ -35,6 +35,7 @@ export const colors = {
   g3: '#898989',
   g4: '#777777',
   g5: '#A1A1A1',
+  g6: '#F2F2F2',
   dropShadow: '#007BD233',
   btnGray: '#C5C5C5',
   inputTxtGray: '#777777',
@@ -46,4 +47,7 @@ export const colors = {
   dark_red: '#BF2A2A',
   //greens
   light_green: '#F6FFEF',
+  light_white: '#E8E8E8',
+  offerCardColor: ['#BEFF8D', '#EFFFDE'],
+  reportCardColor: ['#9ADFFF', '#3AADFF', '#4094FF'],
 };

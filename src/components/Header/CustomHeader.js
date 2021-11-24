@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingRight: 20,
-    // paddingTop: 5,
+    paddingTop: 4,
   },
   header: {
     color: colors.black,

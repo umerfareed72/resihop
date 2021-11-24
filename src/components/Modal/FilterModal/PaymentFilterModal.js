@@ -178,12 +178,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   h1: {
-    // fontFamily:family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     fontSize: size.xxlarge,
     color: colors.light_black,
   },
   h2: {
-    // fontFamily:family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     fontSize: size.xxlarge,
     color: colors.green,
     top: 1,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     fontSize: size.normal,
     color: colors.light_black,
     paddingVertical: 10,
-    // fontFamily:family.product_sans_regular
+    fontFamily: family.product_sans_regular,
   },
   listbtnContainer: {
     backgroundColor: colors.g1,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   listbtnText: {
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     fontSize: size.xsmall,
     color: colors.white,
   },

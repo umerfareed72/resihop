@@ -50,16 +50,19 @@ const DrawerComponent = ({navigation}) => {
       icon: drawerIcons.reports,
       label: 'Reports',
       onPress: () => {
-        // navigation.navigate('Logout');
+        navigation.push('Reports', {
+          routeName: 'Reports',
+        });
+        navigation.closeDrawer();
       },
     },
     {
       icon: drawerIcons.offers,
       label: 'Offers',
       onPress: () => {
-        // navigation.push('Invite', {
-        //   routeName: 'Invite',
-        // });
+        navigation.push('Offers', {
+          routeName: 'Offers',
+        });
         navigation.closeDrawer();
       },
     },
@@ -206,7 +209,7 @@ const styles = StyleSheet.create({
     color: colors.light_black,
     marginVertical: HP('3.5'),
     marginRight: HP('2'),
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
   buttonContainer: {
     width: 160,
@@ -219,7 +222,7 @@ const styles = StyleSheet.create({
   },
   passengerStyle: {
     fontSize: size.xsmall,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: '#FFFFFF',
     marginRight: HP('1'),
     marginHorizontal: HP('1'),
@@ -252,7 +255,7 @@ const styles = StyleSheet.create({
   drawerItemLabel: {
     fontSize: size.normal,
     color: colors.light_black,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
 });
 

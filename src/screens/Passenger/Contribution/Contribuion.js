@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: size.xxlarge,
     color: colors.light_black,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
   buttonStyle: {
     backgroundColor: colors.green,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: size.h5,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
     color: colors.white,
   },
 });

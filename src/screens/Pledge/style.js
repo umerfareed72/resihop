@@ -14,7 +14,7 @@ export default StyleSheet.create({
     color: colors.light_black,
     fontWeight: 'bold',
     textAlignVertical: 'center',
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
   h1Container: {
     paddingVertical: 10,

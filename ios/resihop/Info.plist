@@ -22,6 +22,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -35,22 +37,20 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Resihop Camera Open</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<string>I want to know where your here.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Resihop Location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Resihop always location</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Location usage</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Resihop gallery</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Resihop Gallery Picker</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>product_sans_bold.ttf</string>
@@ -72,7 +72,17 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>I want to know where your here.</string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

@@ -45,7 +45,7 @@ const Invite = ({navigation}) => {
               <Text
                 style={{
                   fontSize: size.normal,
-                  // fontFamily: family.product_sans_bold,
+                  fontFamily: family.product_sans_bold,
                   color: colors.white,
                 }}>
                 Invite Friends
@@ -68,12 +68,12 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: size.xxlarge,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
     color: colors.light_black,
   },
   descriptionText: {
     fontSize: size.small,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     lineHeight: 25,
     color: colors.light_black,
   },
@@ -97,12 +97,12 @@ const styles = StyleSheet.create({
   codeText: {
     marginLeft: HP('2'),
     fontSize: size.xxlarge,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.light_black,
   },
   copyText: {
     fontSize: size.xsmall,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.blue,
     marginRight: HP('2'),
   },

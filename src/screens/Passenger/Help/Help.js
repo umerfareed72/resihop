@@ -130,7 +130,7 @@ const Help = ({navigation}) => {
               <Text
                 style={{
                   fontSize: size.normal,
-                  // fontFamily: family.product_sans_bold,
+                  fontFamily: family.product_sans_bold,
                   color: colors.white,
                 }}>
                 Submit
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   reportText: {
     fontSize: size.normal,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
     color: colors.blue,
     marginVertical: HP('1'),
   },
@@ -185,12 +185,12 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: size.normal,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.light_black,
   },
   descriptionText: {
     fontSize: size.xxsmall,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.gray_shade,
   },
 });

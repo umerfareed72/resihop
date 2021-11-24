@@ -40,6 +40,6 @@ const styles = StyleSheet.create({
   titleStyle: {
     color: colors.black,
     fontSize: size.normal,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
   },
 });

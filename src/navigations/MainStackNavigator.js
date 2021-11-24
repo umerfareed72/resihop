@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
+
 import {DrawerNavigator} from './PassengerDrawerNav';
 
 const Stack = createStackNavigator();

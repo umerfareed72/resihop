@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     padding: WP('5'),
   },
   headerStyle: {
-    // fontFamily:family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     fontSize: size.xxlarge,
     color: colors.light_black,
   },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: size.normal,
-    // fontFamily:family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.light_black,
   },
 });

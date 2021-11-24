@@ -99,12 +99,12 @@ const styles = StyleSheet.create({
   titleTextStyle: {
     fontSize: size.xsmall,
     color: colors.light_black,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
   descriptionTextStyle: {
     fontSize: size.xxsmall,
     marginVertical: 10,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.grimmyGray,
   },
 });

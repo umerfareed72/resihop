@@ -148,14 +148,14 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: size.normal,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.light_black,
   },
   descriptionText: {
     fontSize: size.xxsmall,
     // marginVertical: HP('1'),
     marginBottom: HP('3'),
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.gray_shade,
   },
 });

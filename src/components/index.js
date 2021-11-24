@@ -19,6 +19,7 @@ export * from './Cards/RideHistoryCard/RideHistory';
 export * from './Cards/TransHistoryCard/PaymentCard';
 export * from './Cards/ContributionCard';
 export * from './Cards/Pledge/PledgeCard';
+export * from './Cards/BlockedList/BlockedListCard';
 
 //OTP
 export * from '../components/OtpValidator';

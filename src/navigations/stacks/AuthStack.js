@@ -36,7 +36,7 @@ function AuthStack(props) {
         name="SignInScreen"
         component={SignIn}
       />
-       <Stack.Screen
+      <Stack.Screen
         options={{headerShown: false}}
         name="SignUpScreen"
         component={SignUp}
@@ -45,6 +45,7 @@ function AuthStack(props) {
         options={{headerShown: false}}
         name="PersonalDetails"
         component={PersonalDetails}
+      />
       <Stack.Screen
         options={{headerShown: false}}
         name="Pledge"

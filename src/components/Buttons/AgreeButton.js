@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native';
-import {appIcons, colors, size} from '../../utilities';
+import {appIcons, colors, family, size} from '../../utilities';
 
 export const AgreeButton = ({
   onPress,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: size.normal,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
   btnInner: {
     width: 21,

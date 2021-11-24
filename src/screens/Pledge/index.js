@@ -25,6 +25,9 @@ const index = ({navigation}) => {
           />
           <View style={styles.btnWrapper}>
             <AgreeButton
+              onPress={() => {
+                navigation?.navigate('PassengerDashboard');
+              }}
               fontWeight={'bold'}
               bgColor={colors.green}
               title={I18n.t('pledge_agree')}
