@@ -41,6 +41,7 @@ export const colors = {
   blue: '#007BD2',
   txtBlack: '#101010',
   lineGray: '#DFDFDF',
+  txtGray: '#A1A1A1',
 
   //greens
   light_green: '#F6FFEF',

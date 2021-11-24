@@ -1,8 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {appIcons, appImages, colors} from '../utilities';
 
-const NearestDriverCard = () => {
+const NearestDriverCard = ({setAvailableDrivers}) => {
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      setAvailableDrivers(true);
+    }, 1000);
+
+    return () => {
+      clearTimeout(interval);
+    };
+  }, []);
+
   return (
     <View style={styles.mainWrapper}>
       <View style={styles.addressContainer}>

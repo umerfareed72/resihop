@@ -1,13 +1,17 @@
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/core';
-import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import MyStatusBar from '../components/Header/statusBar';
 import MapViewComponent from '../components/MapViewComponent';
 import {appIcons, colors} from '../utilities';
 import StartMatchingSheet from './StartMatchingSheet';
+import NearestDriverCard from './NearestDriverCard';
+import AvailableDrivers from './AvailableDrivers';
 
 const StartMatching = () => {
   let navigation = useNavigation();
+  const [nearestDriver, setNearestDriver] = useState(false);
+  const [availableDrivers, setAvailableDrivers] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -22,7 +26,13 @@ const StartMatching = () => {
           style={styles.arrowBack}
         />
       </TouchableOpacity>
-      <StartMatchingSheet />
+      {!nearestDriver ? (
+        <StartMatchingSheet setNearestDriver={setNearestDriver} />
+      ) : availableDrivers ? (
+        <AvailableDrivers />
+      ) : (
+        <NearestDriverCard setAvailableDrivers={setAvailableDrivers} />
+      )}
     </View>
   );
 };

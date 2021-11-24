@@ -20,6 +20,7 @@ export const appImages = {
   seatGreen: require('../../assets/icons/png/seat_green.png'),
   calendar: require('../../assets/icons/png/calendar.png'),
   app_logo: require('../../assets/icons/png/app_logo.png'),
+  driver: require('../../assets/icons/png/driver/driver.png'),
 };
 export const drawerIcons = {
   Favourites: require('../../assets/icons/png/drawerIcons/Favourites.png'),

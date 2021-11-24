@@ -3,13 +3,11 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Slider from '@react-native-community/slider';
 import {colors} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
-import NearestDriverCard from './NearestDriverCard';
 
-const StartMatchingSheet = () => {
+const StartMatchingSheet = ({setNearestDriver}) => {
   let navigation = useNavigation();
 
   const [sliderValue, setSliderValue] = useState(0);
-  const [nearestDriver, setNearestDriver] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -36,7 +34,6 @@ const StartMatchingSheet = () => {
         onPress={() => setNearestDriver(true)}>
         <Text style={styles.btnTxt}>Start Matching</Text>
       </TouchableOpacity>
-      {nearestDriver && <NearestDriverCard />}
     </View>
   );
 };
