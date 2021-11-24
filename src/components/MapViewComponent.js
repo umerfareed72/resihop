@@ -23,6 +23,7 @@ const MapViewComponent = ({
   addfavrouiteAddressRef,
   rideModals,
   setModal,
+  onPress,
 }) => {
   let navigation = useNavigation();
 
@@ -244,7 +245,7 @@ const MapViewComponent = ({
                     : 25,
               },
             ]}
-            onPress={() => navigation.navigate('StartMatching')}>
+            onPress={onPress}>
             <Text style={styles.nextTxt}>Next</Text>
           </TouchableOpacity>
         </View>

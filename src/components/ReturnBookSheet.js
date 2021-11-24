@@ -1,9 +1,12 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
+import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
 
 const ReturnBookSheet = ({returnBookSheetRef}) => {
+  let navigation = useNavigation();
+
   return (
     <RBSheet
       ref={returnBookSheetRef}
@@ -19,13 +22,22 @@ const ReturnBookSheet = ({returnBookSheetRef}) => {
       }}>
       <Text style={styles.question}>Do you want to book Return Trip?</Text>
       <TouchableOpacity
+        onPress={() => {
+          returnBookSheetRef.current.close();
+          navigation.navigate('ReturnTrip');
+        }}
         style={[
           styles.btnContainer,
           {backgroundColor: colors.green, marginBottom: 19},
         ]}>
         <Text style={styles.btnTxt}>OK</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.btnContainer}>
+      <TouchableOpacity
+        style={styles.btnContainer}
+        onPress={() => {
+          returnBookSheetRef.current.close();
+          navigation.navigate('BookingDetails');
+        }}>
         <Text style={styles.btnTxt}>Skip</Text>
       </TouchableOpacity>
     </RBSheet>
