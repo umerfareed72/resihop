@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Keyboard,
   KeyboardAvoidingView,
+  Linking,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Formik} from 'formik';
@@ -27,6 +28,8 @@ import {Button, Icon, Input, Text} from 'react-native-elements';
 import Chips from '../../components/Chips';
 import GenderChips from '../../components/GenderChips';
 import UploadImage from '../../components/UploadImage';
+import SigninViaBankID from '../../components/SigninViaBankID';
+import BankWebView from '../../components/BankWebView';
 
 const user = {
   Passenger: 'Passenger',
@@ -43,6 +46,7 @@ const gender = {
 function PersonalDetails(props) {
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
+  const [bankView, setBankView] = useState(false);
   const [pic, setPic] = useState(undefined);
   const refFirstName = useRef();
   const refLastName = useRef();
@@ -59,6 +63,7 @@ function PersonalDetails(props) {
           validationSchema={personalFormSchema}
           onSubmit={values => {
             Keyboard.dismiss();
+            props.navigation.navigate('UploadLicence');
             // values.PERSONAL_FORM.gender = genderType;
             // values.role = userType;
             // values.mobile = `${country.callingCode}${mobileNum}`;
@@ -98,7 +103,9 @@ function PersonalDetails(props) {
                   keyboardAppearance="light"
                   onChangeText={handleChange('firstName')}
                   placeholder={
-                    userIsPassenger ? first_name_text : first_name_driver_text
+                    userType === 'Passenger'
+                      ? first_name_text
+                      : first_name_driver_text
                   }
                   autoFocus={false}
                   autoCapitalize="none"
@@ -121,7 +128,9 @@ function PersonalDetails(props) {
                   onChangeText={handleChange('lastName')}
                   style={theme.Input.inputStyle}
                   placeholder={
-                    userIsPassenger ? last_name_text : last_name_driver_text
+                    userType === 'Passenger'
+                      ? last_name_text
+                      : last_name_driver_text
                   }
                   autoFocus={false}
                   autoCapitalize="none"
@@ -193,40 +202,59 @@ function PersonalDetails(props) {
                     setPic(asset);
                   }}
                 />
-                
-                <Button
-                  title={next}
-                  onPress={() =>
-                    props.navigation.navigate('PassengerDashboard')
-                  }
-                  //   onPress={() => handleSubmit()}
-                  //   disabled={!pic || !isValid}
-                  icon={
-                    <Icon
-                      name={'arrowright'}
-                      type={'antdesign'}
-                      style={{marginRight: 20}}
-                      color={theme.colors.white}
-                    />
-                  }
-                  iconPosition={'right'}
-                  buttonStyle={[
-                    theme.Button.buttonStyle,
-                    {justifyContent: 'space-between'},
-                  ]}
-                  titleStyle={[theme.Button.titleStyle, {paddingLeft: 20}]}
-                  disabledTitleStyle={theme.Button.disabledTitleStyle}
-                  containerStyle={{
-                    width: '90%',
-                    alignSelf: 'center',
-                    marginTop: 20,
-                  }}
-                />
+
+                {userType === 'Passenger' ? (
+                  <SigninViaBankID
+                    disabled={!pic || !isValid}
+                    onBankIdPress={async () => {
+                      try {
+                        const item = await Linking.canOpenURL(
+                          'http://com.bankid.bus',
+                        );
+                        console.log(item);
+                        setBankView(true);
+                      } catch (e) {
+                        console.log(e);
+                      }
+                    }}
+                  />
+                ) : (
+                  <Button
+                    title={next}
+                    onPress={() => handleSubmit()}
+                    disabled={!pic || !isValid}
+                    icon={
+                      <Icon
+                        name={'arrowright'}
+                        type={'antdesign'}
+                        style={{marginRight: 20}}
+                        color={theme.colors.white}
+                      />
+                    }
+                    iconPosition={'right'}
+                    buttonStyle={[
+                      theme.Button.buttonStyle,
+                      {justifyContent: 'space-between'},
+                    ]}
+                    titleStyle={[theme.Button.titleStyle, {paddingLeft: 20}]}
+                    disabledTitleStyle={theme.Button.disabledTitleStyle}
+                    containerStyle={{
+                      width: '90%',
+                      alignSelf: 'center',
+                      marginTop: 20,
+                    }}
+                  />
+                )}
               </View>
             </>
           )}
         </Formik>
       </ScrollView>
+      {bankView ? (
+        <View style={styles.modalView}>
+          <BankWebView setBankView={setBankView} />
+        </View>
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -270,5 +298,14 @@ const styles = StyleSheet.create({
   bottomCon: {
     marginTop: 10,
     padding: 10,
+  },
+  modalView: {
+    width: '90%',
+    height: '90%',
+    backgroundColor: 'red',
+    alignSelf: 'center',
+    position: 'absolute',
+    top: '8%',
+    elevation: 10,
   },
 });
