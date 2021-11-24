@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {useNavigation} from '@react-navigation/core';
 import {
   View,
@@ -11,9 +11,12 @@ import {
 import {CustomHeader} from '../components/Header/CustomHeader';
 import {appImages, colors} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ReturnBookSheet from '../components/ReturnBookSheet';
 
 const AvailableDrivers = () => {
   let navigation = useNavigation();
+
+  const returnBookSheetRef = useRef(null);
 
   const data = [1, 2, 3, 4, 5, 6, 7];
 
@@ -70,12 +73,15 @@ const AvailableDrivers = () => {
               </View>
               <Text style={styles.date}>12 June 2020</Text>
             </View>
-            <TouchableOpacity style={styles.btnContainer}>
+            <TouchableOpacity
+              style={styles.btnContainer}
+              onPress={() => returnBookSheetRef.current.open()}>
               <Text style={styles.btnTxt}>Book Now</Text>
             </TouchableOpacity>
           </View>
         )}
       />
+      <ReturnBookSheet returnBookSheetRef={returnBookSheetRef} />
     </View>
   );
 };
