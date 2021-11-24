@@ -25,6 +25,7 @@ export const RideFilterModal = ({
   h1,
   h2,
   show,
+  onApply,
   time,
   status,
   date,
@@ -229,6 +230,7 @@ export const RideFilterModal = ({
 
           <View style={{padding: 20}}>
             <PaymentButtons
+              onPress={onApply}
               title={'Apply'}
               bgColor={colors.green}
               txtColor={colors.white}

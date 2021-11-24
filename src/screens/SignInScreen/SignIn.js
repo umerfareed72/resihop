@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {Header} from '../../components';
+import {CustomHeader, Header} from '../../components';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
 import {mobile_number, sign_in} from '../../theme/strings';

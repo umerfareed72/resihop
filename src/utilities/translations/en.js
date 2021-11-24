@@ -69,4 +69,10 @@ export default {
   withdraw: 'Withdraw',
   balance: 'Balance',
   wp_title: 'Enter Amount you Want to Withdraw',
+  ride_history: 'Rides History',
+  logout: 'Log out',
+  cancel: 'Cancel',
+  logout_text: 'Are you sure you want to Logout?',
+  pledge_text_h1: 'ÅK IHOP Pledge',
+  pledge_agree: 'I Agree',
 };

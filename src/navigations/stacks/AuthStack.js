@@ -7,6 +7,7 @@ import SignIn from '../../screens/SignInScreen/SignIn';
 import SignUp from '../../screens/SignUpScreen/SignUp';
 import PersonalDetails from '../../screens/PersonalDetails/PersonalDetails';
 import UploadLicence from '../../screens/UploadLicence/UploadLicence';
+import Pledge from '../../screens/Pledge';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +37,7 @@ function AuthStack(props) {
         name="SignInScreen"
         component={SignIn}
       />
-       <Stack.Screen
+      <Stack.Screen
         options={{headerShown: false}}
         name="SignUpScreen"
         component={SignUp}
@@ -50,6 +51,11 @@ function AuthStack(props) {
         options={{headerShown: false}}
         name="UploadLicence"
         component={UploadLicence}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Pledge"
+        component={Pledge}
       />
     </Stack.Navigator>
   );

@@ -75,17 +75,20 @@ const index = ({navigation}) => {
     <>
       <CustomHeader
         backButton={true}
-        title={I18n.t('trnsaction_history')}
+        title={I18n.t('ride_history')}
         navigation={navigation}
-        btnImage={appIcons.filter}
+        btnImage1={appIcons.filter}
+        height3={10}
+        width3={20}
         onPress={() => {
           filterModalRef.current.open();
         }}
         onPress1={() => {
           sortModalRef.current.open();
         }}
-        btnImage1={appIcons.mobiledata}
+        btnImage={appIcons.mobiledata}
       />
+
       <View style={styles.container}>
         <View style={styles.contentContainer}>
           <TransHistoryCard />

@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native';
-import {family, size} from '../../../utilities';
+import {appIcons, colors, size} from '../../utilities';
 
-export const PaymentButtons = ({
+export const AgreeButton = ({
   onPress,
   title,
   bgColor,
@@ -27,19 +27,29 @@ export const PaymentButtons = ({
         ]}>
         {title}
       </Text>
+      <Image source={appIcons.next} style={styles.btnInner} />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   btnContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
     height: 56,
     borderRadius: 14,
+    width: '100%',
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   btnText: {
     fontSize: size.normal,
     // fontFamily: family.product_sans_bold,
+  },
+  btnInner: {
+    width: 21,
+    height: 14,
+    resizeMode: 'center',
+    tintColor: colors.white,
   },
 });
