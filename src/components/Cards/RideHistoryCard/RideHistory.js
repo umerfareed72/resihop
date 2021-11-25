@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 
-export const RideHistoryCard = ({cancelled}) => {
+export const RideHistoryCard = ({cancelled, driver}) => {
   const renderListItems = () => {
     return (
       <View style={styles.wrapper}>
@@ -35,37 +35,61 @@ export const RideHistoryCard = ({cancelled}) => {
                 </Text>
               </View>
             </View>
-
-            <View>
-              <FlatList
-                horizontal={true}
-                data={[1, 2]}
-                renderItem={() => {
-                  return (
-                    <Image
-                      style={[styles.rightIcon]}
-                      source={appImages.seatBlue}
-                    />
-                  );
-                }}
-              />
-            </View>
+            {driver ? (
+              false
+            ) : (
+              <View>
+                <FlatList
+                  horizontal={true}
+                  data={[1, 2]}
+                  renderItem={() => {
+                    return (
+                      <Image
+                        style={[styles.rightIcon]}
+                        source={appImages.seatBlue}
+                      />
+                    );
+                  }}
+                />
+              </View>
+            )}
           </View>
         </View>
-        <View style={styles.row3}>
-          <Image source={appIcons.noUpcomingRide} style={styles.icon50} />
-          <Text style={[styles.h2Text, {fontWeight: '500', color: colors.g5}]}>
-            Ford, Focus,{' '}
+        {driver ? (
+          <View>
+            <FlatList
+              horizontal={true}
+              data={[1, 2]}
+              renderItem={() => {
+                return (
+                  <Image
+                    style={[
+                      styles.rightIcon,
+                      {marginStart: driver ? 0 : 5, marginEnd: driver ? 5 : 0},
+                    ]}
+                    source={appImages.seatBlue}
+                  />
+                );
+              }}
+            />
+          </View>
+        ) : (
+          <View style={styles.row3}>
+            <Image source={appIcons.noUpcomingRide} style={styles.icon50} />
             <Text
-              style={[
-                styles.h2Text,
-                {fontWeight: 'bold', color: colors.light_black},
-              ]}>
-              White, XT32TTU8
+              style={[styles.h2Text, {fontWeight: '500', color: colors.g5}]}>
+              Ford, Focus,{' '}
+              <Text
+                style={[
+                  styles.h2Text,
+                  {fontWeight: 'bold', color: colors.light_black},
+                ]}>
+                White, XT32TTU8
+              </Text>
             </Text>
-          </Text>
-          <Image source={appImages.user} style={styles.icon42} />
-        </View>
+            <Image source={appImages.user} style={styles.icon42} />
+          </View>
+        )}
       </View>
     );
   };
@@ -135,7 +159,6 @@ const styles = StyleSheet.create({
     height: 18,
     resizeMode: 'contain',
     tintColor: colors.green,
-    marginStart: 5,
   },
   row3: {
     flexDirection: 'row',
