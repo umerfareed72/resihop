@@ -121,8 +121,7 @@ const OtpValidator = ({isSignUp}) => {
           <Input
             onChangeText={text => {
               if (text.length === 6) {
-                // navigation.navigate('PersonalDetails');
-                navigation.navigate('Pledge');
+                navigation.navigate('PersonalDetails');
               }
             }}
             keyboardAppearance="light"

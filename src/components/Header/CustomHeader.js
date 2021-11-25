@@ -66,28 +66,19 @@ export const CustomHeader = ({
           )}
           <View style={styles.wrapper2}>
             {btnImage ? (
-              <TouchableOpacity
-                onPress={onPress1}
-                hitSlop={styles.hitSlope}
-                style={styles.btnImageContainer1}>
+              <TouchableOpacity onPress={onPress1}>
                 <Image style={[styles.headerImage1]} source={btnImage} />
               </TouchableOpacity>
             ) : (
               false
             )}
             {btnImage1 ? (
-              <TouchableOpacity
-                onPress={onPress}
-                hitSlop={styles.hitSlope}
-                style={[
-                  styles.btnImageContainer,
-                  {backgroundColor: bg3Color ? bg3Color : colors.green},
-                ]}>
+              <TouchableOpacity onPress={onPress}>
                 <Image
                   style={[
                     styles.headerImage,
                     {
-                      tintColor: tintColor3 ? tintColor3 : colors?.white,
+                      // tintColor: tintColor3 ? tintColor3 : colors?.white,
                       height: height3,
                       width: width3,
                     },
@@ -144,16 +135,16 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   headerImage1: {
-    height: 20,
-    width: 20,
+    height: 25,
+    width: 25,
     resizeMode: 'contain',
-    tintColor: colors.white,
+    // tintColor: colors.white,
+    marginHorizontal: 5,
   },
   headerImage: {
-    height: 10,
-    width: 10,
+    height: 30,
+    width: 30,
     resizeMode: 'contain',
-    tintColor: colors.white,
   },
   hitSlope: {
     top: 30,

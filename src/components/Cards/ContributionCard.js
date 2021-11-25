@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   cardStyle: {
     marginTop: HP('2'),
     marginRight: HP('2'),
-    width: HP('21'),
+    width: HP('20'),
     height: HP('17'),
     backgroundColor: colors.white,
     borderRadius: 13,

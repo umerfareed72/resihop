@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Animated,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import {RectButton} from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {
   family,
   size,
@@ -16,7 +18,6 @@ import {
   HP,
   appIcons,
 } from '../../../utilities';
-import CheckBox from '@react-native-community/checkbox';
 import {Icon} from 'react-native-elements';
 
 let data = [
@@ -44,53 +45,68 @@ let data = [
 ];
 
 export const FavDriver = () => {
-  const DriverCard = ({data}) => {
-    console.log('DATA ===========>    ', data);
+  const renderRightActions = (progress, dragX) => {
     return (
-      <View style={styles.container}>
-        <View style={styles.leftContainer}>
-          <View style={styles.userImageContainer}>
-            <Image style={styles.userImage} source={data?.image} />
-            <View>
-              <View style={styles.userNameView}>
-                <Text style={styles.userName}>{data?.name}</Text>
-                <Icon
-                  name={'heart'}
-                  type={'antdesign'}
-                  color={colors.red}
-                  style={{marginLeft: HP('1'), marginTop: HP('0.5')}}
-                  size={15}
-                />
-              </View>
-              <View style={styles.ratingContainer}>
-                <Icon
-                  name={'star'}
-                  type={'entypo'}
-                  color={colors.white}
-                  //   style={{marginLeft: HP('1'), marginTop: HP('0.5')}}
-                  size={15}
-                />
-                <Text style={styles.ratingText}>4.5</Text>
+      <RectButton
+        style={{alignItems: 'center', justifyContent: 'center', padding: 20}}
+        onPress={() => {
+          alert('Item Deleted');
+        }}>
+        <Image
+          source={appIcons.dumpBox}
+          style={{height: 30, width: 30, resizeMode: 'contain'}}
+        />
+      </RectButton>
+    );
+  };
+  const DriverCard = ({data}) => {
+    return (
+      <Swipeable renderRightActions={renderRightActions}>
+        <View style={styles.container}>
+          <View style={styles.leftContainer}>
+            <View style={styles.userImageContainer}>
+              <Image style={styles.userImage} source={data?.image} />
+              <View>
+                <View style={styles.userNameView}>
+                  <Text style={styles.userName}>{data?.name}</Text>
+                  <Icon
+                    name={'heart'}
+                    type={'antdesign'}
+                    color={colors.red}
+                    style={{marginLeft: HP('1'), marginTop: HP('0.5')}}
+                    size={15}
+                  />
+                </View>
+                <View style={styles.ratingContainer}>
+                  <Icon
+                    name={'star'}
+                    type={'entypo'}
+                    color={colors.white}
+                    //   style={{marginLeft: HP('1'), marginTop: HP('0.5')}}
+                    size={15}
+                  />
+                  <Text style={styles.ratingText}>4.5</Text>
+                </View>
               </View>
             </View>
+            <View style={{marginVertical: HP('1')}}>
+              <Text style={styles.descriptionText}>
+                <Text style={styles.descriptionTextReplica}> Ford, Focus,</Text>{' '}
+                White, XT32TTU8
+              </Text>
+            </View>
           </View>
-          <View style={{marginVertical: HP('1')}}>
-            <Text style={styles.descriptionText}>
-              <Text style={styles.descriptionTextReplica}> Ford, Focus,</Text>{' '}
-              White, XT32TTU8
-            </Text>
+          <View style={styles.rightContainer}>
+            <View style={{alignItems: 'center'}}>
+              <Text style={styles.priceText}>{data?.price}</Text>
+            </View>
+            <Image
+              style={{width: HP('9'), height: HP('6')}}
+              source={appIcons.car_icon}
+            />
           </View>
         </View>
-        <View style={styles.rightContainer}>
-          <View style={{alignItems: 'center'}}>
-            <Text style={styles.priceText}>{data?.price}</Text>
-          </View>
-          <Image
-            style={{width: HP('9'), height: HP('6')}}
-            source={appIcons.car_icon}
-          />
-        </View>
-      </View>
+      </Swipeable>
     );
   };
 

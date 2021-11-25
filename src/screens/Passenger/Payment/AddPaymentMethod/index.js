@@ -102,7 +102,7 @@ const index = ({navigation}) => {
               navigation?.navigate('TransactionHistory');
             }}
             title={'Transaction History'}
-            image={appIcons.mobiledata}
+            image={appIcons.sort}
           />
           {cardScreen && (
             <AddCard

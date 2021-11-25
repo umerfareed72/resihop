@@ -121,7 +121,11 @@ const BookingDetails = () => {
           SEK 40
         </Text>
       </View>
-      <TouchableOpacity style={styles.confirmBtnContainer}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation?.navigate('Payment');
+        }}
+        style={styles.confirmBtnContainer}>
         <Text style={styles.confirmTxt}>Confirm and Pay</Text>
       </TouchableOpacity>
     </View>

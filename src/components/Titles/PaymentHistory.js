@@ -5,7 +5,7 @@ export const PaymentHistory = ({title, image, onPress}) => {
   return (
     <>
       <View style={styles.container}>
-        <TouchableOpacity onPress={onPress} style={styles.btnContainer}>
+        <TouchableOpacity onPress={onPress}>
           <Image style={styles.imageStyle} source={image} />
         </TouchableOpacity>
         <Text style={styles.titleStyle}>{title}</Text>
@@ -25,8 +25,7 @@ const styles = StyleSheet.create({
     height: 25,
     width: 25,
     resizeMode: 'contain',
-    tintColor: colors.white,
-    transform: [{rotateZ: '90deg'}],
+    marginRight: 10,
   },
   btnContainer: {
     height: 30,
