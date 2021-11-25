@@ -29,9 +29,10 @@ const index = ({navigation}) => {
                 navigation?.navigate('PassengerDashboard');
               }}
               fontWeight={'bold'}
-              bgColor={colors.green}
+              bgColor={colors.primary}
               title={I18n.t('pledge_agree')}
               txtColor={colors.white}
+              onPress={() => navigation.navigate('PermissionScreen')}
             />
           </View>
         </View>

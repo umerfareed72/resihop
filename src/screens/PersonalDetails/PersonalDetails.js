@@ -30,6 +30,7 @@ import GenderChips from '../../components/GenderChips';
 import UploadImage from '../../components/UploadImage';
 import SigninViaBankID from '../../components/SigninViaBankID';
 import BankWebView from '../../components/BankWebView';
+import {Header} from '../../components';
 
 const user = {
   Passenger: 'Passenger',
@@ -55,7 +56,8 @@ function PersonalDetails(props) {
 
   const userIsPassenger = user === user.Passenger;
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white', margin: 5}}>
+      <Header leftAction={() => props.navigation.goBack()} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Formik
           initialValues={personalFormFields}
