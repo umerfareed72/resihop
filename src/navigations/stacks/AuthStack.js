@@ -6,6 +6,7 @@ import languageSelect from '../../screens/LanguageSelect/languageSelect';
 import SignIn from '../../screens/SignInScreen/SignIn';
 import SignUp from '../../screens/SignUpScreen/SignUp';
 import PersonalDetails from '../../screens/PersonalDetails/PersonalDetails';
+import UploadLicence from '../../screens/UploadLicence/UploadLicence';
 import Pledge from '../../screens/Pledge';
 
 const Stack = createStackNavigator();
@@ -45,6 +46,11 @@ function AuthStack(props) {
         options={{headerShown: false}}
         name="PersonalDetails"
         component={PersonalDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="UploadLicence"
+        component={UploadLicence}
       />
       <Stack.Screen
         options={{headerShown: false}}

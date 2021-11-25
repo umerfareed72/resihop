@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Keyboard,
   KeyboardAvoidingView,
+  Linking,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Formik} from 'formik';
@@ -27,8 +28,8 @@ import {Button, Icon, Input, Text} from 'react-native-elements';
 import Chips from '../../components/Chips';
 import GenderChips from '../../components/GenderChips';
 import UploadImage from '../../components/UploadImage';
-import {colors} from '../../utilities';
-import {CustomHeader} from '../../components';
+import SigninViaBankID from '../../components/SigninViaBankID';
+import BankWebView from '../../components/BankWebView';
 
 const user = {
   Passenger: 'Passenger',
@@ -45,6 +46,7 @@ const gender = {
 function PersonalDetails(props) {
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
+  const [bankView, setBankView] = useState(false);
   const [pic, setPic] = useState(undefined);
   const refFirstName = useRef();
   const refLastName = useRef();
@@ -53,40 +55,144 @@ function PersonalDetails(props) {
 
   const userIsPassenger = user === user.Passenger;
   return (
-    <>
-      <CustomHeader backButton={true} navigation={props?.navigation} />
-      <View style={{flex: 1, backgroundColor: colors.white}}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Formik
-            initialValues={personalFormFields}
-            isInitialValid={false}
-            validationSchema={personalFormSchema}
-            onSubmit={values => {
-              Keyboard.dismiss();
-              // values.PERSONAL_FORM.gender = genderType;
-              // values.role = userType;
-              // values.mobile = `${country.callingCode}${mobileNum}`;
-              // attemptToSignUp(values, pic);
-            }}>
-            {({
-              handleChange,
-              handleSubmit,
-              values,
-              errors,
-              isValid,
-              handleBlur,
-            }) => (
-              <>
-                <View style={styles.viewCon}>
-                  <Text style={[theme.Text.h1Bold, styles.heading]}>
-                    {_.startCase(personal_details_text)}
-                  </Text>
-                  <Text style={theme.Text.h2Bold}>
-                    {_.startCase(enter_your_personal_details_text)}
-                  </Text>
-                </View>
-                <Chips
-                  horizontal={false}
+    <SafeAreaView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Formik
+          initialValues={personalFormFields}
+          isInitialValid={false}
+          validationSchema={personalFormSchema}
+          onSubmit={values => {
+            Keyboard.dismiss();
+            props.navigation.navigate('UploadLicence');
+            // values.PERSONAL_FORM.gender = genderType;
+            // values.role = userType;
+            // values.mobile = `${country.callingCode}${mobileNum}`;
+            // attemptToSignUp(values, pic);
+          }}>
+          {({
+            handleChange,
+            handleSubmit,
+            values,
+            errors,
+            isValid,
+            handleBlur,
+          }) => (
+            <>
+              <View style={styles.viewCon}>
+                <Text style={[theme.Text.h1Bold, styles.heading]}>
+                  {_.startCase(personal_details_text)}
+                </Text>
+                <Text style={theme.Text.h2Bold}>
+                  {_.startCase(enter_your_personal_details_text)}
+                </Text>
+              </View>
+              <Chips
+                horizontal={false}
+                onChipPress={chips => {
+                  const type = chips[0].text;
+                  setUserType(type);
+                  if (type === user.Driver) {
+                    // controlIsDriver(true);
+                  }
+                }}
+              />
+
+              <KeyboardAvoidingView style={styles.inputCon}>
+                <Input
+                  ref={refFirstName}
+                  keyboardAppearance="light"
+                  onChangeText={handleChange('firstName')}
+                  placeholder={
+                    userType === 'Passenger'
+                      ? first_name_text
+                      : first_name_driver_text
+                  }
+                  autoFocus={false}
+                  autoCapitalize="none"
+                  style={theme.Input.inputStyle}
+                  autoCorrect={false}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {
+                    refLastName.current.focus();
+                  }}
+                  inputContainerStyle={
+                    errors.firstName
+                      ? theme.Input.inputErrorContainerStyle
+                      : theme.Input.inputContainerStyle
+                  }
+                  errorMessage={errors.firstName}
+                />
+                <Input
+                  ref={refLastName}
+                  keyboardAppearance="light"
+                  onChangeText={handleChange('lastName')}
+                  style={theme.Input.inputStyle}
+                  placeholder={
+                    userType === 'Passenger'
+                      ? last_name_text
+                      : last_name_driver_text
+                  }
+                  autoFocus={false}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {
+                    refReferral.current.focus();
+                  }}
+                  inputContainerStyle={
+                    errors.lastName
+                      ? theme.Input.inputErrorContainerStyle
+                      : theme.Input.inputContainerStyle
+                  }
+                  errorMessage={errors.lastName}
+                />
+                <Input
+                  ref={refReferral}
+                  onChangeText={handleChange('refCode')}
+                  keyboardAppearance="light"
+                  placeholder={referral_code_opt_text}
+                  style={theme.Input.inputStyle}
+                  autoFocus={false}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {
+                    refEmail.current.focus();
+                  }}
+                  inputContainerStyle={
+                    errors.refCode
+                      ? theme.Input.inputErrorContainerStyle
+                      : theme.Input.inputContainerStyle
+                  }
+                  errorMessage={errors.refCode}
+                />
+                <Input
+                  ref={refEmail}
+                  keyboardAppearance="light"
+                  onChangeText={handleChange('email')}
+                  placeholder={email_address_text}
+                  style={theme.Input.inputStyle}
+                  autoFocus={false}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  returnKeyType={'done'}
+                  onSubmitEditing={() => {
+                    Keyboard.dismiss();
+                  }}
+                  inputContainerStyle={
+                    errors.email
+                      ? theme.Input.inputErrorContainerStyle
+                      : theme.Input.inputContainerStyle
+                  }
+                  errorMessage={errors.email}
+                />
+              </KeyboardAvoidingView>
+              <View style={styles.bottomCon}>
+                <Text style={[theme.Text.h2Bold]}>
+                  {_.startCase(gender_text)}
+                </Text>
+                <GenderChips
                   onChipPress={chips => {
                     const type = chips[0].text;
                     setUserType(type);
@@ -96,113 +202,26 @@ function PersonalDetails(props) {
                   }}
                 />
 
-                <KeyboardAvoidingView style={styles.inputCon}>
-                  <Input
-                    ref={refFirstName}
-                    keyboardAppearance="light"
-                    onChangeText={handleChange('firstName')}
-                    placeholder={
-                      userIsPassenger ? first_name_text : first_name_driver_text
-                    }
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    style={theme.Input.inputStyle}
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      refLastName.current.focus();
-                    }}
-                    inputContainerStyle={
-                      errors.firstName
-                        ? theme.Input.inputErrorContainerStyle
-                        : theme.Input.inputContainerStyle
-                    }
-                    errorMessage={errors.firstName}
-                  />
-                  <Input
-                    ref={refLastName}
-                    keyboardAppearance="light"
-                    onChangeText={handleChange('lastName')}
-                    style={theme.Input.inputStyle}
-                    placeholder={
-                      userIsPassenger ? last_name_text : last_name_driver_text
-                    }
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      refReferral.current.focus();
-                    }}
-                    inputContainerStyle={
-                      errors.lastName
-                        ? theme.Input.inputErrorContainerStyle
-                        : theme.Input.inputContainerStyle
-                    }
-                    errorMessage={errors.lastName}
-                  />
-                  <Input
-                    ref={refReferral}
-                    onChangeText={handleChange('refCode')}
-                    keyboardAppearance="light"
-                    placeholder={referral_code_opt_text}
-                    style={theme.Input.inputStyle}
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      refEmail.current.focus();
-                    }}
-                    inputContainerStyle={
-                      errors.refCode
-                        ? theme.Input.inputErrorContainerStyle
-                        : theme.Input.inputContainerStyle
-                    }
-                    errorMessage={errors.refCode}
-                  />
-                  <Input
-                    ref={refEmail}
-                    keyboardAppearance="light"
-                    onChangeText={handleChange('email')}
-                    placeholder={email_address_text}
-                    style={theme.Input.inputStyle}
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    returnKeyType={'done'}
-                    onSubmitEditing={() => {
-                      Keyboard.dismiss();
-                    }}
-                    inputContainerStyle={
-                      errors.email
-                        ? theme.Input.inputErrorContainerStyle
-                        : theme.Input.inputContainerStyle
-                    }
-                    errorMessage={errors.email}
-                  />
-                </KeyboardAvoidingView>
-                <View style={styles.bottomCon}>
-                  <Text style={[theme.Text.h2Bold]}>
-                    {_.startCase(gender_text)}
-                  </Text>
-                  <GenderChips
-                    onChipPress={chips => {
-                      setGenderType(chips[0].text);
+                {userType === 'Passenger' ? (
+                  <SigninViaBankID
+                    disabled={!pic || !isValid}
+                    onBankIdPress={async () => {
+                      try {
+                        const item = await Linking.canOpenURL(
+                          'http://com.bankid.bus',
+                        );
+                        console.log(item);
+                        setBankView(true);
+                      } catch (e) {
+                        console.log(e);
+                      }
                     }}
                   />
-                  <UploadImage
-                    getPicUri={asset => {
-                      setPic(asset);
-                    }}
-                  />
-
+                ) : (
                   <Button
                     title={next}
-                    onPress={() => props.navigation.navigate('Pledge')}
-                    //   onPress={() => handleSubmit()}
-                    //   disabled={!pic || !isValid}
+                    onPress={() => handleSubmit()}
+                    disabled={!pic || !isValid}
                     icon={
                       <Icon
                         name={'arrowright'}
@@ -224,13 +243,18 @@ function PersonalDetails(props) {
                       marginTop: 20,
                     }}
                   />
-                </View>
-              </>
-            )}
-          </Formik>
-        </ScrollView>
-      </View>
-    </>
+                )}
+              </View>
+            </>
+          )}
+        </Formik>
+      </ScrollView>
+      {bankView ? (
+        <View style={styles.modalView}>
+          <BankWebView setBankView={setBankView} />
+        </View>
+      ) : null}
+    </SafeAreaView>
   );
 }
 
@@ -273,5 +297,14 @@ const styles = StyleSheet.create({
   bottomCon: {
     marginTop: 10,
     padding: 10,
+  },
+  modalView: {
+    width: '90%',
+    height: '90%',
+    backgroundColor: 'red',
+    alignSelf: 'center',
+    position: 'absolute',
+    top: '8%',
+    elevation: 10,
   },
 });
