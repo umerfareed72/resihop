@@ -21,6 +21,7 @@ export const appIcons = {
   next: require('../../assets/icons/png/next.png'),
   dumpBox: require('../../assets/icons/png/dumpBox.png'),
   car_icon: require('../../assets/icons/png/driver/driver_recurring_ride.png'),
+  // /icons/png/Group9368.png
 };
 export const appImages = {
   visa: require('../../assets/images/visa.png'),

@@ -3,7 +3,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
+import NotificationSettings from '../screens/NotificationSettings/NotificationSetting';
+import TransactionDetails from '../screens/TransactionDetails/TransactionDetails';
 import {DrawerNavigator} from './PassengerDrawerNav';
+import NotificationTune from '../screens/NotificationTune/NotificationTune';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -20,6 +23,23 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="NotificationSettings"
+          component={NotificationSettings}
+        />
+
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="NotificationTune"
+          component={NotificationTune}
+        />
+
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="TransactionDetails"
+          component={TransactionDetails}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="Splash"
