@@ -24,6 +24,7 @@ export const appIcons = {
 
   car_icon: require('../../assets/icons/png/driver/driver_recurring_ride.png'),
   driver_brick_bg: require('../../assets/icons/png/driver/driver_brick_bg.png'),
+  // /icons/png/Group9368.png
 };
 export const appImages = {
   visa: require('../../assets/images/visa.png'),

@@ -59,6 +59,9 @@ export const colors = {
   favouriteTabColor: '#ECFFDF',
   favouriteBorderColor: '#F2F2F2',
 
+  notificationBorder: '#CCCCCC',
+
   offerCardColor: ['#BEFF8D', '#EFFFDE'],
   reportCardColor: ['#9ADFFF', '#3AADFF', '#4094FF'],
+  transactionGradient: ['#F8FEFF', '#FFFFFF'],
 };

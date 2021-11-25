@@ -28,6 +28,9 @@ import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
+import NotificationSettings from '../..//screens/NotificationSettings/NotificationSetting';
+import TransactionDetails from '../../screens/TransactionDetails/TransactionDetails';
+import NotificationTune from '../../screens/NotificationTune/NotificationTune';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -174,6 +177,23 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="BookingDetails"
         component={BookingDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="NotificationSettings"
+        component={NotificationSettings}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="NotificationTune"
+        component={NotificationTune}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="TransactionDetails"
+        component={TransactionDetails}
       />
     </Stack.Navigator>
   );

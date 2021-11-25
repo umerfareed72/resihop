@@ -45,7 +45,7 @@ export const RideHistoryCard = ({cancelled, driver}) => {
                   renderItem={() => {
                     return (
                       <Image
-                        style={[styles.rightIcon]}
+                        style={[styles.rightIcon, {marginStart: 5}]}
                         source={appImages.seatBlue}
                       />
                     );

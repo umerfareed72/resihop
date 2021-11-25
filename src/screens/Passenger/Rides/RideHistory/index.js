@@ -126,7 +126,7 @@ const index = ({navigation}) => {
       />
       <View style={styles.container}>
         <View style={styles.contentContainer}>
-          <RideHistoryCard driver={true} />
+          <RideHistoryCard />
         </View>
       </View>
       <RideFilterModal
