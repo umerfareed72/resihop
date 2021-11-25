@@ -78,4 +78,7 @@ export default {
   blocked_list: 'Blocked Lists',
   language: 'Language',
   change_language: 'Change Language',
+
+  //Driver Strings
+  driver_home: 'Driver Home',
 };

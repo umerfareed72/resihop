@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  ScrollView,
 } from 'react-native';
 import {colors, appIcons, appImages, family} from '../../../utilities';
 import {
@@ -22,6 +23,7 @@ import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 import {RideFilterModal, SortModal} from '../../../components';
+import I18n from '../../../utilities/translations';
 //Data
 var TimeList = {
   id: 1,
@@ -77,7 +79,7 @@ const seatsList = {
     {id: 6, icon: appImages.seatBlue},
   ],
 };
-const PassengerHome = ({navigation}) => {
+const DriverHome = ({navigation}) => {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   //States
@@ -112,7 +114,6 @@ const PassengerHome = ({navigation}) => {
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
-
       <SafeAreaView style={styles.container}>
         {/* Top Header */}
         <View style={styles.passengerHeader}>
@@ -124,7 +125,7 @@ const PassengerHome = ({navigation}) => {
               onPress={() => navigation.toggleDrawer()}
             />
           </TouchableOpacity>
-          <Text style={{fontSize: 16}}>{passenger_home}</Text>
+          <Text style={{fontSize: 16}}>{I18n.t('driver_home')}</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('NotificationList');
@@ -133,11 +134,11 @@ const PassengerHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation?.replace('DriverDashboard');
+              navigation?.replace('PassengerDashboard');
             }}
             style={styles.switchToDriverBtnContainer}>
             <Text style={{fontSize: 13, color: colors.white}}>
-              Switch to Driver
+              Switch to Passenger
             </Text>
           </TouchableOpacity>
         </View>
@@ -146,38 +147,38 @@ const PassengerHome = ({navigation}) => {
 
         <View style={styles.cardMainContainer}>
           <View style={styles.cardContainer}>
-            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
-                source={appIcons.createRide}
+                source={appImages.green_car}
                 style={styles.cardInterior}
                 resizeMode="contain"
               />
               <Text style={[styles.cardTxt, {marginTop: 14}]}>
-                {create_ride}
+                Create Drive
               </Text>
             </View>
           </View>
           <View style={styles.cardContainer}>
-            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
-                source={appIcons.recurringRide}
+                source={appImages.blue_car}
                 style={styles.cardInterior}
                 resizeMode="contain"
               />
-              <Text style={styles.cardTxt}>{recurring_ride}</Text>
+              <Text style={styles.cardTxt}>My Recurring Drives</Text>
             </View>
           </View>
           <View style={styles.cardContainer}>
-            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
-                source={appIcons.cityRide}
+                source={appImages.city}
                 style={styles.cardInterior}
                 resizeMode="contain"
               />
-              <Text style={styles.cardTxt}>{city_to_city}</Text>
+              <Text style={styles.cardTxt}>City to City Drives</Text>
             </View>
           </View>
         </View>
@@ -201,16 +202,19 @@ const PassengerHome = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{marginBottom: 10}}>
+          <Image source={appIcons.driver_home} style={styles.noUpcomingRide} />
 
-        <Image source={appIcons.noUpcomingRide} style={styles.noUpcomingRide} />
+          <Text style={styles.Txt}>{lorem}</Text>
 
-        <Text style={styles.Txt}>{lorem}</Text>
-
-        <TouchableOpacity
-          style={styles.createRideBtnContainer}
-          onPress={() => navigation.navigate('CreateRide')}>
-          <Text style={styles.btnTxt}>{first_ride}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.createRideBtnContainer}
+            onPress={() => navigation.navigate('CreateRide')}>
+            <Text style={styles.btnTxt}>Create your Frist Drive</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </SafeAreaView>
       <RideFilterModal
         time={TimeList}
@@ -315,10 +319,11 @@ const styles = StyleSheet.create({
     lineHeight: 26,
   },
   noUpcomingRide: {
-    height: 197,
-    width: 247,
+    width: 305,
+    height: 278,
     alignSelf: 'center',
     marginTop: 30,
+    resizeMode: 'contain',
   },
   Txt: {
     textAlign: 'justify',
@@ -351,4 +356,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PassengerHome;
+export default DriverHome;

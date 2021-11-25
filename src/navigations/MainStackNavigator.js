@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
 import {DrawerNavigator} from './PassengerDrawerNav';
+import {DriverDrawerNavigator} from './DriverDraweNavigator';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -12,6 +13,16 @@ const PassengerNavigator = () => {
       screenOptions={{headerShown: false}}
       initialRouteName={'PassengerHome'}>
       <Stack.Screen name={'PassengerHome'} component={DrawerNavigator} />
+    </Stack.Navigator>
+  );
+};
+
+const DriverNavigator = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName={'DriverHome'}>
+      <Stack.Screen name={'DriverHome'} component={DriverDrawerNavigator} />
     </Stack.Navigator>
   );
 };
@@ -29,6 +40,11 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="PassengerDashboard"
           component={PassengerNavigator}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="DriverDashboard"
+          component={DriverNavigator}
         />
         <Stack.Screen
           options={{headerShown: false}}
