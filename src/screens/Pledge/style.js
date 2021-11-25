@@ -21,7 +21,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   btnWrapper: {
-    paddingVertical: 20,
-    paddingHorizontal: 10,
+    // paddingVertical: 20,
+    // paddingHorizontal: 10,
   },
 });

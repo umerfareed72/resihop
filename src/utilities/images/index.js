@@ -14,6 +14,7 @@ export const appIcons = {
   walkthrough_img_one: require('../../assets/icons/png/walkthroughimg1.png'),
   walkthrough_img_two: require('../../assets/icons/png/walkthroughimg2.png'),
   landing_user_img: require('../../assets/icons/png/landingUserImg.png'),
+  permission_img: require('../../assets/icons/png/permission.png'),
   share_icon: require('../../assets/icons/png/share.png'),
   spread_goodness: require('../../assets/icons/png/spread_goodness.png'),
   next: require('../../assets/icons/png/next.png'),

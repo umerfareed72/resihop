@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
   btnContainer: {
     height: 56,
     borderRadius: 14,
-    width: '100%',
     paddingHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',

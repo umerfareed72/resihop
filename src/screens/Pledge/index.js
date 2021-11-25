@@ -26,9 +26,10 @@ const index = ({navigation}) => {
           <View style={styles.btnWrapper}>
             <AgreeButton
               fontWeight={'bold'}
-              bgColor={colors.green}
+              bgColor={colors.primary}
               title={I18n.t('pledge_agree')}
               txtColor={colors.white}
+              onPress={() => navigation.navigate('PermissionScreen')}
             />
           </View>
         </View>
