@@ -36,7 +36,9 @@ export const colors = {
   g4: '#777777',
   g5: '#A1A1A1',
   g6: '#F2F2F2',
+  g4: '#828282',
   dropShadow: '#007BD233',
+  dropShadow2: '#00000029',
   btnGray: '#C5C5C5',
   inputTxtGray: '#777777',
   greyBorder: '#EEEEEE',
@@ -45,6 +47,9 @@ export const colors = {
   lineGray: '#DFDFDF',
   gray_shade: '#6F6F6F',
   dark_red: '#BF2A2A',
+  txtGray: '#A1A1A1',
+  blueLocation: '#41D5F9',
+
   //greens
   light_green: '#F6FFEF',
   light_white: '#E8E8E8',

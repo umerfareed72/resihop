@@ -23,6 +23,10 @@ import Offers from '../../screens/Passenger/Offers/Offers';
 import Reports from '../../screens/Passenger/Reports/Reports';
 import BlockedList from '../../screens/Passenger/BlockedList';
 import MultiLanguage from '../../screens/Passenger/MultiLanguage';
+import StartMatching from '../../screens/StartMatching';
+import AvailableDrivers from '../../screens/AvailableDrivers';
+import BookReturnTrip from '../../screens/BookReturnTrip';
+import BookingDetails from '../../screens/BookingDetails';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -144,7 +148,23 @@ function PassengerStack(props) {
         name="MultiLanguage"
         component={MultiLanguage}
       />
+      <Stack.Screen options={{headerShown: false}} component={StartMatching} />
       <Stack.Screen options={{headerShown: false}} name="Faq" component={Faq} />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AvailableDrivers"
+        component={AvailableDrivers}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="ReturnTrip"
+        component={BookReturnTrip}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="BookingDetails"
+        component={BookingDetails}
+      />
     </Stack.Navigator>
   );
 }

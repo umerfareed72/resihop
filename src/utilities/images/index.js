@@ -25,10 +25,12 @@ export const appImages = {
 
   user: require('../../assets/images/user.png'),
   seatBlue: require('../../assets/icons/png/seat_blue.png'),
+  seatGreen: require('../../assets/icons/png/seat_green.png'),
   calendar: require('../../assets/icons/png/calendar.png'),
   app_logo: require('../../assets/icons/png/app_logo.png'),
   valley: require('../../assets/images/valley.png'),
   inviteImage: require('../../assets/icons/png/invite_prop.png'),
+  driver: require('../../assets/icons/png/driver/driver.png'),
 };
 export const drawerIcons = {
   Favourites: require('../../assets/icons/png/drawerIcons/Favourites.png'),
