@@ -19,9 +19,17 @@ import RideHistory from '../../screens/Passenger/Rides/RideHistory';
 import Faq from '../../screens/Passenger/Faq/Faq';
 import Contribution from '../../screens/Passenger/Contribution/Contribuion';
 import Invite from '../../screens/Passenger/Invite/Invite';
+import Offers from '../../screens/Passenger/Offers/Offers';
+import Reports from '../../screens/Passenger/Reports/Reports';
+import BlockedList from '../../screens/Passenger/BlockedList';
+import MultiLanguage from '../../screens/Passenger/MultiLanguage';
+import StartMatching from '../../screens/StartMatching';
+import AvailableDrivers from '../../screens/AvailableDrivers';
+import BookReturnTrip from '../../screens/BookReturnTrip';
+import BookingDetails from '../../screens/BookingDetails';
+import Favourites from '../../screens/Passenger/Favourites/Favourites';
 
 const Stack = createStackNavigator();
-
 function PassengerStack(props) {
   return (
     <Stack.Navigator
@@ -31,6 +39,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="PassengerHome"
         component={PassengerHome}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Favourites"
+        component={Favourites}
       />
 
       <Stack.Screen
@@ -96,7 +109,16 @@ function PassengerStack(props) {
         name="AboutUs"
         component={AboutUs}
       />
-
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Reports"
+        component={Reports}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Offers"
+        component={Offers}
+      />
       <Stack.Screen
         options={{headerShown: false}}
         name="Privacy"
@@ -122,7 +144,37 @@ function PassengerStack(props) {
         name="Contribution"
         component={Contribution}
       />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="BlockedList"
+        component={BlockedList}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="MultiLanguage"
+        component={MultiLanguage}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="StartMatching"
+        component={StartMatching}
+      />
       <Stack.Screen options={{headerShown: false}} name="Faq" component={Faq} />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AvailableDrivers"
+        component={AvailableDrivers}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="ReturnTrip"
+        component={BookReturnTrip}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="BookingDetails"
+        component={BookingDetails}
+      />
     </Stack.Navigator>
   );
 }

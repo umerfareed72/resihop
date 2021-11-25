@@ -30,6 +30,8 @@ import GenderChips from '../../components/GenderChips';
 import UploadImage from '../../components/UploadImage';
 import SigninViaBankID from '../../components/SigninViaBankID';
 import BankWebView from '../../components/BankWebView';
+import {CustomHeader, Header} from '../../components';
+import {colors} from '../../utilities';
 
 const user = {
   Passenger: 'Passenger',
@@ -55,207 +57,210 @@ function PersonalDetails(props) {
 
   const userIsPassenger = user === user.Passenger;
   return (
-    <SafeAreaView>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Formik
-          initialValues={personalFormFields}
-          isInitialValid={false}
-          validationSchema={personalFormSchema}
-          onSubmit={values => {
-            Keyboard.dismiss();
-            props.navigation.navigate('UploadLicence');
-            // values.PERSONAL_FORM.gender = genderType;
-            // values.role = userType;
-            // values.mobile = `${country.callingCode}${mobileNum}`;
-            // attemptToSignUp(values, pic);
-          }}>
-          {({
-            handleChange,
-            handleSubmit,
-            values,
-            errors,
-            isValid,
-            handleBlur,
-          }) => (
-            <>
-              <View style={styles.viewCon}>
-                <Text style={[theme.Text.h1Bold, styles.heading]}>
-                  {_.startCase(personal_details_text)}
-                </Text>
-                <Text style={theme.Text.h2Bold}>
-                  {_.startCase(enter_your_personal_details_text)}
-                </Text>
-              </View>
-              <Chips
-                horizontal={false}
-                onChipPress={chips => {
-                  const type = chips[0].text;
-                  setUserType(type);
-                  if (type === user.Driver) {
-                    // controlIsDriver(true);
-                  }
-                }}
-              />
-
-              <KeyboardAvoidingView style={styles.inputCon}>
-                <Input
-                  ref={refFirstName}
-                  keyboardAppearance="light"
-                  onChangeText={handleChange('firstName')}
-                  placeholder={
-                    userType === 'Passenger'
-                      ? first_name_text
-                      : first_name_driver_text
-                  }
-                  autoFocus={false}
-                  autoCapitalize="none"
-                  style={theme.Input.inputStyle}
-                  autoCorrect={false}
-                  returnKeyType="next"
-                  onSubmitEditing={() => {
-                    refLastName.current.focus();
-                  }}
-                  inputContainerStyle={
-                    errors.firstName
-                      ? theme.Input.inputErrorContainerStyle
-                      : theme.Input.inputContainerStyle
-                  }
-                  errorMessage={errors.firstName}
-                />
-                <Input
-                  ref={refLastName}
-                  keyboardAppearance="light"
-                  onChangeText={handleChange('lastName')}
-                  style={theme.Input.inputStyle}
-                  placeholder={
-                    userType === 'Passenger'
-                      ? last_name_text
-                      : last_name_driver_text
-                  }
-                  autoFocus={false}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  returnKeyType="next"
-                  onSubmitEditing={() => {
-                    refReferral.current.focus();
-                  }}
-                  inputContainerStyle={
-                    errors.lastName
-                      ? theme.Input.inputErrorContainerStyle
-                      : theme.Input.inputContainerStyle
-                  }
-                  errorMessage={errors.lastName}
-                />
-                <Input
-                  ref={refReferral}
-                  onChangeText={handleChange('refCode')}
-                  keyboardAppearance="light"
-                  placeholder={referral_code_opt_text}
-                  style={theme.Input.inputStyle}
-                  autoFocus={false}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  returnKeyType="next"
-                  onSubmitEditing={() => {
-                    refEmail.current.focus();
-                  }}
-                  inputContainerStyle={
-                    errors.refCode
-                      ? theme.Input.inputErrorContainerStyle
-                      : theme.Input.inputContainerStyle
-                  }
-                  errorMessage={errors.refCode}
-                />
-                <Input
-                  ref={refEmail}
-                  keyboardAppearance="light"
-                  onChangeText={handleChange('email')}
-                  placeholder={email_address_text}
-                  style={theme.Input.inputStyle}
-                  autoFocus={false}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  keyboardType="email-address"
-                  returnKeyType={'done'}
-                  onSubmitEditing={() => {
-                    Keyboard.dismiss();
-                  }}
-                  inputContainerStyle={
-                    errors.email
-                      ? theme.Input.inputErrorContainerStyle
-                      : theme.Input.inputContainerStyle
-                  }
-                  errorMessage={errors.email}
-                />
-              </KeyboardAvoidingView>
-              <View style={styles.bottomCon}>
-                <Text style={[theme.Text.h2Bold]}>
-                  {_.startCase(gender_text)}
-                </Text>
-                <GenderChips
+    <>
+      <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
+        <CustomHeader backButton={true} navigation={props?.navigation} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Formik
+            initialValues={personalFormFields}
+            isInitialValid={false}
+            validationSchema={personalFormSchema}
+            onSubmit={values => {
+              Keyboard.dismiss();
+              props.navigation.navigate('Pledge');
+              // values.PERSONAL_FORM.gender = genderType;
+              // values.role = userType;
+              // values.mobile = ${country.callingCode}${mobileNum};
+              // attemptToSignUp(values, pic);
+            }}>
+            {({
+              handleChange,
+              handleSubmit,
+              values,
+              errors,
+              isValid,
+              handleBlur,
+            }) => (
+              <>
+                <View style={styles.viewCon}>
+                  <Text style={[theme.Text.h1Bold, styles.heading]}>
+                    {_.startCase(personal_details_text)}
+                  </Text>
+                  <Text style={theme.Text.h2Bold}>
+                    {_.startCase(enter_your_personal_details_text)}
+                  </Text>
+                </View>
+                <Chips
+                  horizontal={false}
                   onChipPress={chips => {
-                    setGenderType(chips[0].text);
-                  }}
-                />
-                <UploadImage
-                  getPicUri={asset => {
-                    setPic(asset);
+                    const type = chips[0].text;
+                    setUserType(type);
+                    if (type === user.Driver) {
+                      // controlIsDriver(true);
+                    }
                   }}
                 />
 
-                {userType === 'Passenger' ? (
-                  <SigninViaBankID
-                    disabled={!pic || !isValid}
-                    onBankIdPress={async () => {
-                      try {
-                        const item = await Linking.canOpenURL(
-                          'http://com.bankid.bus',
-                        );
-                        console.log(item);
-                        setBankView(true);
-                      } catch (e) {
-                        console.log(e);
-                      }
-                    }}
-                  />
-                ) : (
-                  <Button
-                    title={next}
-                    onPress={() => handleSubmit()}
-                    disabled={!pic || !isValid}
-                    icon={
-                      <Icon
-                        name={'arrowright'}
-                        type={'antdesign'}
-                        style={{marginRight: 20}}
-                        color={theme.colors.white}
-                      />
+                <KeyboardAvoidingView style={styles.inputCon}>
+                  <Input
+                    ref={refFirstName}
+                    keyboardAppearance="light"
+                    onChangeText={handleChange('firstName')}
+                    placeholder={
+                      userType === 'Passenger'
+                        ? first_name_text
+                        : first_name_driver_text
                     }
-                    iconPosition={'right'}
-                    buttonStyle={[
-                      theme.Button.buttonStyle,
-                      {justifyContent: 'space-between'},
-                    ]}
-                    titleStyle={[theme.Button.titleStyle, {paddingLeft: 20}]}
-                    disabledTitleStyle={theme.Button.disabledTitleStyle}
-                    containerStyle={{
-                      width: '90%',
-                      alignSelf: 'center',
-                      marginTop: 20,
+                    autoFocus={false}
+                    autoCapitalize="none"
+                    style={theme.Input.inputStyle}
+                    autoCorrect={false}
+                    returnKeyType="next"
+                    onSubmitEditing={() => {
+                      refLastName.current.focus();
+                    }}
+                    inputContainerStyle={
+                      errors.firstName
+                        ? theme.Input.inputErrorContainerStyle
+                        : theme.Input.inputContainerStyle
+                    }
+                    errorMessage={errors.firstName}
+                  />
+                  <Input
+                    ref={refLastName}
+                    keyboardAppearance="light"
+                    onChangeText={handleChange('lastName')}
+                    style={theme.Input.inputStyle}
+                    placeholder={
+                      userType === 'Passenger'
+                        ? last_name_text
+                        : last_name_driver_text
+                    }
+                    autoFocus={false}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="next"
+                    onSubmitEditing={() => {
+                      refReferral.current.focus();
+                    }}
+                    inputContainerStyle={
+                      errors.lastName
+                        ? theme.Input.inputErrorContainerStyle
+                        : theme.Input.inputContainerStyle
+                    }
+                    errorMessage={errors.lastName}
+                  />
+                  <Input
+                    ref={refReferral}
+                    onChangeText={handleChange('refCode')}
+                    keyboardAppearance="light"
+                    placeholder={referral_code_opt_text}
+                    style={theme.Input.inputStyle}
+                    autoFocus={false}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    returnKeyType="next"
+                    onSubmitEditing={() => {
+                      refEmail.current.focus();
+                    }}
+                    inputContainerStyle={
+                      errors.refCode
+                        ? theme.Input.inputErrorContainerStyle
+                        : theme.Input.inputContainerStyle
+                    }
+                    errorMessage={errors.refCode}
+                  />
+                  <Input
+                    ref={refEmail}
+                    keyboardAppearance="light"
+                    onChangeText={handleChange('email')}
+                    placeholder={email_address_text}
+                    style={theme.Input.inputStyle}
+                    autoFocus={false}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    returnKeyType={'done'}
+                    onSubmitEditing={() => {
+                      Keyboard.dismiss();
+                    }}
+                    inputContainerStyle={
+                      errors.email
+                        ? theme.Input.inputErrorContainerStyle
+                        : theme.Input.inputContainerStyle
+                    }
+                    errorMessage={errors.email}
+                  />
+                </KeyboardAvoidingView>
+                <View style={styles.bottomCon}>
+                  <Text style={[theme.Text.h2Bold]}>
+                    {_.startCase(gender_text)}
+                  </Text>
+                  <GenderChips
+                    onChipPress={chips => {
+                      setGenderType(chips[0].text);
                     }}
                   />
-                )}
-              </View>
-            </>
-          )}
-        </Formik>
-      </ScrollView>
-      {bankView ? (
-        <View style={styles.modalView}>
-          <BankWebView setBankView={setBankView} />
-        </View>
-      ) : null}
-    </SafeAreaView>
+                  <UploadImage
+                    getPicUri={asset => {
+                      setPic(asset);
+                    }}
+                  />
+
+                  {userType === 'Passenger' ? (
+                    <SigninViaBankID
+                      disabled={!pic || !isValid}
+                      onBankIdPress={async () => {
+                        try {
+                          const item = await Linking.canOpenURL(
+                            'http://com.bankid.bus',
+                          );
+                          console.log(item);
+                          setBankView(true);
+                        } catch (e) {
+                          console.log(e);
+                        }
+                      }}
+                    />
+                  ) : (
+                    <Button
+                      title={next}
+                      onPress={() => handleSubmit()}
+                      disabled={!pic || !isValid}
+                      icon={
+                        <Icon
+                          name={'arrowright'}
+                          type={'antdesign'}
+                          style={{marginRight: 20}}
+                          color={theme.colors.white}
+                        />
+                      }
+                      iconPosition={'right'}
+                      buttonStyle={[
+                        theme.Button.buttonStyle,
+                        {justifyContent: 'space-between'},
+                      ]}
+                      titleStyle={[theme.Button.titleStyle, {paddingLeft: 20}]}
+                      disabledTitleStyle={theme.Button.disabledTitleStyle}
+                      containerStyle={{
+                        width: '90%',
+                        alignSelf: 'center',
+                        marginTop: 20,
+                      }}
+                    />
+                  )}
+                </View>
+              </>
+            )}
+          </Formik>
+        </ScrollView>
+        {bankView ? (
+          <View style={styles.modalView}>
+            <BankWebView setBankView={setBankView} />
+          </View>
+        ) : null}
+      </View>
+    </>
   );
 }
 

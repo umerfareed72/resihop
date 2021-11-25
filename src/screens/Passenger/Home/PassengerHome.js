@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import {colors, appIcons} from '../../../utilities';
+import {colors, appIcons, appImages} from '../../../utilities';
 import {
   passenger_home,
   create_ride,
@@ -21,8 +21,94 @@ import {
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
+import {RideFilterModal, SortModal} from '../../../components';
+//Data
+var TimeList = {
+  id: 1,
+  title: 'Time',
+  items: [
+    {id: 1, text: '08:00 to 12:00', status: false},
+    {id: 2, text: '08:00 to 12:00', status: false},
+    {id: 3, text: '08:00 to 12:00', status: false},
+  ],
+};
 
+var RideStatusList = {
+  id: 1,
+  title: 'Ride Status',
+  items: [
+    {id: 1, text: 'Confirmed', status: false},
+    {id: 2, text: 'Waiting for Match', status: false},
+    {id: 3, text: 'Matching Done', status: false},
+  ],
+};
+
+const rideTypeList = {
+  id: 4,
+  title: 'Ride Type',
+  items: [
+    {id: 1, text: 'All Rides'},
+    {id: 2, text: 'Destination Rides'},
+    {id: 3, text: 'Return Rides'},
+  ],
+};
+
+const DateList = {
+  id: 1,
+  title: 'Date',
+  items: [
+    {id: 1, text: '12 June'},
+    {id: 2, text: '13 June'},
+    {id: 3, text: '14 June'},
+    {id: 4, text: '15 June'},
+    {id: 5, text: '16 June'},
+  ],
+};
+
+const seatsList = {
+  id: 5,
+  title: 'Seat',
+  items: [
+    {id: 1, icon: appImages.seatBlue},
+    {id: 2, icon: appImages.seatBlue},
+    {id: 3, icon: appImages.seatBlue},
+    {id: 4, icon: appImages.seatBlue},
+    {id: 5, icon: appImages.seatBlue},
+    {id: 6, icon: appImages.seatBlue},
+  ],
+};
 const PassengerHome = ({navigation}) => {
+  const filterModalRef = useRef(null);
+  const sortModalRef = useRef(null);
+  //States
+  const [time, settime] = useState('');
+  const [date, setdate] = useState('');
+  const [ridetype, setRideType] = useState('');
+  const [status, setStatus] = useState('');
+  const [seats, setSeats] = useState('');
+
+  const selectTime = val => {
+    settime(val);
+  };
+  const selectRideStatus = val => {
+    setStatus(val);
+  };
+  const selectRideType = val => {
+    setRideType(val);
+  };
+  const selectSeats = val => {
+    setSeats(val);
+  };
+  const selectdDate = val => {
+    setdate(val);
+  };
+  const resetFilter = () => {
+    settime('');
+    setdate('');
+    setRideType('');
+    setSeats('');
+    setStatus('');
+  };
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -97,8 +183,18 @@ const PassengerHome = ({navigation}) => {
         <View style={styles.upcomingRidesMainContainer}>
           <Text style={styles.upcomingTxt}>{upcoming_rides} </Text>
           <View style={styles.ellipsesContainer}>
-            <View style={styles.ellipses} />
-            <View style={styles.ellipses} />
+            <TouchableOpacity
+              onPress={() => {
+                sortModalRef.current.open();
+              }}>
+              <Image source={appIcons.mobiledata} style={styles.ellipses} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                filterModalRef.current.open();
+              }}>
+              <Image source={appIcons.filter} style={styles.ellipses} />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -112,6 +208,30 @@ const PassengerHome = ({navigation}) => {
           <Text style={styles.btnTxt}>{first_ride}</Text>
         </TouchableOpacity>
       </SafeAreaView>
+      <RideFilterModal
+        time={TimeList}
+        seats={seatsList}
+        rideType={rideTypeList}
+        status={RideStatusList}
+        date={DateList}
+        onPressdate={selectdDate}
+        onPressrideType={selectRideType}
+        onPressseats={selectSeats}
+        onPresstime={selectTime}
+        onPressstatus={selectRideStatus}
+        show={filterModalRef}
+        selectedTime={time}
+        selectedDate={date}
+        selectedStatus={status}
+        selectedRideType={ridetype}
+        selectedSeats={seats}
+        onPressReset={resetFilter}
+        onApply={() => {
+          filterModalRef.current.close();
+          sortModalRef.current.close();
+        }}
+      />
+      <SortModal show={sortModalRef} />
     </>
   );
 };
@@ -168,10 +288,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   ellipses: {
-    height: 28,
-    width: 28,
-    backgroundColor: colors.green,
-    borderRadius: 28 / 2,
+    height: 25,
+    width: 25,
+    borderRadius: 25,
+    marginRight: 5,
   },
   upcomingRidesMainContainer: {
     flexDirection: 'row',
@@ -183,8 +303,8 @@ const styles = StyleSheet.create({
   },
   ellipsesContainer: {
     flexDirection: 'row',
-    width: '20%',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   upcomingTxt: {
     fontSize: 16,

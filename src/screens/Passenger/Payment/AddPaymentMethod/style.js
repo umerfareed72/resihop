@@ -24,7 +24,7 @@ export default StyleSheet.create({
   btnText: {
     color: colors.white,
     fontSize: size.xsmall,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
   },
   btnContainer2: {
     backgroundColor: colors.green,
@@ -38,7 +38,7 @@ export default StyleSheet.create({
   btnText2: {
     color: colors.white,
     fontSize: size.xsmall,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
   },
   linearGradient: {
     height: 97,
@@ -78,15 +78,15 @@ export default StyleSheet.create({
   header2Text: {
     fontSize: size.xsmall,
     color: colors.white,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
   },
   btntext: {
     color: colors.blue,
     fontSize: size.xxsmall,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
   },
   header2Bold: {
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
     paddingHorizontal: 20,
     fontWeight: '900',
     fontSize: size.h3,

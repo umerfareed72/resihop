@@ -78,8 +78,8 @@ const index = ({navigation}) => {
         title={I18n.t('ride_history')}
         navigation={navigation}
         btnImage1={appIcons.filter}
-        height3={10}
-        width3={20}
+        height3={25}
+        width3={25}
         onPress={() => {
           filterModalRef.current.open();
         }}

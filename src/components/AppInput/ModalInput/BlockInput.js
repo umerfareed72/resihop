@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     color: colors.red,
     padding: 5,
     textAlign: 'left',
-    // fontFamily: family.Poppins_SemiBold,
+    fontFamily: family.Poppins_SemiBold,
   },
   aiCenter: {
     alignItems: 'center',

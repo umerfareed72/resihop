@@ -25,6 +25,6 @@ export const size = {
 };
 
 export const family = {
-  product_sans_bold: 'product_sans_bold',
-  product_sans_regular: 'product_sans_regular',
+  product_sans_bold: 'ProductSans-Bold',
+  product_sans_regular: 'ProductSans-Regular',
 };

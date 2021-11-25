@@ -6,21 +6,22 @@ import _ from 'lodash/string';
 import {mobile_number, sign_in} from '../../theme/strings';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
+import {Divider} from 'react-native-elements/dist/divider/Divider';
 
 function signIn(props) {
   return (
-    <Container padding={0}>
-      <Header leftAction={() => props.navigation.goBack()} />
-      <View style={styles.viewCon}>
-        <Text style={[theme.Text.h1Bold, styles.heading]}>
-          {_.startCase(sign_in)}
-        </Text>
-        <Text style={[theme.Text.h2Bold]}>{_.startCase(mobile_number)}</Text>
-        <OtpValidator
-          maxLengthAction={() => console.log("Fucntion Call")}
-        />
-      </View>
-    </Container>
+    <>
+      <CustomHeader navigation={props?.navigation} backButton={true} />
+      <Container padding={0}>
+        <View style={styles.viewCon}>
+          <Text style={[theme.Text.h1Bold, styles.heading]}>
+            {_.startCase(sign_in)}
+          </Text>
+          <Text style={[theme.Text.h2Bold]}>{_.startCase(mobile_number)}</Text>
+          <OtpValidator />
+        </View>
+      </Container>
+    </>
   );
 }
 

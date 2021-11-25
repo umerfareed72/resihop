@@ -14,14 +14,14 @@ export default StyleSheet.create({
     color: colors.light_black,
     fontWeight: 'bold',
     textAlignVertical: 'center',
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
   h1Container: {
     paddingVertical: 10,
     alignItems: 'center',
   },
   btnWrapper: {
-    paddingVertical: 20,
-    paddingHorizontal: 10,
+    // paddingVertical: 20,
+    // paddingHorizontal: 10,
   },
 });

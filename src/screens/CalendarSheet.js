@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {colors} from '../utilities';
 import moment from 'moment';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const CalendarSheet = ({calendarSheetRef, setDate}) => {
   const [markedDate, setMarkedDate] = useState();

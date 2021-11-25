@@ -8,6 +8,7 @@ import SignUp from '../../screens/SignUpScreen/SignUp';
 import PersonalDetails from '../../screens/PersonalDetails/PersonalDetails';
 import UploadLicence from '../../screens/UploadLicence/UploadLicence';
 import Pledge from '../../screens/Pledge';
+import PermissionScreen from '../../screens/PermissionScreen';
 
 const Stack = createStackNavigator();
 
@@ -56,6 +57,11 @@ function AuthStack(props) {
         options={{headerShown: false}}
         name="Pledge"
         component={Pledge}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="PermissionScreen"
+        component={PermissionScreen}
       />
     </Stack.Navigator>
   );

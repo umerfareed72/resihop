@@ -1,6 +1,6 @@
 export * from './Header/Header';
 export * from './Header/CustomHeader';
-export * from './Loading'
+export * from './Loading';
 //Titles
 export * from './Titles/PaymentHistory';
 
@@ -20,6 +20,10 @@ export * from './Cards/RideHistoryCard/RideHistory';
 export * from './Cards/TransHistoryCard/PaymentCard';
 export * from './Cards/ContributionCard';
 export * from './Cards/Pledge/PledgeCard';
+export * from './Cards/BlockedList/BlockedListCard';
+export * from './Cards/FavouritesCard/FavDriver';
+export * from './Cards/FavouritesCard/FavPassenger';
+export * from './Cards/FavouritesCard/FavLocation';
 
 //OTP
 export * from '../components/OtpValidator';

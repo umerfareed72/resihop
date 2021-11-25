@@ -33,7 +33,7 @@ const Settings = ({navigation}) => {
   let data = [
     {
       title: 'Language',
-      onPress: () => navigation.navigate('LanguageSelect'),
+      onPress: () => navigation.navigate('MultiLanguage'),
     },
     {
       title: 'Help & Support',
@@ -45,7 +45,7 @@ const Settings = ({navigation}) => {
     },
     {
       title: 'Blocked List',
-      onPress: () => alert('Clicked'),
+      onPress: () => navigation.navigate('BlockedList'),
     },
     {
       title: 'FAQs',
@@ -112,12 +112,12 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: size.normal,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.light_black,
   },
   versionText: {
     fontSize: size.normal,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.g1,
   },
 });

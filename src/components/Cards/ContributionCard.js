@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   cardStyle: {
     marginTop: HP('2'),
     marginRight: HP('2'),
-    width: HP('21'),
+    width: HP('20'),
     height: HP('17'),
     backgroundColor: colors.white,
     borderRadius: 13,
@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     fontSize: size.h6,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
     color: colors.light_black,
   },
   descriptionStyle: {
     fontSize: size.normal,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     color: colors.light_black,
   },
 });

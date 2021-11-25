@@ -114,12 +114,12 @@ const styles = StyleSheet.create({
   h1: {
     fontSize: size.xsmall,
     fontWeight: 'bold',
-    // fontFamily:family.product_sans_bold
+    fontFamily: family.product_sans_bold,
   },
   h2: {
     fontSize: size.normal,
     fontWeight: 'bold',
-    // fontFamily:family.product_sans_bold
+    fontFamily: family.product_sans_bold,
   },
   row2: {
     alignItems: 'center',
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     borderColor: colors.g1,
   },
   h2Text: {
-    //   fontFamily:family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
     fontSize: size.xxsmall,
   },
   specialText: {

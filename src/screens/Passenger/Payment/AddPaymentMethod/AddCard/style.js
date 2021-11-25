@@ -5,7 +5,7 @@ export default StyleSheet.create({
   h1: {
     fontSize: size.normal,
     color: colors.black,
-    // fontFamily: family.product_sans_regular,
+    fontFamily: family.product_sans_regular,
   },
   h1container: {
     paddingVertical: 30,

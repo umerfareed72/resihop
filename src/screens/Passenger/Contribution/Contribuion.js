@@ -35,7 +35,7 @@ const Contribution = ({navigation}) => {
   ];
 
   return (
-    <ImageBackground style={{flex: 1}} source={appImages.valley}>
+    <ImageBackground style={{flex: 1}} source={appImages.tree}>
       <CustomHeader
         headerColor={'transparent'}
         barColor={'transparent'}
@@ -45,8 +45,8 @@ const Contribution = ({navigation}) => {
         btnImage1={appIcons.share_icon}
         bg3Color={'transparent'}
         tintColor3={colors?.light_black}
-        height3={21}
-        width3={22}
+        height3={25}
+        width3={25}
       />
       <View style={styles.viewContainer}>
         <View style={styles.imgContainer}>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: size.xxlarge,
     color: colors.light_black,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
   buttonStyle: {
     backgroundColor: colors.green,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: size.h5,
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
     color: colors.white,
   },
 });
