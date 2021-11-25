@@ -53,6 +53,12 @@ export const colors = {
   //greens
   light_green: '#F6FFEF',
   light_white: '#E8E8E8',
+  red: '#FF1616',
+  //greens
+  light_green: '#F6FFEF',
+  favouriteTabColor: '#ECFFDF',
+  favouriteBorderColor: '#F2F2F2',
+
   offerCardColor: ['#BEFF8D', '#EFFFDE'],
   reportCardColor: ['#9ADFFF', '#3AADFF', '#4094FF'],
 };

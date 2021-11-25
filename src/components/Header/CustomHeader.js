@@ -1,5 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import {colors, WP, appIcons, size} from '../../utilities';
 import MyStatusBar from './statusBar';
 export const CustomHeader = ({
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingRight: 20,
-    paddingTop: 4,
+    paddingTop: Platform.select({android: 4, ios: 0}),
   },
   header: {
     color: colors.black,

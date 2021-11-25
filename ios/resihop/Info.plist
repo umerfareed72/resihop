@@ -53,8 +53,6 @@
 	<string>Resihop Gallery Picker</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>product_sans_bold.ttf</string>
-		<string>product_sans_regular.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
@@ -71,6 +69,8 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>ProductSans-Bold.ttf</string>
+		<string>ProductSans-Regular.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

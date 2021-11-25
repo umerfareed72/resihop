@@ -32,7 +32,6 @@ const index = ({navigation}) => {
               bgColor={colors.primary}
               title={I18n.t('pledge_agree')}
               txtColor={colors.white}
-              onPress={() => navigation.navigate('PermissionScreen')}
             />
           </View>
         </View>

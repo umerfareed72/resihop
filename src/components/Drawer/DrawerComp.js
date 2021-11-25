@@ -42,7 +42,10 @@ const DrawerComponent = ({navigation}) => {
       icon: drawerIcons.Favourites,
       label: 'Favourites',
       onPress: () => {
-        // navigation.navigate('AccountSettings');
+        navigation.push('Favourites', {
+          routeName: 'Favourites',
+        });
+        navigation.closeDrawer();
       },
     },
 

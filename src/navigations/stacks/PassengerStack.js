@@ -27,6 +27,7 @@ import StartMatching from '../../screens/StartMatching';
 import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
+import Favourites from '../../screens/Passenger/Favourites/Favourites';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -38,6 +39,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="PassengerHome"
         component={PassengerHome}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Favourites"
+        component={Favourites}
       />
 
       <Stack.Screen
@@ -148,7 +154,11 @@ function PassengerStack(props) {
         name="MultiLanguage"
         component={MultiLanguage}
       />
-      <Stack.Screen options={{headerShown: false}} component={StartMatching} />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="StartMatching"
+        component={StartMatching}
+      />
       <Stack.Screen options={{headerShown: false}} name="Faq" component={Faq} />
       <Stack.Screen
         options={{headerShown: false}}
