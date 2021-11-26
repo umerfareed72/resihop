@@ -16,6 +16,8 @@ import Privacy from '../../screens/Passenger/Privacy/Privacy';
 import Settings from '../../screens/Passenger/Settings/Settings';
 import AboutUs from '../../screens/Passenger/AboutUs/AboutUs';
 import RideHistory from '../../screens/Passenger/Rides/RideHistory';
+import RideDetail from '../../screens/Passenger/Rides/RideDetail';
+
 import Faq from '../../screens/Passenger/Faq/Faq';
 import Contribution from '../../screens/Passenger/Contribution/Contribuion';
 import Invite from '../../screens/Passenger/Invite/Invite';
@@ -28,6 +30,9 @@ import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
+import NotificationSettings from '../..//screens/NotificationSettings/NotificationSetting';
+import TransactionDetails from '../../screens/TransactionDetails/TransactionDetails';
+import NotificationTune from '../../screens/NotificationTune/NotificationTune';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -136,6 +141,11 @@ function PassengerStack(props) {
       />
       <Stack.Screen
         options={{headerShown: false}}
+        name="RideDetail"
+        component={RideDetail}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
         name="Invite"
         component={Invite}
       />
@@ -174,6 +184,23 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="BookingDetails"
         component={BookingDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="NotificationSettings"
+        component={NotificationSettings}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="NotificationTune"
+        component={NotificationTune}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="TransactionDetails"
+        component={TransactionDetails}
       />
     </Stack.Navigator>
   );

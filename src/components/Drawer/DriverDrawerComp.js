@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
   drawerItemLabel: {
     fontSize: size.normal,
     color: colors.light_black,
-    fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_regular,
   },
 });
 

@@ -9,4 +9,8 @@ export default StyleSheet.create({
   contentContainer: {
     paddingHorizontal: WP('5'),
   },
+  separator: {
+    borderWidth: 0.5,
+    borderColor: colors.g1,
+  },
 });

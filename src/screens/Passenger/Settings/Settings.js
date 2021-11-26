@@ -41,7 +41,7 @@ const Settings = ({navigation}) => {
     },
     {
       title: 'Notifications Settings',
-      onPress: () => alert('Clicked'),
+      onPress: () => navigation.navigate('NotificationSettings'),
     },
     {
       title: 'Blocked List',
