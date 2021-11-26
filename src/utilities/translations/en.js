@@ -81,4 +81,5 @@ export default {
 
   //Driver Strings
   driver_home: 'Driver Home',
+  ride_detail: 'Ride Details',
 };

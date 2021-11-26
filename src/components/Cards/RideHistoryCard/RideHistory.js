@@ -1,108 +1,110 @@
 import React from 'react';
 import {Image, Platform, StyleSheet, Text, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 
-export const RideHistoryCard = ({cancelled, driver}) => {
-  const renderListItems = () => {
-    return (
-      <View style={styles.wrapper}>
-        <View style={styles.cardContainer}>
-          <Text style={styles.h1}>Mon, 12 June, 08:00</Text>
-          {cancelled && <Text style={styles.specialText}>cancelled</Text>}
-          <Text style={styles.h2}>SEK 20</Text>
-        </View>
-        <View style={{paddingVertical: 10}}>
-          <View style={styles.row2}>
-            <View style={styles.alignRow}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginBottom: 10,
-                  alignItems: 'center',
-                }}>
-                <View style={styles.circleStyle} />
-                <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-                  123 abc apartment abc street abc...
-                </Text>
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <View style={styles.rectangleStyle} />
-                <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-                  123 abc apartment abc street abc...
-                </Text>
-              </View>
-            </View>
-            {driver ? (
-              false
-            ) : (
-              <View>
-                <FlatList
-                  horizontal={true}
-                  data={[1, 2]}
-                  renderItem={() => {
-                    return (
-                      <Image
-                        style={[styles.rightIcon, {marginStart: 5}]}
-                        source={appImages.seatBlue}
-                      />
-                    );
-                  }}
-                />
-              </View>
-            )}
-          </View>
-        </View>
-        {driver ? (
-          <View>
-            <FlatList
-              horizontal={true}
-              data={[1, 2]}
-              renderItem={() => {
-                return (
-                  <Image
-                    style={[
-                      styles.rightIcon,
-                      {marginStart: driver ? 0 : 5, marginEnd: driver ? 5 : 0},
-                    ]}
-                    source={appImages.seatBlue}
-                  />
-                );
-              }}
-            />
-          </View>
-        ) : (
-          <View style={styles.row3}>
-            <Image source={appIcons.noUpcomingRide} style={styles.icon50} />
-            <Text
-              style={[styles.h2Text, {fontWeight: '500', color: colors.g5}]}>
-              Ford, Focus,{' '}
-              <Text
-                style={[
-                  styles.h2Text,
-                  {fontWeight: 'bold', color: colors.light_black},
-                ]}>
-                White, XT32TTU8
-              </Text>
-            </Text>
-            <Image source={appImages.user} style={styles.icon42} />
-          </View>
-        )}
-      </View>
-    );
-  };
+export const RideHistoryCard = ({
+  cancelled,
+  driver,
+  profilePic,
+  onPressCard,
+}) => {
   return (
     <View style={styles.container}>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={[1, 2, 3, 4, 5, 6, 7]}
-        renderItem={renderListItems}
-        ItemSeparatorComponent={() => {
-          return <View style={styles.separator} />;
-        }}
-      />
+      <View style={styles.wrapper}>
+        <TouchableOpacity onPress={onPressCard}>
+          <View style={styles.cardContainer}>
+            <Text style={styles.h1}>Mon, 12 June, 08:00</Text>
+            {cancelled && <Text style={styles.specialText}>cancelled</Text>}
+            <Text style={styles.h2}>SEK 20</Text>
+          </View>
+          <View style={{paddingVertical: 10}}>
+            <View style={styles.row2}>
+              <View style={styles.alignRow}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: 10,
+                    alignItems: 'center',
+                  }}>
+                  <View style={styles.circleStyle} />
+                  <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
+                    123 abc apartment abc street abc...
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={styles.rectangleStyle} />
+                  <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
+                    123 abc apartment abc street abc...
+                  </Text>
+                </View>
+              </View>
+              {driver ? (
+                false
+              ) : (
+                <View>
+                  <FlatList
+                    horizontal={true}
+                    data={[1, 2]}
+                    renderItem={() => {
+                      return (
+                        <Image
+                          style={[styles.rightIcon, {marginStart: 5}]}
+                          source={appImages.seatBlue}
+                        />
+                      );
+                    }}
+                  />
+                </View>
+              )}
+            </View>
+          </View>
+          {driver ? (
+            <View>
+              <FlatList
+                horizontal={true}
+                data={[1, 2]}
+                renderItem={() => {
+                  return (
+                    <Image
+                      style={[
+                        styles.rightIcon,
+                        {
+                          marginStart: driver ? 0 : 5,
+                          marginEnd: driver ? 5 : 0,
+                        },
+                      ]}
+                      source={appImages.seatBlue}
+                    />
+                  );
+                }}
+              />
+            </View>
+          ) : (
+            <View style={styles.row3}>
+              <Image source={appIcons.car_left} style={styles.icon50} />
+              <Text
+                style={[styles.h2Text, {fontWeight: '500', color: colors.g5}]}>
+                Ford, Focus,{' '}
+                <Text
+                  style={[
+                    styles.h2Text,
+                    {fontWeight: 'bold', color: colors.light_black},
+                  ]}>
+                  White, XT32TTU8
+                </Text>
+              </Text>
+              {profilePic ? (
+                <Image source={appImages.user} style={styles.icon42} />
+              ) : (
+                false
+              )}
+            </View>
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -177,10 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 42,
     bottom: 10,
   },
-  separator: {
-    borderWidth: 0.5,
-    borderColor: colors.g1,
-  },
+
   h2Text: {
     fontFamily: family.product_sans_regular,
     fontSize: size.xxsmall,

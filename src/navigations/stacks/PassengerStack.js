@@ -16,6 +16,8 @@ import Privacy from '../../screens/Passenger/Privacy/Privacy';
 import Settings from '../../screens/Passenger/Settings/Settings';
 import AboutUs from '../../screens/Passenger/AboutUs/AboutUs';
 import RideHistory from '../../screens/Passenger/Rides/RideHistory';
+import RideDetail from '../../screens/Passenger/Rides/RideDetail';
+
 import Faq from '../../screens/Passenger/Faq/Faq';
 import Contribution from '../../screens/Passenger/Contribution/Contribuion';
 import Invite from '../../screens/Passenger/Invite/Invite';
@@ -136,6 +138,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="RideHistory"
         component={RideHistory}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="RideDetail"
+        component={RideDetail}
       />
       <Stack.Screen
         options={{headerShown: false}}

@@ -24,6 +24,7 @@ export * from './Cards/BlockedList/BlockedListCard';
 export * from './Cards/FavouritesCard/FavDriver';
 export * from './Cards/FavouritesCard/FavPassenger';
 export * from './Cards/FavouritesCard/FavLocation';
+export * from './Cards/RideHistoryCard/RiderInfo';
 
 //OTP
 export * from '../components/OtpValidator';

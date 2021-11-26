@@ -6,6 +6,7 @@ import {
   View,
   Image,
   ImageStore,
+  FlatList,
 } from 'react-native';
 import {
   CustomHeader,
@@ -126,7 +127,23 @@ const index = ({navigation}) => {
       />
       <View style={styles.container}>
         <View style={styles.contentContainer}>
-          <RideHistoryCard />
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={[1, 2, 3, 4, 5, 6, 7]}
+            renderItem={() => {
+              return (
+                <RideHistoryCard
+                  profilePic={true}
+                  onPressCard={() => {
+                    navigation?.navigate('RideDetail');
+                  }}
+                />
+              );
+            }}
+            ItemSeparatorComponent={() => {
+              return <View style={styles.separator} />;
+            }}
+          />
         </View>
       </View>
       <RideFilterModal
