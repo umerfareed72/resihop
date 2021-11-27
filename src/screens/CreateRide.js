@@ -80,7 +80,12 @@ const CreateRide = () => {
               onPress={() => favourteLocationRef.current.open()}
             />
             <View style={styles.locationSwitch} />
-            <HeartIcon name="heart" size={30} color={colors.btnGray} />
+            <HeartIcon
+              onPress={() => favourteLocationRef.current.open()}
+              name="heart"
+              size={30}
+              color={colors.btnGray}
+            />
           </View>
         </View>
         <Text style={styles.bookSeatsTxt}>Book Your Seats</Text>

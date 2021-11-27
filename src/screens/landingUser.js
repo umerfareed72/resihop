@@ -4,14 +4,9 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ScrollView,
   Image,
 } from 'react-native';
 import {Button, Icon, Text} from 'react-native-elements';
-import LinearGradient from 'react-native-linear-gradient';
-import {landing_user_img} from '../assets';
-import {CustomHeader, Header} from '../components';
-import {Container} from '../components/Container';
 import MyStatusBar from '../components/Header/statusBar';
 import {theme} from '../theme';
 import {
@@ -21,7 +16,6 @@ import {
   welcome_to_resihop_msg,
 } from '../theme/strings';
 import {appIcons, colors} from '../utilities';
-import {drawerIcons} from '../utilities/images';
 
 function landingUser({navigation}) {
   return (
@@ -33,7 +27,10 @@ function landingUser({navigation}) {
           style={styles.imgCon}
           imageStyle={{height: '100%'}}
           resizeMode={'cover'}>
-          <MyStatusBar backgroundColor={'transparent'} />
+          <MyStatusBar
+            backgroundColor={'transparent'}
+            barStyle={'dark-content'}
+          />
           <TouchableOpacity
             onPress={() => {
               navigation?.goBack();
@@ -54,7 +51,7 @@ function landingUser({navigation}) {
             buttonStyle={theme.Button.buttonStyle}
             titleStyle={theme.Button.titleStyle}
             onPress={() => {
-              navigation.navigate('PassengerDashboard');
+              navigation.navigate('SignInScreen');
             }}
             disabledStyle={theme.Button.disabledStyle}
             disabledTitleStyle={theme.Button.disabledTitleStyle}
@@ -68,7 +65,7 @@ function landingUser({navigation}) {
           <Button
             title={sign_up}
             onPress={() => {
-              navigation.navigate('PassengerDashboard');
+              navigation.navigate('SignUpScreen');
             }}
             buttonStyle={[theme.Button.buttonStyle, styles.signUpButton]}
             titleStyle={[theme.Button.titleStyle, styles.signUpBtnText]}

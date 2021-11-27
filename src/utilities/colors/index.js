@@ -33,6 +33,9 @@ export const colors = {
   g1: '#C5C5C5',
   g2: '#818181',
   g3: '#898989',
+  g4: '#777777',
+  g5: '#A1A1A1',
+  g6: '#F2F2F2',
   g4: '#828282',
   dropShadow: '#007BD233',
   dropShadow2: '#00000029',
@@ -42,9 +45,23 @@ export const colors = {
   blue: '#007BD2',
   txtBlack: '#101010',
   lineGray: '#DFDFDF',
+  gray_shade: '#6F6F6F',
+  dark_red: '#BF2A2A',
   txtGray: '#A1A1A1',
   blueLocation: '#41D5F9',
 
   //greens
   light_green: '#F6FFEF',
+  light_white: '#E8E8E8',
+  red: '#FF1616',
+  //greens
+  light_green: '#F6FFEF',
+  favouriteTabColor: '#ECFFDF',
+  favouriteBorderColor: '#F2F2F2',
+
+  notificationBorder: '#CCCCCC',
+
+  offerCardColor: ['#BEFF8D', '#EFFFDE'],
+  reportCardColor: ['#9ADFFF', '#3AADFF', '#4094FF'],
+  transactionGradient: ['#F8FEFF', '#FFFFFF'],
 };

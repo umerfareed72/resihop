@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import {colors, appIcons} from '../../../utilities';
+import {colors, appIcons, appImages, family} from '../../../utilities';
 import {
   passenger_home,
   create_ride,
@@ -21,91 +21,222 @@ import {
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
+import {RideFilterModal, SortModal} from '../../../components';
+//Data
+var TimeList = {
+  id: 1,
+  title: 'Time',
+  items: [
+    {id: 1, text: '08:00 to 12:00', status: false},
+    {id: 2, text: '08:00 to 12:00', status: false},
+    {id: 3, text: '08:00 to 12:00', status: false},
+  ],
+};
 
+var RideStatusList = {
+  id: 1,
+  title: 'Ride Status',
+  items: [
+    {id: 1, text: 'Confirmed', status: false},
+    {id: 2, text: 'Waiting for Match', status: false},
+    {id: 3, text: 'Matching Done', status: false},
+  ],
+};
+
+const rideTypeList = {
+  id: 4,
+  title: 'Ride Type',
+  items: [
+    {id: 1, text: 'All Rides'},
+    {id: 2, text: 'Destination Rides'},
+    {id: 3, text: 'Return Rides'},
+  ],
+};
+
+const DateList = {
+  id: 1,
+  title: 'Date',
+  items: [
+    {id: 1, text: '12 June'},
+    {id: 2, text: '13 June'},
+    {id: 3, text: '14 June'},
+    {id: 4, text: '15 June'},
+    {id: 5, text: '16 June'},
+  ],
+};
+
+const seatsList = {
+  id: 5,
+  title: 'Seat',
+  items: [
+    {id: 1, icon: appImages.seatBlue},
+    {id: 2, icon: appImages.seatBlue},
+    {id: 3, icon: appImages.seatBlue},
+    {id: 4, icon: appImages.seatBlue},
+    {id: 5, icon: appImages.seatBlue},
+    {id: 6, icon: appImages.seatBlue},
+  ],
+};
 const PassengerHome = ({navigation}) => {
+  const filterModalRef = useRef(null);
+  const sortModalRef = useRef(null);
+  //States
+  const [time, settime] = useState('');
+  const [date, setdate] = useState('');
+  const [ridetype, setRideType] = useState('');
+  const [status, setStatus] = useState('');
+  const [seats, setSeats] = useState('');
+
+  const selectTime = val => {
+    settime(val);
+  };
+  const selectRideStatus = val => {
+    setStatus(val);
+  };
+  const selectRideType = val => {
+    setRideType(val);
+  };
+  const selectSeats = val => {
+    setSeats(val);
+  };
+  const selectdDate = val => {
+    setdate(val);
+  };
+  const resetFilter = () => {
+    settime('');
+    setdate('');
+    setRideType('');
+    setSeats('');
+    setStatus('');
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <MyStatusBar />
-      {/* Top Header */}
-      <MyStatusBar backgroundColor={colors.white} />
-      <View style={styles.passengerHeader}>
-        <TouchableOpacity>
-          <HamburgerMenu
-            name="menu"
-            size={26}
-            color={colors.green}
-            onPress={() => navigation.toggleDrawer()}
-          />
-        </TouchableOpacity>
-        <Text style={{fontSize: 16}}>{passenger_home}</Text>
-        <TouchableOpacity>
-          <Bell name="bell" size={24} color={colors.green} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.switchToDriverBtnContainer}>
-          <Text style={{fontSize: 13, color: colors.white}}>
-            Switch to Driver
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <>
+      <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
 
-      {/* Cards */}
-
-      <View style={styles.cardMainContainer}>
-        <View style={styles.cardContainer}>
-          <Image source={appIcons.homeIconBg} style={styles.homeCards} />
-          <View style={styles.interiorContainer}>
-            <Image
-              source={appIcons.createRide}
-              style={styles.cardInterior}
-              resizeMode="contain"
+      <SafeAreaView style={styles.container}>
+        {/* Top Header */}
+        <View style={styles.passengerHeader}>
+          <TouchableOpacity>
+            <HamburgerMenu
+              name="menu"
+              size={26}
+              color={colors.green}
+              onPress={() => navigation.toggleDrawer()}
             />
-            <Text style={[styles.cardTxt, {marginTop: 14}]}>{create_ride}</Text>
+          </TouchableOpacity>
+          <Text style={{fontSize: 16}}>{passenger_home}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('NotificationList');
+            }}>
+            <Bell name="bell" size={24} color={colors.green} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.replace('DriverDashboard');
+            }}
+            style={styles.switchToDriverBtnContainer}>
+            <Text style={{fontSize: 13, color: colors.white}}>
+              Switch to Driver
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Cards */}
+
+        <View style={styles.cardMainContainer}>
+          <View style={styles.cardContainer}>
+            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <View style={styles.interiorContainer}>
+              <Image
+                source={appIcons.createRide}
+                style={styles.cardInterior}
+                resizeMode="contain"
+              />
+              <Text style={[styles.cardTxt, {marginTop: 14}]}>
+                {create_ride}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.cardContainer}>
+            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <View style={styles.interiorContainer}>
+              <Image
+                source={appIcons.recurringRide}
+                style={styles.cardInterior}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardTxt}>{recurring_ride}</Text>
+            </View>
+          </View>
+          <View style={styles.cardContainer}>
+            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+            <View style={styles.interiorContainer}>
+              <Image
+                source={appIcons.cityRide}
+                style={styles.cardInterior}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardTxt}>{city_to_city}</Text>
+            </View>
           </View>
         </View>
-        <View style={styles.cardContainer}>
-          <Image source={appIcons.homeIconBg} style={styles.homeCards} />
-          <View style={styles.interiorContainer}>
-            <Image
-              source={appIcons.recurringRide}
-              style={styles.cardInterior}
-              resizeMode="contain"
-            />
-            <Text style={styles.cardTxt}>{recurring_ride}</Text>
+
+        {/* upcoming Rides */}
+
+        <View style={styles.upcomingRidesMainContainer}>
+          <Text style={styles.upcomingTxt}>{upcoming_rides} </Text>
+          <View style={styles.ellipsesContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                sortModalRef.current.open();
+              }}>
+              <Image source={appIcons.mobiledata} style={styles.ellipses} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                filterModalRef.current.open();
+              }}>
+              <Image source={appIcons.filter} style={styles.ellipses} />
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.cardContainer}>
-          <Image source={appIcons.homeIconBg} style={styles.homeCards} />
-          <View style={styles.interiorContainer}>
-            <Image
-              source={appIcons.cityRide}
-              style={styles.cardInterior}
-              resizeMode="contain"
-            />
-            <Text style={styles.cardTxt}>{city_to_city}</Text>
-          </View>
-        </View>
-      </View>
 
-      {/* upcoming Rides */}
+        <Image source={appIcons.noUpcomingRide} style={styles.noUpcomingRide} />
 
-      <View style={styles.upcomingRidesMainContainer}>
-        <Text style={styles.upcomingTxt}>{upcoming_rides} </Text>
-        <View style={styles.ellipsesContainer}>
-          <View style={styles.ellipses} />
-          <View style={styles.ellipses} />
-        </View>
-      </View>
+        <Text style={styles.Txt}>{lorem}</Text>
 
-      <Image source={appIcons.noUpcomingRide} style={styles.noUpcomingRide} />
-
-      <Text style={styles.Txt}>{lorem}</Text>
-
-      <TouchableOpacity
-        style={styles.createRideBtnContainer}
-        onPress={() => navigation.navigate('CreateRide')}>
-        <Text style={styles.btnTxt}>{first_ride}</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+        <TouchableOpacity
+          style={styles.createRideBtnContainer}
+          onPress={() => navigation.navigate('CreateRide')}>
+          <Text style={styles.btnTxt}>{first_ride}</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+      <RideFilterModal
+        time={TimeList}
+        seats={seatsList}
+        rideType={rideTypeList}
+        status={RideStatusList}
+        date={DateList}
+        onPressdate={selectdDate}
+        onPressrideType={selectRideType}
+        onPressseats={selectSeats}
+        onPresstime={selectTime}
+        onPressstatus={selectRideStatus}
+        show={filterModalRef}
+        selectedTime={time}
+        selectedDate={date}
+        selectedStatus={status}
+        selectedRideType={ridetype}
+        selectedSeats={seats}
+        onPressReset={resetFilter}
+        onApply={() => {
+          filterModalRef.current.close();
+          sortModalRef.current.close();
+        }}
+      />
+      <SortModal show={sortModalRef} />
+    </>
   );
 };
 
@@ -128,6 +259,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '90%',
     alignSelf: 'center',
+    marginTop: 20,
   },
   homeCards: {
     width: 100,
@@ -160,10 +292,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   ellipses: {
-    height: 28,
-    width: 28,
-    backgroundColor: colors.green,
-    borderRadius: 28 / 2,
+    height: 25,
+    width: 25,
+    borderRadius: 25,
+    marginRight: 5,
   },
   upcomingRidesMainContainer: {
     flexDirection: 'row',
@@ -175,8 +307,8 @@ const styles = StyleSheet.create({
   },
   ellipsesContainer: {
     flexDirection: 'row',
-    width: '20%',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   upcomingTxt: {
     fontSize: 16,
@@ -215,6 +347,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: family.product_sans_bold,
   },
 });
 

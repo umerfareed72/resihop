@@ -12,7 +12,6 @@ import {
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {appIcons, colors} from '../../../../utilities';
-import LinearGradient from 'react-native-linear-gradient';
 import AddCard from './AddCard';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 
@@ -24,6 +23,7 @@ const index = ({navigation}) => {
   const [addMoney, onAddMoney] = useState(true);
 
   const modalRef = useRef(null);
+
   const onPressModalButton = () => {
     if (addMoney) {
       setpaymentSuccessonFailed(true);
@@ -102,7 +102,7 @@ const index = ({navigation}) => {
               navigation?.navigate('TransactionHistory');
             }}
             title={'Transaction History'}
-            image={appIcons.mobiledata}
+            image={appIcons.sort}
           />
           {cardScreen && (
             <AddCard

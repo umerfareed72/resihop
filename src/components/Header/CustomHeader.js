@@ -1,5 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import {colors, WP, appIcons, size} from '../../utilities';
 import MyStatusBar from './statusBar';
 export const CustomHeader = ({
@@ -15,6 +22,10 @@ export const CustomHeader = ({
   onPress1,
   barColor,
   headerColor,
+  tintColor3,
+  bg3Color,
+  height3,
+  width3,
 }) => {
   return (
     <>
@@ -55,21 +66,25 @@ export const CustomHeader = ({
           )}
           <View style={styles.wrapper2}>
             {btnImage ? (
-              <TouchableOpacity
-                onPress={onPress1}
-                hitSlop={styles.hitSlope}
-                style={styles.btnImageContainer1}>
-                <Image style={styles.headerImage1} source={btnImage1} />
+              <TouchableOpacity onPress={onPress1}>
+                <Image style={[styles.headerImage1]} source={btnImage} />
               </TouchableOpacity>
             ) : (
               false
             )}
             {btnImage1 ? (
-              <TouchableOpacity
-                onPress={onPress}
-                hitSlop={styles.hitSlope}
-                style={[styles.btnImageContainer]}>
-                <Image style={styles.headerImage} source={btnImage} />
+              <TouchableOpacity onPress={onPress}>
+                <Image
+                  style={[
+                    styles.headerImage,
+                    {
+                      // tintColor: tintColor3 ? tintColor3 : colors?.white,
+                      height: height3,
+                      width: width3,
+                    },
+                  ]}
+                  source={btnImage1}
+                />
               </TouchableOpacity>
             ) : (
               false
@@ -94,7 +109,7 @@ const styles = StyleSheet.create({
   },
   wrapper2: {
     alignItems: 'center',
-    paddingTop: 10,
+    // paddingTop: 10,
     flexDirection: 'row',
   },
   contentContainer: {
@@ -103,7 +118,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingRight: 20,
-    paddingTop: 5,
+    paddingTop: Platform.select({android: 4, ios: 0}),
   },
   header: {
     color: colors.black,
@@ -120,16 +135,16 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   headerImage1: {
-    height: 20,
-    width: 20,
+    height: 25,
+    width: 25,
     resizeMode: 'contain',
-    tintColor: colors.white,
+    // tintColor: colors.white,
+    marginHorizontal: 5,
   },
   headerImage: {
-    height: 10,
-    width: 10,
+    height: 30,
+    width: 30,
     resizeMode: 'contain',
-    tintColor: colors.white,
   },
   hitSlope: {
     top: 30,

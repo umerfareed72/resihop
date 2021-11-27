@@ -14,6 +14,6 @@ export default StyleSheet.create({
     fontSize: size.normal,
     color: colors.light_black,
     fontWeight: 'bold',
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
 });

@@ -127,10 +127,14 @@ def nativeArchitectures = project.getProperties().get('reactNativeDebugArchitect
 
 android {
     dexOptions {
-       javaMaxHeapSize "4g"
+        javaMaxHeapSize '4g'
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
     ndkVersion rootProject.ext.ndkVersion
- 
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
@@ -156,6 +160,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
+        }
     }
     signingConfigs {
         release {
@@ -180,6 +192,8 @@ android {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -207,8 +221,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
     //Stripe
-    implementation 'com.google.android.material:material:^0.2.3'
-    
+    implementation group: 'com.google.android.material', name: 'material', version: '1.1.0-alpha05'
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 

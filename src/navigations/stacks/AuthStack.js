@@ -3,6 +3,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import landingUser from '../../screens/landingUser';
 import walkThrough from '../../screens/walkThrough';
 import languageSelect from '../../screens/LanguageSelect/languageSelect';
+import SignIn from '../../screens/SignInScreen/SignIn';
+import SignUp from '../../screens/SignUpScreen/SignUp';
+import PersonalDetails from '../../screens/PersonalDetails/PersonalDetails';
+import UploadLicence from '../../screens/UploadLicence/UploadLicence';
+import Pledge from '../../screens/Pledge';
+import PermissionScreen from '../../screens/PermissionScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +32,36 @@ function AuthStack(props) {
         options={{headerShown: false}}
         name="LandingUser"
         component={landingUser}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="SignInScreen"
+        component={SignIn}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="SignUpScreen"
+        component={SignUp}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="PersonalDetails"
+        component={PersonalDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="UploadLicence"
+        component={UploadLicence}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Pledge"
+        component={Pledge}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="PermissionScreen"
+        component={PermissionScreen}
       />
     </Stack.Navigator>
   );

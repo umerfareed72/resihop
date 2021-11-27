@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: size.large,
     color: colors.black,
     fontWeight: 'bold',
-    // fontFamily: family.product_sans_bold,
+    fontFamily: family.product_sans_bold,
   },
   inputContainer: {
     paddingVertical: 10,
