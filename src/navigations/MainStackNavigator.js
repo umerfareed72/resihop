@@ -7,6 +7,7 @@ import NotificationSettings from '../screens/NotificationSettings/NotificationSe
 import TransactionDetails from '../screens/TransactionDetails/TransactionDetails';
 import {DrawerNavigator} from './PassengerDrawerNav';
 import NotificationTune from '../screens/NotificationTune/NotificationTune';
+import Reports from '../screens/Passenger/Reports/Reports';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -23,6 +24,11 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Reports"
+          component={Reports}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="NotificationSettings"
