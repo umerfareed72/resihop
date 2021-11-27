@@ -211,7 +211,7 @@ const DriverHome = ({navigation}) => {
 
           <TouchableOpacity
             style={styles.createRideBtnContainer}
-            onPress={() => navigation.navigate('CreateRide')}>
+            onPress={() => navigation.navigate('CreateDrive')}>
             <Text style={styles.btnTxt}>Create your Frist Drive</Text>
           </TouchableOpacity>
         </ScrollView>

@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import DriverHome from '../../screens/Driver/Home/DriverHome';
 import EditCard from '../../screens/Passenger/Payment/AddPaymentMethod/EditCard';
 import TransactionHistory from '../../screens/Passenger/Payment/PaymentHistory';
-import CreateRide from '../../screens/CreateRide';
+import CreateDrive from '../../screens/Driver/CreateDrive/CreateDrive';
 import StartLocation from '../../screens/StartLocation';
 import WithDrawPayment from '../../screens/Passenger/Payment/AddPaymentMethod/WithdrawPayment';
 import NotificationList from '../../screens/Passenger/NotificationList/NotificationList';
@@ -80,8 +80,8 @@ function DriverStack(props) {
 
       <Stack.Screen
         options={{headerShown: false}}
-        name="CreateRide"
-        component={CreateRide}
+        name="CreateDrive"
+        component={CreateDrive}
       />
       <Stack.Screen
         options={{headerShown: false}}
