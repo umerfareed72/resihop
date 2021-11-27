@@ -10,14 +10,14 @@ import {
   KeyboardAvoidingView,
   Image,
 } from 'react-native';
-import {colors, appIcons, appImages} from '../utilities';
+import {colors, appIcons, appImages} from '../../../utilities';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
-import FavouriteLocations from './FavouriteLocations';
-import {CustomHeader} from '../components';
-import CalendarSheet from './CalendarSheet';
+import FavouriteLocations from '../../FavouriteLocations';
+import {CustomHeader} from '../../../components';
+import CalendarSheet from '../../CalendarSheet';
 import {useNavigation} from '@react-navigation/core';
-import {fonts} from '../theme/theme';
+import {fonts} from '../../../theme/theme';
 
 const UpdateRide = () => {
   let navigation = useNavigation();
