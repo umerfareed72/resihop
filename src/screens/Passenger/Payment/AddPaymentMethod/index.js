@@ -20,7 +20,7 @@ const index = ({navigation}) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [paymentSuccess, setpaymentSuccessonSuccess] = useState(false);
   const [paymentFailed, setpaymentSuccessonFailed] = useState(false);
-  const [addMoney, onAddMoney] = useState(true);
+  const [addMoney, onAddMoney] = useState(false);
 
   const modalRef = useRef(null);
 
@@ -78,6 +78,7 @@ const index = ({navigation}) => {
           <PaymentCard
             onPressAddMoney={() => {
               modalRef?.current?.open();
+              onAddMoney(true);
             }}
             title={I18n.t('wallet_balance')}
             add_Money={I18n.t('add_cards')}
@@ -129,6 +130,12 @@ const index = ({navigation}) => {
                 />
               </View>
               <PaymentButtons
+                onPress={() => {
+                  modalRef.current.open();
+                  setpaymentSuccessonSuccess(true);
+                  setpaymentSuccessonFailed(false);
+                  onAddMoney(false);
+                }}
                 bgColor={colors.g1}
                 title={I18n.t('pay_with_wallet')}
                 txtColor={colors.white}
@@ -146,7 +153,7 @@ const index = ({navigation}) => {
         onPress={() => {
           onPressModalButton();
         }}
-        icon={appIcons.cancel}
+        icon={paymentSuccess ? appIcons.tickBg : appIcons.cancel}
         h1={
           paymentFailed
             ? 'Your amount exceeds Balance'

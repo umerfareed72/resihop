@@ -25,6 +25,11 @@ export const appIcons = {
   heart: require('../../assets/icons/png/heart.png'),
   redHeart: require('../../assets/icons/png/redHeart.png'),
   call: require('../../assets/icons/png/call.png'),
+  cancelled: require('../../assets/icons/png/cancelled.png'),
+  empty_star: require('../../assets/icons/png/emptyStar.png'),
+  full_star: require('../../assets/icons/png/fullStar.png'),
+  tickBg: require('../../assets/icons/png/tickBg.png'),
+
   car_icon: require('../../assets/icons/png/driver/driver_recurring_ride.png'),
   driver_brick_bg: require('../../assets/icons/png/driver/driver_brick_bg.png'),
   // /icons/png/Group9368.png

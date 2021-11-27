@@ -24,7 +24,7 @@ const DriverDrawerComponent = ({navigation}) => {
       icon: drawerIcons.rides_history,
       label: 'Rides History',
       onPress: () => {
-        navigation?.navigate('RideHistory');
+        navigation?.navigate('DriverRideHistory');
         navigation.closeDrawer();
       },
     },
@@ -42,8 +42,8 @@ const DriverDrawerComponent = ({navigation}) => {
       icon: drawerIcons.Favourites,
       label: 'Favourites',
       onPress: () => {
-        navigation.push('Favourites', {
-          routeName: 'Favourites',
+        navigation.push('AddFavourites', {
+          routeName: 'AddFavourites',
         });
         navigation.closeDrawer();
       },

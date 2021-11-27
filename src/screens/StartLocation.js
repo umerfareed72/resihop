@@ -2,7 +2,6 @@ import {useNavigation} from '@react-navigation/core';
 import React, {useRef} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {colors} from 'react-native-elements';
-import MyStatusBar from '../components/Header/statusBar';
 import MapViewComponent from '../components/MapViewComponent';
 import AddFavrouteLocation from './AddFavrouteLocation';
 

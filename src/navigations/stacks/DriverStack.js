@@ -15,7 +15,8 @@ import Terms from '../../screens/Passenger/Terms/Terms';
 import Privacy from '../../screens/Passenger/Privacy/Privacy';
 import Settings from '../../screens/Passenger/Settings/Settings';
 import AboutUs from '../../screens/Passenger/AboutUs/AboutUs';
-import RideHistory from '../../screens/Passenger/Rides/RideHistory';
+import DriverRideHistory from '../../screens/Driver/Rides/DriverRideHistory';
+import DriverRideDetail from '../../screens/Driver/Rides/DriverRideDetail';
 import Faq from '../../screens/Passenger/Faq/Faq';
 import Contribution from '../../screens/Passenger/Contribution/Contribuion';
 import Invite from '../../screens/Passenger/Invite/Invite';
@@ -28,6 +29,8 @@ import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
+import AddFavourites from '../../screens/Driver/Favourites/AddFavourites';
+
 const Stack = createStackNavigator();
 function DriverStack(props) {
   return (
@@ -38,6 +41,22 @@ function DriverStack(props) {
         options={{headerShown: false}}
         name="DriverHome"
         component={DriverHome}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DriverRideHistory"
+        component={DriverRideHistory}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AddFavourites"
+        component={AddFavourites}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DriverRideDetail"
+        component={DriverRideDetail}
       />
       <Stack.Screen
         options={{headerShown: false}}
@@ -127,11 +146,6 @@ function DriverStack(props) {
         options={{headerShown: false}}
         name="Terms"
         component={Terms}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="RideHistory"
-        component={RideHistory}
       />
       <Stack.Screen
         options={{headerShown: false}}
