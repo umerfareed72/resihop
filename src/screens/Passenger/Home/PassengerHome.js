@@ -22,6 +22,8 @@ import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 import {RideFilterModal, SortModal} from '../../../components';
+import PassengerHomeRideCards from '../../../components/PassengerHomeRideCards';
+import {FlatList} from 'react-native-gesture-handler';
 //Data
 var TimeList = {
   id: 1,
@@ -109,6 +111,28 @@ const PassengerHome = ({navigation}) => {
     setSeats('');
     setStatus('');
   };
+
+  const ridesData = [
+    {
+      id: 1,
+      date: '12 June, 08:00',
+      status: 'Confirmed',
+      seats: [1],
+    },
+    {
+      id: 2,
+      date: '12 June, 08:00',
+      status: 'Matching Done',
+      seats: [1, 2],
+    },
+    {
+      id: 3,
+      date: '12 June, 08:00',
+      status: 'Waiting for Match',
+      seats: [1, 2],
+    },
+  ];
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -202,15 +226,37 @@ const PassengerHome = ({navigation}) => {
           </View>
         </View>
 
-        <Image source={appIcons.noUpcomingRide} style={styles.noUpcomingRide} />
+        {ridesData.length === 0 ? (
+          <>
+            <Image
+              source={appIcons.noUpcomingRide}
+              style={styles.noUpcomingRide}
+            />
 
-        <Text style={styles.Txt}>{lorem}</Text>
-
-        <TouchableOpacity
-          style={styles.createRideBtnContainer}
-          onPress={() => navigation.navigate('CreateRide')}>
-          <Text style={styles.btnTxt}>{first_ride}</Text>
-        </TouchableOpacity>
+            <Text style={styles.Txt}>{lorem}</Text>
+            <TouchableOpacity
+              style={styles.createRideBtnContainer}
+              onPress={() => navigation.navigate('CreateRide')}>
+              <Text style={styles.btnTxt}>{first_ride}</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <FlatList
+              data={ridesData}
+              keyExtractor={item => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => <PassengerHomeRideCards item={item} />}
+              ListFooterComponent={() => (
+                <TouchableOpacity
+                  style={styles.createRideBtnContainer}
+                  onPress={() => navigation.navigate('CreateRide')}>
+                  <Text style={styles.btnTxt}>{first_ride}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </>
+        )}
       </SafeAreaView>
       <RideFilterModal
         time={TimeList}
