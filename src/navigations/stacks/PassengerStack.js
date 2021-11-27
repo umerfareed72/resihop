@@ -35,6 +35,8 @@ import Favourites from '../../screens/Passenger/Favourites/Favourites';
 import NotificationSettings from '../..//screens/NotificationSettings/NotificationSetting';
 import TransactionDetails from '../../screens/TransactionDetails/TransactionDetails';
 import NotificationTune from '../../screens/NotificationTune/NotificationTune';
+import EditProfile from '../../screens/EditProfile';
+import ChangePhone from '../../screens/ChangePhone';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -52,11 +54,7 @@ function PassengerStack(props) {
         name="Favourites"
         component={Favourites}
       />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="CityToCity"
-        component={CityToCity}
-      />
+
       <Stack.Screen
         options={{headerShown: false}}
         name="Payment"
@@ -207,6 +205,25 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="TransactionDetails"
         component={TransactionDetails}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="EditProfile"
+        component={EditProfile}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="ChangePhone"
+        component={ChangePhone}
+      />
+
+      {/* City To City Stack */}
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="CityToCity"
+        component={CityToCity}
       />
     </Stack.Navigator>
   );

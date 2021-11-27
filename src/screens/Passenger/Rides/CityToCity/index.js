@@ -21,8 +21,7 @@ import CalendarSheet from '../../../CalendarSheet';
 import styles from './styles';
 import {FlatList} from 'react-native';
 
-const CreateRide = () => {
-  let navigation = useNavigation();
+const index = ({navigation}) => {
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
 
@@ -234,4 +233,4 @@ const CreateRide = () => {
   );
 };
 
-export default CreateRide;
+export default index;
