@@ -49,6 +49,7 @@ export const colors = {
   dark_red: '#BF2A2A',
   txtGray: '#A1A1A1',
   blueLocation: '#41D5F9',
+  purple: '#C113B0',
 
   //greens
   light_green: '#F6FFEF',

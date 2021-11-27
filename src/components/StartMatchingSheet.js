@@ -5,9 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Image,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import {colors} from '../utilities';
+import {appImages, colors} from '../utilities';
 
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   const [sliderValue, setSliderValue] = useState(0);

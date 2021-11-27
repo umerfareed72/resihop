@@ -13,6 +13,7 @@ import {colors} from '../utilities';
 import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
 import AvailableDriversCard from './AvailableDriversCard';
+import RideStatusCards from './RideStatusCards';
 
 const MapViewComponent = ({rideModals, setModal, style, modal}) => {
   const [latitude, setLatitude] = useState(0);
@@ -136,7 +137,8 @@ const MapViewComponent = ({rideModals, setModal, style, modal}) => {
       ) : rideModals === 'finding' ? (
         <NearestDriverCard setModal={setModal} setHeight={setHeight} />
       ) : rideModals === 'available' ? (
-        <AvailableDriversCard setHeight={setHeight} />
+        // <AvailableDriversCard setHeight={setHeight} />
+        <RideStatusCards statusType={'ended'} />
       ) : null}
     </>
   );

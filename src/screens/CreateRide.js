@@ -15,7 +15,6 @@ import {colors, appIcons, appImages} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
-import MyStatusBar from '../components/Header/statusBar';
 import FavouriteLocations from './FavouriteLocations';
 import {CustomHeader} from '../components';
 import CalendarSheet from './CalendarSheet';
@@ -114,6 +113,7 @@ const CreateRide = () => {
             style={styles.noLater}
           />
           <TouchableOpacity
+            onPress={() => calendarSheetRef.current.open()}
             style={[
               styles.noLater,
               {justifyContent: 'center', marginRight: 11},

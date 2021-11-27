@@ -46,6 +46,9 @@ export const appImages = {
   valley: require('../../assets/images/valley.png'),
   inviteImage: require('../../assets/icons/png/invite_prop.png'),
   driver: require('../../assets/icons/png/driver/driver.png'),
+  car: require('../../assets/icons/png/car.png'),
+  sliderIcon: require('../../assets/icons/png/sliderIcon.png'),
+  pin: require('../../assets/icons/png/pin.png'),
 };
 export const drawerIcons = {
   Favourites: require('../../assets/icons/png/drawerIcons/Favourites.png'),
