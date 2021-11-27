@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors, family, size, WP} from '../../../../utilities';
+import {colors, family, HP, size, WP} from '../../../../utilities';
 
 export default StyleSheet.create({
   container: {
@@ -8,9 +8,5 @@ export default StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: WP('5'),
-  },
-  separator: {
-    borderWidth: 0.5,
-    borderColor: colors.g1,
   },
 });

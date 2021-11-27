@@ -2,24 +2,24 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {WP} from '../utilities';
-import DrawerComponent from '../components/Drawer/DrawerComp';
 import PassengerStack from './stacks/PassengerStack';
 import DriverStack from './stacks/DriverStack';
+import DriverDrawerComponent from '../components/Drawer/DriverDrawerComp';
 
 const Drawer = createDrawerNavigator();
 
-export const DrawerNavigator = ({route}) => {
+export const DriverDrawerNavigator = ({route}) => {
   return (
     <Drawer.Navigator
-      drawerContent={props => <DrawerComponent {...props} />}
+      drawerContent={props => <DriverDrawerComponent {...props} />}
       drawerStyle={styles.drawer}
       screenOptions={{headerShown: false}}
-      initialRouteName="PassHome"
+      initialRouteName="DrivHome"
       drawerPosition={'left'}>
       <Drawer.Screen
         // options={{headerShown: false}}
-        name="PassHome"
-        component={PassengerStack}
+        name="DrivHome"
+        component={DriverStack}
       />
     </Drawer.Navigator>
   );

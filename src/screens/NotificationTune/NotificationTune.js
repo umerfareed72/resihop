@@ -43,7 +43,11 @@ const NotificationTune = ({navigation}) => {
 
   return (
     <>
-      <CustomHeader title="Notifications Tone" backButton={true} />
+      <CustomHeader
+        navigation={navigation}
+        title="Notifications Tone"
+        backButton={true}
+      />
       <SafeAreaView style={styles.container}>
         <FlatList data={data} renderItem={item => <TuneComp data={item} />} />
       </SafeAreaView>

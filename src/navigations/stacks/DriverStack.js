@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import PassengerHome from '../../screens/Passenger/Home/PassengerHome';
+import DriverHome from '../../screens/Driver/Home/DriverHome';
 import EditCard from '../../screens/Passenger/Payment/AddPaymentMethod/EditCard';
 import TransactionHistory from '../../screens/Passenger/Payment/PaymentHistory';
 import CreateRide from '../../screens/CreateRide';
@@ -15,9 +15,8 @@ import Terms from '../../screens/Passenger/Terms/Terms';
 import Privacy from '../../screens/Passenger/Privacy/Privacy';
 import Settings from '../../screens/Passenger/Settings/Settings';
 import AboutUs from '../../screens/Passenger/AboutUs/AboutUs';
-import RideHistory from '../../screens/Passenger/Rides/RideHistory';
-import RideDetail from '../../screens/Passenger/Rides/RideDetail';
-
+import DriverRideHistory from '../../screens/Driver/Rides/DriverRideHistory';
+import DriverRideDetail from '../../screens/Driver/Rides/DriverRideDetail';
 import Faq from '../../screens/Passenger/Faq/Faq';
 import Contribution from '../../screens/Passenger/Contribution/Contribuion';
 import Invite from '../../screens/Passenger/Invite/Invite';
@@ -25,38 +24,46 @@ import Offers from '../../screens/Passenger/Offers/Offers';
 import Reports from '../../screens/Passenger/Reports/Reports';
 import BlockedList from '../../screens/Passenger/BlockedList';
 import MultiLanguage from '../../screens/Passenger/MultiLanguage';
-import CityToCity from '../../screens/Passenger/Rides/CityToCity';
-
 import StartMatching from '../../screens/StartMatching';
 import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
-import NotificationSettings from '../..//screens/NotificationSettings/NotificationSetting';
-import TransactionDetails from '../../screens/TransactionDetails/TransactionDetails';
-import NotificationTune from '../../screens/NotificationTune/NotificationTune';
+import AddFavourites from '../../screens/Driver/Favourites/AddFavourites';
 
 const Stack = createStackNavigator();
-function PassengerStack(props) {
+function DriverStack(props) {
   return (
     <Stack.Navigator
-      initialRouteName="PassengerHome"
+      initialRouteName="DriverHome"
       screenOptions={{headerShown: false}}>
       <Stack.Screen
         options={{headerShown: false}}
-        name="PassengerHome"
-        component={PassengerHome}
+        name="DriverHome"
+        component={DriverHome}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DriverRideHistory"
+        component={DriverRideHistory}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AddFavourites"
+        component={AddFavourites}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DriverRideDetail"
+        component={DriverRideDetail}
       />
       <Stack.Screen
         options={{headerShown: false}}
         name="Favourites"
         component={Favourites}
       />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="CityToCity"
-        component={CityToCity}
-      />
+
       <Stack.Screen
         options={{headerShown: false}}
         name="Payment"
@@ -142,16 +149,6 @@ function PassengerStack(props) {
       />
       <Stack.Screen
         options={{headerShown: false}}
-        name="RideHistory"
-        component={RideHistory}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="RideDetail"
-        component={RideDetail}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
         name="Invite"
         component={Invite}
       />
@@ -191,25 +188,7 @@ function PassengerStack(props) {
         name="BookingDetails"
         component={BookingDetails}
       />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="NotificationSettings"
-        component={NotificationSettings}
-      />
-
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="NotificationTune"
-        component={NotificationTune}
-      />
-
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="TransactionDetails"
-        component={TransactionDetails}
-      />
     </Stack.Navigator>
   );
 }
-
-export default PassengerStack;
+export default DriverStack;

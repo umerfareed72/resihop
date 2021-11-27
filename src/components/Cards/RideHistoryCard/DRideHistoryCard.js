@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 
-export const RideHistoryCard = ({
+export const DRideHistoryCard = ({
   cancelled,
   driver,
   profilePic,
@@ -17,8 +17,14 @@ export const RideHistoryCard = ({
         <TouchableOpacity onPress={onPressCard}>
           <View style={styles.cardContainer}>
             <Text style={styles.h1}>Mon, 12 June, 08:00</Text>
-            {cancelled && <Text style={styles.specialText}>cancelled</Text>}
-            <Text style={styles.h2}>SEK 20</Text>
+            <Text style={[styles.h2, {marginLeft: driver ? 30 : 0}]}>
+              SEK 20
+            </Text>
+            {driver ? (
+              <Image source={appIcons.redHeart} style={styles.imageStyle} />
+            ) : (
+              false
+            )}
           </View>
           <View style={{paddingVertical: 10}}>
             <View style={styles.row2}>
@@ -41,68 +47,25 @@ export const RideHistoryCard = ({
                   </Text>
                 </View>
               </View>
-              {driver ? (
-                false
-              ) : (
-                <View>
-                  <FlatList
-                    horizontal={true}
-                    data={[1, 2]}
-                    renderItem={() => {
-                      return (
-                        <Image
-                          style={[styles.rightIcon, {marginStart: 5}]}
-                          source={appImages.seatBlue}
-                        />
-                      );
-                    }}
-                  />
-                </View>
-              )}
             </View>
           </View>
-          {driver ? (
-            <View>
-              <FlatList
-                horizontal={true}
-                data={[1, 2]}
-                renderItem={() => {
-                  return (
-                    <Image
-                      style={[
-                        styles.rightIcon,
-                        {
-                          marginStart: driver ? 0 : 5,
-                          marginEnd: driver ? 5 : 0,
-                        },
-                      ]}
-                      source={appImages.seatBlue}
-                    />
-                  );
-                }}
-              />
-            </View>
-          ) : (
-            <View style={styles.row3}>
-              <Image source={appIcons.car_left} style={styles.icon50} />
-              <Text
-                style={[styles.h2Text, {fontWeight: '500', color: colors.g5}]}>
-                Ford, Focus,{' '}
-                <Text
-                  style={[
-                    styles.h2Text,
-                    {fontWeight: 'bold', color: colors.light_black},
-                  ]}>
-                  White, XT32TTU8
-                </Text>
-              </Text>
-              {profilePic ? (
-                <Image source={appImages.user} style={styles.icon42} />
-              ) : (
-                false
-              )}
-            </View>
-          )}
+          <View style={{alignItems: 'center', flexDirection: 'row'}}>
+            <FlatList
+              horizontal={true}
+              data={[1, 2]}
+              renderItem={() => {
+                return (
+                  <Image
+                    style={[styles.rightIcon, {marginEnd: 5}]}
+                    source={appImages.seatBlue}
+                  />
+                );
+              }}
+            />
+            {cancelled && (
+              <Image source={appIcons.cancelled} style={styles.specialText} />
+            )}
+          </View>
         </TouchableOpacity>
       </View>
     </View>
@@ -185,12 +148,13 @@ const styles = StyleSheet.create({
     fontSize: size.xxsmall,
   },
   specialText: {
-    color: colors.dark_red,
-    fontWeight: '700',
-    fontSize: size.normal,
-    borderBottomWidth: 2,
-    borderTopWidth: 2,
-    borderBottomColor: colors.dark_red,
-    borderTopColor: colors?.dark_red,
+    height: 19,
+    width: 58,
+    resizeMode: 'contain',
+  },
+  imageStyle: {
+    height: 18,
+    width: 18,
+    resizeMode: 'contain',
   },
 });

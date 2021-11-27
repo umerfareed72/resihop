@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native';
-import {family, size} from '../../../utilities';
+import {family, size} from '../../utilities';
 
-export const PaymentButtons = ({
+export const SmallButtons = ({
   onPress,
   title,
   bgColor,
@@ -13,13 +13,19 @@ export const PaymentButtons = ({
   fontFamily,
   fontWeight,
   image,
+  height,
 }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[
         styles.btnContainer,
-        {backgroundColor: bgColor, width: width, borderWidth: borderWidth},
+        {
+          backgroundColor: bgColor,
+          height: height,
+          width: width,
+          borderWidth: borderWidth,
+        },
       ]}>
       {image && (
         <Image
@@ -50,6 +56,7 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 14,
     flexDirection: 'row',
+    alignSelf: 'center',
   },
   btnText: {
     fontSize: size.normal,

@@ -13,10 +13,14 @@ import {CustomHeader} from '../../components';
 import {appIcons, appImages, colors, family, HP, size} from '../../utilities';
 import LinearGradient from 'react-native-linear-gradient';
 
-const TransactionDetails = () => {
+const TransactionDetails = ({navigation}) => {
   return (
     <>
-      <CustomHeader title="Transaction Details" backButton={true} />
+      <CustomHeader
+        title="Transaction Details"
+        backButton={true}
+        navigation={navigation}
+      />
       <SafeAreaView style={styles.container}>
         <View style={styles.marginContainer}>
           <LinearGradient

@@ -3,18 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
-import NotificationSettings from '../screens/NotificationSettings/NotificationSetting';
-import TransactionDetails from '../screens/TransactionDetails/TransactionDetails';
 import {DrawerNavigator} from './PassengerDrawerNav';
-import NotificationTune from '../screens/NotificationTune/NotificationTune';
-import Reports from '../screens/Passenger/Reports/Reports';
-import StartCity from '../screens/StartCity/StartCity';
-import CostPerSeat from '../screens/CostPerSeat/CostPerSeat';
-import DestinationCity from '../screens/DestinationCity/DestinationCity';
-import SelectRoute from '../screens/SelectRoute/SelectRoute';
-import AvailablePassengerMap from '../screens/AvailablePassengerMap/AvailablePassengerMap';
-import AvailablePassengerList from '../screens/AvailablePassengerList/AvailablePassengerList';
-import Invite from '../screens/Passenger/Invite/Invite';
+import {DriverDrawerNavigator} from './DriverDraweNavigator';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -27,67 +17,20 @@ const PassengerNavigator = () => {
   );
 };
 
+const DriverNavigator = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName={'DriverHome'}>
+      <Stack.Screen name={'DriverHome'} component={DriverDrawerNavigator} />
+    </Stack.Navigator>
+  );
+};
+
 function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Invite"
-          component={Invite}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="AvailablePassengerList"
-          component={AvailablePassengerList}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="AvailablePassengerMap"
-          component={AvailablePassengerMap}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="SelectRoute"
-          component={SelectRoute}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="CostPerSeat"
-          component={CostPerSeat}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="DestinationCity"
-          component={DestinationCity}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="StartCity"
-          component={StartCity}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="Reports"
-          component={Reports}
-        />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="NotificationSettings"
-          component={NotificationSettings}
-        />
-
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="NotificationTune"
-          component={NotificationTune}
-        />
-
-        <Stack.Screen
-          options={{headerShown: false}}
-          name="TransactionDetails"
-          component={TransactionDetails}
-        />
         <Stack.Screen
           options={{headerShown: false}}
           name="Splash"
@@ -97,6 +40,11 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="PassengerDashboard"
           component={PassengerNavigator}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="DriverDashboard"
+          component={DriverNavigator}
         />
         <Stack.Screen
           options={{headerShown: false}}

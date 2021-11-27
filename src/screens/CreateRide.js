@@ -79,7 +79,7 @@ const CreateRide = () => {
               color={colors.btnGray}
               onPress={() => favourteLocationRef.current.open()}
             />
-            <View style={styles.locationSwitch} />
+            <Image style={styles.locationSwitch} source={appIcons.mobiledata} />
             <HeartIcon
               onPress={() => favourteLocationRef.current.open()}
               name="heart"
@@ -93,7 +93,7 @@ const CreateRide = () => {
           {seats.map(seat => (
             <Image
               key={seat}
-              source={appIcons.seatBlue}
+              source={appImages.seatBlue}
               resizeMode="contain"
               style={styles.seat}
             />
@@ -280,7 +280,6 @@ const styles = StyleSheet.create({
   locationSwitch: {
     height: 25,
     width: 25,
-    backgroundColor: colors.green,
     borderRadius: 25 / 2,
     marginVertical: 11,
   },

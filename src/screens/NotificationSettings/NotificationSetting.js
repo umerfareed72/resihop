@@ -22,7 +22,11 @@ const NotificationSettings = ({navigation}) => {
   const [toggleEnabled, setToggleEnabled] = useState(false);
   return (
     <>
-      <CustomHeader title="Notifications Settings" backButton={true} />
+      <CustomHeader
+        title="Notifications Settings"
+        backButton={true}
+        navigation={navigation}
+      />
       <SafeAreaView style={styles.container}>
         <View style={styles.marginContainer}>
           <View style={styles.notifTune}>

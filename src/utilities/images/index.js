@@ -21,11 +21,27 @@ export const appIcons = {
   spread_goodness: require('../../assets/icons/png/spread_goodness.png'),
   next: require('../../assets/icons/png/next.png'),
   dumpBox: require('../../assets/icons/png/dumpBox.png'),
+  driver_home: require('../../assets/icons/png/driver/driver_home.png'),
+  car_left: require('../../assets/icons/png/car_left.png'),
+  heart: require('../../assets/icons/png/heart.png'),
+  redHeart: require('../../assets/icons/png/redHeart.png'),
+  call: require('../../assets/icons/png/call.png'),
+  cancelled: require('../../assets/icons/png/cancelled.png'),
+  empty_star: require('../../assets/icons/png/emptyStar.png'),
+  full_star: require('../../assets/icons/png/fullStar.png'),
+  tickBg: require('../../assets/icons/png/tickBg.png'),
+
   car_icon: require('../../assets/icons/png/driver/driver_recurring_ride.png'),
+  driver_brick_bg: require('../../assets/icons/png/driver/driver_brick_bg.png'),
   // /icons/png/Group9368.png
 };
 export const appImages = {
   visa: require('../../assets/images/visa.png'),
+  green_car: require('../../assets/images/green_car.png'),
+  blue_car: require('../../assets/images/blue_car.png'),
+  city: require('../../assets/images/city.png'),
+  boss_car: require('../../assets/images/boss_car.png'),
+  green_car2: require('../../assets/images/green_car2.png'),
   leftcar: require('../../assets/images/leftcar.png'),
   tree: require('../../assets/images/tree.png'),
   user: require('../../assets/images/user.png'),

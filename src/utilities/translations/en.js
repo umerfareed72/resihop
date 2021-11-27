@@ -78,4 +78,12 @@ export default {
   blocked_list: 'Blocked Lists',
   language: 'Language',
   change_language: 'Change Language',
+
+  //Driver Strings
+  driver_home: 'Driver Home',
+  ride_detail: 'Ride Details',
+  driver_ride_history: 'Drive History',
+  driver_ride_detail: 'Drive Details',
+  add_to_favourite: 'Add to Favorites',
+  add_experience: 'Rate your Ride Experience',
 };

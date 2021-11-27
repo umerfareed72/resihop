@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {
   CustomHeader,
+  DRideFilterModal,
+  DRideHistoryCard,
   PaymentFilterModal,
   RideFilterModal,
   RideHistoryCard,
@@ -22,26 +24,18 @@ import styles from './style';
 //Data
 var TimeList = {
   id: 1,
-  title: 'Time',
+  title: 'Timeframe',
   items: [
-    {id: 1, text: '08:00 to 12:00', status: false},
-    {id: 2, text: '08:00 to 12:00', status: false},
-    {id: 3, text: '08:00 to 12:00', status: false},
-  ],
-};
-
-var RideStatusList = {
-  id: 1,
-  title: 'Ride Status',
-  items: [
-    {id: 1, text: 'Confirmed', status: false},
-    {id: 2, text: 'Waiting for Match', status: false},
-    {id: 3, text: 'Matching Done', status: false},
+    {id: 1, text: 'Today', status: false},
+    {id: 2, text: 'This Week', status: false},
+    {id: 3, text: 'This Month', status: false},
+    {id: 3, text: 'This Month', status: false},
+    {id: 3, text: 'This Year', status: false},
   ],
 };
 
 const rideTypeList = {
-  id: 4,
+  id: 2,
   title: 'Ride Type',
   items: [
     {id: 1, text: 'All Rides'},
@@ -50,20 +44,8 @@ const rideTypeList = {
   ],
 };
 
-const DateList = {
-  id: 1,
-  title: 'Date',
-  items: [
-    {id: 1, text: '12 June'},
-    {id: 2, text: '13 June'},
-    {id: 3, text: '14 June'},
-    {id: 4, text: '15 June'},
-    {id: 5, text: '16 June'},
-  ],
-};
-
 const seatsList = {
-  id: 5,
+  id: 3,
   title: 'Seat',
   items: [
     {id: 1, icon: appImages.seatBlue},
@@ -80,39 +62,31 @@ const index = ({navigation}) => {
   const sortModalRef = useRef(null);
   //States
   const [time, settime] = useState('');
-  const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
-  const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
 
   const selectTime = val => {
     settime(val);
   };
-  const selectRideStatus = val => {
-    setStatus(val);
-  };
+
   const selectRideType = val => {
     setRideType(val);
   };
   const selectSeats = val => {
     setSeats(val);
   };
-  const selectdDate = val => {
-    setdate(val);
-  };
+
   const resetFilter = () => {
     settime('');
-    setdate('');
     setRideType('');
     setSeats('');
-    setStatus('');
   };
 
   return (
     <>
       <CustomHeader
         backButton={true}
-        title={I18n.t('ride_history')}
+        title={I18n.t('driver_ride_history')}
         navigation={navigation}
         btnImage1={appIcons.filter}
         height3={25}
@@ -132,10 +106,10 @@ const index = ({navigation}) => {
             data={[1, 2, 3, 4, 5, 6, 7]}
             renderItem={() => {
               return (
-                <RideHistoryCard
+                <DRideHistoryCard
                   profilePic={true}
                   onPressCard={() => {
-                    navigation?.navigate('RideDetail');
+                    navigation?.navigate('DriverRideDetail');
                   }}
                 />
               );
@@ -146,21 +120,15 @@ const index = ({navigation}) => {
           />
         </View>
       </View>
-      <RideFilterModal
+      <DRideFilterModal
         time={TimeList}
         seats={seatsList}
         rideType={rideTypeList}
-        status={RideStatusList}
-        date={DateList}
-        onPressdate={selectdDate}
         onPressrideType={selectRideType}
         onPressseats={selectSeats}
         onPresstime={selectTime}
-        onPressstatus={selectRideStatus}
         show={filterModalRef}
         selectedTime={time}
-        selectedDate={date}
-        selectedStatus={status}
         selectedRideType={ridetype}
         selectedSeats={seats}
         onPressReset={resetFilter}

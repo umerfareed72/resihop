@@ -16,7 +16,7 @@ import MyStatusBar from '../Header/statusBar';
 import {LogoutModal} from '../Modal/LogoutModal/LogoutModal';
 import I18n from '../../utilities/translations';
 
-const DrawerComponent = ({navigation}) => {
+const DriverDrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
 
   const list = [
@@ -24,7 +24,7 @@ const DrawerComponent = ({navigation}) => {
       icon: drawerIcons.rides_history,
       label: 'Rides History',
       onPress: () => {
-        navigation?.navigate('RideHistory');
+        navigation?.navigate('DriverRideHistory');
         navigation.closeDrawer();
       },
     },
@@ -42,13 +42,22 @@ const DrawerComponent = ({navigation}) => {
       icon: drawerIcons.Favourites,
       label: 'Favourites',
       onPress: () => {
-        navigation.push('Favourites', {
-          routeName: 'Favourites',
+        navigation.push('AddFavourites', {
+          routeName: 'AddFavourites',
         });
         navigation.closeDrawer();
       },
     },
-
+    {
+      icon: appImages.green_car2,
+      label: 'Vehicle Information',
+      onPress: () => {
+        // navigation.push('VehicleInformation', {
+        //   routeName: 'VehicleInformation',
+        // });
+        navigation.closeDrawer();
+      },
+    },
     {
       icon: drawerIcons.reports,
       label: 'Reports',
@@ -130,16 +139,29 @@ const DrawerComponent = ({navigation}) => {
                 type={'antdesign'}
               />
             </View>
-            <TouchableOpacity onPress={() => {}} style={styles.buttonContainer}>
-              <Text style={styles.passengerStyle}>Passenger</Text>
-              <Icon
-                name={'star'}
-                type={'entypo'}
-                color={colors.white}
-                size={15}
-              />
-              <Text style={styles.passengerStyle}>4.5</Text>
-            </TouchableOpacity>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <TouchableOpacity style={styles.buttonContainer}>
+                <Text style={styles.passengerStyle}>Passenger</Text>
+                <Icon
+                  name={'star'}
+                  type={'entypo'}
+                  color={colors.white}
+                  size={15}
+                />
+                <Text style={styles.passengerStyle}>4.5</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonContainer2}>
+                <Text style={styles.passengerStyle}>Driver</Text>
+                <Icon
+                  name={'star'}
+                  type={'entypo'}
+                  color={colors.white}
+                  size={15}
+                />
+                <Text style={styles.passengerStyle}>4.5</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
         <ScrollView
@@ -150,7 +172,10 @@ const DrawerComponent = ({navigation}) => {
               containerStyle={{backgroundColor: colors.light_green}}
               key={i}
               onPress={item.onPress}>
-              <Image style={{width: 20, height: 20}} source={item.icon} />
+              <Image
+                style={{width: 24, height: 24, resizeMode: 'contain'}}
+                source={item.icon}
+              />
 
               <ListItem.Content>
                 <ListItem.Title style={styles.drawerItemLabel}>
@@ -185,7 +210,6 @@ const DrawerComponent = ({navigation}) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    // width: WP('70'),
     backgroundColor: colors.light_green,
   },
   userInfoContainer: {
@@ -195,7 +219,7 @@ const styles = StyleSheet.create({
     marginBottom: HP('2'),
   },
   infoContainer: {
-    marginHorizontal: HP('5'),
+    marginHorizontal: HP('3'),
     // marginVertical: HP('10'),
   },
   imgStyle: {
@@ -215,8 +239,18 @@ const styles = StyleSheet.create({
     fontFamily: family.product_sans_bold,
   },
   buttonContainer: {
-    width: 160,
-    height: 40,
+    width: 130,
+    height: 30,
+    borderRadius: 20,
+    backgroundColor: colors.green,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 5,
+  },
+  buttonContainer2: {
+    width: 110,
+    height: 30,
     borderRadius: 20,
     backgroundColor: colors.green,
     flexDirection: 'row',
@@ -262,4 +296,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DrawerComponent;
+export default DriverDrawerComponent;

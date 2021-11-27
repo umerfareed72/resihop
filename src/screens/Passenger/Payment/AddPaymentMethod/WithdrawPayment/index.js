@@ -37,6 +37,9 @@ const index = ({navigation}) => {
           </View>
           <View style={{padding: 20}}>
             <PaymentButtons
+              onPress={() => {
+                navigation?.navigate('TransactionDetails');
+              }}
               txtColor={colors.white}
               bgColor={addMoney ? colors.green : colors.g1}
               title={I18n.t('withdraw')}
