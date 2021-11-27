@@ -1,10 +1,14 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {appImages, colors} from '../utilities';
+import {appImages, colors, family, HP, size} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/core';
 
-const AvailableDrivers = ({setAvailableDrivers, setNearestDriver}) => {
+const AvailableDrivers = ({
+  modalName,
+  setAvailableDrivers,
+  setNearestDriver,
+}) => {
   let navigation = useNavigation();
 
   return (
@@ -22,20 +26,23 @@ const AvailableDrivers = ({setAvailableDrivers, setNearestDriver}) => {
         </Text>
         <View style={styles.addressSquare} />
       </View>
-      <View style={styles.timeDateContainer}>
-        <Text style={styles.dateTimeTxt}>12 June, 07:50</Text>
-        <View style={styles.matchingContainer}>
-          <Text style={styles.matchingTxt}>Matching Done</Text>
+      {modalName !== 'availableDrivers' && (
+        <View style={styles.timeDateContainer}>
+          <Text style={styles.dateTimeTxt}>12 June, 07:50</Text>
+          <View style={styles.matchingContainer}>
+            <Text style={styles.matchingTxt}>Matching Done</Text>
+          </View>
+          <View style={styles.seatsContainer}>
+            <Image
+              source={appImages.seatGreen}
+              resizeMode="contain"
+              style={styles.greenSeat}
+            />
+            <Text style={styles.seatTxt}>2 Seat</Text>
+          </View>
         </View>
-        <View style={styles.seatsContainer}>
-          <Image
-            source={appImages.seatGreen}
-            resizeMode="contain"
-            style={styles.greenSeat}
-          />
-          <Text style={styles.seatTxt}>2 Seat</Text>
-        </View>
-      </View>
+      )}
+
       <View style={styles.driverInfoContainer}>
         <View style={styles.driverInfo}>
           <Image
@@ -51,51 +58,110 @@ const AvailableDrivers = ({setAvailableDrivers, setNearestDriver}) => {
             </View>
           </View>
         </View>
-        <View>
-          <Text>SEK 20</Text>
-        </View>
+        {modalName === 'availableDrivers' ? (
+          <View>
+            <View style={styles.imagesContainer}>
+              <Image
+                source={appImages.seatGreen}
+                resizeMode="contain"
+                style={styles.greenSeat}
+              />
+              <Image
+                source={appImages.seatGreen}
+                resizeMode="contain"
+                style={styles.greenSeat}
+              />
+            </View>
+
+            <Text style={styles.dateStyle}>12 June, 08:00</Text>
+          </View>
+        ) : (
+          <View>
+            <Text>SEK 20</Text>
+          </View>
+        )}
       </View>
-      <View style={styles.rideDetailsContainer}>
-        <View style={styles.seatDetails}>
-          <Image
-            source={appImages.seatGreen}
-            resizeMode="contain"
-            style={styles.seatGreen}
-          />
-          <Text style={styles.seatNum}>4 Seat Available</Text>
-        </View>
-        <View style={styles.carDetailsTxt}>
-          <Text style={styles.carDetails}>Ford, Focus,</Text>
-          <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-            White, XT32TTU8
-          </Text>
-        </View>
-      </View>
-      <View style={styles.availableMain}>
-        <View style={styles.availableBox}>
-          <Text style={styles.availableTxt}>Available</Text>
-        </View>
-        <Text style={styles.date}>12 June 2020</Text>
-      </View>
-      <View style={styles.btnMainContainer}>
-        <TouchableOpacity style={styles.btnContainer}>
-          <Text style={styles.btnTxt}>Book Now</Text>
+      {modalName !== 'availableDrivers' && (
+        <>
+          <View style={styles.rideDetailsContainer}>
+            <View style={styles.seatDetails}>
+              <Image
+                source={appImages.seatGreen}
+                resizeMode="contain"
+                style={styles.seatGreen}
+              />
+              <Text style={styles.seatNum}>4 Seat Available</Text>
+            </View>
+            <View style={styles.carDetailsTxt}>
+              <Text style={styles.carDetails}>Ford, Focus,</Text>
+              <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
+                White, XT32TTU8
+              </Text>
+            </View>
+          </View>
+          <View style={styles.availableMain}>
+            <View style={styles.availableBox}>
+              <Text style={styles.availableTxt}>Available</Text>
+            </View>
+            <Text style={styles.date}>12 June 2020</Text>
+          </View>
+          <View style={styles.btnMainContainer}>
+            <TouchableOpacity style={styles.btnContainer}>
+              <Text style={styles.btnTxt}>Book Now</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btnContainer}
+              onPress={() => {
+                navigation.navigate('AvailableDrivers');
+              }}>
+              <Text style={styles.btnTxt}>Show All Drivers</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+
+      {modalName === 'availableDrivers' && (
+        <TouchableOpacity style={styles.selectRouteButtom}>
+          <Text style={styles.routeText}>Select Route</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnContainer}
-          onPress={() => {
-            navigation.navigate('AvailableDrivers');
-          }}>
-          <Text style={styles.btnTxt}>Show All Drivers</Text>
-        </TouchableOpacity>
-      </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  selectRouteButtom: {
+    height: HP('7'),
+    backgroundColor: colors.green,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: HP('3'),
+    borderRadius: 14,
+    marginVertical: HP('3'),
+  },
+  routeText: {
+    fontSize: size.large,
+    fontFamily: family.product_sans_regular,
+    color: colors.white,
+  },
+  imagesContainer: {
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dateStyle: {
+    fontSize: size.small,
+    fontFamily: family.product_sans_regular,
+    color: colors.light_black,
+    marginTop: HP('1'),
+  },
+  greenSeat: {
+    width: 18.75,
+    height: 25,
+    marginHorizontal: 10,
+  },
   container: {
-    height: 497,
+    // height: 497,
     backgroundColor: colors.white,
     position: 'absolute',
     bottom: 0,

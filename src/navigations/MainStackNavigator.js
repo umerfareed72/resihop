@@ -8,6 +8,13 @@ import TransactionDetails from '../screens/TransactionDetails/TransactionDetails
 import {DrawerNavigator} from './PassengerDrawerNav';
 import NotificationTune from '../screens/NotificationTune/NotificationTune';
 import Reports from '../screens/Passenger/Reports/Reports';
+import StartCity from '../screens/StartCity/StartCity';
+import CostPerSeat from '../screens/CostPerSeat/CostPerSeat';
+import DestinationCity from '../screens/DestinationCity/DestinationCity';
+import SelectRoute from '../screens/SelectRoute/SelectRoute';
+import AvailablePassengerMap from '../screens/AvailablePassengerMap/AvailablePassengerMap';
+import AvailablePassengerList from '../screens/AvailablePassengerList/AvailablePassengerList';
+import Invite from '../screens/Passenger/Invite/Invite';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -24,6 +31,41 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Invite"
+          component={Invite}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="AvailablePassengerList"
+          component={AvailablePassengerList}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="AvailablePassengerMap"
+          component={AvailablePassengerMap}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="SelectRoute"
+          component={SelectRoute}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="CostPerSeat"
+          component={CostPerSeat}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="DestinationCity"
+          component={DestinationCity}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="StartCity"
+          component={StartCity}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="Reports"
