@@ -25,6 +25,8 @@ import Offers from '../../screens/Passenger/Offers/Offers';
 import Reports from '../../screens/Passenger/Reports/Reports';
 import BlockedList from '../../screens/Passenger/BlockedList';
 import MultiLanguage from '../../screens/Passenger/MultiLanguage';
+import CityToCity from '../../screens/Passenger/Rides/CityToCity';
+
 import StartMatching from '../../screens/StartMatching';
 import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
@@ -50,7 +52,11 @@ function PassengerStack(props) {
         name="Favourites"
         component={Favourites}
       />
-
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="CityToCity"
+        component={CityToCity}
+      />
       <Stack.Screen
         options={{headerShown: false}}
         name="Payment"
