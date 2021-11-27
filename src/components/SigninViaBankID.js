@@ -9,7 +9,7 @@ import {
   sign_in_with_bank_id,
   terms_and_condition_text,
 } from '../theme/strings';
-import {bank_id_white} from '../assets';
+import { appIcons } from '../utilities';
 
 function SigninViaBankID({onBankIdPress, disabled = true}) {
   return (
@@ -51,7 +51,7 @@ function SigninViaBankID({onBankIdPress, disabled = true}) {
             {sign_in_with_bank_id}
           </Text>
           <Image
-            source={bank_id_white}
+            source={appIcons.bank_id}
             style={{width: 50, height: 35, resizeMode: 'contain'}}
           />
         </View>

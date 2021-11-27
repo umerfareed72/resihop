@@ -121,7 +121,10 @@ const DrawerComponent = ({navigation}) => {
               source={appImages.app_logo}
             />
 
-            <View style={styles.userNameContainer}>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => navigation.navigate('EditProfile')}
+              style={styles.userNameContainer}>
               <Text style={styles.userName}>Umar Fareed</Text>
               <Icon
                 name={'right'}
@@ -129,7 +132,7 @@ const DrawerComponent = ({navigation}) => {
                 size={22}
                 type={'antdesign'}
               />
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.buttonContainer}>
               <Text style={styles.passengerStyle}>Passenger</Text>
               <Icon
