@@ -2,10 +2,15 @@ import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {appImages, colors} from '../utilities';
 import {fonts} from '../theme/theme';
+import {useNavigation} from '@react-navigation/core';
 
 const PassengerHomeRideCards = ({item}) => {
+  let navigation = useNavigation();
+
   return (
-    <TouchableOpacity style={styles.cardContainer}>
+    <TouchableOpacity
+      style={styles.cardContainer}
+      onPress={() => navigation.navigate('UpdateRide')}>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
           123 abc apartment abc street abc...

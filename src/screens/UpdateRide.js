@@ -1,25 +1,25 @@
 import React, {useState, useRef} from 'react';
 import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
   StyleSheet,
-  TouchableOpacity,
+  Text,
+  View,
+  SafeAreaView,
   TextInput,
+  TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
-  Keyboard,
+  Image,
 } from 'react-native';
 import {colors, appIcons, appImages} from '../utilities';
-import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from './FavouriteLocations';
 import {CustomHeader} from '../components';
 import CalendarSheet from './CalendarSheet';
+import {useNavigation} from '@react-navigation/core';
+import {fonts} from '../theme/theme';
 
-const CreateRide = () => {
+const UpdateRide = () => {
   let navigation = useNavigation();
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
@@ -36,18 +36,9 @@ const CreateRide = () => {
       <CustomHeader
         backButton={true}
         navigation={navigation}
-        title={'Create Ride'}
+        title={'Update Ride'}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.tripBtnWrapper}>
-          <TouchableOpacity style={styles.tripBtnContainer}>
-            <Text style={styles.btnTxt}>Single Trip</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tripBtnContainer}>
-            <Text style={styles.btnTxt}>Recurring Ride</Text>
-          </TouchableOpacity>
-        </View>
-
         <View style={styles.locationMainWrapper}>
           <View>
             <View style={{marginBottom: 20}}>
@@ -104,7 +95,6 @@ const CreateRide = () => {
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
             Need to arrive no later than
           </Text>
-          <Text style={styles.selectTxt}>Select Date</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
           <TextInput
@@ -113,19 +103,6 @@ const CreateRide = () => {
             value={noLaterTime}
             onChangeText={setNoLaterTime}
             style={styles.noLater}
-          />
-          <TouchableOpacity
-            onPress={() => calendarSheetRef.current.open()}
-            style={[
-              styles.noLater,
-              {justifyContent: 'center', marginRight: 11},
-            ]}>
-            <Text style={styles.dateTxt}>{date !== '' ? date : 'Date'}</Text>
-          </TouchableOpacity>
-          <Image
-            source={appImages.calendar}
-            resizeMode="contain"
-            style={styles.calendarIcon}
           />
         </View>
         <View style={styles.returnTripWrapper}>
@@ -200,15 +177,15 @@ const CreateRide = () => {
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableOpacity
-          style={styles.nextBtnContainer}
-          onPress={() => navigation.navigate('StartLocation')}>
-          <Text style={styles.nextTxt}>Next</Text>
+        <TouchableOpacity style={styles.nextBtnContainer}>
+          <Text style={styles.nextTxt}>Update</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
+
+export default UpdateRide;
 
 const styles = StyleSheet.create({
   container: {
@@ -386,6 +363,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
   dateTxt: {
     fontSize: 16,
@@ -393,5 +371,3 @@ const styles = StyleSheet.create({
     color: colors.g1,
   },
 });
-
-export default CreateRide;

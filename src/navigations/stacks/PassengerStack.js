@@ -17,6 +17,7 @@ import Settings from '../../screens/Passenger/Settings/Settings';
 import AboutUs from '../../screens/Passenger/AboutUs/AboutUs';
 import RideHistory from '../../screens/Passenger/Rides/RideHistory';
 import RideDetail from '../../screens/Passenger/Rides/RideDetail';
+import UpdateRide from '../../screens/UpdateRide';
 
 import Faq from '../../screens/Passenger/Faq/Faq';
 import Contribution from '../../screens/Passenger/Contribution/Contribuion';
@@ -201,6 +202,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="TransactionDetails"
         component={TransactionDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="UpdateRide"
+        component={UpdateRide}
       />
     </Stack.Navigator>
   );
