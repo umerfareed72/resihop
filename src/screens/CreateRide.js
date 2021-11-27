@@ -108,15 +108,13 @@ const CreateRide = () => {
             onChangeText={setNoLaterTime}
             style={styles.noLater}
           />
-          <TextInput
-            placeholder="Date"
-            placeholderTextColor={colors.btnGray}
-            value={date}
-            onChangeText={setDate}
-            onPressOut={() => calendarSheetRef.current.open()}
-            onPressIn={() => Keyboard.dismiss()}
-            style={[styles.noLater, {marginRight: 11}]}
-          />
+          <TouchableOpacity
+            style={[
+              styles.noLater,
+              {justifyContent: 'center', marginRight: 11},
+            ]}>
+            <Text style={styles.dateTxt}>{date !== '' ? date : 'Date'}</Text>
+          </TouchableOpacity>
           <Image
             source={appImages.calendar}
             resizeMode="contain"
@@ -381,6 +379,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+  },
+  dateTxt: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.g1,
   },
 });
 

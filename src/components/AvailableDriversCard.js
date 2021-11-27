@@ -1,11 +1,22 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import {appImages, colors} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/core';
 
-const AvailableDrivers = ({setAvailableDrivers, setNearestDriver}) => {
+const AvailableDrivers = ({setHeight}) => {
   let navigation = useNavigation();
+
+  useEffect(() => {
+    setHeight(Dimensions.get('screen').height - 400);
+  }, []);
 
   return (
     <View style={styles.container}>

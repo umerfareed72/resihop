@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   PermissionsAndroid,
@@ -12,15 +12,18 @@ import {colors} from '../utilities';
 
 import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
-import AvailableDrivers from './AvailableDriversCard';
+import AvailableDriversCard from './AvailableDriversCard';
 
-const MapViewComponent = ({rideModals, setModal, style}) => {
+const MapViewComponent = ({rideModals, setModal, style, modal}) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [height, setHeight] = useState(0);
+
+  const mapRef = useRef();
 
   useEffect(() => {
     getLocation();
-  }, []);
+  }, [height]);
 
   let customMarkers = [
     {
@@ -60,12 +63,19 @@ const MapViewComponent = ({rideModals, setModal, style}) => {
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         );
       }
-      if (permission && permission === 'granted') {
+      if (permission || permission === 'granted') {
         Geolocation.getCurrentPosition(
           position => {
-            console.log('Position', position);
             setLatitude(position.coords.latitude);
             setLongitude(position.coords.longitude);
+            mapRef.current.fitToSuppliedMarkers(['custom'], {
+              edgePadding: {
+                top: 100,
+                right: 100,
+                left: 100,
+                bottom: 100,
+              },
+            });
           },
           error => {
             console.log(error.code, error.message);
@@ -81,20 +91,26 @@ const MapViewComponent = ({rideModals, setModal, style}) => {
   return (
     <>
       <MapView
+        ref={mapRef}
         provider={PROVIDER_GOOGLE}
         region={{
           latitude: 31.524909,
           longitude: 74.34291,
-          latitudeDelta: 0.009,
-          longitudeDelta: 0.009,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
         }}
         //onRegionChange={regionChanged}
-
         followsUserLocation={true}
         zoomEnabled={true}
-        zoomControlEnabled={true}
-        style={style ? style : {...StyleSheet.absoluteFillObject}}>
+        style={
+          style
+            ? style
+            : height
+            ? {height: height, ...StyleSheet.absoluteFillObject}
+            : {...StyleSheet.absoluteFillObject}
+        }>
         <Marker
+          identifier="currentPosition"
           coordinate={{
             latitude: 31.524909,
             longitude: 74.34291,
@@ -103,6 +119,7 @@ const MapViewComponent = ({rideModals, setModal, style}) => {
         </Marker>
         {customMarkers.map(item => (
           <Marker
+            identifier="custom"
             key={item.id}
             coordinate={{
               latitude: item.latitude,
@@ -115,11 +132,11 @@ const MapViewComponent = ({rideModals, setModal, style}) => {
         ))}
       </MapView>
       {rideModals === 'startMatching' ? (
-        <StartMatchingSheet setModal={setModal} />
+        <StartMatchingSheet setModal={setModal} setHeight={setHeight} />
       ) : rideModals === 'finding' ? (
-        <NearestDriverCard setModal={setModal} />
+        <NearestDriverCard setModal={setModal} setHeight={setHeight} />
       ) : rideModals === 'available' ? (
-        <AvailableDrivers />
+        <AvailableDriversCard setHeight={setHeight} />
       ) : null}
     </>
   );

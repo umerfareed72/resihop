@@ -1,9 +1,11 @@
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
 import {appIcons, appImages, colors} from '../utilities';
 
-const NearestDriverCard = ({setModal}) => {
+const NearestDriverCard = ({setModal, setHeight}) => {
   useEffect(() => {
+    setHeight(Dimensions.get('screen').height - 240);
+
     const interval = setTimeout(() => {
       setModal('available');
     }, 1000);

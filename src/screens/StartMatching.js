@@ -14,7 +14,7 @@ const StartMatching = () => {
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor="transparent" />
-      <MapViewComponent rideModals={modal} setModal={setModal} />
+      <MapViewComponent rideModals={modal} setModal={setModal} modal={modal} />
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => navigation.goBack()}>

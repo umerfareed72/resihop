@@ -1,10 +1,20 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import Slider from '@react-native-community/slider';
 import {colors} from '../utilities';
 
-const StartMatchingSheet = ({setModal}) => {
+const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   const [sliderValue, setSliderValue] = useState(0);
+
+  useEffect(() => {
+    setHeight(Dimensions.get('screen').height - 200);
+  }, []);
 
   return (
     <View style={styles.container}>
