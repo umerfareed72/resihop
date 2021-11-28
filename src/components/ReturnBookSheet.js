@@ -4,7 +4,7 @@ import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
 
-const ReturnBookSheet = ({returnBookSheetRef}) => {
+const ReturnBookSheet = ({returnBookSheetRef, onPressReturn, onPressSkip}) => {
   let navigation = useNavigation();
 
   return (
@@ -22,22 +22,14 @@ const ReturnBookSheet = ({returnBookSheetRef}) => {
       }}>
       <Text style={styles.question}>Do you want to book Return Trip?</Text>
       <TouchableOpacity
-        onPress={() => {
-          returnBookSheetRef.current.close();
-          navigation.navigate('ReturnTrip');
-        }}
+        onPress={onPressReturn}
         style={[
           styles.btnContainer,
           {backgroundColor: colors.green, marginBottom: 19},
         ]}>
         <Text style={styles.btnTxt}>OK</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btnContainer}
-        onPress={() => {
-          returnBookSheetRef.current.close();
-          navigation.navigate('BookingDetails');
-        }}>
+      <TouchableOpacity style={styles.btnContainer} onPress={onPressSkip}>
         <Text style={styles.btnTxt}>Skip</Text>
       </TouchableOpacity>
     </RBSheet>

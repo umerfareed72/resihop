@@ -3,6 +3,7 @@ export * from './Header/CustomHeader';
 export * from './Loading';
 //Titles
 export * from './Titles/PaymentHistory';
+export * from './Titles/CityRideList';
 
 export * from './Cards/TransHistoryCard/TransHistory';
 //Buttons
@@ -29,6 +30,7 @@ export * from './Cards/RideHistoryCard/RiderInfo';
 export * from './Cards/RideHistoryCard/DRideHistoryCard';
 export * from './Cards/RideHistoryCard/DRiderInfo';
 export * from './Cards/FavouritesCard/FavDriverCard';
+export * from './Cards/RideInputCard';
 
 //OTP
 export * from '../components/OtpValidator';

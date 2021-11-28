@@ -30,6 +30,10 @@ import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
 import AddFavourites from '../../screens/Driver/Favourites/AddFavourites';
+import DriverCityToCity from '../../screens/Driver/Rides/DriverCityToCity';
+import CostPerSeat from '../../screens/CostPerSeat/CostPerSeat';
+import AvailablePassengerMap from '../../screens/AvailablePassengerMap/AvailablePassengerMap';
+import AvailablePassenger from '../../screens/AvailablePassengerList/AvailablePassengerList';
 
 const Stack = createStackNavigator();
 function DriverStack(props) {
@@ -41,6 +45,11 @@ function DriverStack(props) {
         options={{headerShown: false}}
         name="DriverHome"
         component={DriverHome}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DriverCityToCity"
+        component={DriverCityToCity}
       />
       <Stack.Screen
         options={{headerShown: false}}
@@ -187,6 +196,21 @@ function DriverStack(props) {
         options={{headerShown: false}}
         name="BookingDetails"
         component={BookingDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="CostPerSeat"
+        component={CostPerSeat}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AvailablePassengerMap"
+        component={AvailablePassengerMap}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AvailablePassenger"
+        component={AvailablePassenger}
       />
     </Stack.Navigator>
   );

@@ -7,8 +7,6 @@ import {appIcons, colors} from '../utilities';
 
 const StartMatching = props => {
   let navigation = useNavigation();
-  const [nearestDriver, setNearestDriver] = useState(false);
-  const [availableDrivers, setAvailableDrivers] = useState(false);
   const [modal, setModal] = useState(props?.route?.params?.modalName);
 
   return (

@@ -103,7 +103,17 @@ const AvailableDrivers = props => {
           </View>
         )}
       />
-      <ReturnBookSheet returnBookSheetRef={returnBookSheetRef} />
+      <ReturnBookSheet
+        onPressReturn={() => {
+          returnBookSheetRef.current.close();
+          navigation.navigate('ReturnTrip');
+        }}
+        onPressSkip={() => {
+          returnBookSheetRef.current.close();
+          navigation.navigate('BookingDetails');
+        }}
+        returnBookSheetRef={returnBookSheetRef}
+      />
     </View>
   );
 };

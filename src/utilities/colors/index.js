@@ -55,11 +55,13 @@ export const colors = {
   light_green: '#F6FFEF',
   light_white: '#E8E8E8',
   red: '#FF1616',
+
   //greens
   light_green: '#F6FFEF',
   favouriteTabColor: '#ECFFDF',
   favouriteBorderColor: '#F2F2F2',
-
+  // Blue
+  navy_blue: '#007BD2',
   notificationBorder: '#CCCCCC',
 
   offerCardColor: ['#BEFF8D', '#EFFFDE'],

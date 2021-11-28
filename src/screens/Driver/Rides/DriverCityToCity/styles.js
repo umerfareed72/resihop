@@ -1,40 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {colors, appIcons, appImages, family, size} from '../../../../utilities';
+import {colors, family, size} from '../../../../utilities';
+
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
   },
-  aiCenterRow: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  aiCenter: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   backArrow: {
     height: 15,
     width: 20,
     marginRight: 19,
-  },
-  smallBtnConatinerRight: {
-    width: '32%',
-    backgroundColor: colors.green,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 24,
-    borderTopRightRadius: 12,
-    borderBottomRightRadius: 12,
-  },
-  smallBtnConatinerLeft: {
-    width: '32%',
-    backgroundColor: colors.green,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 24,
-    borderBottomLeftRadius: 12,
-    borderTopLeftRadius: 12,
   },
   createHeader: {
     flexDirection: 'row',
@@ -61,7 +36,11 @@ export default StyleSheet.create({
     width: '85%',
     alignSelf: 'center',
   },
-
+  btnTxt: {
+    fontSize: 14,
+    lineHeight: 24,
+    color: colors.white,
+  },
   txtInput: {
     height: 44,
     width: 291,
@@ -70,9 +49,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 45,
     color: colors.inputTxtGray,
-    justifyContent: 'center',
   },
-
   startDot: {
     height: 16,
     width: 16,
@@ -128,17 +105,19 @@ export default StyleSheet.create({
   },
   selectWrapper: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 26,
-    marginLeft: 20,
+    paddingHorizontal: 20,
   },
   selectTxt: {
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
+    width: '43%',
   },
   noLater: {
     height: 44,
-    width: '100%',
+    width: 140,
     borderWidth: 1,
     borderColor: colors.greyBorder,
     borderRadius: 10,
@@ -146,7 +125,6 @@ export default StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.inputTxtGray,
-    justifyContent: 'center',
   },
   calendarIcon: {
     height: 18,
@@ -171,7 +149,8 @@ export default StyleSheet.create({
   returnTripWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 21,
+    width: '87%',
+    alignSelf: 'center',
   },
   returntimeTxt: {
     fontSize: 14,
@@ -198,51 +177,20 @@ export default StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
-    fontFamily: family.product_sans_bold,
   },
-  listContainer: {
-    paddingHorizontal: 21,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  btnContainer: {
-    borderColor: colors.green,
+  starttxtBtn: {
+    height: 44,
+    width: 291,
     borderWidth: 1,
-    height: 24,
-    width: 56,
-    borderRadius: 12,
-    // alignItems: 'center',
+    borderColor: colors.greyBorder,
+    borderRadius: 10,
+    paddingLeft: 45,
+    color: colors.inputTxtGray,
     justifyContent: 'center',
   },
-  btnText: {
+  starttxt: {
     fontFamily: family.product_sans_regular,
-    color: colors.light_black,
-    fontSize: size.xsmall,
-    textAlign: 'center',
-  },
-
-  arrowBack: {
-    height: 15,
-    width: 15,
-  },
-  arrowBackCircle: {
-    height: 34,
-    width: 34,
-    borderRadius: 34 / 2,
-    backgroundColor: colors.white,
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: 50,
-    marginLeft: 18,
-    elevation: 5,
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 1,
-    shadowColor: colors.dropShadow2,
+    fontSize: size.normal,
+    color: colors.inputTxtGray,
   },
 });

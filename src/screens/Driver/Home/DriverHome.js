@@ -172,14 +172,18 @@ const DriverHome = ({navigation}) => {
           </View>
           <View style={styles.cardContainer}>
             <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
-            <View style={styles.interiorContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation?.navigate('DriverCityToCity');
+              }}
+              style={styles.interiorContainer}>
               <Image
                 source={appImages.city}
                 style={styles.cardInterior}
                 resizeMode="contain"
               />
               <Text style={styles.cardTxt}>City to City Drives</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 

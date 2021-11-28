@@ -96,14 +96,24 @@ const AvailablePassengerList = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.btnContainerReplica}
-                onPress={() => returnBookSheetRef.current.open()}>
+                onPress={() => alert('Coming Soon')}>
                 <Text style={styles.btnTxt}>Reject</Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
       />
-      <ReturnBookSheet returnBookSheetRef={returnBookSheetRef} />
+      <ReturnBookSheet
+        onPressReturn={() => {
+          returnBookSheetRef.current.close();
+          navigation.navigate('ReturnTrip');
+        }}
+        onPressSkip={() => {
+          returnBookSheetRef.current.close();
+          navigation.navigate('DriverHome');
+        }}
+        returnBookSheetRef={returnBookSheetRef}
+      />
     </View>
   );
 };
