@@ -34,7 +34,12 @@ const NotificationTune = ({navigation}) => {
       <>
         <View style={styles.rowContainer}>
           <Text style={styles.nameText}>{data?.item?.name}</Text>
-          {/* {data?.item?.icon && <Image source={} />} */}
+          {data?.item?.icon && (
+            <Image
+              style={{height: 20, width: 20, resizeMode: 'contain'}}
+              source={appIcons.tickBg}
+            />
+          )}
         </View>
         <View style={{borderBottomWidth: 1, borderBottomColor: colors.g3}} />
       </>
@@ -65,6 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: HP('2'),
     marginHorizontal: HP('2.5'),
+    alignItems: 'center',
   },
   nameText: {
     fontSize: size.large,

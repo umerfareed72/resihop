@@ -6,11 +6,34 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Share,
 } from 'react-native';
 import {CustomHeader} from '../../../components';
 import {colors, appImages, HP, size, family} from '../../../utilities';
 
 const Invite = ({navigation}) => {
+  const onInviteFriend = async () => {
+    try {
+      const result = await Share.share({
+        title: 'Pawtai',
+        message:
+          Platform.OS == 'android'
+            ? `Your Pawtai Joining Code is ${code}, Link to Download Application from PlayStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`
+            : `Your Pawtai Joining Code is ${code}, Link to Download Application from AppStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   return (
     <>
       <CustomHeader navigation={navigation} title="Invite" backButton={true} />
@@ -41,7 +64,8 @@ const Invite = ({navigation}) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginBottom: HP('2'),
-              }}>
+              }}
+              onPress={() => onInviteFriend()}>
               <Text
                 style={{
                   fontSize: size.normal,

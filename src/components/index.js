@@ -3,11 +3,13 @@ export * from './Header/CustomHeader';
 export * from './Loading';
 //Titles
 export * from './Titles/PaymentHistory';
+export * from './Titles/CityRideList';
 
 export * from './Cards/TransHistoryCard/TransHistory';
 //Buttons
 export * from './Buttons/Payment/PaymentButtons';
 export * from './Buttons/AgreeButton';
+export * from './Buttons/SmallBtn';
 
 //App Inputs
 export * from './AppInput/PaymentInput/PaymentInput';
@@ -26,6 +28,10 @@ export * from './Cards/FavouritesCard/FavPassenger';
 export * from './Cards/FavouritesCard/FavLocation';
 export * from './Cards/RideHistoryCard/RiderInfo';
 export * from './Cards/RecurringRideCard/RecurringRideCard'
+export * from './Cards/RideHistoryCard/DRideHistoryCard';
+export * from './Cards/RideHistoryCard/DRiderInfo';
+export * from './Cards/FavouritesCard/FavDriverCard';
+export * from './Cards/RideInputCard';
 
 //OTP
 export * from '../components/OtpValidator';
@@ -38,3 +44,6 @@ export * from './Modal/FilterModal/PaymentFilterModal';
 export * from './Modal/SortModal/SortModal';
 export * from './Modal/FilterModal/RideFilterModal';
 export * from './Modal/LogoutModal/LogoutModal';
+export * from './Modal/FilterModal/DRideFilterModal';
+export * from './Modal/RatingModal/RatingModal';
+export * from './Modal/WarningModal/WarningModal';

@@ -88,8 +88,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginTop: HP('1'),
     backgroundColor: colors.blue,
+    width: '70%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonContainer: {
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: HP('2'),

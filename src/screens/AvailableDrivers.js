@@ -9,11 +9,11 @@ import {
   FlatList,
 } from 'react-native';
 import {CustomHeader} from '../components/Header/CustomHeader';
-import {appImages, colors} from '../utilities';
+import {appIcons, appImages, colors, family} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ReturnBookSheet from '../components/ReturnBookSheet';
 
-const AvailableDrivers = () => {
+const AvailableDrivers = props => {
   let navigation = useNavigation();
 
   const returnBookSheetRef = useRef(null);
@@ -48,7 +48,25 @@ const AvailableDrivers = () => {
                 </View>
               </View>
               <View>
-                <Text>SEK 20</Text>
+                <Text
+                  style={[
+                    styles.driverName,
+                    {
+                      fontFamily: family.product_sans_bold,
+                      top: 5,
+                    },
+                  ]}>
+                  SEK 20
+                </Text>
+                <Image
+                  source={appIcons.car_right}
+                  style={{
+                    height: 30,
+                    width: 64,
+                    resizeMode: 'contain',
+                    top: 5,
+                  }}
+                />
               </View>
             </View>
             <View style={styles.rideDetailsContainer}>
@@ -75,13 +93,27 @@ const AvailableDrivers = () => {
             </View>
             <TouchableOpacity
               style={styles.btnContainer}
-              onPress={() => returnBookSheetRef.current.open()}>
-              <Text style={styles.btnTxt}>Book Now</Text>
+              onPress={() => {
+                props?.route?.params?.btnText === 'Book Now'
+                  ? returnBookSheetRef.current.open()
+                  : alert('Coming Soon');
+              }}>
+              <Text style={styles.btnTxt}>{props?.route?.params?.btnText}</Text>
             </TouchableOpacity>
           </View>
         )}
       />
-      <ReturnBookSheet returnBookSheetRef={returnBookSheetRef} />
+      <ReturnBookSheet
+        onPressReturn={() => {
+          returnBookSheetRef.current.close();
+          navigation.navigate('ReturnTrip');
+        }}
+        onPressSkip={() => {
+          returnBookSheetRef.current.close();
+          navigation.navigate('BookingDetails');
+        }}
+        returnBookSheetRef={returnBookSheetRef}
+      />
     </View>
   );
 };

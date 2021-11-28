@@ -133,7 +133,7 @@ const DrawerComponent = ({navigation}) => {
                 type={'antdesign'}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => {}} style={styles.buttonContainer}>
               <Text style={styles.passengerStyle}>Passenger</Text>
               <Icon
                 name={'star'}

@@ -7338,7 +7338,7 @@ react-native-raw-bottom-sheet@^2.2.0:
 
 react-native-reanimated@^2.2.4:
   version "2.2.4"
-  resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-2.2.4.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.2.4.tgz#36c5d15028b0bd7d479fba5199117ac870c7a532"
   integrity sha512-Nn648MfEEnTCEiWsl1YmfkojiLyV0NMY0EiRdDRbZNfJVfxBuyqhCxI/4Jd7aBi162qpgf8XK2mByYgvF4zLrQ==
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.10.4"

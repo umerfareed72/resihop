@@ -145,7 +145,11 @@ const PassengerHome = ({navigation}) => {
         {/* Cards */}
 
         <View style={styles.cardMainContainer}>
-          <View style={styles.cardContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.navigate('CreateRide');
+            }}
+            style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
@@ -162,6 +166,8 @@ const PassengerHome = ({navigation}) => {
             onPress={() => navigation.navigate('RecurringRides')}
             activeOpacity={0.8}
             style={styles.cardContainer}>
+          </TouchableOpacity>
+          <View style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
@@ -173,6 +179,12 @@ const PassengerHome = ({navigation}) => {
             </View>
           </TouchableOpacity>
           <View style={styles.cardContainer}>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.navigate('CityToCity');
+            }}
+            style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
@@ -182,7 +194,7 @@ const PassengerHome = ({navigation}) => {
               />
               <Text style={styles.cardTxt}>{city_to_city}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* upcoming Rides */}

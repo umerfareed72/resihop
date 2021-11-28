@@ -36,7 +36,8 @@ export const colors = {
   g4: '#777777',
   g5: '#A1A1A1',
   g6: '#F2F2F2',
-  g4: '#828282',
+  g7: '#828282',
+  g8: '#B8B8B8',
   dropShadow: '#007BD233',
   dropShadow2: '#00000029',
   btnGray: '#C5C5C5',
@@ -54,11 +55,13 @@ export const colors = {
   light_green: '#F6FFEF',
   light_white: '#E8E8E8',
   red: '#FF1616',
+
   //greens
   light_green: '#F6FFEF',
   favouriteTabColor: '#ECFFDF',
   favouriteBorderColor: '#F2F2F2',
-
+  // Blue
+  navy_blue: '#007BD2',
   notificationBorder: '#CCCCCC',
 
   offerCardColor: ['#BEFF8D', '#EFFFDE'],
