@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,6 +12,7 @@ import {colors, family, HP, size} from '../../../utilities';
 import {FavDriver, FavPassenger, FavLocation} from '../../../components';
 
 const Favourites = ({navigation}) => {
+  const [selected, setSelected] = useState(1);
   return (
     <>
       <CustomHeader
@@ -22,17 +23,47 @@ const Favourites = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.marginContainer}>
           <View style={styles.tabContainer}>
-            <TouchableOpacity style={styles.driverTab}>
-              <Text style={styles.tabText}>Driver</Text>
+            <TouchableOpacity
+              onPress={() => setSelected(1)}
+              style={styles.driverTab}>
+              <Text
+                style={[
+                  styles.tabText,
+                  {color: selected === 1 ? colors.green : colors.light_black},
+                ]}>
+                Driver
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.driverTab}>
-              <Text style={styles.tabTextReplica}>Passenger</Text>
+            <TouchableOpacity
+              onPress={() => setSelected(2)}
+              style={styles.driverTab}>
+              <Text
+                style={[
+                  styles.tabTextReplica,
+                  {color: selected === 2 ? colors.green : colors.light_black},
+                ]}>
+                Passenger
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.locationTab}>
-              <Text style={styles.tabTextReplica}>Location</Text>
+            <TouchableOpacity
+              onPress={() => setSelected(3)}
+              style={styles.locationTab}>
+              <Text
+                style={[
+                  styles.tabTextReplica,
+                  {color: selected === 3 ? colors.green : colors.light_black},
+                ]}>
+                Location
+              </Text>
             </TouchableOpacity>
           </View>
-          <FavDriver />
+          {selected === 1 ? (
+            <FavDriver />
+          ) : selected === 2 ? (
+            <FavPassenger />
+          ) : (
+            <FavLocation />
+          )}
         </View>
       </SafeAreaView>
     </>

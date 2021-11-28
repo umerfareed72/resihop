@@ -169,7 +169,11 @@ const PassengerHome = ({navigation}) => {
               <Text style={styles.cardTxt}>{recurring_ride}</Text>
             </View>
           </View>
-          <View style={styles.cardContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.navigate('CityToCity');
+            }}
+            style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
@@ -179,7 +183,7 @@ const PassengerHome = ({navigation}) => {
               />
               <Text style={styles.cardTxt}>{city_to_city}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* upcoming Rides */}

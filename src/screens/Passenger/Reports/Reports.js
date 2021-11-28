@@ -15,10 +15,12 @@ import {CustomHeader} from '../../../components/Header/CustomHeader';
 import {colors, family, HP, size} from '../../../utilities';
 import {appImages, appIcons} from '../../../utilities';
 import CalendarSheet from '../../CalendarSheet';
+import ReportsEarning from './ReportsEarning';
+import ReportsSpending from './ReportsSpending';
 
 const Reports = ({navigation}) => {
-  const calendarSheetRef = useRef(null);
   const [date, setDate] = useState();
+  const [selected, setSelected] = useState(1);
   return (
     <>
       <CustomHeader navigation={navigation} title="Reports" backButton={true} />
@@ -26,160 +28,33 @@ const Reports = ({navigation}) => {
         <View style={styles.mainView}>
           <View style={styles.containerOne}>
             <View style={styles.tabContainer}>
-              <TouchableOpacity style={styles.leftTabStyle}>
-                <Text style={styles.leftTabText}>Earnings</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.rightTabStyle}>
-                <Text style={styles.rightTabText}>Spending</Text>
-              </TouchableOpacity>
-            </View>
-
-            <LinearGradient
-              colors={colors.reportCardColor}
-              style={styles.reportCard}>
-              <View style={styles.firstCardView}>
-                <View style={{marginLeft: HP('2')}}>
-                  <Image source={appIcons.car_icon} />
-                </View>
-                <View style={styles.monthContainer}>
-                  <TouchableOpacity style={styles.monthView}>
-                    <Text style={styles.monthText}>This Month</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.monthView}>
-                    <Text style={styles.monthText}>This Year</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.secondContainer}>
-                <View style={styles.leftRideContainer}>
-                  <Text style={styles.promoStyle}>Total Rides</Text>
-                  <Text style={styles.promoText}>120</Text>
-                </View>
-                <View style={styles.rightRideContainer}>
-                  <Text style={styles.promoStyle}>Total Spending</Text>
-                  <Text style={styles.promoText}>SEK 2500</Text>
-                </View>
-              </View>
-            </LinearGradient>
-            <Text style={styles.downloadReport}>Download Reports</Text>
-            <View style={styles.monthButtonContainer}>
-              <TouchableOpacity style={styles.buttonMonthStyle}>
-                <Text style={styles.buttonMonthText}>Last Month</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonMonthStyle}>
-                <Text style={styles.buttonMonthText}>Last 6 Months</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonMonthStyle}>
-                <Text style={styles.buttonMonthText}>Last 1 Year</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.rangeContainer}>
-              <Text style={styles.downloadReport}>Select Range</Text>
               <TouchableOpacity
-                style={{
-                  backgroundColor: colors.light_black,
-                  borderRadius: 30,
-                  width: 160,
-                  height: 30,
-                  marginVertical: HP('2'),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text style={styles.promoStyleReplica}>
-                  Select Calendar Year
+                onPress={() => setSelected(1)}
+                style={styles.leftTabStyle}>
+                <Text
+                  style={[
+                    styles.leftTabText,
+                    {color: selected === 1 ? colors.blue : colors.light_black},
+                  ]}>
+                  Earnings
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setSelected(2)}
+                style={styles.rightTabStyle}>
+                <Text
+                  style={[
+                    styles.rightTabText,
+                    {color: selected === 2 ? colors.blue : colors.light_black},
+                  ]}>
+                  Spending
                 </Text>
               </TouchableOpacity>
             </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <>
-                <TextInput
-                  placeholder="Start Date"
-                  placeholderTextColor={colors.btnGray}
-                  value={date}
-                  onChangeText={setDate}
-                  onPressOut={() => calendarSheetRef.current.open()}
-                  onPressIn={() => Keyboard.dismiss()}
-                  style={[styles.noLater, {marginRight: 11}]}
-                />
-                <Image
-                  source={appImages.calendar}
-                  resizeMode="contain"
-                  style={styles.calendarIcon}
-                />
-              </>
-              <>
-                <TextInput
-                  placeholder="End Date"
-                  placeholderTextColor={colors.btnGray}
-                  value={date}
-                  onChangeText={setDate}
-                  onPressOut={() => calendarSheetRef.current.open()}
-                  onPressIn={() => Keyboard.dismiss()}
-                  style={[styles.noLater, {marginRight: 11}]}
-                />
-                <Image
-                  source={appImages.calendar}
-                  resizeMode="contain"
-                  style={styles.calendarIcon}
-                />
-              </>
-            </View>
-            <Text
-              style={{
-                color: colors.g1,
-                marginVertical: HP(2),
-                fontFamily: family.product_sans_regular,
-                fontSize: size.xsmall,
-              }}>
-              Select Atleast 1 Month Time Bracket
-            </Text>
-            <View
-              style={{
-                marginHorizontal: HP('2'),
-                marginVertical: HP('2'),
-                borderRadius: 13,
-                backgroundColor: '#E9FFD9',
-              }}>
-              <Text
-                style={{
-                  fontSize: size.tiny,
-                  fontFamily: family.product_sans_regular,
-                  color: colors.light_black,
-                  textAlign: 'center',
-                  marginHorizontal: HP('1'),
-                  marginVertical: HP('2'),
-                }}>
-                Your Earning/Spending Report has been successfully sent to your
-                registered email address.
-              </Text>
-            </View>
-          </View>
-          <View style={styles.containerTwo}>
-            <TouchableOpacity
-              style={{
-                borderRadius: 15,
-                height: HP('7'),
-                width: '100%',
-                backgroundColor: colors.green,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: size.normal,
-                  fontFamily: family.product_sans_bold,
-                  color: colors.white,
-                }}>
-                Download Report
-              </Text>
-            </TouchableOpacity>
+            {selected === 2 ? <ReportsSpending /> : <ReportsEarning />}
           </View>
         </View>
       </SafeAreaView>
-
-      <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
     </>
   );
 };

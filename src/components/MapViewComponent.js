@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {appIcons, appImages, colors} from '../utilities';
+import {appIcons, appImages, colors, HP} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CustomHeader} from './Header/CustomHeader';
 import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
 import AvailableDrivers from './AvailableDriversCard';
+import {Icon} from 'react-native-elements';
 
 const MapViewComponent = ({
   modalName,
@@ -24,6 +25,7 @@ const MapViewComponent = ({
   rideModals,
   setModal,
   onPress,
+  title,
 }) => {
   let navigation = useNavigation();
 
@@ -131,7 +133,9 @@ const MapViewComponent = ({
       </MapView>
 
       {modalName === 'startLocation' ||
+      modalName === 'startCity' ||
       modalName === 'destination' ||
+      modalName === 'destinationCity' ||
       modalName === 'returnTrip' ? (
         <View style={styles.upperModalContainer}>
           <CustomHeader
@@ -142,6 +146,10 @@ const MapViewComponent = ({
                 ? 'Start Location'
                 : modalName === 'returnTrip'
                 ? 'Return Trip'
+                : modalName === 'startCity'
+                ? 'Start City'
+                : modalName === 'destinationCity'
+                ? 'Destination City'
                 : 'Destination'
             }
           />
@@ -184,16 +192,28 @@ const MapViewComponent = ({
                   style={
                     modalName === 'startLocation'
                       ? styles.startDot
+                      : modalName === 'startCity'
+                      ? styles.startDot
                       : styles.destSquare
                   }
                 />
               </>
             )}
           </View>
-          <Text style={styles.favLocation}>
-            {' '}
-            Add this Location to Favorite Locations
-          </Text>
+
+          {modalName === 'startLocation' && (
+            <Text style={styles.favLocation}>
+              {' '}
+              Add this Location to Favorite Locations
+            </Text>
+          )}
+          {modalName === 'startCity' && (
+            <Text style={styles.favLocation}> Add to Favorites Location</Text>
+          )}
+          {modalName === 'destinationCity' && (
+            <Text style={styles.favLocation}> Add to Favorites Location</Text>
+          )}
+
           <View style={styles.faveBtnWrapper}>
             <TouchableOpacity style={styles.favLocationBtn}>
               <Text style={styles.favLocationBtnTxt}>Home</Text>
@@ -246,14 +266,41 @@ const MapViewComponent = ({
                 />
               </View>
             </>
+          ) : modalName === 'startCity' ? (
+            <>
+              <Text style={styles.bookSeatsTxt}>Available Seats</Text>
+              <View style={styles.seatsWrapper}>
+                {seats.map(seat => (
+                  <Image
+                    key={seat}
+                    source={appImages.seatBlue}
+                    resizeMode="contain"
+                    style={styles.seat}
+                  />
+                ))}
+              </View>
+            </>
           ) : (
             <>
-              <View style={styles.selectWrapper}>
-                <Text style={[styles.selectTxt, {marginRight: 23}]}>
-                  Need to arrive no later than
-                </Text>
-                <Text style={styles.selectTxt}>Select Date</Text>
-              </View>
+              {modalName === 'destination' && (
+                <View style={styles.selectWrapper}>
+                  <Text style={[styles.selectTxt, {marginRight: 23}]}>
+                    Need to arrive no later than
+                  </Text>
+                  <Text style={styles.selectTxt}>Select Date</Text>
+                </View>
+              )}
+              {modalName === 'destinationCity' && (
+                <View style={styles.selectWrapper}>
+                  <Text style={[styles.selectTxt, {marginRight: 23}]}>
+                    Departure Time
+                  </Text>
+                  <Text style={styles.selectTxt}>
+                    {' '}
+                    {'                      '} Select Date
+                  </Text>
+                </View>
+              )}
               <View style={styles.selectionInputWrapper}>
                 <TextInput
                   placeholder="XX:XX"
@@ -294,13 +341,38 @@ const MapViewComponent = ({
             <Text style={styles.nextTxt}>Next</Text>
           </TouchableOpacity>
         </View>
-      ) : null}
+      ) : modalName === 'selectRoute' ? (
+        <TouchableOpacity
+          style={{
+            width: HP('8'),
+            height: HP('8'),
+            borderRadius: 100,
+            marginVertical: HP('3'),
+            marginHorizontal: HP('3'),
+            zIndex: 100,
+            backgroundColor: colors.white,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Icon
+            name={'arrowleft'}
+            type={'antdesign'}
+            size={25}
+            color={colors.black}
+          />
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
       {rideModals === 'startMatching' ? (
         <StartMatchingSheet setModal={setModal} />
       ) : rideModals === 'finding' ? (
         <NearestDriverCard setModal={setModal} />
       ) : rideModals === 'available' ? (
-        <AvailableDrivers />
+        <AvailableDrivers
+          title={title}
+          btnText={title === 'Book Now' ? 'Book Now' : 'Send Request'}
+        />
       ) : null}
     </>
   );

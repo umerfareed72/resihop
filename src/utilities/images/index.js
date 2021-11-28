@@ -9,6 +9,7 @@ export const appIcons = {
   recurringRide: require('../../assets/icons/png/homeIcons/recurringRide.png'),
   cityRide: require('../../assets/icons/png/homeIcons/cityRide.png'),
   noUpcomingRide: require('../../assets/icons/png/no_upcoming_ride.png'),
+  noPayment: require('../../assets/icons/png/no_payment.png'),
   cancel: require('../../assets/icons/png/cancel.png'),
   landing_img: require('../../assets/icons/png/landingImg.png'),
   drawerIcon: require('../../assets/icons/png/homeIcons/recurringRide.png'),
@@ -22,11 +23,20 @@ export const appIcons = {
   dumpBox: require('../../assets/icons/png/dumpBox.png'),
   driver_home: require('../../assets/icons/png/driver/driver_home.png'),
   car_left: require('../../assets/icons/png/car_left.png'),
+  car_right: require('../../assets/icons/png/car_right.png'),
+
   heart: require('../../assets/icons/png/heart.png'),
   redHeart: require('../../assets/icons/png/redHeart.png'),
   call: require('../../assets/icons/png/call.png'),
+  cancelled: require('../../assets/icons/png/cancelled.png'),
+  empty_star: require('../../assets/icons/png/emptyStar.png'),
+  full_star: require('../../assets/icons/png/fullStar.png'),
+  tickBg: require('../../assets/icons/png/tickBg.png'),
+
   car_icon: require('../../assets/icons/png/driver/driver_recurring_ride.png'),
   driver_brick_bg: require('../../assets/icons/png/driver/driver_brick_bg.png'),
+  bank_id: require('../../assets/icons/png/bank_id.png'),
+  edit_profile: require('../../assets/icons/png/editprofile.png'),
   // /icons/png/Group9368.png
 };
 export const appImages = {

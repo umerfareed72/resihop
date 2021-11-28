@@ -25,6 +25,7 @@ import Offers from '../../screens/Passenger/Offers/Offers';
 import Reports from '../../screens/Passenger/Reports/Reports';
 import BlockedList from '../../screens/Passenger/BlockedList';
 import MultiLanguage from '../../screens/Passenger/MultiLanguage';
+import CityToCity from '../../screens/Passenger/Rides/CityToCity';
 import StartMatching from '../../screens/StartMatching';
 import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
@@ -33,6 +34,10 @@ import Favourites from '../../screens/Passenger/Favourites/Favourites';
 import NotificationSettings from '../..//screens/NotificationSettings/NotificationSetting';
 import TransactionDetails from '../../screens/TransactionDetails/TransactionDetails';
 import NotificationTune from '../../screens/NotificationTune/NotificationTune';
+import EditProfile from '../../screens/EditProfile';
+import ChangePhone from '../../screens/ChangePhone';
+import CostPerSeat from '../../screens/CostPerSeat/CostPerSeat';
+import AvailablePassengerMap from '../../screens/AvailablePassengerMap/AvailablePassengerMap';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -201,6 +206,35 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="TransactionDetails"
         component={TransactionDetails}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="EditProfile"
+        component={EditProfile}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="ChangePhone"
+        component={ChangePhone}
+      />
+
+      {/* City To City Stack */}
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="CityToCity"
+        component={CityToCity}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="CostPerSeat"
+        component={CostPerSeat}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AvailablePassengerMap"
+        component={AvailablePassengerMap}
       />
     </Stack.Navigator>
   );

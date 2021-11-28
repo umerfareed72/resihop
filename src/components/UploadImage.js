@@ -11,8 +11,9 @@ import {
 import {permissions_types} from '../utilities';
 import MediaPicker from './Modal/MediaPicker';
 
-const UploadImage = ({getPicUri}) => {
+const UploadImage = ({getPicUri, show, close}) => {
   const [showPicker, setShowPicker] = useState(false);
+  const [closePicker, setClosePicker] = useState(false);
   const [profilePic, setProfilePic] = useState();
   const [isCameraPermitted, setIsCameraPermitted] = useState(true);
 
@@ -67,7 +68,7 @@ const UploadImage = ({getPicUri}) => {
         </Text>
       </TouchableOpacity>
       <MediaPicker
-        show={showPicker}
+        show={showPicker || show}
         onImageSelected={asset => {
           if (asset) {
             setProfilePic(asset);
