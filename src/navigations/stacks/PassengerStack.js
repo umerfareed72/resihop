@@ -34,8 +34,10 @@ import Favourites from '../../screens/Passenger/Favourites/Favourites';
 import NotificationSettings from '../..//screens/NotificationSettings/NotificationSetting';
 import TransactionDetails from '../../screens/TransactionDetails/TransactionDetails';
 import NotificationTune from '../../screens/NotificationTune/NotificationTune';
+import RecurringRides from '../../screens/Passenger/RecurringRides';
 import EditProfile from '../../screens/EditProfile';
 import ChangePhone from '../../screens/ChangePhone';
+import RecurringRideDetail from '../../screens/Passenger/RecurringRideDetail';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -218,6 +220,16 @@ function PassengerStack(props) {
         component={ChangePhone}
       />
 
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="RecurringRides"
+        component={RecurringRides}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="RecurringRideDetail"
+        component={RecurringRideDetail}
       {/* City To City Stack */}
       <Stack.Screen
         options={{headerShown: false}}

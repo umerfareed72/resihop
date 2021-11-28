@@ -27,6 +27,7 @@ export * from './Cards/FavouritesCard/FavDriver';
 export * from './Cards/FavouritesCard/FavPassenger';
 export * from './Cards/FavouritesCard/FavLocation';
 export * from './Cards/RideHistoryCard/RiderInfo';
+export * from './Cards/RecurringRideCard/RecurringRideCard'
 export * from './Cards/RideHistoryCard/DRideHistoryCard';
 export * from './Cards/RideHistoryCard/DRiderInfo';
 export * from './Cards/FavouritesCard/FavDriverCard';
