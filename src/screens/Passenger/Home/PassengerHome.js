@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  FlatList,
 } from 'react-native';
 import {colors, appIcons, appImages, family} from '../../../utilities';
 import {
@@ -22,8 +23,8 @@ import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 import {RideFilterModal, SortModal} from '../../../components';
-import PassengerHomeRideCards from '../../../components/PassengerHomeRideCards';
-import {FlatList} from 'react-native-gesture-handler';
+import UpcomingRideCards from '../../../components/UpcomingRideCards';
+
 //Data
 var TimeList = {
   id: 1,
@@ -132,6 +133,10 @@ const PassengerHome = ({navigation}) => {
       seats: [1, 2],
     },
   ];
+
+  const onPress = () => {
+    navigation.navigate('UpdateRide');
+  };
 
   return (
     <>
@@ -246,7 +251,9 @@ const PassengerHome = ({navigation}) => {
               data={ridesData}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
-              renderItem={({item}) => <PassengerHomeRideCards item={item} />}
+              renderItem={({item}) => (
+                <UpcomingRideCards item={item} onPress={onPress} />
+              )}
               ListFooterComponent={() => (
                 <TouchableOpacity
                   style={styles.createRideBtnContainer}

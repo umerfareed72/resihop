@@ -29,6 +29,7 @@ import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
 import AvailablePassenger from '../../screens/Driver/AvailablePassenger/AvailablePassenger';
+import DriveStatus from '../../screens/Driver/DriverStatus/DriveStatus';
 const Stack = createStackNavigator();
 function DriverStack(props) {
   return (
@@ -179,6 +180,11 @@ function DriverStack(props) {
         options={{headerShown: false}}
         name="AvailablePassenger"
         component={AvailablePassenger}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DriveStatus"
+        component={DriveStatus}
       />
     </Stack.Navigator>
   );

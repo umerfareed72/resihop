@@ -8,6 +8,7 @@ import {
   Image,
   Platform,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import {colors, appIcons, appImages, family} from '../../../utilities';
 import {
@@ -24,6 +25,8 @@ import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 import {RideFilterModal, SortModal} from '../../../components';
 import I18n from '../../../utilities/translations';
+import UpcomingRideCards from '../../../components/UpcomingRideCards';
+
 //Data
 var TimeList = {
   id: 1,
@@ -133,6 +136,10 @@ const DriverHome = ({navigation}) => {
     },
   ];
 
+  const onPress = item => {
+    navigation.navigate('DriveStatus', {status: item.status});
+  };
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -224,19 +231,40 @@ const DriverHome = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{marginBottom: 10}}>
-          <Image source={appIcons.driver_home} style={styles.noUpcomingRide} />
+        {ridesData.length === 0 ? (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{marginBottom: 10}}>
+            <Image
+              source={appIcons.driver_home}
+              style={styles.noUpcomingRide}
+            />
 
-          <Text style={styles.Txt}>{lorem}</Text>
+            <Text style={styles.Txt}>{lorem}</Text>
 
-          <TouchableOpacity
-            style={styles.createRideBtnContainer}
-            onPress={() => navigation.navigate('CreateDrive')}>
-            <Text style={styles.btnTxt}>Create your Frist Drive</Text>
-          </TouchableOpacity>
-        </ScrollView>
+            <TouchableOpacity
+              style={styles.createRideBtnContainer}
+              onPress={() => navigation.navigate('CreateDrive')}>
+              <Text style={styles.btnTxt}>Create your Frist Drive</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        ) : (
+          <FlatList
+            data={ridesData}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => (
+              <UpcomingRideCards item={item} onPress={() => onPress(item)} />
+            )}
+            ListFooterComponent={() => (
+              <TouchableOpacity
+                style={styles.createRideBtnContainer}
+                onPress={() => navigation.navigate('CreateDrive')}>
+                <Text style={styles.btnTxt}>Create your Frist Drive</Text>
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </SafeAreaView>
       <RideFilterModal
         time={TimeList}

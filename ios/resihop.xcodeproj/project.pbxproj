@@ -17,6 +17,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E22DA7B811532126ECF23AD1 /* libPods-resihop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D318C7280BDFB2F6BD838A6D /* libPods-resihop.a */; };
 		E35734B516E445FBBAB482BB /* BuildFile in Resources */ = {isa = PBXBuildFile; };
+		53763919AFE4445F9D1A852D /* BebasNeue Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DF3930175A4489CA33CDEE7 /* BebasNeue Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		F85ADDEFEC184964B37D5758 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		F88024A2C8A0480B8DEF2443 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		F9C411EEF6B802A977246300 /* Pods-resihop-resihopTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-resihop-resihopTests.release.xcconfig"; path = "Target Support Files/Pods-resihop-resihopTests/Pods-resihop-resihopTests.release.xcconfig"; sourceTree = "<group>"; };
+		9DF3930175A4489CA33CDEE7 /* BebasNeue Bold.ttf */ = {isa = PBXFileReference; name = "BebasNeue Bold.ttf"; path = "../src/assets/fonts/BebasNeue Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 				999026AAF6E9452FAE21E370 /* Octicons.ttf */,
 				083D1D5C20D1460D8C425F66 /* SimpleLineIcons.ttf */,
 				2EA36FF8D2A54CD981EA31F5 /* Zocial.ttf */,
+				9DF3930175A4489CA33CDEE7 /* BebasNeue Bold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5D428A9C274F8B18004D44A3 /* ProductSans-Bold.ttf in Resources */,
 				E35734B516E445FBBAB482BB /* BuildFile in Resources */,
+				53763919AFE4445F9D1A852D /* BebasNeue Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

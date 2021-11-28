@@ -2,15 +2,10 @@ import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {appImages, colors} from '../utilities';
 import {fonts} from '../theme/theme';
-import {useNavigation} from '@react-navigation/core';
 
-const PassengerHomeRideCards = ({item}) => {
-  let navigation = useNavigation();
-
+const PassengerHomeRideCards = ({item, onPress}) => {
   return (
-    <TouchableOpacity
-      style={styles.cardContainer}
-      onPress={() => navigation.navigate('UpdateRide')}>
+    <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
           123 abc apartment abc street abc...
@@ -116,6 +111,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     color: colors.green,
     textTransform: 'uppercase',
+    fontFamily: fonts.bebasBold,
   },
   statusWrapper: {
     borderTopWidth: 1.5,
@@ -146,10 +142,10 @@ const styles = StyleSheet.create({
 });
 
 const getStatusColor = status => {
-  if (status === 'Confirmed') {
+  if (status === 'Confirmed' || status === 'Fully Booked') {
     return colors.green;
   }
-  if (status === 'Matching Done') {
+  if (status === 'Matching Done' || status === 'Partially Booked') {
     return colors.blue;
   }
   if (status === 'Waiting for Match') {

@@ -16,8 +16,9 @@ import AvailableDriversCard from './AvailableDriversCard';
 import RideStatusCards from './RideStatusCards';
 import SelectRouteCard from './SelectRouteCard';
 import AvailablePassengersCard from './AvailablePassengersCard';
+import DriveStatusCard from './DriveStatusCard';
 
-const MapViewComponent = ({rideModals, setModal, style, modal}) => {
+const MapViewComponent = ({rideModals, setModal, style, modal, status}) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [height, setHeight] = useState(0);
@@ -145,6 +146,8 @@ const MapViewComponent = ({rideModals, setModal, style, modal}) => {
         <SelectRouteCard setModal={setModal} />
       ) : rideModals === 'availablePassenger' ? (
         <AvailablePassengersCard />
+      ) : rideModals === 'driveStatus' ? (
+        <DriveStatusCard status={status} />
       ) : null}
     </>
   );
