@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
-import {colors, appIcons, appImages} from '../utilities';
+import {colors, appIcons, appImages, family, size} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -51,27 +51,20 @@ const CreateRide = () => {
 
         <View style={styles.locationMainWrapper}>
           <View>
-            <View style={{marginBottom: 20}}>
-              <TextInput
-                placeholder="Start Location"
-                placeholderTextColor={colors.inputTxtGray}
-                value={startLocation}
-                onChangeText={setStartLocation}
-                style={styles.txtInput}
-              />
+            <TouchableOpacity
+              onPress={() => navigation.navigate('StartLocation')}
+              style={[styles.starttxtBtn, {marginBottom: 20}]}>
+              <Text style={styles.starttxt}>Start City</Text>
               <View style={styles.startDot} />
-            </View>
-            <View>
-              <TextInput
-                placeholder="Destination"
-                placeholderTextColor={colors.inputTxtGray}
-                value={destination}
-                onChangeText={setDestination}
-                style={styles.txtInput}
-              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('StartLocation')}
+              style={styles.starttxtBtn}>
+              <Text style={styles.starttxt}>Destination City</Text>
               <View style={styles.destSquare} />
-            </View>
+            </TouchableOpacity>
           </View>
+
           <View style={styles.switchWrapper}>
             <HeartIcon
               name="heart"
@@ -202,7 +195,9 @@ const CreateRide = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          onPress={() => navigation.navigate('StartLocation')}>
+          onPress={() =>
+            navigation.navigate('StartMatching', {modalName: 'startMatching'})
+          }>
           <Text style={styles.nextTxt}>Next</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -385,6 +380,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+  },
+  starttxtBtn: {
+    height: 44,
+    width: 291,
+    borderWidth: 1,
+    borderColor: colors.greyBorder,
+    borderRadius: 10,
+    paddingLeft: 45,
+    color: colors.inputTxtGray,
+    justifyContent: 'center',
+  },
+  starttxt: {
+    fontFamily: family.product_sans_regular,
+    fontSize: size.normal,
+    color: colors.inputTxtGray,
   },
 });
 

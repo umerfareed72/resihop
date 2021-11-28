@@ -171,7 +171,7 @@ const PassengerHome = ({navigation}) => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              navigation?.replace('CityToCity');
+              navigation?.navigate('CityToCity');
             }}
             style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />

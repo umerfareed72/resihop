@@ -5,16 +5,24 @@ import MyStatusBar from '../components/Header/statusBar';
 import MapViewComponent from '../components/MapViewComponent';
 import {appIcons, colors} from '../utilities';
 
-const StartMatching = () => {
+const StartMatching = props => {
   let navigation = useNavigation();
   const [nearestDriver, setNearestDriver] = useState(false);
   const [availableDrivers, setAvailableDrivers] = useState(false);
-  const [modal, setModal] = useState('startMatching');
+  const [modal, setModal] = useState(props?.route?.params?.modalName);
 
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor="transparent" />
-      <MapViewComponent rideModals={modal} setModal={setModal} />
+      <MapViewComponent
+        rideModals={modal}
+        setModal={setModal}
+        title={
+          props?.route?.params?.modalName === 'finding'
+            ? 'Send Request'
+            : 'Book Now'
+        }
+      />
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => navigation.goBack()}>

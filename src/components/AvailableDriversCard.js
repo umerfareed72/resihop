@@ -8,6 +8,8 @@ const AvailableDrivers = ({
   modalName,
   setAvailableDrivers,
   setNearestDriver,
+  title,
+  btnText,
 }) => {
   let navigation = useNavigation();
 
@@ -107,12 +109,12 @@ const AvailableDrivers = ({
           </View>
           <View style={styles.btnMainContainer}>
             <TouchableOpacity style={styles.btnContainer}>
-              <Text style={styles.btnTxt}>Book Now</Text>
+              <Text style={styles.btnTxt}>{title}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.btnContainer}
               onPress={() => {
-                navigation.navigate('AvailableDrivers');
+                navigation.navigate('AvailableDrivers', {btnText: btnText});
               }}>
               <Text style={styles.btnTxt}>Show All Drivers</Text>
             </TouchableOpacity>
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   container: {
-    // height: 497,
+    height: 497,
     backgroundColor: colors.white,
     position: 'absolute',
     bottom: 0,

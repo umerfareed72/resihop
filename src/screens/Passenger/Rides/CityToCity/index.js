@@ -12,56 +12,62 @@ import {
   Keyboard,
 } from 'react-native';
 import {colors, appIcons, appImages, family, size} from '../../../../utilities';
-import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../../FavouriteLocations';
-import {CustomHeader, PaymentButtons} from '../../../../components';
+import {
+  CustomHeader,
+  PaymentButtons,
+  WarningModal,
+} from '../../../../components';
 import CalendarSheet from '../../../CalendarSheet';
 import styles from './styles';
 import {FlatList} from 'react-native';
+import MapViewComponent from '../../../../components/MapViewComponent';
 
 const index = ({navigation}) => {
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
+  const warningSheetRef = useRef(null);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
+  const [toggleEnabled1, setToggleEnabled1] = useState(false);
+  const [toggleEnabled2, setToggleEnabled2] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [modal, setModal] = useState('finding');
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
       <CustomHeader
         backButton={true}
-        navigation={navigation}
         title={'City to City Rides'}
+        navigation={navigation}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.locationMainWrapper}>
           <View>
-            <View style={{marginBottom: 20}}>
-              <TextInput
-                placeholder="Start Location"
-                placeholderTextColor={colors.inputTxtGray}
-                value={startLocation}
-                onChangeText={setStartLocation}
-                style={styles.txtInput}
-              />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('StartLocation', {modalName: 'startCity'})
+              }
+              style={[styles.starttxtBtn, {marginBottom: 20}]}>
+              <Text style={styles.starttxt}>Start City</Text>
               <View style={styles.startDot} />
-            </View>
-            <View>
-              <TextInput
-                placeholder="Destination"
-                placeholderTextColor={colors.inputTxtGray}
-                value={destination}
-                onChangeText={setDestination}
-                style={styles.txtInput}
-              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('StartLocation', {
+                  modalName: 'destinationCity',
+                })
+              }
+              style={styles.starttxtBtn}>
+              <Text style={styles.starttxt}>Destination City</Text>
               <View style={styles.destSquare} />
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.switchWrapper}>
             <HeartIcon
@@ -224,12 +230,28 @@ const index = ({navigation}) => {
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
-          style={styles.nextBtnContainer}
-          onPress={() => navigation.navigate('StartLocation')}>
+          onPress={() => {
+            warningSheetRef?.current?.open();
+          }}
+          style={styles.nextBtnContainer}>
           <Text style={styles.nextTxt}>Start Matching</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+      <WarningModal
+        h1={'Smoke Free Car?'}
+        matter={true}
+        h2={'Animal Free Car?'}
+        show={warningSheetRef}
+        toggleEnabled={toggleEnabled1}
+        onToggle={setToggleEnabled1}
+        toggleEnabled1={toggleEnabled2}
+        onToggle1={setToggleEnabled2}
+        onPress={() => {
+          warningSheetRef?.current?.close();
+          navigation?.navigate('StartMatching', {modalName: 'finding'});
+        }}
+      />
+    </>
   );
 };
 

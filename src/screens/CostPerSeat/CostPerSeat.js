@@ -12,10 +12,14 @@ import {CustomHeader} from '../../components';
 import MyStatusBar from '../../components/Header/statusBar';
 import {colors, family, HP, size} from '../../utilities';
 
-const CostPerSeat = () => {
+const CostPerSeat = ({navigation}) => {
   return (
     <>
-      <CustomHeader title="Cost Per Seat" backButton={true} />
+      <CustomHeader
+        title="Cost Per Seat"
+        backButton={true}
+        navigation={navigation}
+      />
       <SafeAreaView style={styles.container}>
         <View style={{flex: 0.7}}>
           <View style={styles.marginContainer}>
@@ -55,6 +59,9 @@ const CostPerSeat = () => {
           }}>
           <View style={styles.marginContainer}>
             <TouchableOpacity
+              onPress={() => {
+                navigation?.navigate('AvailablePassengerMap');
+              }}
               style={{
                 height: HP('7'),
                 justifyContent: 'center',

@@ -23,6 +23,8 @@ export const appIcons = {
   dumpBox: require('../../assets/icons/png/dumpBox.png'),
   driver_home: require('../../assets/icons/png/driver/driver_home.png'),
   car_left: require('../../assets/icons/png/car_left.png'),
+  car_right: require('../../assets/icons/png/car_right.png'),
+
   heart: require('../../assets/icons/png/heart.png'),
   redHeart: require('../../assets/icons/png/redHeart.png'),
   call: require('../../assets/icons/png/call.png'),

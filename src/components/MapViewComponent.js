@@ -25,6 +25,7 @@ const MapViewComponent = ({
   rideModals,
   setModal,
   onPress,
+  title,
 }) => {
   let navigation = useNavigation();
 
@@ -368,7 +369,10 @@ const MapViewComponent = ({
       ) : rideModals === 'finding' ? (
         <NearestDriverCard setModal={setModal} />
       ) : rideModals === 'available' ? (
-        <AvailableDrivers />
+        <AvailableDrivers
+          title={title}
+          btnText={title === 'Book Now' ? 'Book Now' : 'Send Request'}
+        />
       ) : null}
     </>
   );

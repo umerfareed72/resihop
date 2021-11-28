@@ -3,16 +3,14 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {appIcons, appImages, colors, family, HP, size} from '../utilities';
 
 const NearestDriverCard = ({setModal, modalName}) => {
-  // useEffect(() => {
-  //   const interval = setTimeout(() => {
-  //     setModal('available');
-  //   }, 1000);
-
-  //   return () => {
-  //     clearTimeout(interval);
-  //   };
-  // }, []);
-
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      setModal('available');
+    }, 2000);
+    return () => {
+      clearTimeout(interval);
+    };
+  }, []);
   return (
     <View style={styles.mainWrapper}>
       {modalName === 'selectRoute' && (
@@ -66,7 +64,7 @@ const styles = StyleSheet.create({
     marginHorizontal: HP('3'),
   },
   mainWrapper: {
-    // height: 265,
+    height: 265,
     backgroundColor: colors.white,
     width: '100%',
     position: 'absolute',

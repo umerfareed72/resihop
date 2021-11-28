@@ -43,3 +43,4 @@ export * from './Modal/FilterModal/RideFilterModal';
 export * from './Modal/LogoutModal/LogoutModal';
 export * from './Modal/FilterModal/DRideFilterModal';
 export * from './Modal/RatingModal/RatingModal';
+export * from './Modal/WarningModal/WarningModal';

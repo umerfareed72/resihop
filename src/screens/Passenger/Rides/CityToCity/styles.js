@@ -40,13 +40,19 @@ export default StyleSheet.create({
     lineHeight: 24,
     color: colors.white,
   },
-  txtInput: {
+  starttxtBtn: {
     height: 44,
     width: 291,
     borderWidth: 1,
     borderColor: colors.greyBorder,
     borderRadius: 10,
     paddingLeft: 45,
+    color: colors.inputTxtGray,
+    justifyContent: 'center',
+  },
+  starttxt: {
+    fontFamily: family.product_sans_regular,
+    fontSize: size.normal,
     color: colors.inputTxtGray,
   },
   startDot: {
@@ -174,6 +180,7 @@ export default StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: family.product_sans_bold,
   },
   listContainer: {
     paddingHorizontal: 21,
@@ -195,5 +202,28 @@ export default StyleSheet.create({
     fontFamily: family.product_sans_regular,
     color: colors.light_black,
     fontSize: size.xsmall,
+  },
+
+  arrowBack: {
+    height: 15,
+    width: 15,
+  },
+  arrowBackCircle: {
+    height: 34,
+    width: 34,
+    borderRadius: 34 / 2,
+    backgroundColor: colors.white,
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 50,
+    marginLeft: 18,
+    elevation: 5,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 1,
+    shadowColor: colors.dropShadow2,
   },
 });
