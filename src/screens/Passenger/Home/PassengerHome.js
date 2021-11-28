@@ -145,7 +145,11 @@ const PassengerHome = ({navigation}) => {
         {/* Cards */}
 
         <View style={styles.cardMainContainer}>
-          <View style={styles.cardContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.navigate('CreateRide');
+            }}
+            style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
@@ -157,7 +161,7 @@ const PassengerHome = ({navigation}) => {
                 {create_ride}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>

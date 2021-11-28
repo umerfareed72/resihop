@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     borderWidth: 1,
     marginTop: HP('1'),
+    paddingHorizontal: 10,
     borderColor: colors.notificationBorder,
   },
   marginContainer: {

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View, ScrollView, Image} from 'react-native';
 import styles from './style';
 import {CardField, useStripe} from '@stripe/stripe-react-native';
-import {appImages, colors, size} from '../../../../../utilities';
+import {appIcons, appImages, colors, size} from '../../../../../utilities';
 import {
   CustomHeader,
   DeleteCardModal,
@@ -39,8 +39,8 @@ const CardDetail = ({navigation}) => {
             <PaymentButtons
               width={'45%'}
               onPress={() => {
-navigation?.navigate('EditCard')
-            }}
+                navigation?.navigate('EditCard');
+              }}
               bgColor={colors.green}
               title={I18n.t('edit_card')}
               txtColor={colors.white}
@@ -66,6 +66,7 @@ navigation?.navigate('EditCard')
       </View>
       {show && (
         <DeleteCardModal
+          image={appIcons.dumpBox}
           onPressHide={() => {
             setshow(false);
           }}

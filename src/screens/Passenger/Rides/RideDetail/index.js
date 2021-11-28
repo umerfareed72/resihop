@@ -126,6 +126,7 @@ const index = ({navigation}) => {
                 borderRadius: 14,
                 borderColor: colors.gray_shade,
                 borderWidth: 1,
+                paddingHorizontal: 10,
               }}
               placeholder="Please tell us your issue."
               placeholderTextColor={colors.gray_shade}

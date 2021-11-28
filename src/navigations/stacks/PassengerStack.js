@@ -36,8 +36,6 @@ import TransactionDetails from '../../screens/TransactionDetails/TransactionDeta
 import NotificationTune from '../../screens/NotificationTune/NotificationTune';
 import EditProfile from '../../screens/EditProfile';
 import ChangePhone from '../../screens/ChangePhone';
-import CostPerSeat from '../../screens/CostPerSeat/CostPerSeat';
-import AvailablePassengerMap from '../../screens/AvailablePassengerMap/AvailablePassengerMap';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -225,16 +223,6 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="CityToCity"
         component={CityToCity}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="CostPerSeat"
-        component={CostPerSeat}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="AvailablePassengerMap"
-        component={AvailablePassengerMap}
       />
     </Stack.Navigator>
   );
