@@ -111,6 +111,28 @@ const DriverHome = ({navigation}) => {
     setSeats('');
     setStatus('');
   };
+
+  const ridesData = [
+    {
+      id: 1,
+      date: '12 June, 08:00',
+      status: 'Fully Booked',
+      seats: [1],
+    },
+    {
+      id: 2,
+      date: '12 June, 08:00',
+      status: 'Partially Booked',
+      seats: [1, 2],
+    },
+    {
+      id: 3,
+      date: '12 June, 08:00',
+      status: 'Waiting for Match',
+      seats: [1, 2],
+    },
+  ];
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />

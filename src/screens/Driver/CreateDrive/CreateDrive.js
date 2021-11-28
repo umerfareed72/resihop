@@ -213,7 +213,7 @@ const CreateDrive = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          onPress={() => navigation.navigate('StartLocation')}>
+          onPress={() => navigation.navigate('StartLocationDriver')}>
           <Text style={styles.nextTxt}>Next</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

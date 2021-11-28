@@ -14,6 +14,8 @@ import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
 import AvailableDriversCard from './AvailableDriversCard';
 import RideStatusCards from './RideStatusCards';
+import SelectRouteCard from './SelectRouteCard';
+import AvailablePassengersCard from './AvailablePassengersCard';
 
 const MapViewComponent = ({rideModals, setModal, style, modal}) => {
   const [latitude, setLatitude] = useState(0);
@@ -139,6 +141,10 @@ const MapViewComponent = ({rideModals, setModal, style, modal}) => {
       ) : rideModals === 'available' ? (
         // <AvailableDriversCard setHeight={setHeight} />
         <RideStatusCards statusType={'ended'} />
+      ) : rideModals === 'selectRoute' ? (
+        <SelectRouteCard setModal={setModal} />
+      ) : rideModals === 'availablePassenger' ? (
+        <AvailablePassengersCard />
       ) : null}
     </>
   );

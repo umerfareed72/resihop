@@ -4,7 +4,7 @@ import DriverHome from '../../screens/Driver/Home/DriverHome';
 import EditCard from '../../screens/Passenger/Payment/AddPaymentMethod/EditCard';
 import TransactionHistory from '../../screens/Passenger/Payment/PaymentHistory';
 import CreateDrive from '../../screens/Driver/CreateDrive/CreateDrive';
-import StartLocation from '../../screens/StartLocation';
+import StartLocationDriver from '../../screens/Driver/StartLocationDriver/StartLocationDriver';
 import WithDrawPayment from '../../screens/Passenger/Payment/AddPaymentMethod/WithdrawPayment';
 import NotificationList from '../../screens/Passenger/NotificationList/NotificationList';
 import AddCard from '../../screens/Passenger/Payment/AddPaymentMethod/AddCard';
@@ -23,11 +23,12 @@ import Offers from '../../screens/Passenger/Offers/Offers';
 import Reports from '../../screens/Passenger/Reports/Reports';
 import BlockedList from '../../screens/Passenger/BlockedList';
 import MultiLanguage from '../../screens/Passenger/MultiLanguage';
-import StartMatching from '../../screens/StartMatching';
+import SelectRoute from '../../screens/Driver/SelectRoute/SelectRoute';
 import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
+import AvailablePassenger from '../../screens/Driver/AvailablePassenger/AvailablePassenger';
 const Stack = createStackNavigator();
 function DriverStack(props) {
   return (
@@ -85,8 +86,8 @@ function DriverStack(props) {
       />
       <Stack.Screen
         options={{headerShown: false}}
-        name="StartLocation"
-        component={StartLocation}
+        name="StartLocationDriver"
+        component={StartLocationDriver}
       />
       <Stack.Screen
         options={{headerShown: false}}
@@ -155,8 +156,8 @@ function DriverStack(props) {
       />
       <Stack.Screen
         options={{headerShown: false}}
-        name="StartMatching"
-        component={StartMatching}
+        name="SelectRoute"
+        component={SelectRoute}
       />
       <Stack.Screen options={{headerShown: false}} name="Faq" component={Faq} />
       <Stack.Screen
@@ -173,6 +174,11 @@ function DriverStack(props) {
         options={{headerShown: false}}
         name="BookingDetails"
         component={BookingDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="AvailablePassenger"
+        component={AvailablePassenger}
       />
     </Stack.Navigator>
   );

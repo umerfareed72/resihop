@@ -11,7 +11,7 @@ import {CustomHeader} from './Header/CustomHeader';
 import {appImages, colors} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 
-const AddressCards = ({modalName, addfavrouiteAddressRef, onPress}) => {
+const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
   let navigation = useNavigation();
 
   const [destination, setDestination] = useState('');
@@ -101,7 +101,9 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress}) => {
           </View>
           {modalName === 'startLocation' ? (
             <>
-              <Text style={styles.bookSeatsTxt}>Book Your Seats</Text>
+              <Text style={styles.bookSeatsTxt}>
+                {mode === 'driver' ? ' Available Seats' : 'Book Your Seats'}
+              </Text>
               <View style={styles.seatsWrapper}>
                 {seats.map(seat => (
                   <Image
