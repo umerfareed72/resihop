@@ -30,6 +30,7 @@ import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
 import AvailablePassenger from '../../screens/Driver/AvailablePassenger/AvailablePassenger';
 import DriveStatus from '../../screens/Driver/DriverStatus/DriveStatus';
+import UpdateDrive from '../../screens/Driver/UpdateDrive/UpdateDrive';
 const Stack = createStackNavigator();
 function DriverStack(props) {
   return (
@@ -185,6 +186,11 @@ function DriverStack(props) {
         options={{headerShown: false}}
         name="DriveStatus"
         component={DriveStatus}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="UpdateDrive"
+        component={UpdateDrive}
       />
     </Stack.Navigator>
   );

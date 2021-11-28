@@ -11,9 +11,12 @@ import {fonts} from '../theme';
 import {appImages, colors} from '../utilities';
 import CallIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/core';
 
 const DriveStatusCard = ({status}) => {
   const [seats, setSeats] = useState([1, 2, 3, 4]);
+
+  let navigation = useNavigation();
 
   const passengerData = [
     {
@@ -67,7 +70,9 @@ const DriveStatusCard = ({status}) => {
           </Text>
         </View>
         <View style={[styles.btnWrapper, {width: '90%'}]}>
-          <TouchableOpacity style={styles.btnContainer}>
+          <TouchableOpacity
+            style={styles.btnContainer}
+            onPress={() => navigation.navigate('UpdateDrive')}>
             <Text style={styles.btnTxt}>Update</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btnContainer}>
