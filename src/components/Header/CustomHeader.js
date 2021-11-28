@@ -16,7 +16,8 @@ export const CustomHeader = ({
   text,
   btnText,
   btnImage,
-  onPress,
+  onPressbtnImage,
+  onPressbtnImage1,
   onPressBtn,
   btnImage1,
   onPress1,
@@ -66,25 +67,15 @@ export const CustomHeader = ({
           )}
           <View style={styles.wrapper2}>
             {btnImage ? (
-              <TouchableOpacity onPress={onPress1}>
+              <TouchableOpacity onPress={onPressbtnImage}>
                 <Image style={[styles.headerImage1]} source={btnImage} />
               </TouchableOpacity>
             ) : (
               false
             )}
             {btnImage1 ? (
-              <TouchableOpacity onPress={onPress}>
-                <Image
-                  style={[
-                    styles.headerImage,
-                    {
-                      // tintColor: tintColor3 ? tintColor3 : colors?.white,
-                      height: height3,
-                      width: width3,
-                    },
-                  ]}
-                  source={btnImage1}
-                />
+              <TouchableOpacity onPress={onPressbtnImage1}>
+                <Image style={[styles.headerImage1]} source={btnImage1} />
               </TouchableOpacity>
             ) : (
               false

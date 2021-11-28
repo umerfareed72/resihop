@@ -1,26 +1,25 @@
 import React, {useState, useRef} from 'react';
 import {
-  View,
-  Text,
   SafeAreaView,
-  Image,
   StyleSheet,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
-  KeyboardAvoidingView,
-  Keyboard,
+  View,
+  TextInput,
+  Image,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
-import {colors, appIcons, appImages} from '../utilities';
+import {Button} from 'react-native-elements';
+import {CustomHeader, DeleteCardModal} from '../../../components';
 import {useNavigation} from '@react-navigation/core';
+import {appIcons, appImages, colors} from '../../../utilities';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
-import MyStatusBar from '../components/Header/statusBar';
-import FavouriteLocations from './FavouriteLocations';
-import {CustomHeader} from '../components';
-import CalendarSheet from './CalendarSheet';
+import CalendarSheet from '../../CalendarSheet';
+import {theme} from '../../../theme';
+import I18n from '../../../utilities/translations';
 
-const CreateRide = () => {
+function index() {
   let navigation = useNavigation();
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
@@ -28,27 +27,20 @@ const CreateRide = () => {
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState('08:00');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [show, setShow] = useState(false);
+  const [selected, setSelected] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
         backButton={true}
         navigation={navigation}
-        title={'Create Ride'}
+        title={'Details'}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.tripBtnWrapper}>
-          <TouchableOpacity style={styles.tripBtnContainer}>
-            <Text style={styles.btnTxt}>Single Trip</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tripBtnContainer}>
-            <Text style={styles.btnTxt}>Recurring Ride</Text>
-          </TouchableOpacity>
-        </View>
-
         <View style={styles.locationMainWrapper}>
           <View>
             <View style={{marginBottom: 20}}>
@@ -73,21 +65,12 @@ const CreateRide = () => {
             </View>
           </View>
           <View style={styles.switchWrapper}>
-            <HeartIcon
-              name="heart"
-              size={30}
-              color={colors.btnGray}
-              onPress={() => favourteLocationRef.current.open()}
-            />
-            <View style={styles.locationSwitch} />
-            <HeartIcon
-              onPress={() => favourteLocationRef.current.open()}
-              name="heart"
-              size={30}
-              color={colors.btnGray}
-            />
+            <HeartIcon name="heart" size={30} color={colors.btnGray} />
+            <Image source={appIcons.mobiledata} style={styles.locationSwitch} />
+            <HeartIcon name="heart" size={30} color={colors.btnGray} />
           </View>
         </View>
+
         <Text style={styles.bookSeatsTxt}>Book Your Seats</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
@@ -99,6 +82,7 @@ const CreateRide = () => {
             />
           ))}
         </View>
+
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
             Need to arrive no later than
@@ -107,19 +91,12 @@ const CreateRide = () => {
         </View>
         <View style={styles.selectionInputWrapper}>
           <TextInput
-            placeholder="XX:XX"
-            placeholderTextColor={colors.btnGray}
-            value={noLaterTime}
-            onChangeText={setNoLaterTime}
-            style={styles.noLater}
-          />
-          <TextInput
-            placeholder="Date"
+            editable={false}
             placeholderTextColor={colors.btnGray}
             value={date}
             onChangeText={setDate}
-            onPressOut={() => calendarSheetRef.current.open()}
-            onPressIn={() => Keyboard.dismiss()}
+            // onPressOut={() => calendarSheetRef.current.open()}
+            // onPressIn={() => Keyboard.dismiss()}
             style={[styles.noLater, {marginRight: 11}]}
           />
           <Image
@@ -127,7 +104,15 @@ const CreateRide = () => {
             resizeMode="contain"
             style={styles.calendarIcon}
           />
+          <TouchableOpacity
+            onPress={() => calendarSheetRef.current.open()}
+            activeOpacity={0.8}>
+            <View style={styles.noLater}>
+              <Text>{'Date'}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
+
         <View style={styles.returnTripWrapper}>
           <Text style={styles.returnTxt}>Return Trip</Text>
           <ToggleSwitch
@@ -193,66 +178,84 @@ const CreateRide = () => {
                 style={styles.noLater}
               />
             </View>
+            <View style={{marginBottom: '5%'}}>
+              <Button
+                title={'Update'}
+                // onPress={() => props.navigation.navigate('ChangePhone')}
+                buttonStyle={[theme.Button.buttonStyle]}
+                titleStyle={[theme.Button.titleStyle]}
+                disabledTitleStyle={theme.Button.disabledTitleStyle}
+                containerStyle={{
+                  width: '90%',
+                  alignSelf: 'center',
+                  marginTop: '5%',
+                }}
+              />
+              <Button
+                title={'Delete Rides'}
+                onPress={() => setShow(true)}
+                buttonStyle={[
+                  theme.Button.buttonStyle,
+                  {backgroundColor: 'black'},
+                ]}
+                titleStyle={[theme.Button.titleStyle]}
+                disabledTitleStyle={theme.Button.disabledTitleStyle}
+                containerStyle={{
+                  width: '90%',
+                  alignSelf: 'center',
+                  marginTop: '5%',
+                }}
+              />
+            </View>
           </>
         ) : null}
-        <FavouriteLocations favourteLocationRef={favourteLocationRef} />
       </ScrollView>
-      <KeyboardAvoidingView
-        //keyboardVerticalOffset={15}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableOpacity
-          style={styles.nextBtnContainer}
-          onPress={() => navigation.navigate('StartLocation')}>
-          <Text style={styles.nextTxt}>Next</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+      {show && (
+        <DeleteCardModal
+          img={appIcons.dumpBox}
+          onPressHide={() => {
+            setShow(false);
+          }}
+          selected={selected}
+          h1={I18n.t('delete_h1')}
+          h2={I18n.t('delete_h2')}
+          btn1Text={I18n.t('yes')}
+          btn2Text={I18n.t('no')}
+          show={show}
+          bgColor={colors.green}
+          textColor={colors.white}
+          onPressYes={() => {
+            setSelected(true);
+          }}
+          onPressNo={() => {
+            setSelected(false);
+            setShow(false);
+          }}
+        />
+      )}
     </SafeAreaView>
   );
-};
+}
+
+export default index;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
   },
-  backArrow: {
-    height: 15,
-    width: 20,
-    marginRight: 19,
-  },
-  createHeader: {
+  locationMainWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 21,
-  },
-  rideTxt: {
-    fontSize: 20,
-    lineHeight: 24,
-  },
-  tripBtnContainer: {
-    height: 39,
-    width: 145,
-    backgroundColor: colors.btnGray,
-    borderRadius: 20,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tripBtnWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
+    marginTop: 19,
     justifyContent: 'space-between',
-    width: '85%',
+    width: '90%',
     alignSelf: 'center',
-  },
-  btnTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.white,
   },
   txtInput: {
     height: 44,
-    width: 291,
+    width: 300,
     borderWidth: 1,
     borderColor: colors.greyBorder,
     borderRadius: 10,
@@ -277,24 +280,14 @@ const styles = StyleSheet.create({
     left: 15,
     borderRadius: 4,
   },
-  locationSwitch: {
-    height: 25,
-    width: 25,
-    backgroundColor: colors.green,
-    borderRadius: 25 / 2,
-    marginVertical: 11,
-  },
   switchWrapper: {
     alignItems: 'center',
   },
-  locationMainWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 19,
-    justifyContent: 'space-between',
-    width: '90%',
-    alignSelf: 'center',
+  locationSwitch: {
+    height: 25,
+    width: 25,
+    resizeMode: 'center',
+    marginVertical: 11,
   },
   bookSeatsTxt: {
     fontSize: 14,
@@ -303,25 +296,40 @@ const styles = StyleSheet.create({
     color: colors.txtBlack,
     marginLeft: 21,
   },
-  seat: {
-    height: 31,
-    width: 24,
-    marginRight: 20,
-  },
   seatsWrapper: {
     flexDirection: 'row',
     marginLeft: 21,
     marginTop: 25,
   },
+  seat: {
+    height: 31,
+    width: 24,
+    marginRight: 20,
+  },
   selectWrapper: {
     flexDirection: 'row',
     marginTop: 26,
-    marginLeft: 20,
+    marginLeft: 25,
   },
   selectTxt: {
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
+  },
+  selectionInputWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  calendarIcon: {
+    height: 18,
+    width: 18,
+    position: 'absolute',
+    right: 22,
+    top: 13,
   },
   noLater: {
     height: 44,
@@ -333,26 +341,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.inputTxtGray,
-  },
-  calendarIcon: {
-    height: 18,
-    width: 18,
-    position: 'absolute',
-    right: 22,
-    top: 13,
-  },
-  selectionInputWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    alignSelf: 'center',
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  returnTxt: {
-    fontSize: 16,
-    lineHeight: 29,
-    color: colors.txtBlack,
+    justifyContent: 'center',
   },
   returnTripWrapper: {
     flexDirection: 'row',
@@ -360,6 +349,11 @@ const styles = StyleSheet.create({
     marginTop: 31,
     width: '87%',
     alignSelf: 'center',
+  },
+  returnTxt: {
+    fontSize: 16,
+    lineHeight: 29,
+    color: colors.txtBlack,
   },
   returntimeTxt: {
     fontSize: 14,
@@ -372,21 +366,4 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.btnGray,
   },
-  nextBtnContainer: {
-    height: 56,
-    backgroundColor: colors.green,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '80%',
-    borderRadius: 15,
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  nextTxt: {
-    fontSize: 16,
-    lineHeight: 26,
-    color: colors.white,
-  },
 });
-
-export default CreateRide;

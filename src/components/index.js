@@ -25,6 +25,7 @@ export * from './Cards/FavouritesCard/FavDriver';
 export * from './Cards/FavouritesCard/FavPassenger';
 export * from './Cards/FavouritesCard/FavLocation';
 export * from './Cards/RideHistoryCard/RiderInfo';
+export * from './Cards/RecurringRideCard/RecurringRideCard'
 
 //OTP
 export * from '../components/OtpValidator';
