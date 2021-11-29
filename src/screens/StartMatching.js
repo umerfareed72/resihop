@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/core';
+import React, {useEffect, useState} from 'react';
+import {useIsFocused, useNavigation} from '@react-navigation/core';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import MyStatusBar from '../components/Header/statusBar';
 import MapViewComponent from '../components/MapViewComponent';
@@ -7,28 +7,32 @@ import {appIcons, colors} from '../utilities';
 
 const StartMatching = props => {
   let navigation = useNavigation();
-  const [modal, setModal] = useState(props?.route?.params?.modalName);
+  const isFocus = useIsFocused();
+  const [modal, setModal] = useState(null);
+  useEffect(() => {
+    if (isFocus) {
+      setModal(props?.route?.params?.modalName);
+    }
+  }, [isFocus]);
 
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor="transparent" />
 
-      <MapViewComponent rideModals={modal} setModal={setModal} modal={modal} />
-
       <MapViewComponent
         rideModals={modal}
         setModal={setModal}
+        modal={modal}
         title={
           props?.route?.params?.modalName === 'finding'
             ? 'Send Request'
             : 'Book Now'
         }
-        modal={modal}
       />
 
       <TouchableOpacity
         style={styles.arrowBackCircle}
-        onPress={() => navigation.goBack()}>
+        onPress={() => props?.navigation.goBack()}>
         <Image
           source={appIcons.backArrow}
           resizeMode="contain"

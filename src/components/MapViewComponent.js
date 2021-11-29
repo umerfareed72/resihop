@@ -6,6 +6,7 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
@@ -19,7 +20,7 @@ import SelectRouteCard from './SelectRouteCard';
 import AvailablePassengersCard from './AvailablePassengersCard';
 import DriveStatusCard from './DriveStatusCard';
 import OfferReturnDriveCard from './OfferReturnDriveCard';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import PickUpInfoCard from './PickUpInfoCard';
 
 const MapViewComponent = ({
   rideModals,
@@ -173,6 +174,8 @@ const MapViewComponent = ({
         />
       ) : rideModals === 'offerReturnDrive' ? (
         <OfferReturnDriveCard />
+      ) : rideModals === 'pickUpInfo' ? (
+        <PickUpInfoCard title={title} />
       ) : null}
     </>
   );
