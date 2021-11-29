@@ -230,6 +230,7 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="RecurringRideDetail"
         component={RecurringRideDetail}
+      />
       {/* City To City Stack */}
       <Stack.Screen
         options={{headerShown: false}}
