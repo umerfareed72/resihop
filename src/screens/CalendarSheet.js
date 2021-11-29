@@ -4,6 +4,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {colors} from '../utilities';
 import moment from 'moment';
+import {fonts} from '../theme/theme';
 
 const CalendarSheet = ({calendarSheetRef, setDate}) => {
   const [markedDate, setMarkedDate] = useState();
@@ -73,9 +74,9 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
           //textDisabledColor: colors.red,
           arrowColor: colors.black,
           monthTextColor: colors.black,
-          textDayFontWeight: '400',
-          textMonthFontWeight: '700',
-          textDayHeaderFontWeight: '400',
+          textMonthFontFamily: fonts.regular,
+          textDayFontFamily: fonts.regular,
+          textDayHeaderFontFamily: fonts.bold,
           todayTextColor: colors.black,
           textDayFontSize: 16,
           textMonthFontSize: 24,
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 27,
     marginBottom: 30,
+    fontFamily: fonts.bold,
   },
   okBtn: {
     height: 56,
@@ -117,6 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
 });
 

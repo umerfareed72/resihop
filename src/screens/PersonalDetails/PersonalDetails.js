@@ -30,7 +30,7 @@ import GenderChips from '../../components/GenderChips';
 import UploadImage from '../../components/UploadImage';
 import SigninViaBankID from '../../components/SigninViaBankID';
 import BankWebView from '../../components/BankWebView';
-import {CustomHeader, Header} from '../../components';
+import {CustomHeader, Header, IncorrectRefCode} from '../../components';
 import {colors} from '../../utilities';
 
 const user = {
@@ -54,7 +54,7 @@ function PersonalDetails(props) {
   const refLastName = useRef();
   const refReferral = useRef();
   const refEmail = useRef();
-
+  const refCodeSheet = useRef(null);
   const userIsPassenger = user === user.Passenger;
   return (
     <>
@@ -67,8 +67,8 @@ function PersonalDetails(props) {
             validationSchema={personalFormSchema}
             onSubmit={values => {
               Keyboard.dismiss();
+              refCodeSheet?.current?.open();
               // props.navigation.navigate('Pledge');
-              props.navigation.navigate('VahicleInformation');
               // values.PERSONAL_FORM.gender = genderType;
               // values.role = userType;
               // values.mobile = ${country.callingCode}${mobileNum};
@@ -261,6 +261,13 @@ function PersonalDetails(props) {
           </View>
         ) : null}
       </View>
+      <IncorrectRefCode
+        show={refCodeSheet}
+        onPress={() => {
+          props.navigation.navigate('VahicleInformation');
+          refCodeSheet.current.close();
+        }}
+      />
     </>
   );
 }

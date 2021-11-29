@@ -3,8 +3,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import DriverHome from '../../screens/Driver/Home/DriverHome';
 import EditCard from '../../screens/Passenger/Payment/AddPaymentMethod/EditCard';
 import TransactionHistory from '../../screens/Passenger/Payment/PaymentHistory';
-import CreateRide from '../../screens/CreateRide';
-import StartLocation from '../../screens/StartLocation';
+import CreateDrive from '../../screens/Driver/CreateDrive/CreateDrive';
+import StartLocationDriver from '../../screens/Driver/StartLocationDriver/StartLocationDriver';
 import WithDrawPayment from '../../screens/Passenger/Payment/AddPaymentMethod/WithdrawPayment';
 import NotificationList from '../../screens/Passenger/NotificationList/NotificationList';
 import AddCard from '../../screens/Passenger/Payment/AddPaymentMethod/AddCard';
@@ -24,16 +24,21 @@ import Offers from '../../screens/Passenger/Offers/Offers';
 import Reports from '../../screens/Passenger/Reports/Reports';
 import BlockedList from '../../screens/Passenger/BlockedList';
 import MultiLanguage from '../../screens/Passenger/MultiLanguage';
-import StartMatching from '../../screens/StartMatching';
+import SelectRoute from '../../screens/Driver/SelectRoute/SelectRoute';
 import AvailableDrivers from '../../screens/AvailableDrivers';
 import BookReturnTrip from '../../screens/BookReturnTrip';
 import BookingDetails from '../../screens/BookingDetails';
 import Favourites from '../../screens/Passenger/Favourites/Favourites';
+import AvailablePassengerDriver from '../../screens/Driver/AvailablePassenger/AvailablePassenger';
+import DriveStatus from '../../screens/Driver/DriverStatus/DriveStatus';
+import UpdateDrive from '../../screens/Driver/UpdateDrive/UpdateDrive';
 import AddFavourites from '../../screens/Driver/Favourites/AddFavourites';
 import DriverCityToCity from '../../screens/Driver/Rides/DriverCityToCity';
 import CostPerSeat from '../../screens/CostPerSeat/CostPerSeat';
 import AvailablePassengerMap from '../../screens/AvailablePassengerMap/AvailablePassengerMap';
 import AvailablePassenger from '../../screens/AvailablePassengerList/AvailablePassengerList';
+import DRecurringRides from '../../screens/Driver/DRecurringRides';
+import DRecurringRideDetail from '../../screens/Driver/DRecurringRideDetail';
 
 const Stack = createStackNavigator();
 function DriverStack(props) {
@@ -108,13 +113,13 @@ function DriverStack(props) {
 
       <Stack.Screen
         options={{headerShown: false}}
-        name="CreateRide"
-        component={CreateRide}
+        name="CreateDrive"
+        component={CreateDrive}
       />
       <Stack.Screen
         options={{headerShown: false}}
-        name="StartLocation"
-        component={StartLocation}
+        name="StartLocationDriver"
+        component={StartLocationDriver}
       />
       <Stack.Screen
         options={{headerShown: false}}
@@ -178,8 +183,8 @@ function DriverStack(props) {
       />
       <Stack.Screen
         options={{headerShown: false}}
-        name="StartMatching"
-        component={StartMatching}
+        name="SelectRoute"
+        component={SelectRoute}
       />
       <Stack.Screen options={{headerShown: false}} name="Faq" component={Faq} />
       <Stack.Screen
@@ -199,9 +204,35 @@ function DriverStack(props) {
       />
       <Stack.Screen
         options={{headerShown: false}}
+        name="AvailablePassenger"
+        component={AvailablePassenger}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DriveStatus"
+        component={DriveStatus}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="UpdateDrive"
+        component={UpdateDrive}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
         name="CostPerSeat"
         component={CostPerSeat}
       />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DRecurringRides"
+        component={DRecurringRides}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DRecurringRideDetail"
+        component={DRecurringRideDetail}
+      />
+
       <Stack.Screen
         options={{headerShown: false}}
         name="AvailablePassengerMap"
@@ -209,8 +240,8 @@ function DriverStack(props) {
       />
       <Stack.Screen
         options={{headerShown: false}}
-        name="AvailablePassenger"
-        component={AvailablePassenger}
+        name="AvailablePassengerDriver"
+        component={AvailablePassengerDriver}
       />
     </Stack.Navigator>
   );

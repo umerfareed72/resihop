@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
+import {CalendarYear} from '../../../components';
 import {CustomHeader} from '../../../components/Header/CustomHeader';
 import {colors, family, HP, size} from '../../../utilities';
 import {appImages, appIcons} from '../../../utilities';
@@ -21,6 +22,8 @@ import ReportsSpending from './ReportsSpending';
 const Reports = ({navigation}) => {
   const [date, setDate] = useState();
   const [selected, setSelected] = useState(1);
+  const yearSheetRef = useRef(null);
+
   return (
     <>
       <CustomHeader navigation={navigation} title="Reports" backButton={true} />
@@ -51,10 +54,19 @@ const Reports = ({navigation}) => {
                 </Text>
               </TouchableOpacity>
             </View>
-            {selected === 2 ? <ReportsSpending /> : <ReportsEarning />}
+            {selected === 2 ? (
+              <ReportsSpending
+                onPressYear={() => {
+                  yearSheetRef.current.open();
+                }}
+              />
+            ) : (
+              <ReportsEarning />
+            )}
           </View>
         </View>
       </SafeAreaView>
+      <CalendarYear show={yearSheetRef} />
     </>
   );
 };

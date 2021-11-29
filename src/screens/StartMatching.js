@@ -12,6 +12,9 @@ const StartMatching = props => {
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor="transparent" />
+
+      <MapViewComponent rideModals={modal} setModal={setModal} modal={modal} />
+
       <MapViewComponent
         rideModals={modal}
         setModal={setModal}
@@ -20,7 +23,9 @@ const StartMatching = props => {
             ? 'Send Request'
             : 'Book Now'
         }
+        modal={modal}
       />
+
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => navigation.goBack()}>

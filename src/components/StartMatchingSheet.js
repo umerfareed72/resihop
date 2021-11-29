@@ -1,10 +1,22 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Image,
+} from 'react-native';
 import Slider from '@react-native-community/slider';
-import {colors} from '../utilities';
+import {appIcons, appImages, colors} from '../utilities';
+import {fonts} from '../theme';
 
-const StartMatchingSheet = ({setModal}) => {
+const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   const [sliderValue, setSliderValue] = useState(0);
+
+  useEffect(() => {
+    setHeight(Dimensions.get('screen').height - 200);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -18,6 +30,7 @@ const StartMatchingSheet = ({setModal}) => {
         style={styles.slider}
         minimumValue={0}
         maximumValue={3000}
+        thumbImage={appIcons.sliderImage}
         minimumTrackTintColor={colors.green}
         maximumTrackTintColor={colors.g1}
         onValueChange={value => setSliderValue(parseInt(value))}
@@ -59,12 +72,13 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     flexWrap: 'wrap',
+    fontFamily: fonts.regular,
   },
   distance: {
     fontSize: 18,
     lineHeight: 24,
     color: colors.green,
-    fontWeight: 'bold',
+    fontFamily: fonts.bold,
   },
   slider: {
     width: '88%',
@@ -82,6 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     color: colors.g1,
+    fontFamily: fonts.regular,
   },
   btnWrapper: {
     height: 56,
@@ -97,6 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
 });
 

@@ -95,6 +95,9 @@ function index(props) {
     setSeats('');
     setStatus('');
   };
+
+  const onPress = () => {};
+
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -113,7 +116,13 @@ function index(props) {
             showsVerticalScrollIndicator={false}
             data={[1, 2]}
             renderItem={() => {
-              return <RecurringRideCard />;
+              return (
+                <RecurringRideCard
+                  onPressCard={() => {
+                    props?.navigation?.navigate('RecurringRideDetail');
+                  }}
+                />
+              );
             }}
           />
         </View>

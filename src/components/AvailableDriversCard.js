@@ -1,17 +1,30 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {appImages, colors, family, HP, size} from '../utilities';
+import React, {useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+import {appImages, colors, HP, size, family} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/core';
+import {fonts} from '../theme';
 
 const AvailableDrivers = ({
   modalName,
   setAvailableDrivers,
   setNearestDriver,
+  setHeight,
   title,
   btnText,
 }) => {
   let navigation = useNavigation();
+
+  useEffect(() => {
+    setHeight(Dimensions.get('screen').height - 400);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -79,7 +92,12 @@ const AvailableDrivers = ({
           </View>
         ) : (
           <View>
-            <Text>SEK 20</Text>
+            <Text style={styles.fair}>SEK 20</Text>
+            <Image
+              source={appImages.car}
+              resizeMode="contain"
+              style={styles.car}
+            />
           </View>
         )}
       </View>
@@ -177,6 +195,7 @@ const styles = StyleSheet.create({
     color: colors.txtBlack,
     marginTop: 24,
     marginLeft: 24,
+    fontFamily: fonts.regular,
   },
   addressContainer: {
     height: 42,
@@ -192,6 +211,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     paddingLeft: 40,
+    fontFamily: fonts.regular,
+    color: colors.txtBlack,
   },
   addressCircle: {
     height: 16,
@@ -244,6 +265,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 30,
     color: colors.black,
+    fontFamily: fonts.regular,
   },
   matchingTxt: {
     fontSize: 16,
@@ -251,12 +273,14 @@ const styles = StyleSheet.create({
     color: colors.blue,
     textTransform: 'uppercase',
     textAlign: 'center',
+    fontFamily: fonts.bebasBold,
   },
   seatTxt: {
     fontSize: 13,
     lineHeight: 22,
     color: colors.txtBlack,
     marginLeft: 7,
+    fontFamily: fonts.regular,
   },
   driver: {
     height: 58,
@@ -291,12 +315,14 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     //lineHeight: 37,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   driverName: {
     fontSize: 18,
     lineHeight: 22,
     color: colors.txtBlack,
     marginBottom: 7,
+    fontFamily: fonts.regular,
   },
   seatGreen: {
     height: 16,
@@ -323,11 +349,13 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.txtBlack,
     marginLeft: 6,
+    fontFamily: fonts.regular,
   },
   carDetails: {
     fontSize: 14,
     lineHeight: 22,
     color: colors.txtGray,
+    fontFamily: fonts.regular,
   },
   availableMain: {
     flexDirection: 'row',
@@ -349,11 +377,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   date: {
     fontSize: 14,
     lineHeight: 22,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   btnMainContainer: {
     flexDirection: 'row',
@@ -376,6 +406,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.txtBlack,
+    fontFamily: fonts.bold,
+  },
+  fair: {
+    fontFamily: fonts.bold,
+    fontSize: 18,
+    lineHeight: 22,
+    color: colors.txtBlack,
+  },
+  car: {
+    height: 26,
+    width: 64,
+    marginTop: 8,
   },
 });
 

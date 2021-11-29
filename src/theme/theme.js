@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 
 const colors = {
-  primary: '#71B900',
+  primary: '#47B000',
   secondary: '#FFFFFF',
   accentColor: '#818181',
   Gold: 'rgb(249,176,0)',
@@ -34,6 +34,7 @@ export const fonts = {
   regular:
     Platform.OS === 'ios' ? 'ProductSans-regular' : 'product_sans_regular',
   bold: Platform.OS === 'ios' ? 'ProductSans-bold' : 'product_sans_bold',
+  bebasBold: Platform.OS === 'ios' ? 'Bebas Neue Bold' : 'BebasNeue Bold',
 };
 
 export const theme = {

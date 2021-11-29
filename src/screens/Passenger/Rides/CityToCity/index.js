@@ -51,11 +51,11 @@ const index = ({navigation}) => {
             p1={'Start City'}
             p2={'Destination City'}
             onPressStart={() =>
-              navigation.navigate('StartLocation', {modalName: 'startCity'})
+              navigation.navigate('StartLocation', {modalName: 'startLocation'})
             }
             onPressDes={() =>
               navigation.navigate('StartLocation', {
-                modalName: 'destinationCity',
+                modalName: 'destination',
               })
             }
           />

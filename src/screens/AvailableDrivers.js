@@ -12,6 +12,7 @@ import {CustomHeader} from '../components/Header/CustomHeader';
 import {appIcons, appImages, colors, family} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ReturnBookSheet from '../components/ReturnBookSheet';
+import {fonts} from '../theme';
 
 const AvailableDrivers = props => {
   let navigation = useNavigation();
@@ -59,7 +60,7 @@ const AvailableDrivers = props => {
                   SEK 20
                 </Text>
                 <Image
-                  source={appIcons.car_right}
+                  source={appImages.car}
                   style={{
                     height: 30,
                     width: 64,
@@ -156,12 +157,14 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     //lineHeight: 37,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   driverName: {
     fontSize: 18,
     lineHeight: 22,
     color: colors.txtBlack,
     marginBottom: 7,
+    fontFamily: fonts.regular,
   },
   seatGreen: {
     height: 16,
@@ -189,11 +192,13 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.txtBlack,
     marginLeft: 6,
+    fontFamily: fonts.regular,
   },
   carDetails: {
     fontSize: 14,
     lineHeight: 22,
     color: colors.txtGray,
+    fontFamily: fonts.regular,
   },
   availableMain: {
     flexDirection: 'row',
@@ -215,11 +220,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   date: {
     fontSize: 14,
     lineHeight: 22,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   btnContainer: {
     height: 42,
@@ -235,6 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
   driversCard: {
     borderWidth: 1,

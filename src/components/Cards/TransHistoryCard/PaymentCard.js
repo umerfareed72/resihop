@@ -16,7 +16,7 @@ export const PaymentCard = ({title, add_Money, onPress, onPressAddMoney}) => {
     <LinearGradient
       colors={colors.gradientBoxColor}
       style={styles.linearGradient}>
-      <TouchableOpacity onPress={onPress}>
+      <View>
         <View style={styles.rowAlign}>
           <View style={styles.leftContainer}>
             <Text style={styles.header2Text}>{title}</Text>
@@ -33,7 +33,7 @@ export const PaymentCard = ({title, add_Money, onPress, onPressAddMoney}) => {
           </View>
           <Text style={styles.header2Bold}>00.00 SEK</Text>
         </View>
-      </TouchableOpacity>
+      </View>
     </LinearGradient>
   );
 };

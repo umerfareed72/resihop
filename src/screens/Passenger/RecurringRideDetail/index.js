@@ -16,7 +16,7 @@ import {appIcons, appImages, colors} from '../../../utilities';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import CalendarSheet from '../../CalendarSheet';
-import {theme} from '../../../theme';
+import {theme, fonts} from '../../../theme';
 import I18n from '../../../utilities/translations';
 
 function index() {
@@ -178,41 +178,38 @@ function index() {
                 style={styles.noLater}
               />
             </View>
-            <View style={{marginBottom: '5%'}}>
-              <Button
-                title={'Update'}
-                // onPress={() => props.navigation.navigate('ChangePhone')}
-                buttonStyle={[theme.Button.buttonStyle]}
-                titleStyle={[theme.Button.titleStyle]}
-                disabledTitleStyle={theme.Button.disabledTitleStyle}
-                containerStyle={{
-                  width: '90%',
-                  alignSelf: 'center',
-                  marginTop: '5%',
-                }}
-              />
-              <Button
-                title={'Delete Rides'}
-                onPress={() => setShow(true)}
-                buttonStyle={[
-                  theme.Button.buttonStyle,
-                  {backgroundColor: 'black'},
-                ]}
-                titleStyle={[theme.Button.titleStyle]}
-                disabledTitleStyle={theme.Button.disabledTitleStyle}
-                containerStyle={{
-                  width: '90%',
-                  alignSelf: 'center',
-                  marginTop: '5%',
-                }}
-              />
-            </View>
           </>
         ) : null}
+        <View style={{marginTop: '35%'}}>
+          <Button
+            title={'Update'}
+            onPress={() => navigation.navigate('UpdateRide')}
+            buttonStyle={[theme.Button.buttonStyle]}
+            titleStyle={[theme.Button.titleStyle]}
+            disabledTitleStyle={theme.Button.disabledTitleStyle}
+            containerStyle={{
+              width: '90%',
+              alignSelf: 'center',
+              marginTop: '5%',
+            }}
+          />
+          <Button
+            title={'Delete Rides'}
+            onPress={() => setShow(true)}
+            buttonStyle={[theme.Button.buttonStyle, {backgroundColor: 'black'}]}
+            titleStyle={[theme.Button.titleStyle]}
+            disabledTitleStyle={theme.Button.disabledTitleStyle}
+            containerStyle={{
+              width: '90%',
+              alignSelf: 'center',
+              marginTop: '5%',
+            }}
+          />
+        </View>
       </ScrollView>
       {show && (
         <DeleteCardModal
-          img={appIcons.dumpBox}
+          image={appIcons.dumpBox}
           onPressHide={() => {
             setShow(false);
           }}
@@ -295,6 +292,7 @@ const styles = StyleSheet.create({
     marginTop: 37,
     color: colors.txtBlack,
     marginLeft: 21,
+    fontFamily: fonts.regular,
   },
   seatsWrapper: {
     flexDirection: 'row',

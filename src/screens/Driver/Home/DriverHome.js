@@ -8,6 +8,7 @@ import {
   Image,
   Platform,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import {colors, appIcons, appImages, family} from '../../../utilities';
 import {
@@ -24,6 +25,9 @@ import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 import {RideFilterModal, SortModal} from '../../../components';
 import I18n from '../../../utilities/translations';
+import UpcomingRideCards from '../../../components/UpcomingRideCards';
+import {fonts} from '../../../theme';
+
 //Data
 var TimeList = {
   id: 1,
@@ -111,6 +115,32 @@ const DriverHome = ({navigation}) => {
     setSeats('');
     setStatus('');
   };
+
+  const ridesData = [
+    {
+      id: 1,
+      date: '12 June, 08:00',
+      status: 'Fully Booked',
+      seats: [1],
+    },
+    {
+      id: 2,
+      date: '12 June, 08:00',
+      status: 'Partially Booked',
+      seats: [1, 2],
+    },
+    {
+      id: 3,
+      date: '12 June, 08:00',
+      status: 'Waiting for Match',
+      seats: [1, 2],
+    },
+  ];
+
+  const onPress = item => {
+    navigation.navigate('DriveStatus', {status: item.status});
+  };
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -137,7 +167,12 @@ const DriverHome = ({navigation}) => {
               navigation?.replace('PassengerDashboard');
             }}
             style={styles.switchToDriverBtnContainer}>
-            <Text style={{fontSize: 13, color: colors.white}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: colors.white,
+                fontFamily: fonts.regular,
+              }}>
               Switch to Passenger
             </Text>
           </TouchableOpacity>
@@ -146,7 +181,11 @@ const DriverHome = ({navigation}) => {
         {/* Cards */}
 
         <View style={styles.cardMainContainer}>
-          <View style={styles.cardContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.navigate('CreateDrive');
+            }}
+            style={styles.cardContainer}>
             <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
@@ -158,8 +197,12 @@ const DriverHome = ({navigation}) => {
                 Create Drive
               </Text>
             </View>
-          </View>
-          <View style={styles.cardContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.cardContainer}
+            onPress={() => {
+              navigation?.navigate('DRecurringRides');
+            }}>
             <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
             <View style={styles.interiorContainer}>
               <Image
@@ -169,7 +212,7 @@ const DriverHome = ({navigation}) => {
               />
               <Text style={styles.cardTxt}>My Recurring Drives</Text>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.cardContainer}>
             <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
             <TouchableOpacity
@@ -206,19 +249,38 @@ const DriverHome = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{marginBottom: 10}}>
-          <Image source={appIcons.driver_home} style={styles.noUpcomingRide} />
-
-          <Text style={styles.Txt}>{lorem}</Text>
-
-          <TouchableOpacity
-            style={styles.createRideBtnContainer}
-            onPress={() => navigation.navigate('CreateRide')}>
-            <Text style={styles.btnTxt}>Create your Frist Drive</Text>
-          </TouchableOpacity>
-        </ScrollView>
+        {ridesData.length === 0 ? (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{marginBottom: 10}}>
+            <Image
+              source={appIcons.driver_home}
+              style={styles.noUpcomingRide}
+            />
+            <Text style={styles.Txt}>{lorem}</Text>
+            <TouchableOpacity
+              style={styles.createRideBtnContainer}
+              onPress={() => navigation.navigate('CreateDrive')}>
+              <Text style={styles.btnTxt}>Create your Frist Drive</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        ) : (
+          <FlatList
+            data={ridesData}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => (
+              <UpcomingRideCards item={item} onPress={() => onPress(item)} />
+            )}
+            ListFooterComponent={() => (
+              <TouchableOpacity
+                style={styles.createRideBtnContainer}
+                onPress={() => navigation.navigate('CreateDrive')}>
+                <Text style={styles.btnTxt}>Create your Frist Drive</Text>
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </SafeAreaView>
       <RideFilterModal
         time={TimeList}
@@ -291,6 +353,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16,
     marginTop: 8,
+    fontFamily: fonts.regular,
   },
   cardMainContainer: {
     flexDirection: 'row',
@@ -321,6 +384,8 @@ const styles = StyleSheet.create({
   upcomingTxt: {
     fontSize: 16,
     lineHeight: 26,
+    fontFamily: fonts.regular,
+    color: colors.txtBlack,
   },
   noUpcomingRide: {
     width: 305,

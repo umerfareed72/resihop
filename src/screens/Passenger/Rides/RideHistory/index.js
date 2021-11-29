@@ -117,10 +117,10 @@ const index = ({navigation}) => {
         btnImage1={appIcons.filter}
         height3={25}
         width3={25}
-        onPress={() => {
+        onPressbtnImage1={() => {
           filterModalRef.current.open();
         }}
-        onPress1={() => {
+        onPressbtnImage={() => {
           sortModalRef.current.open();
         }}
         btnImage={appIcons.mobiledata}
