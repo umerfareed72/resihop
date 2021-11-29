@@ -68,6 +68,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     paddingLeft: 40,
+    fontFamily: fonts.regular,
+    color: colors.txtBlack,
   },
   addressCircle: {
     height: 16,

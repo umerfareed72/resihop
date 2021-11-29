@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useRef, useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -6,15 +6,16 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {CustomHeader} from '../../../components';
+import {CustomHeader, RatingCardModal} from '../../../components';
 import {colors, family, HP, size, WP} from '../../../utilities';
+import I18n from '../../..//utilities/translations';
 import {Icon} from 'react-native-elements';
 
 const Settings = ({navigation}) => {
-  const ItemsView = ({data}) => {
-    console.log('data value on items view  ', data);
+  const [rating, setRating] = useState(0);
+  const [show, setShow] = useState(false);
 
+  const ItemsView = ({data}) => {
     return (
       <View style={styles.itemView}>
         <Text style={styles.titleText}>{data?.title}</Text>
@@ -65,7 +66,9 @@ const Settings = ({navigation}) => {
     },
     {
       title: 'Rate Us',
-      onPress: () => alert('Clicked'),
+      onPress: () => {
+        setShow(!show);
+      },
     },
     {
       title: 'App Version',
@@ -80,7 +83,6 @@ const Settings = ({navigation}) => {
         backButton={true}
         navigation={navigation}
       />
-
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.settingsContentContainer}>
@@ -91,6 +93,17 @@ const Settings = ({navigation}) => {
           </View>
         </ScrollView>
       </View>
+      {show && (
+        <RatingCardModal
+          h1={I18n.t('add_experience')}
+          show={show}
+          onPressHide={() => {
+            setShow(false);
+          }}
+          onSelectRating={setRating}
+          rating={rating}
+        />
+      )}
     </>
   );
 };

@@ -68,7 +68,7 @@ const AvailablePassenger = () => {
                     />
                   ))}
                 </View>
-                <Text>12 June, 08:00</Text>
+                <Text style={{fontFamily: fonts.regular}}>12 June, 08:00</Text>
               </View>
             </View>
           </View>
@@ -98,6 +98,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     paddingLeft: 40,
+    fontFamily: fonts.regular,
+    color: colors.txtBlack,
   },
   addressCircle: {
     height: 16,
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     //lineHeight: 37,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   infoMainContainer: {
     flexDirection: 'row',

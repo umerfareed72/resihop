@@ -26,6 +26,7 @@ import MyStatusBar from '../../../components/Header/statusBar';
 import {RideFilterModal, SortModal} from '../../../components';
 import I18n from '../../../utilities/translations';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
+import {fonts} from '../../../theme';
 
 //Data
 var TimeList = {
@@ -166,7 +167,12 @@ const DriverHome = ({navigation}) => {
               navigation?.replace('PassengerDashboard');
             }}
             style={styles.switchToDriverBtnContainer}>
-            <Text style={{fontSize: 13, color: colors.white}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: colors.white,
+                fontFamily: fonts.regular,
+              }}>
               Switch to Passenger
             </Text>
           </TouchableOpacity>
@@ -201,14 +207,18 @@ const DriverHome = ({navigation}) => {
           </View>
           <View style={styles.cardContainer}>
             <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
-            <View style={styles.interiorContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation?.navigate('DriverCityToCity');
+              }}
+              style={styles.interiorContainer}>
               <Image
                 source={appImages.city}
                 style={styles.cardInterior}
                 resizeMode="contain"
               />
               <Text style={styles.cardTxt}>City to City Drives</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -337,6 +347,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16,
     marginTop: 8,
+    fontFamily: fonts.regular,
   },
   cardMainContainer: {
     flexDirection: 'row',
@@ -367,6 +378,8 @@ const styles = StyleSheet.create({
   upcomingTxt: {
     fontSize: 16,
     lineHeight: 26,
+    fontFamily: fonts.regular,
+    color: colors.txtBlack,
   },
   noUpcomingRide: {
     width: 305,

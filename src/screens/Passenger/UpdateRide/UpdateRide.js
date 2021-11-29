@@ -42,23 +42,27 @@ const UpdateRide = () => {
         <View style={styles.locationMainWrapper}>
           <View>
             <View style={{marginBottom: 20}}>
-              <TextInput
-                placeholder="Start Location"
-                placeholderTextColor={colors.inputTxtGray}
-                value={startLocation}
-                onChangeText={setStartLocation}
+              <TouchableOpacity
                 style={styles.txtInput}
-              />
+                onPress={() =>
+                  navigation.navigate('StartLocation', {
+                    modalName: 'startLocation',
+                  })
+                }>
+                <Text style={styles.startTxt}>Start Location</Text>
+              </TouchableOpacity>
               <View style={styles.startDot} />
             </View>
             <View>
-              <TextInput
-                placeholder="Destination"
-                placeholderTextColor={colors.inputTxtGray}
-                value={destination}
-                onChangeText={setDestination}
+              <TouchableOpacity
                 style={styles.txtInput}
-              />
+                onPress={() =>
+                  navigation.navigate('StartLocation', {
+                    modalName: 'destination',
+                  })
+                }>
+                <Text style={styles.startTxt}>Destination</Text>
+              </TouchableOpacity>
               <View style={styles.destSquare} />
             </View>
           </View>
@@ -121,23 +125,27 @@ const UpdateRide = () => {
             <View style={styles.locationMainWrapper}>
               <View>
                 <View style={{marginBottom: 20}}>
-                  <TextInput
-                    placeholder="Start Location"
-                    placeholderTextColor={colors.inputTxtGray}
-                    value={startLocation}
-                    onChangeText={setStartLocation}
+                  <TouchableOpacity
                     style={styles.txtInput}
-                  />
+                    onPress={() =>
+                      navigation.navigate('StartLocation', {
+                        modalName: 'startLocation',
+                      })
+                    }>
+                    <Text style={styles.startTxt}>Start Location</Text>
+                  </TouchableOpacity>
                   <View style={styles.startDot} />
                 </View>
                 <View>
-                  <TextInput
-                    placeholder="Destination"
-                    placeholderTextColor={colors.inputTxtGray}
-                    value={destination}
-                    onChangeText={setDestination}
+                  <TouchableOpacity
                     style={styles.txtInput}
-                  />
+                    onPress={() =>
+                      navigation.navigate('StartLocation', {
+                        modalName: 'destination',
+                      })
+                    }>
+                    <Text style={styles.startTxt}>Destination</Text>
+                  </TouchableOpacity>
                   <View style={styles.destSquare} />
                 </View>
               </View>
@@ -235,6 +243,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 45,
     color: colors.inputTxtGray,
+    fontFamily: fonts.regular,
+    justifyContent: 'center',
   },
   startDot: {
     height: 16,
@@ -279,6 +289,7 @@ const styles = StyleSheet.create({
     marginTop: 37,
     color: colors.txtBlack,
     marginLeft: 21,
+    fontFamily: fonts.regular,
   },
   seat: {
     height: 31,
@@ -299,6 +310,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   noLater: {
     height: 44,
@@ -310,6 +322,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.inputTxtGray,
+    fontFamily: fonts.regular,
   },
   calendarIcon: {
     height: 18,
@@ -330,6 +343,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 29,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   returnTripWrapper: {
     flexDirection: 'row',
@@ -343,11 +357,13 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     marginTop: 20,
+    fontFamily: fonts.regular,
   },
   timeBracketTxt: {
     fontSize: 12,
     lineHeight: 24,
     color: colors.btnGray,
+    fontFamily: fonts.regular,
   },
   nextBtnContainer: {
     height: 56,
@@ -369,5 +385,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.g1,
+  },
+  startTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 13,
+    lineHeight: 20,
+    color: colors.g4,
   },
 });

@@ -6,21 +6,18 @@ import MapViewComponent from '../../../components/MapViewComponent';
 import AddFavrouteLocation from '../../AddFavrouteLocation';
 import {colors} from '../../../utilities';
 
-const StartLocationDriver = () => {
+const StartLocationDriver = ({route}) => {
   let navigation = useNavigation();
   const addfavrouiteAddressRef = useRef(null);
 
-  const onPress = () => {
-    navigation.navigate('SelectRoute');
-  };
+  const {type} = route.params;
 
   return (
     <View style={styles.container}>
       <MapViewComponent style={styles.mapStyles} />
       <AddressCards
-        modalName={'startLocation'}
+        modalName={type}
         addfavrouiteAddressRef={addfavrouiteAddressRef}
-        onPress={onPress}
         mode="driver"
       />
       <AddFavrouteLocation addfavrouiteAddressRef={addfavrouiteAddressRef} />

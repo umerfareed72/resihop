@@ -1,22 +1,30 @@
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
-import {appIcons, appImages, colors} from '../utilities';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+import {appIcons, appImages, colors, family, size, HP} from '../utilities';
+import {fonts} from '../theme';
 
-const NearestDriverCard = ({setModal, setHeight}) => {
+const NearestDriverCard = ({setModal, setHeight, modalName}) => {
   useEffect(() => {
     setHeight(Dimensions.get('screen').height - 240);
-
     const interval = setTimeout(() => {
       setModal('available');
-    }, 1000);
-
+    }, 2000);
     return () => {
       clearTimeout(interval);
     };
   }, []);
-
   return (
     <View style={styles.mainWrapper}>
+      {modalName === 'selectRoute' && (
+        <Text style={styles.topText}>24 min (15.6 km) | 6 Passenger</Text>
+      )}
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
           123 abc apartment abc street abc...
@@ -44,12 +52,26 @@ const NearestDriverCard = ({setModal, setHeight}) => {
           />
         </View>
       </View>
-      <Text style={styles.driverTxt}>Finding Nearest Driver...</Text>
+      {modalName !== 'selectRoute' && (
+        <Text style={styles.driverTxt}>Finding Nearest Driver...</Text>
+      )}
+      {modalName === 'selectRoute' && (
+        <TouchableOpacity style={styles.selectRouteButtom}>
+          <Text style={styles.routeText}>Select Route</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  topText: {
+    color: colors.light_black,
+    fontSize: size.large,
+    fontFamily: family.product_sans_bold,
+    marginTop: HP('2'),
+    marginHorizontal: HP('3'),
+  },
   mainWrapper: {
     height: 265,
     backgroundColor: colors.white,
@@ -73,6 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     paddingLeft: 40,
+    fontFamily: fonts.regular,
   },
   addressCircle: {
     height: 16,
@@ -111,12 +134,28 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 30,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   driverTxt: {
     fontSize: 15,
     lineHeight: 30,
     marginLeft: 21,
     marginTop: 20,
+    fontFamily: fonts.regular,
+  },
+  selectRouteButtom: {
+    height: HP('7'),
+    backgroundColor: colors.green,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: HP('3'),
+    borderRadius: 14,
+    marginVertical: HP('3'),
+  },
+  routeText: {
+    fontSize: size.large,
+    fontFamily: fonts.regular,
+    color: colors.white,
   },
 });
 

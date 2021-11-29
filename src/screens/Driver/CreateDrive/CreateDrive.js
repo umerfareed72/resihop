@@ -9,7 +9,6 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
-  Keyboard,
 } from 'react-native';
 import {colors, appIcons, appImages} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
@@ -53,23 +52,27 @@ const CreateDrive = () => {
         <View style={styles.locationMainWrapper}>
           <View>
             <View style={{marginBottom: 20}}>
-              <TextInput
-                placeholder="Start Location"
-                placeholderTextColor={colors.inputTxtGray}
-                value={startLocation}
-                onChangeText={setStartLocation}
+              <TouchableOpacity
                 style={styles.txtInput}
-              />
+                onPress={() =>
+                  navigation.navigate('StartLocationDriver', {
+                    type: 'startLocation',
+                  })
+                }>
+                <Text style={styles.locationTxt}>Start Location</Text>
+              </TouchableOpacity>
               <View style={styles.startDot} />
             </View>
             <View>
-              <TextInput
-                placeholder="Destination"
-                placeholderTextColor={colors.inputTxtGray}
-                value={destination}
-                onChangeText={setDestination}
+              <TouchableOpacity
                 style={styles.txtInput}
-              />
+                onPress={() =>
+                  navigation.navigate('StartLocationDriver', {
+                    type: 'destination',
+                  })
+                }>
+                <Text style={styles.locationTxt}>Destination</Text>
+              </TouchableOpacity>
               <View style={styles.destSquare} />
             </View>
           </View>
@@ -106,7 +109,7 @@ const CreateDrive = () => {
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
             Need to arrive no later than
           </Text>
-          <Text style={styles.selectTxt}>Select Date</Text>
+          <Text style={[styles.selectTxt, {marginLeft: 8}]}>Select Date</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
           <TextInput
@@ -132,7 +135,7 @@ const CreateDrive = () => {
         </View>
         <Text style={styles.presetTxt}>Preset cost for each passenger</Text>
         <TouchableOpacity style={styles.presetCostContainer}>
-          <Text>SEK 20</Text>
+          <Text style={{fontFamily: fonts.regular}}>SEK 20</Text>
           <ArrowDown
             name="keyboard-arrow-down"
             size={24}
@@ -195,7 +198,7 @@ const CreateDrive = () => {
                 onChangeText={setNoLaterTime}
                 style={styles.noLater}
               />
-              <Text>To</Text>
+              <Text style={styles.to}>To</Text>
               <TextInput
                 placeholder="XX:XX"
                 placeholderTextColor={colors.btnGray}
@@ -213,7 +216,7 @@ const CreateDrive = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          onPress={() => navigation.navigate('StartLocationDriver')}>
+          onPress={() => navigation.navigate('SelectRoute')}>
           <Text style={styles.nextTxt}>Next</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -260,6 +263,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   txtInput: {
     height: 44,
@@ -269,6 +273,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 45,
     color: colors.inputTxtGray,
+    justifyContent: 'center',
+    fontFamily: fonts.regular,
   },
   startDot: {
     height: 16,
@@ -313,6 +319,7 @@ const styles = StyleSheet.create({
     marginTop: 37,
     color: colors.txtBlack,
     marginLeft: 21,
+    fontFamily: fonts.regular,
   },
   seat: {
     height: 31,
@@ -333,6 +340,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   noLater: {
     height: 44,
@@ -344,6 +352,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.inputTxtGray,
+    fontFamily: fonts.regular,
   },
   calendarIcon: {
     height: 18,
@@ -364,6 +373,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 29,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   returnTripWrapper: {
     flexDirection: 'row',
@@ -377,11 +387,13 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     marginTop: 20,
+    fontFamily: fonts.regular,
   },
   timeBracketTxt: {
     fontSize: 12,
     lineHeight: 24,
     color: colors.btnGray,
+    fontFamily: fonts.regular,
   },
   nextBtnContainer: {
     height: 56,
@@ -397,11 +409,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
   dateTxt: {
     fontSize: 16,
     lineHeight: 24,
     color: colors.g1,
+    fontFamily: fonts.regular,
   },
   presetCostContainer: {
     height: 44,
@@ -422,6 +436,18 @@ const styles = StyleSheet.create({
     color: colors.black,
     marginVertical: 25,
     marginHorizontal: 22,
+  },
+  locationTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 13,
+    lineHeight: 20,
+    color: colors.g4,
+  },
+  to: {
+    fontFamily: fonts.regular,
+    fontSize: 14,
+    lineHeight: 24,
+    color: colors.txtBlack,
   },
 });
 

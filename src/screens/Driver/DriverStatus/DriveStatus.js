@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {colors, appIcons} from '../../../utilities';
 import MapViewComponent from '../../../components/MapViewComponent';
@@ -8,11 +8,17 @@ import {useNavigation} from '@react-navigation/core';
 const DriveStatus = ({route}) => {
   let navigation = useNavigation();
 
+  const [modal, setModal] = useState('driveStatus');
+
   const {status} = route.params;
 
   return (
     <View style={styles.container}>
-      <MapViewComponent rideModals="driveStatus" status={status} />
+      <MapViewComponent
+        rideModals={modal}
+        status={status}
+        setModal={setModal}
+      />
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => navigation.goBack()}>

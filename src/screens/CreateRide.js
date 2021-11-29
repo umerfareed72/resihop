@@ -11,7 +11,8 @@ import {
   KeyboardAvoidingView,
   Keyboard,
 } from 'react-native';
-import {colors, appIcons, appImages} from '../utilities';
+import {colors, appIcons, appImages, family, size} from '../utilities';
+import {fonts} from '../theme';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -50,27 +51,26 @@ const CreateRide = () => {
 
         <View style={styles.locationMainWrapper}>
           <View>
-            <View style={{marginBottom: 20}}>
-              <TextInput
-                placeholder="Start Location"
-                placeholderTextColor={colors.inputTxtGray}
-                value={startLocation}
-                onChangeText={setStartLocation}
-                style={styles.txtInput}
-              />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('StartLocation', {
+                  modalName: 'startLocation',
+                })
+              }
+              style={[styles.txtInput, {marginBottom: 20}]}>
+              <Text style={styles.startTxt}>Start Location</Text>
               <View style={styles.startDot} />
-            </View>
-            <View>
-              <TextInput
-                placeholder="Destination"
-                placeholderTextColor={colors.inputTxtGray}
-                value={destination}
-                onChangeText={setDestination}
-                style={styles.txtInput}
-              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('StartLocation', {modalName: 'destination'})
+              }
+              style={styles.txtInput}>
+              <Text style={styles.startTxt}>Destination City</Text>
               <View style={styles.destSquare} />
-            </View>
+            </TouchableOpacity>
           </View>
+
           <View style={styles.switchWrapper}>
             <HeartIcon
               name="heart"
@@ -202,7 +202,9 @@ const CreateRide = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          onPress={() => navigation.navigate('StartLocation')}>
+          onPress={() =>
+            navigation.navigate('StartMatching', {modalName: 'startMatching'})
+          }>
           <Text style={styles.nextTxt}>Next</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -249,6 +251,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   txtInput: {
     height: 44,
@@ -258,6 +261,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 45,
     color: colors.inputTxtGray,
+    justifyContent: 'center',
+    fontFamily: fonts.regular,
   },
   startDot: {
     height: 16,
@@ -280,7 +285,6 @@ const styles = StyleSheet.create({
   locationSwitch: {
     height: 25,
     width: 25,
-    backgroundColor: colors.green,
     borderRadius: 25 / 2,
     marginVertical: 11,
   },
@@ -302,6 +306,7 @@ const styles = StyleSheet.create({
     marginTop: 37,
     color: colors.txtBlack,
     marginLeft: 21,
+    fontFamily: fonts.regular,
   },
   seat: {
     height: 31,
@@ -322,6 +327,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   noLater: {
     height: 44,
@@ -333,6 +339,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.inputTxtGray,
+    fontFamily: fonts.regular,
   },
   calendarIcon: {
     height: 18,
@@ -353,6 +360,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 29,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   returnTripWrapper: {
     flexDirection: 'row',
@@ -366,11 +374,13 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     marginTop: 20,
+    fontFamily: fonts.regular,
   },
   timeBracketTxt: {
     fontSize: 12,
     lineHeight: 24,
     color: colors.btnGray,
+    fontFamily: fonts.regular,
   },
   nextBtnContainer: {
     height: 56,
@@ -386,11 +396,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
   dateTxt: {
     fontSize: 16,
     lineHeight: 24,
     color: colors.g1,
+    fontFamily: fonts.regular,
+  },
+  startTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 13,
+    lineHeight: 20,
+    color: colors.g4,
   },
 });
 

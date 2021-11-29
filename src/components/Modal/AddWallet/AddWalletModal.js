@@ -19,7 +19,6 @@ import {
 } from '../../../utilities';
 import {BlockInput} from '../../AppInput/ModalInput/BlockInput';
 import {PaymentButtons} from '../../Buttons/Payment/PaymentButtons';
-
 export const AddWalletModal = ({
   title,
   show,
@@ -62,8 +61,10 @@ export const AddWalletModal = ({
           false
         )}
         {onSuccess ? (
-          <View>
-            <Text>hello</Text>
+          <View style={styles.aiCenter}>
+            <Image style={styles.icon67} source={icon} />
+            <Text style={styles.h1}>{h1}</Text>
+            <Text style={styles.h2}>{h2}</Text>
           </View>
         ) : (
           false

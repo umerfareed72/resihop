@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../theme/theme';
 import {appImages, colors} from '../utilities';
@@ -8,8 +8,35 @@ import CallIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HeartIcon from 'react-native-vector-icons/AntDesign';
 import Star from 'react-native-vector-icons/FontAwesome';
+import {RatingCardModal} from '../components/Modal/RatingModal/RatingModal';
+import {useNavigation} from '@react-navigation/core';
 
 const RideStatusCards = ({statusType}) => {
+  let navigation = useNavigation();
+
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [currentRide, setCurrentRide] = useState(false);
+
+  if (currentRide) {
+    return (
+      <View style={styles.currentRideContainer}>
+        <Text style={styles.destinationTxt}>Destination 10 KM (20 Min)</Text>
+        <View style={styles.addressContainer}>
+          <Text style={styles.addressTxt}>
+            123 abc apartment abc street abc...
+          </Text>
+          <View style={styles.addressCircle} />
+        </View>
+        <View style={[styles.addressContainer, {marginTop: 21}]}>
+          <Text style={styles.addressTxt}>
+            123 abc apartment abc street abc...
+          </Text>
+          <View style={styles.addressSquare} />
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.addressContainer}>
@@ -26,7 +53,7 @@ const RideStatusCards = ({statusType}) => {
       </View>
       <View style={styles.dateTimeContainer}>
         <Text style={styles.dateTimeTxt}>12 June, 08:00</Text>
-        {statusType === 'confirmed' && (
+        {statusType === 'Confirmed' && (
           <View style={styles.confirmedWrapper}>
             <Text style={styles.confirmedTxt}>confirmed</Text>
           </View>
@@ -82,23 +109,23 @@ const RideStatusCards = ({statusType}) => {
           </View>
         </View>
       </View>
-      {statusType === 'confirmed' || statusType === 'pending' ? (
+      {statusType === 'Confirmed' || statusType === 'Matching Done' ? (
         <>
           <View style={styles.borderBtnMainContainer}>
             <TouchableOpacity
               style={styles.borderBtnContainer}
-              disabled={statusType === 'confirmed'}>
+              disabled={statusType === 'Confirmed'}>
               <CallIcon
                 name="call"
                 size={18}
-                color={statusType === 'confirmed' ? colors.g1 : colors.black}
+                color={statusType === 'Confirmed' ? colors.g1 : colors.black}
               />
               <Text
                 style={[
                   styles.borderBtnTxt,
                   {
                     color:
-                      statusType === 'confirmed' ? colors.g1 : colors.black,
+                      statusType === 'Confirmed' ? colors.g1 : colors.black,
                   },
                 ]}>
                 Call Now
@@ -126,8 +153,10 @@ const RideStatusCards = ({statusType}) => {
               <Text style={styles.btnTxt}>Cancel</Text>
             </TouchableOpacity>
           </View>
-          {statusType === 'pending' && (
-            <TouchableOpacity style={styles.startTripContainer}>
+          {statusType === 'Matching Done' && (
+            <TouchableOpacity
+              style={styles.startTripContainer}
+              onPress={() => setCurrentRide(true)}>
               <Icon name="angle-double-right" size={30} color={colors.white} />
               <Text style={styles.startTripTxt}>Start Trip</Text>
             </TouchableOpacity>
@@ -140,16 +169,25 @@ const RideStatusCards = ({statusType}) => {
               <HeartIcon name="heart" size={15} color={'red'} />
               <Text style={styles.favTxt}>Add to Favorites</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.rateBtnContainer}>
+            <TouchableOpacity
+              style={styles.rateBtnContainer}
+              onPress={() => setShowRatingModal(true)}>
               <Star name="star" size={18} color={colors.black} />
               <Text style={styles.rateTxt}>Rate Driver</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.passengerHomeBtn}>
+          <TouchableOpacity
+            style={styles.passengerHomeBtn}
+            onPress={() => navigation.navigate('PassengerHome')}>
             <Text style={styles.homeTxt}>Passenger Home</Text>
           </TouchableOpacity>
         </>
       )}
+      <RatingCardModal
+        show={showRatingModal}
+        h1={'Rate your Ride Experience'}
+        onPressHide={setShowRatingModal}
+      />
     </View>
   );
 };
@@ -215,6 +253,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     color: colors.green,
     textTransform: 'uppercase',
+    fontFamily: fonts.bebasBold,
   },
   confirmedWrapper: {
     borderTopWidth: 1.5,
@@ -439,5 +478,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 24,
     marginBottom: 25,
+  },
+  currentRideContainer: {
+    height: 229,
+    backgroundColor: colors.white,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+  },
+  destinationTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 18,
+    lineHeight: 22,
+    color: colors.txtBlack,
+    marginHorizontal: 22,
+    marginTop: 30,
   },
 });

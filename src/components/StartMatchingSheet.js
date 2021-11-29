@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import {appImages, colors} from '../utilities';
+import {fonts} from '../theme';
 
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   const [sliderValue, setSliderValue] = useState(0);
@@ -70,12 +71,13 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     flexWrap: 'wrap',
+    fontFamily: fonts.regular,
   },
   distance: {
     fontSize: 18,
     lineHeight: 24,
     color: colors.green,
-    fontWeight: 'bold',
+    fontFamily: fonts.bold,
   },
   slider: {
     width: '88%',
@@ -93,6 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     color: colors.g1,
+    fontFamily: fonts.regular,
   },
   btnWrapper: {
     height: 56,
@@ -108,6 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
 });
 

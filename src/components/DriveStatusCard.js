@@ -13,7 +13,7 @@ import CallIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/core';
 
-const DriveStatusCard = ({status}) => {
+const DriveStatusCard = ({status, setModal}) => {
   const [seats, setSeats] = useState([1, 2, 3, 4]);
 
   let navigation = useNavigation();
@@ -127,7 +127,9 @@ const DriveStatusCard = ({status}) => {
           <Text style={styles.btnTxt}>Cancel</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.startTripContainer}>
+      <TouchableOpacity
+        style={styles.startTripContainer}
+        onPress={() => setModal('offerReturnDrive')}>
         <Icon name="angle-double-right" size={30} color={colors.white} />
         <Text style={styles.startTripTxt}>Start Drive</Text>
       </TouchableOpacity>
@@ -139,7 +141,7 @@ const PassengerInfoCard = ({item}) => {
   return (
     <View style={styles.passengerInfoContainer}>
       <View style={styles.nameContainer}>
-        <Text>{item.name}</Text>
+        <Text style={{fontFamily: fonts.regular}}>{item.name}</Text>
         <Image
           source={appImages.driver}
           resizeMode="cover"
@@ -148,7 +150,7 @@ const PassengerInfoCard = ({item}) => {
       </View>
       <Text style={styles.pickUp}>{item.pickUp}</Text>
       <View style={styles.btnMainContainer}>
-        <Text>{item.time}</Text>
+        <Text style={{fontFamily: fonts.regular}}>{item.time}</Text>
         <TouchableOpacity style={styles.callNowContainer}>
           <CallIcon name="call" size={15} color={colors.white} />
           <Text style={styles.callNowTxt}>Call Now</Text>

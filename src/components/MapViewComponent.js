@@ -5,10 +5,11 @@ import {
   Platform,
   View,
   Text,
+  Image,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {colors} from '../utilities';
+import {appImages, colors} from '../utilities';
 
 import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
@@ -17,6 +18,8 @@ import RideStatusCards from './RideStatusCards';
 import SelectRouteCard from './SelectRouteCard';
 import AvailablePassengersCard from './AvailablePassengersCard';
 import DriveStatusCard from './DriveStatusCard';
+import OfferReturnDriveCard from './OfferReturnDriveCard';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const MapViewComponent = ({rideModals, setModal, style, modal, status}) => {
   const [latitude, setLatitude] = useState(0);
@@ -24,10 +27,6 @@ const MapViewComponent = ({rideModals, setModal, style, modal, status}) => {
   const [height, setHeight] = useState(0);
 
   const mapRef = useRef();
-
-  useEffect(() => {
-    getLocation();
-  }, [height]);
 
   let customMarkers = [
     {
@@ -104,14 +103,14 @@ const MapViewComponent = ({rideModals, setModal, style, modal, status}) => {
           longitudeDelta: 0.005,
         }}
         //onRegionChange={regionChanged}
-        followsUserLocation={true}
         zoomEnabled={true}
         style={
-          style
-            ? style
-            : height
-            ? {height: height, ...StyleSheet.absoluteFillObject}
-            : {...StyleSheet.absoluteFillObject}
+          // style
+          //   ? style
+          //   : height
+          //   ? {height: height, ...StyleSheet.absoluteFillObject}
+          //   :
+          {...StyleSheet.absoluteFillObject}
         }>
         <Marker
           identifier="currentPosition"
@@ -135,19 +134,33 @@ const MapViewComponent = ({rideModals, setModal, style, modal, status}) => {
           </Marker>
         ))}
       </MapView>
+      <View style={styles.currentLocationWrapper}>
+        <TouchableOpacity activeOpacity={0.8}>
+          <Image
+            source={appImages.currentLocation}
+            resizeMode="contain"
+            style={styles.currentLocation}
+          />
+        </TouchableOpacity>
+      </View>
       {rideModals === 'startMatching' ? (
         <StartMatchingSheet setModal={setModal} setHeight={setHeight} />
       ) : rideModals === 'finding' ? (
         <NearestDriverCard setModal={setModal} setHeight={setHeight} />
       ) : rideModals === 'available' ? (
-        // <AvailableDriversCard setHeight={setHeight} />
-        <RideStatusCards statusType={'ended'} />
+        <AvailableDriversCard
+          setHeight={setHeight}
+          title={'Book Now'}
+          btnText={'Book Now'}
+        />
       ) : rideModals === 'selectRoute' ? (
         <SelectRouteCard setModal={setModal} />
       ) : rideModals === 'availablePassenger' ? (
         <AvailablePassengersCard />
       ) : rideModals === 'driveStatus' ? (
-        <DriveStatusCard status={status} />
+        <DriveStatusCard status={status} setModal={setModal} />
+      ) : rideModals === 'offerReturnDrive' ? (
+        <OfferReturnDriveCard />
       ) : null}
     </>
   );
@@ -169,6 +182,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  currentLocation: {
+    height: 42,
+    width: 42,
+  },
+  currentLocationWrapper: {
+    position: 'absolute',
+    bottom: 25,
+    right: 16,
   },
 });
 

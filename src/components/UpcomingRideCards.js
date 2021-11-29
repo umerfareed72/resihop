@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {appImages, colors} from '../utilities';
 import {fonts} from '../theme/theme';
 
-const PassengerHomeRideCards = ({item, onPress}) => {
+const UpcomingRideCards = ({item, onPress}) => {
   return (
     <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
       <View style={styles.addressContainer}>
@@ -35,6 +35,7 @@ const PassengerHomeRideCards = ({item, onPress}) => {
         <View style={styles.seatContainer}>
           {item?.seats.map(seat => (
             <Image
+              key={seat}
               source={appImages.seatGreen}
               resizeMode="contain"
               style={styles.green}
@@ -46,14 +47,14 @@ const PassengerHomeRideCards = ({item, onPress}) => {
   );
 };
 
-export default PassengerHomeRideCards;
+export default UpcomingRideCards;
 
 const styles = StyleSheet.create({
   cardContainer: {
     height: 199,
     width: 333,
     backgroundColor: colors.white,
-    elevation: 3,
+    elevation: 10,
     shadowOffset: {
       width: 0,
       height: 3,
@@ -78,6 +79,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     paddingLeft: 40,
+    fontFamily: fonts.regular,
   },
   addressCircle: {
     height: 16,

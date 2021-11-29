@@ -67,7 +67,8 @@ function PersonalDetails(props) {
             validationSchema={personalFormSchema}
             onSubmit={values => {
               Keyboard.dismiss();
-              props.navigation.navigate('Pledge');
+              // props.navigation.navigate('Pledge');
+              props.navigation.navigate('VahicleInformation');
               // values.PERSONAL_FORM.gender = genderType;
               // values.role = userType;
               // values.mobile = ${country.callingCode}${mobileNum};
