@@ -11,6 +11,7 @@ import {CustomHeader} from '../components/Header/CustomHeader';
 import {useNavigation} from '@react-navigation/core';
 import {colors, appImages} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {fonts} from '../theme';
 
 const BookingDetails = () => {
   let navigation = useNavigation();
@@ -62,11 +63,24 @@ const BookingDetails = () => {
           </View>
         </View>
         <View>
-          <Text style={{textAlign: 'center'}}>SEK 20</Text>
           <Text
-            style={{textAlign: 'center', fontSize: 12, color: colors.txtGray}}>
+            style={{textAlign: 'center', fontFamily: fonts.bold, fontSize: 18}}>
+            SEK 20
+          </Text>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 12,
+              color: colors.txtGray,
+              fontFamily: fonts.regular,
+            }}>
             (SEK 20/Trip)
           </Text>
+          <Image
+            source={appImages.car}
+            resizeMode="contain"
+            style={{height: 26, width: 64, marginTop: 5, alignSelf: 'flex-end'}}
+          />
         </View>
       </View>
       <View style={styles.rideDetailsContainer}>
@@ -117,7 +131,7 @@ const BookingDetails = () => {
       <View style={[styles.line, {marginTop: 0}]} />
       <View style={styles.totalContainer}>
         <Text style={styles.bookingTitles}>Total Pay</Text>
-        <Text style={[styles.amount, {fontSize: 18, fontWeight: 'bold'}]}>
+        <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
           SEK 40
         </Text>
       </View>
@@ -151,6 +165,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     paddingLeft: 40,
+    fontFamily: fonts.regular,
   },
   addressCircle: {
     height: 16,
@@ -195,6 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 30,
     color: colors.black,
+    fontFamily: fonts.regular,
   },
   matchingTxt: {
     fontSize: 16,
@@ -208,6 +224,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.txtBlack,
     marginLeft: 7,
+    fontFamily: fonts.regular,
   },
   driverInfoContainer: {
     flexDirection: 'row',
@@ -236,12 +253,14 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     //lineHeight: 37,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   driverName: {
     fontSize: 18,
     lineHeight: 22,
     color: colors.txtBlack,
     marginBottom: 7,
+    fontFamily: fonts.regular,
   },
   seatGreen: {
     height: 16,
@@ -268,11 +287,13 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.txtBlack,
     marginLeft: 6,
+    fontFamily: fonts.regular,
   },
   carDetails: {
     fontSize: 14,
     lineHeight: 22,
     color: colors.txtGray,
+    fontFamily: fonts.regular,
   },
   driver: {
     height: 58,
@@ -291,6 +312,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 24,
     color: colors.inputTxtGray,
+    fontFamily: fonts.regular,
   },
   btnContainer: {
     height: 35,
@@ -314,11 +336,13 @@ const styles = StyleSheet.create({
     color: colors.txtBlack,
     marginLeft: 20,
     marginTop: 10,
+    fontFamily: fonts.regular,
   },
   btnTxt: {
     fontSize: 14,
     lineHeight: 18,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   promoLine: {
     borderWidth: 1,
@@ -330,6 +354,7 @@ const styles = StyleSheet.create({
   bookingTitles: {
     fontSize: 15,
     lineHeight: 30,
+    fontFamily: fonts.regular,
   },
   titleContainer: {
     flexDirection: 'row',
@@ -343,6 +368,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 34,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   totalContainer: {
     flexDirection: 'row',
@@ -366,6 +392,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
 });
 

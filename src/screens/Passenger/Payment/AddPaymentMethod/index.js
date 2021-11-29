@@ -82,9 +82,6 @@ const index = ({navigation}) => {
             }}
             title={I18n.t('wallet_balance')}
             add_Money={I18n.t('add_cards')}
-            onPress={() => {
-              navigation?.navigate('WithDrawPayment');
-            }}
           />
 
           <BankCard
@@ -158,7 +155,7 @@ const index = ({navigation}) => {
           paymentFailed
             ? 'Your amount exceeds Balance'
             : '' || paymentSuccess
-            ? 'Money Withdrawal Successful!'
+            ? 'Transaction Successful!'
             : ''
         }
         show={modalRef}

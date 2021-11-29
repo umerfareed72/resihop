@@ -48,21 +48,16 @@ const DriverCityToCity = () => {
         title={'City To City Drives'}
       />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.tripBtnWrapper}>
-          <TouchableOpacity style={styles.tripBtnContainer}>
-            <Text style={styles.btnTxt}>Single Trip</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tripBtnContainer}>
-            <Text style={styles.btnTxt}>Recurring Ride</Text>
-          </TouchableOpacity>
-        </View>
-
         <View style={styles.locationMainWrapper}>
           <RideInputCard
             p1={'Start City'}
             p2={'Destination City'}
-            onPressStart={() => navigation.navigate('StartLocation')}
-            onPressDes={() => navigation.navigate('StartLocation')}
+            onPressStart={navigation.navigate('StartLocationDriver', {
+              type: 'startLocation',
+            })}
+            onPressDes={navigation.navigate('StartLocationDriver', {
+              type: 'destination',
+            })}
           />
 
           <View style={styles.switchWrapper}>

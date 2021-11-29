@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import {fonts} from '../../theme';
 import {colors, WP, appIcons, size} from '../../utilities';
 import MyStatusBar from './statusBar';
 export const CustomHeader = ({
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   header: {
     color: colors.black,
     fontSize: size.xxlarge,
-    fontWeight: 'bold',
+    fontFamily: fonts.bold,
   },
   imageStyle: {
     height: 20,

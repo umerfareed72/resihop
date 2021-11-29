@@ -19,7 +19,6 @@ import {
 } from '../../../utilities';
 import {BlockInput} from '../../AppInput/ModalInput/BlockInput';
 import {PaymentButtons} from '../../Buttons/Payment/PaymentButtons';
-
 export const AddWalletModal = ({
   title,
   show,

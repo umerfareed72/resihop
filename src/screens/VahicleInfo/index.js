@@ -9,14 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  Button,
-  colors,
-  Divider,
-  Icon,
-  Input,
-  Text,
-} from 'react-native-elements';
+import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
 import {CustomHeader} from '../../components';
 import * as Yup from 'yup';
 import {fonts, theme} from '../../theme';
@@ -27,7 +20,7 @@ import {
   sign_in_with_bank_id,
   terms_and_condition_text,
 } from '../../theme/strings';
-import { appIcons } from '../../utilities';
+import {appIcons, colors} from '../../utilities';
 
 const vahicleFormFields = {
   licencePlate: '',
@@ -304,16 +297,28 @@ function index(props) {
                         width: '100%',
                         flexDirection: 'row',
                         marginTop: 10,
+                        backgroundColor: colors.green,
                       },
                     ]}>
                     <View style={styles.bankIDBtnCon}>
-                      <Text
-                        style={[theme.Button.titleStyle, {paddingLeft: 20}]}>
-                        {sign_in_with_bank_id}
-                      </Text>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={[theme.Button.titleStyle]}>
+                          {sign_in_with_bank_id}
+                        </Text>
+                        <Image
+                          source={appIcons.bank_id}
+                          style={{
+                            width: 50,
+                            height: 35,
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </View>
+
                       <Image
-                        source={appIcons.bank_id}
-                        style={{width: 50, height: 35, resizeMode: 'contain'}}
+                        style={{height: 14, width: 21}}
+                        source={appIcons.rightArrow}
                       />
                     </View>
                   </TouchableOpacity>
@@ -357,8 +362,10 @@ const styles = StyleSheet.create({
   },
   bankIDBtnCon: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    width: '100%',
   },
   pickerStyle: {
     width: '93%',

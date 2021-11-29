@@ -1,9 +1,18 @@
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {appIcons, appImages, colors, family, HP, size} from '../utilities';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+import {appIcons, appImages, colors, family, size, HP} from '../utilities';
+import {fonts} from '../theme';
 
-const NearestDriverCard = ({setModal, modalName}) => {
+const NearestDriverCard = ({setModal, setHeight, modalName}) => {
   useEffect(() => {
+    setHeight(Dimensions.get('screen').height - 240);
     const interval = setTimeout(() => {
       setModal('available');
     }, 2000);
@@ -86,6 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     paddingLeft: 40,
+    fontFamily: fonts.regular,
   },
   addressCircle: {
     height: 16,
@@ -124,12 +134,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 30,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   driverTxt: {
     fontSize: 15,
     lineHeight: 30,
     marginLeft: 21,
     marginTop: 20,
+    fontFamily: fonts.regular,
   },
   selectRouteButtom: {
     height: HP('7'),
@@ -142,7 +154,7 @@ const styles = StyleSheet.create({
   },
   routeText: {
     fontSize: size.large,
-    fontFamily: family.product_sans_regular,
+    fontFamily: fonts.regular,
     color: colors.white,
   },
 });

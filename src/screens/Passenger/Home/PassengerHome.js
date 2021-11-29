@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  FlatList,
 } from 'react-native';
 import {colors, appIcons, appImages, family} from '../../../utilities';
 import {
@@ -22,6 +23,9 @@ import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 import {RideFilterModal, SortModal} from '../../../components';
+import UpcomingRideCards from '../../../components/UpcomingRideCards';
+import {fonts} from '../../../theme';
+
 //Data
 var TimeList = {
   id: 1,
@@ -109,6 +113,32 @@ const PassengerHome = ({navigation}) => {
     setSeats('');
     setStatus('');
   };
+
+  const ridesData = [
+    {
+      id: 1,
+      date: '12 June, 08:00',
+      status: 'Confirmed',
+      seats: [1],
+    },
+    {
+      id: 2,
+      date: '12 June, 08:00',
+      status: 'Matching Done',
+      seats: [1, 2],
+    },
+    {
+      id: 3,
+      date: '12 June, 08:00',
+      status: 'Waiting for Match',
+      seats: [1, 2],
+    },
+  ];
+
+  const onPress = item => {
+    navigation.navigate('RideStatus', {status: item.status});
+  };
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -124,7 +154,7 @@ const PassengerHome = ({navigation}) => {
               onPress={() => navigation.toggleDrawer()}
             />
           </TouchableOpacity>
-          <Text style={{fontSize: 16}}>{passenger_home}</Text>
+          <Text style={styles.passengerHomeTxt}>{passenger_home}</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('NotificationList');
@@ -136,7 +166,12 @@ const PassengerHome = ({navigation}) => {
               navigation?.replace('DriverDashboard');
             }}
             style={styles.switchToDriverBtnContainer}>
-            <Text style={{fontSize: 13, color: colors.white}}>
+            <Text
+              style={{
+                fontSize: 13,
+                color: colors.white,
+                fontFamily: fonts.regular,
+              }}>
               Switch to Driver
             </Text>
           </TouchableOpacity>
@@ -161,40 +196,41 @@ const PassengerHome = ({navigation}) => {
                 {create_ride}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => navigation.navigate('RecurringRides')}
             activeOpacity={0.8}
             style={styles.cardContainer}>
-          </TouchableOpacity>
-          <View style={styles.cardContainer}>
-            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
-            <View style={styles.interiorContainer}>
-              <Image
-                source={appIcons.recurringRide}
-                style={styles.cardInterior}
-                resizeMode="contain"
-              />
-              <Text style={styles.cardTxt}>{recurring_ride}</Text>
+            <View style={styles.cardContainer}>
+              <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+              <View style={styles.interiorContainer}>
+                <Image
+                  source={appIcons.recurringRide}
+                  style={styles.cardInterior}
+                  resizeMode="contain"
+                />
+                <Text style={styles.cardTxt}>{recurring_ride}</Text>
+              </View>
             </View>
           </TouchableOpacity>
           <View style={styles.cardContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation?.navigate('CityToCity');
+              }}
+              style={styles.cardContainer}>
+              <Image source={appIcons.homeIconBg} style={styles.homeCards} />
+              <View style={styles.interiorContainer}>
+                <Image
+                  source={appIcons.cityRide}
+                  style={styles.cardInterior}
+                  resizeMode="contain"
+                />
+                <Text style={styles.cardTxt}>{city_to_city}</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              navigation?.navigate('CityToCity');
-            }}
-            style={styles.cardContainer}>
-            <Image source={appIcons.homeIconBg} style={styles.homeCards} />
-            <View style={styles.interiorContainer}>
-              <Image
-                source={appIcons.cityRide}
-                style={styles.cardInterior}
-                resizeMode="contain"
-              />
-              <Text style={styles.cardTxt}>{city_to_city}</Text>
-            </View>
-          </TouchableOpacity>
         </View>
 
         {/* upcoming Rides */}
@@ -217,15 +253,39 @@ const PassengerHome = ({navigation}) => {
           </View>
         </View>
 
-        <Image source={appIcons.noUpcomingRide} style={styles.noUpcomingRide} />
+        {ridesData.length === 0 ? (
+          <>
+            <Image
+              source={appIcons.noUpcomingRide}
+              style={styles.noUpcomingRide}
+            />
 
-        <Text style={styles.Txt}>{lorem}</Text>
-
-        <TouchableOpacity
-          style={styles.createRideBtnContainer}
-          onPress={() => navigation.navigate('CreateRide')}>
-          <Text style={styles.btnTxt}>{first_ride}</Text>
-        </TouchableOpacity>
+            <Text style={styles.Txt}>{lorem}</Text>
+            <TouchableOpacity
+              style={styles.createRideBtnContainer}
+              onPress={() => navigation.navigate('CreateRide')}>
+              <Text style={styles.btnTxt}>{first_ride}</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <FlatList
+              data={ridesData}
+              keyExtractor={item => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => (
+                <UpcomingRideCards item={item} onPress={() => onPress(item)} />
+              )}
+              ListFooterComponent={() => (
+                <TouchableOpacity
+                  style={styles.createRideBtnContainer}
+                  onPress={() => navigation.navigate('CreateRide')}>
+                  <Text style={styles.btnTxt}>{first_ride}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </>
+        )}
       </SafeAreaView>
       <RideFilterModal
         time={TimeList}
@@ -298,6 +358,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 16,
     marginTop: 8,
+    fontFamily: fonts.regular,
   },
   cardMainContainer: {
     flexDirection: 'row',
@@ -328,6 +389,8 @@ const styles = StyleSheet.create({
   upcomingTxt: {
     fontSize: 16,
     lineHeight: 26,
+    color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   noUpcomingRide: {
     height: 197,
@@ -340,6 +403,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     maxWidth: 300,
     marginTop: 10,
+    color: colors.g4,
+    fontFamily: fonts.regular,
   },
   createRideBtnContainer: {
     height: 56,
@@ -363,6 +428,12 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     color: colors.white,
     fontFamily: family.product_sans_bold,
+  },
+  passengerHomeTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 16,
+    lineHeight: 26,
+    color: colors.txtBlack,
   },
 });
 

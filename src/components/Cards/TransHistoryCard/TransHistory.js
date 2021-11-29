@@ -8,11 +8,7 @@ export const TransHistoryCard = () => {
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
-        <LinearGradient
-          colors={['#82DB1F', '#47B000']}
-          style={styles.imageContainer}>
-          <Image style={styles.imageStyle} source={appIcons.backArrow} />
-        </LinearGradient>
+        <Image style={styles.imageStyle} source={appIcons.downArrow} />
       </View>
       <View style={styles.centerContainer}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -64,10 +60,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   imageStyle: {
-    height: 17,
-    width: 22,
+    height: 38,
+    width: 38,
     resizeMode: 'contain',
-    tintColor: colors.white,
   },
   imageContainer: {
     height: 20,

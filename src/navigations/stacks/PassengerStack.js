@@ -17,6 +17,7 @@ import Settings from '../../screens/Passenger/Settings/Settings';
 import AboutUs from '../../screens/Passenger/AboutUs/AboutUs';
 import RideHistory from '../../screens/Passenger/Rides/RideHistory';
 import RideDetail from '../../screens/Passenger/Rides/RideDetail';
+import UpdateRide from '../../screens/Passenger/UpdateRide/UpdateRide';
 
 import Faq from '../../screens/Passenger/Faq/Faq';
 import Contribution from '../../screens/Passenger/Contribution/Contribuion';
@@ -38,6 +39,7 @@ import RecurringRides from '../../screens/Passenger/RecurringRides';
 import EditProfile from '../../screens/EditProfile';
 import ChangePhone from '../../screens/ChangePhone';
 import RecurringRideDetail from '../../screens/Passenger/RecurringRideDetail';
+import RideStatus from '../../screens/Passenger/RideStatus/RideStatus';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -207,6 +209,11 @@ function PassengerStack(props) {
         name="TransactionDetails"
         component={TransactionDetails}
       />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="UpdateRide"
+        component={UpdateRide}
+      />
 
       <Stack.Screen
         options={{headerShown: false}}
@@ -230,11 +237,17 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="RecurringRideDetail"
         component={RecurringRideDetail}
+      />
       {/* City To City Stack */}
       <Stack.Screen
         options={{headerShown: false}}
         name="CityToCity"
         component={CityToCity}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="RideStatus"
+        component={RideStatus}
       />
     </Stack.Navigator>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   View,
   Text,
@@ -9,11 +9,13 @@ import {
   SafeAreaView,
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {CustomHeader} from '../../components';
+import {AddWalletModal, CustomHeader} from '../../components';
 import {appIcons, appImages, colors, family, HP, size} from '../../utilities';
 import LinearGradient from 'react-native-linear-gradient';
 
 const TransactionDetails = ({navigation}) => {
+  const modalRef = useRef(null);
+
   return (
     <>
       <CustomHeader
@@ -66,13 +68,30 @@ const TransactionDetails = ({navigation}) => {
               />
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  modalRef?.current.open();
+                }}>
                 <Text style={styles.buttonText}>Download</Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>
         </View>
       </SafeAreaView>
+      <AddWalletModal
+        btnText={'OK'}
+        onSuccess={true}
+        onPress={() => {
+          navigation?.navigate('PassengerHome');
+        }}
+        icon={appIcons.tickBg}
+        h1={'Money Withdrawal Successful!'}
+        show={modalRef}
+        h2={
+          'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
+        }
+      />
     </>
   );
 };

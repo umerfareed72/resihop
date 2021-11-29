@@ -75,15 +75,15 @@ const index = ({navigation}) => {
     <>
       <CustomHeader
         backButton={true}
-        title={I18n.t('ride_history')}
+        title={I18n.t('trnsaction_history')}
         navigation={navigation}
         btnImage1={appIcons.filter}
         height3={25}
         width3={25}
-        onPress={() => {
+        onPressbtnImage1={() => {
           filterModalRef.current.open();
         }}
-        onPress1={() => {
+        onPressbtnImage={() => {
           sortModalRef.current.open();
         }}
         btnImage={appIcons.mobiledata}

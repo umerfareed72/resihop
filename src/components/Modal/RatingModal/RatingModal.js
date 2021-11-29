@@ -42,7 +42,9 @@ export const RatingCardModal = ({
             />
           </View>
 
-          <TouchableOpacity style={styles.btnContainer}>
+          <TouchableOpacity
+            style={styles.btnContainer}
+            onPress={() => onPressHide(false)}>
             <Text style={styles.btnText}>Submit</Text>
           </TouchableOpacity>
         </View>

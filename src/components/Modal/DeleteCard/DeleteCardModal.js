@@ -24,13 +24,13 @@ export const DeleteCardModal = ({
   bgColor,
   textColor,
   onPressNo,
-  img
+  img,
 }) => {
   return (
     <View style={styles.container}>
       <Modal isVisible={show} onBackdropPress={onPressHide}>
         <View style={styles.modalContainer}>
-          <Image style={styles.imageStyle} source={img} />
+          {img && <Image style={styles.imageStyle} source={img} />}
           <Image style={styles.imageStyle} source={image} />
           <Text style={styles.h1}>{h1} </Text>
           <Text style={styles.h2}> {h2}</Text>

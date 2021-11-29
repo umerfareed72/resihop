@@ -16,7 +16,7 @@ import {colors, family, HP, size} from '../../../utilities';
 import {appImages, appIcons} from '../../../utilities';
 import CalendarSheet from '../../CalendarSheet';
 
-const ReportsSpending = () => {
+const ReportsSpending = ({onPressYear}) => {
   const calendarSheetRef = useRef(null);
   const [date, setDate] = useState();
   return (
@@ -65,6 +65,7 @@ const ReportsSpending = () => {
         <View style={styles.rangeContainer}>
           <Text style={styles.downloadReport}>Select Range</Text>
           <TouchableOpacity
+            onPress={onPressYear}
             style={{
               backgroundColor: colors.light_black,
               borderRadius: 30,

@@ -12,10 +12,10 @@ import {
   Keyboard,
 } from 'react-native';
 import {colors, appIcons, appImages, family, size} from '../utilities';
+import {fonts} from '../theme';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
-import MyStatusBar from '../components/Header/statusBar';
 import FavouriteLocations from './FavouriteLocations';
 import {CustomHeader} from '../components';
 import CalendarSheet from './CalendarSheet';
@@ -31,6 +31,7 @@ const CreateRide = () => {
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [screen, setScreen] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -41,10 +42,25 @@ const CreateRide = () => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.tripBtnWrapper}>
-          <TouchableOpacity style={styles.tripBtnContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setScreen(false);
+            }}
+            style={[
+              styles.tripBtnContainer,
+              {backgroundColor: screen ? colors.btnGray : colors.green},
+            ]}>
             <Text style={styles.btnTxt}>Single Trip</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.tripBtnContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              setScreen(true);
+              navigation?.navigate('RecurringRides');
+            }}
+            style={[
+              styles.tripBtnContainer,
+              {backgroundColor: screen ? colors.green : colors.btnGray},
+            ]}>
             <Text style={styles.btnTxt}>Recurring Ride</Text>
           </TouchableOpacity>
         </View>
@@ -52,15 +68,21 @@ const CreateRide = () => {
         <View style={styles.locationMainWrapper}>
           <View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('StartLocation')}
-              style={[styles.starttxtBtn, {marginBottom: 20}]}>
-              <Text style={styles.starttxt}>Start City</Text>
+              onPress={() =>
+                navigation.navigate('StartLocation', {
+                  modalName: 'startLocation',
+                })
+              }
+              style={[styles.txtInput, {marginBottom: 20}]}>
+              <Text style={styles.startTxt}>Start Location</Text>
               <View style={styles.startDot} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate('StartLocation')}
-              style={styles.starttxtBtn}>
-              <Text style={styles.starttxt}>Destination City</Text>
+              onPress={() =>
+                navigation.navigate('StartLocation', {modalName: 'destination'})
+              }
+              style={styles.txtInput}>
+              <Text style={styles.startTxt}>Destination City</Text>
               <View style={styles.destSquare} />
             </TouchableOpacity>
           </View>
@@ -72,7 +94,9 @@ const CreateRide = () => {
               color={colors.btnGray}
               onPress={() => favourteLocationRef.current.open()}
             />
-            <Image style={styles.locationSwitch} source={appIcons.mobiledata} />
+
+            <Image source={appIcons.mobiledata} style={styles.locationSwitch} />
+
             <HeartIcon
               onPress={() => favourteLocationRef.current.open()}
               name="heart"
@@ -106,15 +130,14 @@ const CreateRide = () => {
             onChangeText={setNoLaterTime}
             style={styles.noLater}
           />
-          <TextInput
-            placeholder="Date"
-            placeholderTextColor={colors.btnGray}
-            value={date}
-            onChangeText={setDate}
-            onPressOut={() => calendarSheetRef.current.open()}
-            onPressIn={() => Keyboard.dismiss()}
-            style={[styles.noLater, {marginRight: 11}]}
-          />
+          <TouchableOpacity
+            onPress={() => calendarSheetRef.current.open()}
+            style={[
+              styles.noLater,
+              {justifyContent: 'center', marginRight: 11},
+            ]}>
+            <Text style={styles.dateTxt}>{date !== '' ? date : 'Date'}</Text>
+          </TouchableOpacity>
           <Image
             source={appImages.calendar}
             resizeMode="contain"
@@ -244,6 +267,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   txtInput: {
     height: 44,
@@ -253,6 +277,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 45,
     color: colors.inputTxtGray,
+    justifyContent: 'center',
+    fontFamily: fonts.regular,
   },
   startDot: {
     height: 16,
@@ -296,6 +322,7 @@ const styles = StyleSheet.create({
     marginTop: 37,
     color: colors.txtBlack,
     marginLeft: 21,
+    fontFamily: fonts.regular,
   },
   seat: {
     height: 31,
@@ -316,6 +343,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   noLater: {
     height: 44,
@@ -327,6 +355,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.inputTxtGray,
+    fontFamily: fonts.regular,
   },
   calendarIcon: {
     height: 18,
@@ -347,6 +376,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 29,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   returnTripWrapper: {
     flexDirection: 'row',
@@ -360,11 +390,13 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     marginTop: 20,
+    fontFamily: fonts.regular,
   },
   timeBracketTxt: {
     fontSize: 12,
     lineHeight: 24,
     color: colors.btnGray,
+    fontFamily: fonts.regular,
   },
   nextBtnContainer: {
     height: 56,
@@ -380,21 +412,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
-  starttxtBtn: {
-    height: 44,
-    width: 291,
-    borderWidth: 1,
-    borderColor: colors.greyBorder,
-    borderRadius: 10,
-    paddingLeft: 45,
-    color: colors.inputTxtGray,
-    justifyContent: 'center',
+  dateTxt: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.g1,
+    fontFamily: fonts.regular,
   },
-  starttxt: {
-    fontFamily: family.product_sans_regular,
-    fontSize: size.normal,
-    color: colors.inputTxtGray,
+  startTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 13,
+    lineHeight: 20,
+    color: colors.g4,
   },
 });
 

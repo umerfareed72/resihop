@@ -1,14 +1,21 @@
 import React, {useState, useRef} from 'react';
-import {StyleSheet, View, TextInput, Text, Image} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Text,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {colors, appImages} from '../../../utilities';
 
-export const RecurringRideCard = () => {
+export const RecurringRideCard = ({onPressCard}) => {
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
 
   return (
     <>
-      <View style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={onPressCard}>
         <View style={styles.cardStyle}>
           <View style={{marginBottom: 20}}>
             <TextInput
@@ -57,7 +64,7 @@ export const RecurringRideCard = () => {
             </>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </>
   );
 };
@@ -74,6 +81,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
   },
   txtInput: {
     height: 44,

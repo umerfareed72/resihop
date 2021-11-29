@@ -80,6 +80,8 @@ const CardDetail = ({navigation}) => {
           textColor={colors.white}
           onPressYes={() => {
             setSelected(true);
+            navigation?.navigate('WithDrawPayment');
+            setshow(false);
           }}
           onPressNo={() => {
             setSelected(false);

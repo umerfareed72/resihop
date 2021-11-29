@@ -1,5 +1,12 @@
 export const appIcons = {
   backArrow: require('../../assets/icons/png/backArrow.png'),
+  rightArrow: require('../../assets/icons/png/rightArrow.png'),
+  downArrow: require('../../assets/icons/png/downArrow.png'),
+
+  upArrow: require('../../assets/icons/png/upArrow.png'),
+  wrongData: require('../../assets/icons/png/wrongData.png'),
+
+  sliderImage: require('../../assets/icons/png/sliderImage.png'),
   filter: require('../../assets/icons/png/filter.png'),
   plus: require('../../assets/icons/png/plus.png'),
   sort: require('../../assets/icons/png/sort.png'),
@@ -56,6 +63,9 @@ export const appImages = {
   valley: require('../../assets/images/valley.png'),
   inviteImage: require('../../assets/icons/png/invite_prop.png'),
   driver: require('../../assets/icons/png/driver/driver.png'),
+  car: require('../../assets/icons/png/car.png'),
+  pin: require('../../assets/icons/png/pin.png'),
+  currentLocation: require('../../assets/icons/png/currentLocation.png'),
 };
 export const drawerIcons = {
   Favourites: require('../../assets/icons/png/drawerIcons/Favourites.png'),

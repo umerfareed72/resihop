@@ -3,6 +3,7 @@ import {useNavigation} from '@react-navigation/core';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
+import {fonts} from '../theme';
 
 const ReturnBookSheet = ({returnBookSheetRef, onPressReturn, onPressSkip}) => {
   let navigation = useNavigation();
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 29,
     marginBottom: 59,
+    fontFamily: fonts.regular,
   },
   btnContainer: {
     height: 56,
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
 });
 
