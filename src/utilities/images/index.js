@@ -66,6 +66,7 @@ export const appImages = {
   car: require('../../assets/icons/png/car.png'),
   pin: require('../../assets/icons/png/pin.png'),
   currentLocation: require('../../assets/icons/png/currentLocation.png'),
+  tickMark: require('../../assets/icons/png/tickMark.png'),
 };
 export const drawerIcons = {
   Favourites: require('../../assets/icons/png/drawerIcons/Favourites.png'),

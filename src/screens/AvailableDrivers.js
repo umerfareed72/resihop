@@ -97,7 +97,9 @@ const AvailableDrivers = props => {
               onPress={() => {
                 props?.route?.params?.btnText === 'Book Now'
                   ? returnBookSheetRef.current.open()
-                  : alert('Coming Soon');
+                  : navigation?.navigate('StartMatching', {
+                      modalName: 'pickUpInfo',
+                    });
               }}>
               <Text style={styles.btnTxt}>{props?.route?.params?.btnText}</Text>
             </TouchableOpacity>

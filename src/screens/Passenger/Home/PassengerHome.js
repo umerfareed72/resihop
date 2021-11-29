@@ -90,6 +90,7 @@ const PassengerHome = ({navigation}) => {
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
+  const [selectedCard, setSelectedCard] = useState([]);
 
   const selectTime = val => {
     settime(val);
@@ -274,7 +275,12 @@ const PassengerHome = ({navigation}) => {
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => (
-                <UpcomingRideCards item={item} onPress={() => onPress(item)} />
+                <UpcomingRideCards
+                  item={item}
+                  onPress={() => onPress(item)}
+                  selectedCard={selectedCard}
+                  setSelectedCard={setSelectedCard}
+                />
               )}
               ListFooterComponent={() => (
                 <TouchableOpacity

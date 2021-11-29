@@ -30,6 +30,7 @@ const index = ({navigation}) => {
       onAddMoney(false);
     } else {
       modalRef?.current?.close();
+      navigation?.navigate('StartMatching', {modalName: 'pickUpInfo'});
     }
   };
   return (

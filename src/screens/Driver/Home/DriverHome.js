@@ -27,6 +27,7 @@ import {RideFilterModal, SortModal} from '../../../components';
 import I18n from '../../../utilities/translations';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Data
 var TimeList = {
@@ -184,6 +185,7 @@ const DriverHome = ({navigation}) => {
           <TouchableOpacity
             onPress={() => {
               navigation?.navigate('CreateDrive');
+              AsyncStorage.setItem('city', 'no');
             }}
             style={styles.cardContainer}>
             <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
@@ -217,6 +219,7 @@ const DriverHome = ({navigation}) => {
             <Image source={appIcons.driver_brick_bg} style={styles.homeCards} />
             <TouchableOpacity
               onPress={() => {
+                AsyncStorage.setItem('city', 'yes');
                 navigation?.navigate('DriverCityToCity');
               }}
               style={styles.interiorContainer}>

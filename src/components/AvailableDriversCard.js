@@ -126,7 +126,9 @@ const AvailableDrivers = ({
             <Text style={styles.date}>12 June 2020</Text>
           </View>
           <View style={styles.btnMainContainer}>
-            <TouchableOpacity style={styles.btnContainer}>
+            <TouchableOpacity
+              style={styles.btnContainer}
+              onPress={() => navigation.navigate('PickUpInfo')}>
               <Text style={styles.btnTxt}>{title}</Text>
             </TouchableOpacity>
             <TouchableOpacity

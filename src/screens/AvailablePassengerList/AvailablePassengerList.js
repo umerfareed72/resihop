@@ -27,7 +27,7 @@ const AvailablePassengerList = () => {
       <CustomHeader
         backButton={true}
         navigation={navigation}
-        title={'Available Drivers'}
+        title={'Available Passengers'}
       />
 
       <FlatList

@@ -52,12 +52,16 @@ const DriverCityToCity = () => {
           <RideInputCard
             p1={'Start City'}
             p2={'Destination City'}
-            onPressStart={navigation.navigate('StartLocationDriver', {
-              type: 'startLocation',
-            })}
-            onPressDes={navigation.navigate('StartLocationDriver', {
-              type: 'destination',
-            })}
+            onPressStart={() =>
+              navigation.navigate('StartLocationDriver', {
+                type: 'startLocation',
+              })
+            }
+            onPressDes={() =>
+              navigation.navigate('StartLocationDriver', {
+                type: 'destination',
+              })
+            }
           />
 
           <View style={styles.switchWrapper}>
@@ -121,6 +125,9 @@ const DriverCityToCity = () => {
             padding: 20,
           }}>
           <PaymentButtons
+            onPress={() => {
+              navigation?.navigate('CostPerSeat');
+            }}
             width={'45%'}
             bgColor={colors.navy_blue}
             txtColor={colors.white}
@@ -225,7 +232,7 @@ const DriverCityToCity = () => {
         onToggle1={setToggleEnabled2}
         onPress={() => {
           warningSheet?.current?.close();
-          navigation?.navigate('CostPerSeat');
+          navigation.navigate('SelectRoute');
         }}
       />
     </>

@@ -4,12 +4,20 @@ import {appImages, colors} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fonts} from '../theme/theme';
 import {useNavigation} from '@react-navigation/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AvailablePassengersCard = () => {
   const [seat, setSeats] = useState([1, 2]);
 
   let navigation = useNavigation();
-
+  const getData = async () => {
+    const res = await AsyncStorage.getItem('city');
+    if (res == 'yes') {
+      navigation.navigate('AvailablePassenger');
+    } else {
+      navigation.navigate('AvailablePassengerDriver');
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.available}>Available Passenger</Text>
@@ -59,9 +67,7 @@ const AvailablePassengersCard = () => {
           <Text style={{fontFamily: fonts.regular}}>12 June, 08:00</Text>
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.btnContainer}
-        onPress={() => navigation.navigate('AvailablePassengerDriver')}>
+      <TouchableOpacity style={styles.btnContainer} onPress={getData}>
         <Text style={styles.btnTxt}>Show All Passenger</Text>
       </TouchableOpacity>
     </View>
