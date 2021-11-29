@@ -40,6 +40,7 @@ import EditProfile from '../../screens/EditProfile';
 import ChangePhone from '../../screens/ChangePhone';
 import RecurringRideDetail from '../../screens/Passenger/RecurringRideDetail';
 import RideStatus from '../../screens/Passenger/RideStatus/RideStatus';
+import PickUpInfo from '../../screens/Passenger/PickUpInfo/PickUpInfo';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -248,6 +249,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="RideStatus"
         component={RideStatus}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="PickUpInfo"
+        component={PickUpInfo}
       />
     </Stack.Navigator>
   );

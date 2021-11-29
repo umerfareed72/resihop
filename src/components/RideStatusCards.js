@@ -132,7 +132,9 @@ const RideStatusCards = ({statusType}) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.borderBtnContainer}>
+            <TouchableOpacity
+              style={styles.borderBtnContainer}
+              onPress={() => navigation.navigate('RecurringRideDetail')}>
               <Image
                 source={appImages.pin}
                 resizeMode="contain"

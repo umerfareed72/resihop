@@ -23,6 +23,7 @@ const StartLocation = props => {
       <MapViewComponent style={styles.mapStyles} />
       <AddressCards
         modalName={props.route.params.modalName}
+        addfavrouiteAddressRef={addfavrouiteAddressRef}
         onPress={onPress}
       />
       <AddFavrouteLocation addfavrouiteAddressRef={addfavrouiteAddressRef} />
