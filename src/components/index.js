@@ -32,6 +32,7 @@ export * from './Cards/RideHistoryCard/DRideHistoryCard';
 export * from './Cards/RideHistoryCard/DRiderInfo';
 export * from './Cards/FavouritesCard/FavDriverCard';
 export * from './Cards/RideInputCard';
+export * from './Cards/ApprovalCard/ApprovalCard';
 
 //OTP
 export * from '../components/OtpValidator';
