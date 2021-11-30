@@ -17,17 +17,18 @@ const Settings = ({navigation}) => {
 
   const ItemsView = ({data}) => {
     return (
-      <View style={styles.itemView}>
-        <Text style={styles.titleText}>{data?.title}</Text>
-        <TouchableOpacity onPress={data?.onPress}>
+      <TouchableOpacity onPress={data?.onPress}>
+        <View style={styles.itemView}>
+          <Text style={styles.titleText}>{data?.title}</Text>
+
           <Icon
             name={'right'}
             color={colors.light_black}
             size={22}
             type={'antdesign'}
           />
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     );
   };
 

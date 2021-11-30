@@ -139,6 +139,9 @@ const DriverCityToCity = () => {
             bgColor={colors.light_black}
             txtColor={colors.white}
             title={'Allergies'}
+            onPress={() => {
+              warningSheet.current.open();
+            }}
             fontFamily={family.product_sans_bold}
           />
         </View>
@@ -218,7 +221,7 @@ const DriverCityToCity = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          onPress={() => warningSheet?.current?.open()}>
+          onPress={() => navigation.navigate('SelectRoute')}>
           <Text style={styles.nextTxt}>Next</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -232,7 +235,6 @@ const DriverCityToCity = () => {
         onToggle1={setToggleEnabled2}
         onPress={() => {
           warningSheet?.current?.close();
-          navigation.navigate('SelectRoute');
         }}
       />
     </>

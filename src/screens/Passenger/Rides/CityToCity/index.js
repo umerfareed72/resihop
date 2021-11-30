@@ -116,6 +116,9 @@ const index = ({navigation}) => {
             txtColor={colors.white}
             fontFamily={family.product_sans_bold}
             title={'Allergies'}
+            onPress={() => {
+              warningSheetRef?.current?.open();
+            }}
           />
         </View>
         <CityRideList />
@@ -198,7 +201,7 @@ const index = ({navigation}) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           onPress={() => {
-            warningSheetRef?.current?.open();
+            navigation?.navigate('StartMatching', {modalName: 'finding'});
           }}
           style={styles.nextBtnContainer}>
           <Text style={styles.nextTxt}>Start Matching</Text>
@@ -215,7 +218,6 @@ const index = ({navigation}) => {
         onToggle1={setToggleEnabled2}
         onPress={() => {
           warningSheetRef?.current?.close();
-          navigation?.navigate('StartMatching', {modalName: 'finding'});
         }}
       />
     </>

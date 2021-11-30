@@ -105,13 +105,7 @@ function index(props) {
                       maxLength={8}
                       ref={licencePlate}
                       keyboardAppearance="light"
-                      onChangeText={text => {
-                        if (text.length === 8) {
-                          setgetDetailsBtn(false);
-                        } else {
-                          setgetDetailsBtn(true);
-                        }
-                      }}
+                      onChangeText={handleChange('licencePlate')}
                       inputContainerStyle={{width: '100%'}}
                       placeholder={'Licence Plate'}
                       autoFocus={false}
@@ -119,9 +113,6 @@ function index(props) {
                       style={theme.Input.inputStyle}
                       autoCorrect={false}
                       returnKeyType="next"
-                      onSubmitEditing={() => {
-                        carCompany.current.focus();
-                      }}
                       inputContainerStyle={
                         errors.licencePlate
                           ? theme.Input.inputErrorContainerStyle
@@ -132,7 +123,6 @@ function index(props) {
                     <Button
                       title={'Get Details'}
                       onPress={() => console.log('Pressed!')}
-                      disabled={getDetailsBtn}
                       buttonStyle={[theme.Button.buttonStyle]}
                       titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                       disabledTitleStyle={theme.Button.disabledTitleStyle}
@@ -153,9 +143,6 @@ function index(props) {
                     style={theme.Input.inputStyle}
                     autoCorrect={false}
                     returnKeyType="next"
-                    onSubmitEditing={() => {
-                      modelName.current.focus();
-                    }}
                     inputContainerStyle={
                       errors.carCompany
                         ? theme.Input.inputErrorContainerStyle
@@ -173,9 +160,6 @@ function index(props) {
                     style={theme.Input.inputStyle}
                     autoCorrect={false}
                     returnKeyType="next"
-                    onSubmitEditing={() => {
-                      vahicleColor.current.focus();
-                    }}
                     inputContainerStyle={
                       errors.modelName
                         ? theme.Input.inputErrorContainerStyle
@@ -193,9 +177,6 @@ function index(props) {
                     style={theme.Input.inputStyle}
                     autoCorrect={false}
                     returnKeyType="next"
-                    onSubmitEditing={() => {
-                      vahicleColor.current.focus();
-                    }}
                     inputContainerStyle={
                       errors.modelName
                         ? theme.Input.inputErrorContainerStyle
@@ -214,9 +195,6 @@ function index(props) {
                     style={theme.Input.inputStyle}
                     autoCorrect={false}
                     returnKeyType="next"
-                    onSubmitEditing={() => {
-                      vahicleColor.current.focus();
-                    }}
                     inputContainerStyle={
                       errors.modelName
                         ? theme.Input.inputErrorContainerStyle

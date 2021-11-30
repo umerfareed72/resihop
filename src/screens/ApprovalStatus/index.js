@@ -11,7 +11,7 @@ const index = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
       settime(true);
-    }, 5000);
+    }, 3000);
   }, []);
   return (
     <>
@@ -27,13 +27,16 @@ const index = ({navigation}) => {
               btnText={'Switch to Passenger'}
               height={120}
               width={111}
-              h3={
+              h4={
                 'You can always switch back to Driver in the app with just one click!'
               }
               image={appIcons.timer}
               fontSize={size.normal}
               textColor={colors.g3}
               fontFamily={family.product_sans_regular}
+              onPress={() => {
+                navigation?.replace('PassengerHome');
+              }}
             />
           )}
           {time && (
@@ -50,6 +53,9 @@ const index = ({navigation}) => {
               textColor={colors.light_black}
               fontFamily={family.product_sans_bold}
               image={appIcons.tickBg}
+              onPress={() => {
+                navigation?.replace('DriverDashboard');
+              }}
             />
           )}
         </View>

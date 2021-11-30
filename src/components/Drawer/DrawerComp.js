@@ -169,7 +169,7 @@ const DrawerComponent = ({navigation}) => {
             h2={I18n.t('logout_text')}
             onPress={() => {
               modalRef?.current?.close();
-              navigation.navigate('AuthStack');
+              navigation.replace('AuthStack');
             }}
             btnText={I18n.t('yes')}
             btnText2={I18n.t('cancel')}

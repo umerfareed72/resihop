@@ -24,7 +24,7 @@ function splash(props) {
       //   navigation.replace('Auth');
       //   // navigation.replace('App', {screen: 'Cart'});
       // }
-      props.navigation.replace('PassengerDashboard');
+      props.navigation.replace('AuthStack');
     }, 2000);
   };
 

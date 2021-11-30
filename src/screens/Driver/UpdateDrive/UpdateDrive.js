@@ -39,7 +39,7 @@ const UpdateDrive = () => {
       <CustomHeader
         backButton={true}
         navigation={navigation}
-        title={'Update Ride'}
+        title={'Update Drive'}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.locationMainWrapper}>

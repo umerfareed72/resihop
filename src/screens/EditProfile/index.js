@@ -40,7 +40,6 @@ const gender = {
 function index(props) {
   const [imagePicker, setImagePicker] = useState(false);
   const [genderType, setGenderType] = useState(gender.Male);
-
   const [pic, setPic] = useState(undefined);
 
   const refFirstName = useRef();
@@ -196,6 +195,9 @@ function index(props) {
         <>
           <UploadImage
             show
+            close={() => {
+              setImagePicker(false);
+            }}
             getPicUri={asset => {
               if (asset) {
                 setPic(asset);

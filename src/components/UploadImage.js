@@ -77,6 +77,7 @@ const UploadImage = ({getPicUri, show, close}) => {
           setShowPicker(!showPicker);
         }}
         onClosePress={() => {
+          close();
           setShowPicker(!showPicker);
         }}
       />

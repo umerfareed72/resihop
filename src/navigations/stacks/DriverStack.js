@@ -38,7 +38,9 @@ import CostPerSeat from '../../screens/CostPerSeat/CostPerSeat';
 import AvailablePassengerMap from '../../screens/AvailablePassengerMap/AvailablePassengerMap';
 import AvailablePassenger from '../../screens/AvailablePassengerList/AvailablePassengerList';
 import DRecurringRides from '../../screens/Driver/DRecurringRides';
+import ChangePhone from '../../screens/ChangePhone';
 import DRecurringRideDetail from '../../screens/Driver/DRecurringRideDetail';
+import EditProfile from '../../screens/EditProfile';
 
 const Stack = createStackNavigator();
 function DriverStack(props) {
@@ -242,6 +244,16 @@ function DriverStack(props) {
         options={{headerShown: false}}
         name="AvailablePassengerDriver"
         component={AvailablePassengerDriver}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="EditProfile"
+        component={EditProfile}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="ChangePhone"
+        component={ChangePhone}
       />
     </Stack.Navigator>
   );

@@ -15,6 +15,7 @@ export const ApprovalCard = ({
   textColor,
   fontSize,
   fontFamily,
+  h4,
 }) => {
   return (
     <View>
@@ -42,6 +43,8 @@ export const ApprovalCard = ({
         ]}>
         {h2}
       </Text>
+      {h3 && <Text style={styles.h3}>{h3} </Text>}
+
       <View style={{padding: 20}}>
         <PaymentButtons
           onPress={onPress}
@@ -51,7 +54,7 @@ export const ApprovalCard = ({
           fontFamily={family.product_sans_bold}
         />
       </View>
-      {h3 && <Text style={styles.h3}>{h3} </Text>}
+      {h4 && <Text style={styles.h3}>{h4} </Text>}
     </View>
   );
 };
