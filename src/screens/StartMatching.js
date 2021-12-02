@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/core';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import MyStatusBar from '../components/Header/statusBar';
 import MapViewComponent from '../components/MapViewComponent';
 import {appIcons, colors} from '../utilities';
 
 const StartMatching = props => {
-  let navigation = useNavigation();
   const isFocus = useIsFocused();
   const [modal, setModal] = useState(null);
   useEffect(() => {
@@ -18,7 +17,6 @@ const StartMatching = props => {
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor="transparent" />
-
       <MapViewComponent
         rideModals={modal}
         setModal={setModal}
@@ -29,7 +27,6 @@ const StartMatching = props => {
             : 'Book Now'
         }
       />
-
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => props?.navigation.goBack()}>
