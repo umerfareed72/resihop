@@ -164,7 +164,7 @@ const PassengerHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation?.replace('DriverDashboard');
+              navigation?.replace('ApprovalStatus');
             }}
             style={styles.switchToDriverBtnContainer}>
             <Text

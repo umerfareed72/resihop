@@ -4,6 +4,8 @@ export const appIcons = {
   downArrow: require('../../assets/icons/png/downArrow.png'),
 
   upArrow: require('../../assets/icons/png/upArrow.png'),
+  timer: require('../../assets/icons/png/timer.png'),
+
   wrongData: require('../../assets/icons/png/wrongData.png'),
 
   sliderImage: require('../../assets/icons/png/sliderImage.png'),

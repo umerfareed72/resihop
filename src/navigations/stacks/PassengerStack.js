@@ -41,6 +41,7 @@ import ChangePhone from '../../screens/ChangePhone';
 import RecurringRideDetail from '../../screens/Passenger/RecurringRideDetail';
 import RideStatus from '../../screens/Passenger/RideStatus/RideStatus';
 import PickUpInfo from '../../screens/Passenger/PickUpInfo/PickUpInfo';
+import ApprovalStatus from '../../screens/ApprovalStatus';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -57,6 +58,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="Favourites"
         component={Favourites}
+      />
+        <Stack.Screen
+        options={{headerShown: false}}
+        name="ApprovalStatus"
+        component={ApprovalStatus}
       />
 
       <Stack.Screen
