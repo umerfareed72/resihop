@@ -15,7 +15,6 @@ import * as Yup from 'yup';
 import {appIcons, colors} from '../../utilities';
 import {theme} from '../../theme';
 import UploadImage from '../../components/UploadImage';
-import {gender_text} from '../../theme/strings';
 import GenderChips from '../../components/GenderChips';
 
 const formFields = {
@@ -40,7 +39,6 @@ const gender = {
 function index(props) {
   const [imagePicker, setImagePicker] = useState(false);
   const [genderType, setGenderType] = useState(gender.Male);
-
   const [pic, setPic] = useState(undefined);
 
   const refFirstName = useRef();
@@ -153,7 +151,7 @@ function index(props) {
                   errorMessage={errors.email}
                 />
                 <Text style={[theme.Text.h2Bold, {marginStart: '3%'}]}>
-                  {gender_text}
+                  {I18n.t('gender_text')}
                 </Text>
                 <GenderChips
                   onChipPress={chips => {
@@ -196,6 +194,9 @@ function index(props) {
         <>
           <UploadImage
             show
+            close={() => {
+              setImagePicker(false);
+            }}
             getPicUri={asset => {
               if (asset) {
                 setPic(asset);

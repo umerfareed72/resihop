@@ -130,7 +130,10 @@ const DriverDrawerComponent = ({navigation}) => {
               source={appImages.app_logo}
             />
 
-            <View style={styles.userNameContainer}>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => navigation.navigate('EditProfile')}
+              style={styles.userNameContainer}>
               <Text style={styles.userName}>Umar Fareed</Text>
               <Icon
                 name={'right'}
@@ -138,7 +141,7 @@ const DriverDrawerComponent = ({navigation}) => {
                 size={22}
                 type={'antdesign'}
               />
-            </View>
+            </TouchableOpacity>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableOpacity style={styles.buttonContainer}>
@@ -191,7 +194,7 @@ const DriverDrawerComponent = ({navigation}) => {
             h2={I18n.t('logout_text')}
             onPress={() => {
               modalRef?.current?.close();
-              navigation.navigate('AuthStack');
+              navigation.replace('AuthStack');
             }}
             btnText={I18n.t('yes')}
             btnText2={I18n.t('cancel')}

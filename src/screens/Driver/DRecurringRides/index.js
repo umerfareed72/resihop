@@ -7,10 +7,11 @@ import {
   SortModal,
 } from '../../../components';
 import {appIcons, appImages, colors} from '../../../utilities';
+import I18n from '../../../utilities/translations';
 
 var TimeList = {
   id: 1,
-  title: 'Time',
+  title: I18n.t('time'),
   items: [
     {id: 1, text: '08:00 to 12:00', status: false},
     {id: 2, text: '08:00 to 12:00', status: false},
@@ -20,7 +21,7 @@ var TimeList = {
 
 var RideStatusList = {
   id: 1,
-  title: 'Ride Status',
+  title: I18n.t('ride_status'),
   items: [
     {id: 1, text: 'Confirmed', status: false},
     {id: 2, text: 'Waiting for Match', status: false},
@@ -30,7 +31,7 @@ var RideStatusList = {
 
 const rideTypeList = {
   id: 4,
-  title: 'Ride Type',
+  title: I18n.t('ride_type'),
   items: [
     {id: 1, text: 'All Rides'},
     {id: 2, text: 'Destination Rides'},
@@ -40,7 +41,7 @@ const rideTypeList = {
 
 const DateList = {
   id: 1,
-  title: 'Date',
+  title: I18n.t('date'),
   items: [
     {id: 1, text: '12 June'},
     {id: 2, text: '13 June'},
@@ -52,7 +53,7 @@ const DateList = {
 
 const seatsList = {
   id: 5,
-  title: 'Seat',
+  title: I18n.t('seat'),
   items: [
     {id: 1, icon: appImages.seatBlue},
     {id: 2, icon: appImages.seatBlue},

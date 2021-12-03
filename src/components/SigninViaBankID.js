@@ -3,21 +3,18 @@ import {StyleSheet, TouchableOpacity, View, Image} from 'react-native';
 
 import {fonts, theme} from '../theme';
 import {Icon, Text} from 'react-native-elements';
-import {
-  by_clicking_bank_id_text,
-  i_agree_to_res_ihop,
-  sign_in_with_bank_id,
-  terms_and_condition_text,
-} from '../theme/strings';
-import { appIcons } from '../utilities';
+import {appIcons} from '../utilities';
+import I18n from '../utilities/translations';
 
 function SigninViaBankID({onBankIdPress, disabled = true}) {
   return (
     <View style={styles.bankIDCon}>
-      <Text style={theme.Text.h4Normal}>{by_clicking_bank_id_text}</Text>
+      <Text style={theme.Text.h4Normal}>
+        {I18n.t('by_clicking_bank_id_text')}
+      </Text>
       <View style={styles.textCon}>
         <Text style={[theme.Text.h4Normal, {paddingHorizontal: 2}]}>
-          {i_agree_to_res_ihop}
+          {I18n.t('i_agree_to_res_ihop')}
         </Text>
         <TouchableOpacity
           onPress={() => {
@@ -30,7 +27,7 @@ function SigninViaBankID({onBankIdPress, disabled = true}) {
               textDecorationLine: 'underline',
               color: theme.colors.black,
             }}>
-            {terms_and_condition_text}
+            {I18n.t('terms_and_condition_text')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -48,7 +45,7 @@ function SigninViaBankID({onBankIdPress, disabled = true}) {
         ]}>
         <View style={styles.bankIDBtnCon}>
           <Text style={[theme.Button.titleStyle, {paddingLeft: 20}]}>
-            {sign_in_with_bank_id}
+            {I18n.t('sign_in_with_bank_id')}
           </Text>
           <Image
             source={appIcons.bank_id}
@@ -85,7 +82,7 @@ const styles = StyleSheet.create({
   },
   bankIDBtnCon: {
     flexDirection: 'row',
-    justifyContent:'center',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });

@@ -7,23 +7,10 @@ import {
   KeyboardAvoidingView,
   Linking,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {theme} from '../../theme';
 import _ from 'lodash/string';
-import {
-  email_address_text,
-  enter_your_personal_details_text,
-  first_name_driver_text,
-  first_name_text,
-  gender_text,
-  last_name_driver_text,
-  last_name_text,
-  next,
-  personal_details_text,
-  referral_code_opt_text,
-} from '../../theme/strings';
 import {Button, Icon, Input, Text} from 'react-native-elements';
 import Chips from '../../components/Chips';
 import GenderChips from '../../components/GenderChips';
@@ -31,8 +18,7 @@ import UploadImage from '../../components/UploadImage';
 import SigninViaBankID from '../../components/SigninViaBankID';
 import BankWebView from '../../components/BankWebView';
 import {CustomHeader, Header, IncorrectRefCode} from '../../components';
-import {colors} from '../../utilities';
-
+import I18n from '../../utilities/translations';
 const user = {
   Passenger: 'Passenger',
   Driver: 'Driver',
@@ -40,12 +26,14 @@ const user = {
 };
 
 const gender = {
-  Male: 'Male',
-  Female: 'Female',
-  Other: 'Other',
+  Male: I18n.t('male'),
+  Female: I18n.t('female'),
+  Other: I18n.t('other'),
 };
 
 function PersonalDetails(props) {
+  const [imagePicker, setImagePicker] = useState(false);
+
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
   const [bankView, setBankView] = useState(false);
@@ -85,10 +73,10 @@ function PersonalDetails(props) {
               <>
                 <View style={styles.viewCon}>
                   <Text style={[theme.Text.h1Bold, styles.heading]}>
-                    {_.startCase(personal_details_text)}
+                    {_.startCase(I18n.t('personal_details_text'))}
                   </Text>
                   <Text style={theme.Text.h2Bold}>
-                    {_.startCase(enter_your_personal_details_text)}
+                    {_.startCase(I18n.t('enter_your_personal_details_text'))}
                   </Text>
                 </View>
                 <Chips
@@ -109,8 +97,8 @@ function PersonalDetails(props) {
                     onChangeText={handleChange('firstName')}
                     placeholder={
                       userType === 'Passenger'
-                        ? first_name_text
-                        : first_name_driver_text
+                        ? I18n.t('first_name_text')
+                        : I18n.t('first_name_driver_text')
                     }
                     autoFocus={false}
                     autoCapitalize="none"
@@ -134,8 +122,8 @@ function PersonalDetails(props) {
                     style={theme.Input.inputStyle}
                     placeholder={
                       userType === 'Passenger'
-                        ? last_name_text
-                        : last_name_driver_text
+                        ? I18n.t('last_name_text')
+                        : I18n.t('last_name_driver_text')
                     }
                     autoFocus={false}
                     autoCapitalize="none"
@@ -155,7 +143,7 @@ function PersonalDetails(props) {
                     ref={refReferral}
                     onChangeText={handleChange('refCode')}
                     keyboardAppearance="light"
-                    placeholder={referral_code_opt_text}
+                    placeholder={I18n.t('referral_code_opt_text')}
                     style={theme.Input.inputStyle}
                     autoFocus={false}
                     autoCapitalize="none"
@@ -175,7 +163,7 @@ function PersonalDetails(props) {
                     ref={refEmail}
                     keyboardAppearance="light"
                     onChangeText={handleChange('email')}
-                    placeholder={email_address_text}
+                    placeholder={I18n.t('email_address_text')}
                     style={theme.Input.inputStyle}
                     autoFocus={false}
                     autoCapitalize="none"
@@ -195,7 +183,7 @@ function PersonalDetails(props) {
                 </KeyboardAvoidingView>
                 <View style={styles.bottomCon}>
                   <Text style={[theme.Text.h2Bold]}>
-                    {_.startCase(gender_text)}
+                    {_.startCase(I18n.t('gender_text'))}
                   </Text>
                   <GenderChips
                     onChipPress={chips => {
@@ -225,7 +213,7 @@ function PersonalDetails(props) {
                     />
                   ) : (
                     <Button
-                      title={next}
+                      title={I18n.t('next')}
                       onPress={() => handleSubmit()}
                       disabled={!pic || !isValid}
                       icon={

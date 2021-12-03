@@ -6,7 +6,7 @@ import {colors, size} from '../../../../../utilities';
 import {PaymentButtons, PaymentInput} from '../../../../../components';
 import I18n from '../../../../../utilities/translations';
 
-const AddCard = ({title, onPressCard, onPressWallet,btn}) => {
+const AddCard = ({title, onPressCard, onPressWallet, btn}) => {
   return (
     <View>
       {title && (
@@ -51,7 +51,7 @@ const AddCard = ({title, onPressCard, onPressWallet,btn}) => {
           <PaymentButtons
             onPress={onPressWallet}
             bgColor={colors.g1}
-            title={'Pay From Wallet'}
+            title={I18n.t('pay_from_wallet')}
             txtColor={colors.white}
           />
         </View>

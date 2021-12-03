@@ -20,7 +20,7 @@ import {
   appIcons,
 } from '../../../utilities';
 import {PaymentButtons} from '../../Buttons/Payment/PaymentButtons';
-
+import I18n from '../../../utilities/translations';
 export const PaymentFilterModal = ({
   h1,
   h2,
@@ -156,7 +156,7 @@ export const PaymentFilterModal = ({
 
           <View style={{padding: 20}}>
             <PaymentButtons
-              title={'Apply'}
+              title={I18n.t('apply')}
               bgColor={colors.green}
               txtColor={colors.white}
             />

@@ -31,7 +31,7 @@ const index = ({navigation}) => {
               onChangeText={text => {
                 setaddMoney(text);
               }}
-              placeholder={'Amount'}
+              placeholder={I18n.t('amount')}
               placeholderTextColor={colors.g1}
             />
           </View>

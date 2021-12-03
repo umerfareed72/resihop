@@ -11,10 +11,6 @@ import {AgreeButton} from '../../components';
 import MyStatusBar from '../../components/Header/statusBar';
 import {theme} from '../../theme';
 import I18n from '../../utilities/translations';
-import {
-  dummy_ipsum_msg_small,
-  welcome_to_resihop_msg,
-} from '../../theme/strings';
 import {appIcons, colors} from '../../utilities';
 
 const permissions = [
@@ -60,10 +56,10 @@ function index({navigation}) {
         </ImageBackground>
         <View style={{width: '95%', alignSelf: 'center'}}>
           <Text style={[theme.Text.h1Bold, styles.heading]}>
-            {welcome_to_resihop_msg}
+            {I18n.t('welcome_to_resihop_msg')}
           </Text>
           <Text style={[theme.Text.h4Normal, styles.sayingText]}>
-            {dummy_ipsum_msg_small}
+            {I18n.t('dummy_ipsum_msg_small')}
           </Text>
         </View>
         <View style={styles.permissionContainer}>

@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../theme/theme';
 import {appIcons, appImages, colors} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,6 +12,8 @@ import {RatingCardModal} from '../components/Modal/RatingModal/RatingModal';
 import {useNavigation} from '@react-navigation/core';
 import {DeleteCardModal} from './Modal/DeleteCard/DeleteCardModal';
 import I18n from '../utilities/translations';
+import {AddWalletModal} from '.';
+import {drawerIcons} from '../utilities/images';
 const RideStatusCards = ({statusType}) => {
   let navigation = useNavigation();
 
@@ -19,6 +21,8 @@ const RideStatusCards = ({statusType}) => {
   const [currentRide, setCurrentRide] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState(false);
+  const [rating, setRating] = useState(0);
+  const walletRef = useRef(null);
 
   if (currentRide) {
     return (
@@ -199,6 +203,8 @@ const RideStatusCards = ({statusType}) => {
           show={showRatingModal}
           h1={'Rate your Ride Experience'}
           onPressHide={setShowRatingModal}
+          rating={rating}
+          onSelectRating={setRating}
         />
       </View>
       {showModal && (
@@ -217,6 +223,8 @@ const RideStatusCards = ({statusType}) => {
           textColor={colors.white}
           onPressYes={() => {
             setSelected(true);
+            setShowModal(false);
+            walletRef.current.open();
           }}
           onPressNo={() => {
             setSelected(false);
@@ -224,6 +232,19 @@ const RideStatusCards = ({statusType}) => {
           }}
         />
       )}
+      <AddWalletModal
+        height={Dimensions.get('screen').height / 2.7}
+        show={walletRef}
+        onSuccess={true}
+        onPress={() => {
+          walletRef?.current?.close();
+          navigation.navigate('PassengerHome');
+        }}
+        icon={drawerIcons.my_payment_methods}
+        h1={'Refund Amount'}
+        h2={'Amount will be refunded to your card within 7 working days.'}
+        btnText={'OK'}
+      />
     </>
   );
 };

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Image,
+  ScrollView,
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {
@@ -30,11 +31,12 @@ export const AddWalletModal = ({
   h1,
   h2,
   icon,
+  height,
 }) => {
   return (
     <RBSheet
       ref={show}
-      height={329}
+      height={height}
       customStyles={{
         wrapper: {
           backgroundColor: 'rgba(16,16,16,0.5)',
@@ -44,7 +46,7 @@ export const AddWalletModal = ({
           borderTopLeftRadius: 35,
         },
       }}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {addMoney ? (
           <>
             <View style={styles.header}>
@@ -86,7 +88,7 @@ export const AddWalletModal = ({
             title={btnText}
           />
         </View>
-      </View>
+      </ScrollView>
     </RBSheet>
   );
 };
@@ -122,6 +124,7 @@ const styles = StyleSheet.create({
     fontSize: size.large,
     color: colors.light_black,
     fontWeight: 'bold',
+    paddingVertical: 10,
   },
   h2: {
     color: colors.g3,
@@ -129,5 +132,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20,
     paddingVertical: 10,
+    lineHeight: 25,
   },
 });

@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/core';
 import {colors, appImages} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fonts} from '../theme';
+import I18n from '../utilities/translations';
 
 const BookingDetails = () => {
   let navigation = useNavigation();
@@ -21,7 +22,7 @@ const BookingDetails = () => {
       <CustomHeader
         backButton={true}
         navigation={navigation}
-        title={'Booking Details'}
+        title={I18n.t('booking_detail')}
       />
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>

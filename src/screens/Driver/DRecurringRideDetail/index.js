@@ -193,7 +193,7 @@ function index() {
         <View style={{marginTop: '35%'}}>
           <Button
             title={'Update'}
-            onPress={() => navigation.navigate('UpdateRide')}
+            onPress={() => navigation.navigate('UpdateDrive')}
             buttonStyle={[theme.Button.buttonStyle]}
             titleStyle={[theme.Button.titleStyle]}
             disabledTitleStyle={theme.Button.disabledTitleStyle}

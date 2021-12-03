@@ -13,6 +13,7 @@ import {appIcons, appImages, colors, family} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ReturnBookSheet from '../components/ReturnBookSheet';
 import {fonts} from '../theme';
+import I18n from '../utilities/translations';
 
 const AvailableDrivers = props => {
   let navigation = useNavigation();
@@ -26,7 +27,7 @@ const AvailableDrivers = props => {
       <CustomHeader
         backButton={true}
         navigation={navigation}
-        title={'Available Drivers'}
+        title={I18n.t('available_drivers')}
       />
 
       <FlatList

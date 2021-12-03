@@ -19,6 +19,7 @@ import {CustomHeader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
 import ArrowDown from 'react-native-vector-icons/MaterialIcons';
 import {fonts} from '../../../theme/theme';
+import I18n from '../../../utilities/translations';
 
 const CreateDrive = () => {
   let navigation = useNavigation();
@@ -38,7 +39,7 @@ const CreateDrive = () => {
       <CustomHeader
         backButton={true}
         navigation={navigation}
-        title={'Create Drive'}
+        title={I18n.t('create_drive')}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.tripBtnWrapper}>
@@ -50,7 +51,7 @@ const CreateDrive = () => {
               styles.tripBtnContainer,
               {backgroundColor: screen ? colors.btnGray : colors.green},
             ]}>
-            <Text style={styles.btnTxt}>Single Trip</Text>
+            <Text style={styles.btnTxt}>{I18n.t('single_trip')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -61,7 +62,7 @@ const CreateDrive = () => {
               styles.tripBtnContainer,
               {backgroundColor: screen ? colors.green : colors.btnGray},
             ]}>
-            <Text style={styles.btnTxt}>Recurring Ride</Text>
+            <Text style={styles.btnTxt}>{I18n.t('recurring_ride')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -75,7 +76,9 @@ const CreateDrive = () => {
                     type: 'startLocation',
                   })
                 }>
-                <Text style={styles.locationTxt}>Start Location</Text>
+                <Text style={styles.locationTxt}>
+                  {I18n.t('start_location')}
+                </Text>
               </TouchableOpacity>
               <View style={styles.startDot} />
             </View>
@@ -87,7 +90,7 @@ const CreateDrive = () => {
                     type: 'destination',
                   })
                 }>
-                <Text style={styles.locationTxt}>Destination</Text>
+                <Text style={styles.locationTxt}>{I18n.t('destination')}</Text>
               </TouchableOpacity>
               <View style={styles.destSquare} />
             </View>
@@ -110,7 +113,7 @@ const CreateDrive = () => {
             />
           </View>
         </View>
-        <Text style={styles.bookSeatsTxt}>Book Your Seats</Text>
+        <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
             <Image
@@ -123,9 +126,11 @@ const CreateDrive = () => {
         </View>
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
-            Need to arrive no later than
+            {I18n.t('need_to_arrive')}
           </Text>
-          <Text style={[styles.selectTxt, {marginLeft: 8}]}>Select Date</Text>
+          <Text style={[styles.selectTxt, {marginLeft: 8}]}>
+            {I18n.t('select_date')}
+          </Text>
         </View>
         <View style={styles.selectionInputWrapper}>
           <TextInput
@@ -149,7 +154,7 @@ const CreateDrive = () => {
             style={styles.calendarIcon}
           />
         </View>
-        <Text style={styles.presetTxt}>Preset cost for each passenger</Text>
+        <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
         <TouchableOpacity style={styles.presetCostContainer}>
           <Text style={{fontFamily: fonts.regular}}>SEK 20</Text>
           <ArrowDown
@@ -159,7 +164,7 @@ const CreateDrive = () => {
           />
         </TouchableOpacity>
         <View style={styles.returnTripWrapper}>
-          <Text style={styles.returnTxt}>Return Trip</Text>
+          <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
           <ToggleSwitch
             isOn={toggleEnabled}
             onColor={colors.green}
@@ -175,7 +180,7 @@ const CreateDrive = () => {
               <View>
                 <View style={{marginBottom: 20}}>
                   <TextInput
-                    placeholder="Start Location"
+                    placeholder={I18n.t('start_location')}
                     placeholderTextColor={colors.inputTxtGray}
                     value={startLocation}
                     onChangeText={setStartLocation}
@@ -185,7 +190,7 @@ const CreateDrive = () => {
                 </View>
                 <View>
                   <TextInput
-                    placeholder="Destination"
+                    placeholder={I18n.t('destination')}
                     placeholderTextColor={colors.inputTxtGray}
                     value={destination}
                     onChangeText={setDestination}
@@ -201,9 +206,11 @@ const CreateDrive = () => {
               </View>
             </View>
             <View style={{marginLeft: 26}}>
-              <Text style={styles.returntimeTxt}>Departure Time (Return)</Text>
+              <Text style={styles.returntimeTxt}>
+                {I18n.t('departure_time')}
+              </Text>
               <Text style={styles.timeBracketTxt}>
-                (Add a time bracket when you want ride for return)
+                {I18n.t('departure_time_desc')}
               </Text>
             </View>
             <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
@@ -214,7 +221,7 @@ const CreateDrive = () => {
                 onChangeText={setNoLaterTime}
                 style={styles.noLater}
               />
-              <Text style={styles.to}>To</Text>
+              <Text style={styles.to}>{I18n.t('to')}</Text>
               <TextInput
                 placeholder="XX:XX"
                 placeholderTextColor={colors.btnGray}
@@ -233,7 +240,7 @@ const CreateDrive = () => {
         <TouchableOpacity
           style={styles.nextBtnContainer}
           onPress={() => navigation.navigate('SelectRoute')}>
-          <Text style={styles.nextTxt}>Next</Text>
+          <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -14,13 +14,9 @@ import {CustomHeader} from '../../components';
 import * as Yup from 'yup';
 import {fonts, theme} from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {
-  by_clicking_bank_id_text,
-  i_agree_to_res_ihop,
-  sign_in_with_bank_id,
-  terms_and_condition_text,
-} from '../../theme/strings';
+
 import {appIcons, colors} from '../../utilities';
+import I18n from '../../utilities/translations';
 
 const vahicleFormFields = {
   licencePlate: '',
@@ -84,14 +80,14 @@ function index(props) {
               <>
                 <View style={styles.viewCon}>
                   <Text style={[theme.Text.h1Bold, styles.heading]}>
-                    {'Vahicle Information'}
+                    {I18n.t('vehicle_information')}
                   </Text>
                   <Text
                     style={[
                       theme.Text.h2Bold,
                       {fontSize: 16, marginStart: 10},
                     ]}>
-                    {'Enter your vahicle information'}
+                    {I18n.t('enter_vehcile_info')}
                   </Text>
                 </View>
                 <KeyboardAvoidingView style={styles.inputCon}>
@@ -105,23 +101,14 @@ function index(props) {
                       maxLength={8}
                       ref={licencePlate}
                       keyboardAppearance="light"
-                      onChangeText={text => {
-                        if (text.length === 8) {
-                          setgetDetailsBtn(false);
-                        } else {
-                          setgetDetailsBtn(true);
-                        }
-                      }}
+                      onChangeText={handleChange('licencePlate')}
                       inputContainerStyle={{width: '100%'}}
-                      placeholder={'Licence Plate'}
+                      placeholder={I18n.t('license_plate')}
                       autoFocus={false}
                       autoCapitalize="none"
                       style={theme.Input.inputStyle}
                       autoCorrect={false}
                       returnKeyType="next"
-                      onSubmitEditing={() => {
-                        carCompany.current.focus();
-                      }}
                       inputContainerStyle={
                         errors.licencePlate
                           ? theme.Input.inputErrorContainerStyle
@@ -130,9 +117,8 @@ function index(props) {
                       errorMessage={errors.licencePlate}
                     />
                     <Button
-                      title={'Get Details'}
+                      title={I18n.t('get_details')}
                       onPress={() => console.log('Pressed!')}
-                      disabled={getDetailsBtn}
                       buttonStyle={[theme.Button.buttonStyle]}
                       titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                       disabledTitleStyle={theme.Button.disabledTitleStyle}
@@ -147,15 +133,12 @@ function index(props) {
                     ref={carCompany}
                     keyboardAppearance="light"
                     onChangeText={handleChange('carCompany')}
-                    placeholder={'Car Company'}
+                    placeholder={I18n.t('car_company')}
                     autoFocus={false}
                     autoCapitalize="none"
                     style={theme.Input.inputStyle}
                     autoCorrect={false}
                     returnKeyType="next"
-                    onSubmitEditing={() => {
-                      modelName.current.focus();
-                    }}
                     inputContainerStyle={
                       errors.carCompany
                         ? theme.Input.inputErrorContainerStyle
@@ -167,15 +150,12 @@ function index(props) {
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
-                    placeholder={'Model Name'}
+                    placeholder={I18n.t('modal_name')}
                     autoFocus={false}
                     autoCapitalize="none"
                     style={theme.Input.inputStyle}
                     autoCorrect={false}
                     returnKeyType="next"
-                    onSubmitEditing={() => {
-                      vahicleColor.current.focus();
-                    }}
                     inputContainerStyle={
                       errors.modelName
                         ? theme.Input.inputErrorContainerStyle
@@ -187,15 +167,12 @@ function index(props) {
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
-                    placeholder={'Vahicle Colour'}
+                    placeholder={I18n.t('vehicle_colour')}
                     autoFocus={false}
                     autoCapitalize="none"
                     style={theme.Input.inputStyle}
                     autoCorrect={false}
                     returnKeyType="next"
-                    onSubmitEditing={() => {
-                      vahicleColor.current.focus();
-                    }}
                     inputContainerStyle={
                       errors.modelName
                         ? theme.Input.inputErrorContainerStyle
@@ -208,15 +185,12 @@ function index(props) {
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
-                    placeholder={'CO2 EMISSIONS (g CO2 / km)'}
+                    placeholder={I18n.t('vehicle_emission')}
                     autoFocus={false}
                     autoCapitalize="none"
                     style={theme.Input.inputStyle}
                     autoCorrect={false}
                     returnKeyType="next"
-                    onSubmitEditing={() => {
-                      vahicleColor.current.focus();
-                    }}
                     inputContainerStyle={
                       errors.modelName
                         ? theme.Input.inputErrorContainerStyle
@@ -226,8 +200,7 @@ function index(props) {
                   />
                   <DropDownPicker
                     style={styles.pickerStyle}
-                    x
-                    placeholder={'Preset cost for each passenger'}
+                    placeholder={I18n.t('cost_percentage')}
                     placeholderStyle={{color: 'grey'}}
                     dropDownContainerStyle={styles.itemListStyle}
                     showTickIcon={false}
@@ -249,7 +222,7 @@ function index(props) {
                         color: 'grey',
                       },
                     ]}>
-                    {'(You can always change it when setting new drive)'}
+                    {I18n.t('cost_detail')}
                   </Text>
                   <TouchableOpacity
                     onPress={() => props.navigation.navigate('ReviewDetails')}
@@ -258,16 +231,16 @@ function index(props) {
                       styles.reviewBtn,
                       {borderColor: 'grey', borderWidth: 1},
                     ]}>
-                    <Text>{'Review Your Details'}</Text>
+                    <Text>{I18n.t('review_details')}</Text>
                   </TouchableOpacity>
                   <View style={{margin: 12}}>
                     <Text style={theme.Text.h4Normal}>
-                      {by_clicking_bank_id_text}
+                      {I18n.t('by_clicking_bank_id_text')}
                     </Text>
                     <View style={styles.textCon}>
                       <Text
                         style={[theme.Text.h4Normal, {paddingHorizontal: 2}]}>
-                        {i_agree_to_res_ihop}
+                        {I18n.t('i_agree_to_res_ihop')}
                       </Text>
                       <TouchableOpacity
                         onPress={() => {
@@ -280,7 +253,7 @@ function index(props) {
                             textDecorationLine: 'underline',
                             color: theme.colors.black,
                           }}>
-                          {terms_and_condition_text}
+                          {I18n.t('terms_and_condition_text')}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -304,7 +277,7 @@ function index(props) {
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Text style={[theme.Button.titleStyle]}>
-                          {sign_in_with_bank_id}
+                          {I18n.t('sign_in_with_bank_id')}
                         </Text>
                         <Image
                           source={appIcons.bank_id}
