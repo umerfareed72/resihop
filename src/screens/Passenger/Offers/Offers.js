@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React, {Component} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
@@ -10,17 +11,17 @@ const Offers = ({navigation}) => {
     {
       title: 'Welcome Offer',
       description: 'Welcome to ÅK IHOP',
-      promo: 'PROMO10',
+      promo: I18n.t('offer_promo'),
     },
     {
       title: 'Welcome Offer',
       description: 'Welcome to ÅK IHOP',
-      promo: 'PROMO10',
+      promo: I18n.t('offer_promo'),
     },
     {
       title: 'Welcome Offer',
       description: 'Welcome to ÅK IHOP',
-      promo: 'PROMO10',
+      promo: I18n.t('offer_promo'),
     },
   ];
 
@@ -41,7 +42,11 @@ const Offers = ({navigation}) => {
 
   return (
     <>
-      <CustomHeader navigation={navigation} title="Offers" backButton={true} />
+      <CustomHeader
+        navigation={navigation}
+        title={I18n.t('offer_title')}
+        backButton={true}
+      />
       <SafeAreaView style={styles.container}>
         <FlatList data={data} renderItem={item => <OfferCard data={item} />} />
       </SafeAreaView>

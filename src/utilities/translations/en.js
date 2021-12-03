@@ -116,4 +116,62 @@ export default {
   driver_ride_detail: 'Drive Details',
   add_to_favourite: 'Add to Favorites',
   add_experience: 'Rate your Ride Experience',
+
+  //Notification Settings
+  noti_title: 'Notifications Settings',
+  notif_tune: 'Notifications Tone',
+  notif_off: 'Turn off All Notifications',
+  notif_disturb: 'Do Not Disturb',
+  notif_disturb_off: 'Do not Disturb Period',
+  from: 'From',
+  to: 'To',
+
+  //Notification Tune
+  notif_tune: 'Notifications Tune',
+
+  //Favourites
+  fav_title: 'Favourites',
+  fav_driver: 'Driver',
+  fav_passenger: 'Passenger',
+  fav_location: 'Location',
+
+  //Reports
+  report: 'Reports',
+  rep_earning: 'Earnings',
+  rep_spending: 'Spendings',
+  //Reports Spending
+  rep_month: 'This Month',
+  rep_year: 'This Year',
+  rep_total_rides: 'Total Rides',
+  rep_total_spending: 'Total Spending',
+  rep_download_rep: 'Download Reports',
+  rep_last_month: 'Last Month',
+  rep_last_6month: 'Last 6 Months',
+  rep_last_year: 'Last 1 Year',
+  rep_select_range: 'Select Range',
+  rep_select_calendar: 'Select Calendar Year',
+  rep_condition: 'Select Atleast 1 Month Time Bracket',
+  rep_download_rep: 'Download Report',
+
+  //Report Earnings
+  rep_earn_text: 'You have no Earnings',
+
+  //Offers
+  offer_title: 'Offers',
+  offer_promo: 'PROMO10',
+
+  //INVITE
+  invite_title: 'Invite',
+  invite_friend: 'Invite Your Friends',
+  invite_copy_code: 'Copy Code',
+  invite_friend: 'Invite Friends',
+
+  //About
+  about_us: 'About Us',
+
+  //Terms & Conditions
+  terms_title: 'Terms & Conditions',
+
+  //Privacy Policy
+  privacy_title: 'Privacy Policy',
 };
