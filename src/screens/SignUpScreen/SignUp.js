@@ -3,10 +3,9 @@ import {Text, View, StyleSheet} from 'react-native';
 import {CustomHeader, Header} from '../../components';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
-import {mobile_number, sign_up} from '../../theme/strings';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
-
+import I18n from '../../utilities/translations';
 function SignUp(props) {
   return (
     <>
@@ -15,9 +14,11 @@ function SignUp(props) {
       <Container padding={0}>
         <View style={styles.viewCon}>
           <Text style={[theme.Text.h1Bold, styles.heading]}>
-            {_.startCase(sign_up)}
+            {_.startCase(I18n.t('sign_up'))}
           </Text>
-          <Text style={[theme.Text.h2Bold]}>{_.startCase(mobile_number)}</Text>
+          <Text style={[theme.Text.h2Bold]}>
+            {_.startCase(I18n.t('mobile_number'))}
+          </Text>
           <OtpValidator />
         </View>
       </Container>

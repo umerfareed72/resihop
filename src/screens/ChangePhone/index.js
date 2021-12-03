@@ -2,7 +2,6 @@ import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
-import {mobile_number, sign_in} from '../../theme/strings';
 import {theme} from '../../theme';
 import {CustomHeader} from '../../components';
 import OtpValidator from '../../components/OtpValidator';
@@ -17,7 +16,9 @@ function signIn(props) {
       />
       <Container padding={0}>
         <View style={styles.viewCon}>
-          <Text style={[theme.Text.h2Bold]}>{_.startCase(mobile_number)}</Text>
+          <Text style={[theme.Text.h2Bold]}>
+            {_.startCase(I18n.t('mobile_number'))}
+          </Text>
           <OtpValidator />
         </View>
       </Container>

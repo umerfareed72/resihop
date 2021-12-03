@@ -1,16 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
-import {landing_img} from '../../assets';
-import {Header} from '../../components';
 import ChooseLanguage from '../../components/ChooseLanguage';
 import {Container} from '../../components/Container';
 import MyStatusBar from '../../components/Header/statusBar';
-import {next} from '../../theme/strings';
 import {theme} from '../../theme/theme';
 import {colors} from '../../utilities';
 import {appIcons, drawerIcons} from '../../utilities/images';
-
+import I18n from '../../utilities/translations';
 function languageSelect(props) {
   const [language, setLanguage] = useState('');
 
@@ -24,7 +21,7 @@ function languageSelect(props) {
           </View>
 
           <Text style={[theme.Text.h1Bold, styles.heading]}>
-            Select Your Language
+            {I18n.t('select_language_title')}
           </Text>
           <View>
             <ChooseLanguage
@@ -34,7 +31,7 @@ function languageSelect(props) {
             />
 
             <Button
-              title={next}
+              title={I18n.t('next')}
               buttonStyle={theme.Button.buttonStyle}
               titleStyle={theme.Button.titleStyle}
               onPress={() => {

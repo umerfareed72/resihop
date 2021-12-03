@@ -19,6 +19,7 @@ import {
   appIcons,
   HP,
 } from '../../../utilities';
+import I18n from '../../../utilities/translations';
 
 export const IncorrectRefCode = ({show, onPress}) => {
   return (
@@ -40,16 +41,16 @@ export const IncorrectRefCode = ({show, onPress}) => {
             style={{width: HP('8'), height: HP('8'), resizeMode: 'contain'}}
             source={appIcons.wrongData}
           />
-          <Text style={styles.reffralText}>Incorrect Referral code</Text>
+          <Text style={styles.reffralText}>{I18n.t('incorrect_ref_code')}</Text>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={() => show?.current?.close()}
             style={styles.button}>
-            <Text style={styles.buttonText}>Edit</Text>
+            <Text style={styles.buttonText}>{I18n.t('edit')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onPress} style={styles.buttonReplica}>
-            <Text style={styles.buttonText}>Continue</Text>
+            <Text style={styles.buttonText}>{I18n.t('continue')}</Text>
           </TouchableOpacity>
         </View>
       </View>

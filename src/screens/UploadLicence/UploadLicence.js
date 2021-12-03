@@ -3,7 +3,6 @@ import {View, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {Header} from '../../components';
 import {theme} from '../../theme';
 import {Text, Icon, Button} from 'react-native-elements';
-import {next} from '../../theme/strings';
 import MediaPicker from '../../components/Modal/MediaPicker';
 
 const UploadImageBrick = ({title, onPress, pic}) => {
@@ -84,7 +83,7 @@ const UploadLicence = () => {
           onPress={() => controlPicker('back')}
         />
         <Button
-          title={next}
+          title={I18n.t('next')}
           onPress={() => {
             // Navigation.push(AUTH_NAV_ID, PersonalDetailScreen);
             // controlIsDriver(true);

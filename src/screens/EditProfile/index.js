@@ -15,7 +15,6 @@ import * as Yup from 'yup';
 import {appIcons, colors} from '../../utilities';
 import {theme} from '../../theme';
 import UploadImage from '../../components/UploadImage';
-import {gender_text} from '../../theme/strings';
 import GenderChips from '../../components/GenderChips';
 
 const formFields = {
@@ -152,7 +151,7 @@ function index(props) {
                   errorMessage={errors.email}
                 />
                 <Text style={[theme.Text.h2Bold, {marginStart: '3%'}]}>
-                  {gender_text}
+                  {I18n.t('gender_text')}
                 </Text>
                 <GenderChips
                   onChipPress={chips => {

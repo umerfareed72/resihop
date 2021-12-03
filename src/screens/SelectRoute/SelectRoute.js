@@ -8,8 +8,6 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {CustomHeader} from '../../components';
-import MyStatusBar from '../../components/Header/statusBar';
 import MapViewComponent from '../../components/MapViewComponent';
 import NearestDriverCard from '../../components/NearestDriverCard';
 import {colors, family, HP, size} from '../../utilities';

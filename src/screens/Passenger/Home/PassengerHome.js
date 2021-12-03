@@ -10,21 +10,13 @@ import {
   FlatList,
 } from 'react-native';
 import {colors, appIcons, appImages, family} from '../../../utilities';
-import {
-  passenger_home,
-  create_ride,
-  recurring_ride,
-  city_to_city,
-  upcoming_rides,
-  lorem,
-  first_ride,
-} from '../../../theme/strings';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
 import {RideFilterModal, SortModal} from '../../../components';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
+import I18n from '../../../utilities/translations';
 
 //Data
 var TimeList = {
@@ -155,7 +147,9 @@ const PassengerHome = ({navigation}) => {
               onPress={() => navigation.toggleDrawer()}
             />
           </TouchableOpacity>
-          <Text style={styles.passengerHomeTxt}>{passenger_home}</Text>
+          <Text style={styles.passengerHomeTxt}>
+            {I18n.t('passenger_home')}
+          </Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('NotificationList');
@@ -173,7 +167,7 @@ const PassengerHome = ({navigation}) => {
                 color: colors.white,
                 fontFamily: fonts.regular,
               }}>
-              Switch to Driver
+              {I18n.t('switch_driver')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -194,7 +188,7 @@ const PassengerHome = ({navigation}) => {
                 resizeMode="contain"
               />
               <Text style={[styles.cardTxt, {marginTop: 14}]}>
-                {create_ride}
+                {I18n.t('create_ride')}
               </Text>
             </View>
           </TouchableOpacity>
@@ -211,7 +205,7 @@ const PassengerHome = ({navigation}) => {
                   style={styles.cardInterior}
                   resizeMode="contain"
                 />
-                <Text style={styles.cardTxt}>{recurring_ride}</Text>
+                <Text style={styles.cardTxt}>{I18n.t('recurring_ride')}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -228,7 +222,7 @@ const PassengerHome = ({navigation}) => {
                   style={styles.cardInterior}
                   resizeMode="contain"
                 />
-                <Text style={styles.cardTxt}>{city_to_city}</Text>
+                <Text style={styles.cardTxt}>{I18n.t('city_to_city')}</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -237,7 +231,7 @@ const PassengerHome = ({navigation}) => {
         {/* upcoming Rides */}
 
         <View style={styles.upcomingRidesMainContainer}>
-          <Text style={styles.upcomingTxt}>{upcoming_rides} </Text>
+          <Text style={styles.upcomingTxt}>{I18n.t('upcoming_rides')} </Text>
           <View style={styles.ellipsesContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -261,11 +255,11 @@ const PassengerHome = ({navigation}) => {
               style={styles.noUpcomingRide}
             />
 
-            <Text style={styles.Txt}>{lorem}</Text>
+            <Text style={styles.Txt}>{I18n.t('lorem')}</Text>
             <TouchableOpacity
               style={styles.createRideBtnContainer}
               onPress={() => navigation.navigate('CreateRide')}>
-              <Text style={styles.btnTxt}>{first_ride}</Text>
+              <Text style={styles.btnTxt}>{I18n.t('first_ride')}</Text>
             </TouchableOpacity>
           </>
         ) : (
@@ -286,7 +280,7 @@ const PassengerHome = ({navigation}) => {
                 <TouchableOpacity
                   style={styles.createRideBtnContainer}
                   onPress={() => navigation.navigate('CreateRide')}>
-                  <Text style={styles.btnTxt}>{first_ride}</Text>
+                  <Text style={styles.btnTxt}>{I18n.t('first_ride')}</Text>
                 </TouchableOpacity>
               )}
             />

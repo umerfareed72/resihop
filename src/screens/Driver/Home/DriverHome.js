@@ -11,15 +11,6 @@ import {
   FlatList,
 } from 'react-native';
 import {colors, appIcons, appImages, family} from '../../../utilities';
-import {
-  passenger_home,
-  create_ride,
-  recurring_ride,
-  city_to_city,
-  upcoming_rides,
-  lorem,
-  first_ride,
-} from '../../../theme/strings';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
@@ -236,7 +227,7 @@ const DriverHome = ({navigation}) => {
         {/* upcoming Rides */}
 
         <View style={styles.upcomingRidesMainContainer}>
-          <Text style={styles.upcomingTxt}>{upcoming_rides} </Text>
+          <Text style={styles.upcomingTxt}>{I18n.t('upcoming_rides')} </Text>
           <View style={styles.ellipsesContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -260,7 +251,7 @@ const DriverHome = ({navigation}) => {
               source={appIcons.driver_home}
               style={styles.noUpcomingRide}
             />
-            <Text style={styles.Txt}>{lorem}</Text>
+            <Text style={styles.Txt}>{I18n.t('lorem')}</Text>
             <TouchableOpacity
               style={styles.createRideBtnContainer}
               onPress={() => navigation.navigate('CreateDrive')}>

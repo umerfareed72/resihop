@@ -9,13 +9,9 @@ import {
 import {Button, Icon, Text} from 'react-native-elements';
 import MyStatusBar from '../components/Header/statusBar';
 import {theme} from '../theme';
-import {
-  dummy_ipsum_msg,
-  login,
-  sign_up,
-  welcome_to_resihop_msg,
-} from '../theme/strings';
+
 import {appIcons, colors} from '../utilities';
+import I18n from '../utilities/translations';
 
 function landingUser({navigation}) {
   return (
@@ -40,14 +36,14 @@ function landingUser({navigation}) {
           </TouchableOpacity>
         </ImageBackground>
         <Text style={[theme.Text.h1Bold, styles.heading]}>
-          {welcome_to_resihop_msg}
+          {I18n.t('welcome_to_resihop_msg')}
         </Text>
         <View>
           <Text style={[theme.Text.h4Normal, styles.sayingText]}>
-            {dummy_ipsum_msg}
+            {I18n.t('dummy_ipsum_msg')}
           </Text>
           <Button
-            title={login}
+            title={I18n.t('login')}
             buttonStyle={theme.Button.buttonStyle}
             titleStyle={theme.Button.titleStyle}
             onPress={() => {
@@ -63,7 +59,7 @@ function landingUser({navigation}) {
           />
 
           <Button
-            title={sign_up}
+            title={I18n.t('sign_up')}
             onPress={() => {
               navigation.navigate('SignUpScreen');
             }}

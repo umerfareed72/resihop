@@ -143,8 +143,8 @@ const index = ({navigation}) => {
         </View>
       </KeyboardAwareScrollView>
       <AddWalletModal
-        btnText={'OK'}
-        title={'Add Money to Wallet'}
+        btnText={I18n.t('ok')}
+        title={I18n.t('add_to_wallet')}
         addMoney={addMoney}
         onSuccess={paymentSuccess}
         onFailed={paymentFailed}

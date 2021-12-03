@@ -1,16 +1,12 @@
 import React from 'react';
 import {View, StyleSheet, Animated, Dimensions, FlatList} from 'react-native';
 import PagerView, {PagerViewOnPageScrollEvent} from 'react-native-pager-view';
-import {walkthrough_img_one, walkthrough_img_two} from '../assets';
 import {Container} from '../components/Container';
 import {theme} from '../theme';
 import {Image, Button, Text, Icon} from 'react-native-elements';
 import {ExpandingDot} from 'react-native-animated-pagination-dots';
-import {
-  skip,
-  walkthrough_msg_one,
-  welcome_to_resihop_msg,
-} from '../theme/strings';
+import I18n from '../utilities/translations';
+
 import {appIcons} from '../utilities/images';
 
 const introData = [
@@ -85,10 +81,10 @@ function walkThrough(props) {
         </View>
         <View style={styles.bottomCon}>
           <Text style={[theme.Text.h1Bold, styles.heading]}>
-            {welcome_to_resihop_msg}
+            {I18n.t('welcome_to_resihop_msg')}
           </Text>
           <Text style={[theme.Text.h3Normal, styles.headingSaying]}>
-            {walkthrough_msg_one}
+            {I18n.t('walkthrough_msg_one')}
           </Text>
           <View style={styles.bottomBtnCon}>
             <Text
@@ -96,7 +92,7 @@ function walkThrough(props) {
               onPress={() => {
                 props.navigation.navigate('LandingUser');
               }}>
-              {skip}
+              {I18n.t('skip')}
             </Text>
             <Button
               icon={

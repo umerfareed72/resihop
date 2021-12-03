@@ -10,15 +10,11 @@ import {
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
 import CountryPicker, {Country} from 'react-native-country-picker-modal';
 import {theme} from '../theme';
-import {
-  please_enter_phone_msg,
-  send_code,
-  verify_code,
-  verify_your_code,
-} from '../theme/strings';
+
 import reactotron from 'reactotron-react-native';
 import CountDownTimer from 'react-native-countdown-timer-hooks';
 import {useNavigation} from '@react-navigation/native';
+import I18n from '../utilities/translations';
 
 const OtpValidator = ({isSignUp}) => {
   const navigation = useNavigation();
@@ -43,7 +39,7 @@ const OtpValidator = ({isSignUp}) => {
   const onSendCodePress = () => {
     Keyboard.dismiss();
     if (phoneNum === '') {
-      ToastAndroid.show(please_enter_phone_msg, ToastAndroid.LONG);
+      ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
       return;
     }
     setOtpArea(true);
@@ -101,7 +97,7 @@ const OtpValidator = ({isSignUp}) => {
           value={phoneNum}
         />
         <Button
-          title={send_code}
+          title={I18n.t('send_code')}
           onPress={() => onSendCodePress()}
           disabled={otpArea}
           buttonStyle={[theme.Button.buttonStyle]}
@@ -117,7 +113,7 @@ const OtpValidator = ({isSignUp}) => {
 
       {otpArea && (
         <View style={styles.otpCon}>
-          <Text style={[theme.Text.h2Bold]}>{verify_code}</Text>
+          <Text style={[theme.Text.h2Bold]}>{I18n.t('verify_code')}</Text>
           <Input
             onChangeText={text => {
               if (text.length === 6) {
@@ -135,7 +131,7 @@ const OtpValidator = ({isSignUp}) => {
           />
 
           <Text style={[theme.Text.h4Normal, {textAlign: 'center'}]}>
-            {verify_your_code}
+            {I18n.t('verify_your_code')}
           </Text>
           <View style={{display: timerEnd ? 'none' : 'flex'}}>
             <CountDownTimer

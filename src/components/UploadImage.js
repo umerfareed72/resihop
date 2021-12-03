@@ -4,13 +4,10 @@ import _ from 'lodash/string';
 
 import {theme} from '../theme';
 import {Avatar, Icon, Text} from 'react-native-elements';
-import {
-  CAMERA_PERMISSION_TEXT,
-  upload_profile_picture_text,
-} from '../theme/strings';
+
 import {permissions_types} from '../utilities';
 import MediaPicker from './Modal/MediaPicker';
-
+import I18n from '../utilities/translations';
 const UploadImage = ({getPicUri, show, close}) => {
   const [showPicker, setShowPicker] = useState(false);
   const [closePicker, setClosePicker] = useState(false);
@@ -40,7 +37,7 @@ const UploadImage = ({getPicUri, show, close}) => {
             ? setShowPicker(!showPicker)
             : Alert.alert(
                 'Alert',
-                CAMERA_PERMISSION_TEXT,
+                I18n.t('CAMERA_PERMISSION_TEXT'),
                 [
                   {
                     text: 'Allow',
@@ -64,7 +61,7 @@ const UploadImage = ({getPicUri, show, close}) => {
           )}
         </View>
         <Text style={theme.Text.h2Bold}>
-          {_.startCase(upload_profile_picture_text)}
+          {_.startCase(I18n.t('upload_profile_picture_text'))}
         </Text>
       </TouchableOpacity>
       <MediaPicker
@@ -77,7 +74,7 @@ const UploadImage = ({getPicUri, show, close}) => {
           setShowPicker(!showPicker);
         }}
         onClosePress={() => {
-          close();
+          close && close();
           setShowPicker(!showPicker);
         }}
       />

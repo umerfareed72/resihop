@@ -1,12 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-  ImageStore,
-} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {View} from 'react-native';
 import {
   CustomHeader,
   PaymentFilterModal,
