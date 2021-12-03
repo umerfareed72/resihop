@@ -21,9 +21,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationCategoryType</key>
-	<string/>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,14 +39,14 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Resihop Camera Open</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>I want to know where your here.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Resihop Location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Resihop always location</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Location usage</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>I want to know where your here.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Resihop gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
