@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "934266920805",
+    "project_id": "reshiop-mobile-app",
+    "storage_bucket": "reshiop-mobile-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:934266920805:android:d7eb32e23ad8f25ea8cb8c",
+        "android_client_info": {
+          "package_name": "com.reactnative.resihop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "934266920805-eboadk6vk9d9pe5g740dbq3s25b31ht1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsS-9rWUf4bgtP-o014CBaU0AESSCMjdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "934266920805-eboadk6vk9d9pe5g740dbq3s25b31ht1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
