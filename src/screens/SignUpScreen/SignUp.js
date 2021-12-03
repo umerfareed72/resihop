@@ -1,16 +1,93 @@
-import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
-import {CustomHeader, Header} from '../../components';
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, View, StyleSheet, Keyboard, ToastAndroid} from 'react-native';
+import {CustomHeader} from '../../components';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
 import I18n from '../../utilities/translations';
+import auth from '@react-native-firebase/auth';
+import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
+import Loader from '../../components/Loader/Loader';
+
 function SignUp(props) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [phoneNum, setPhoneNum] = useState('');
+  const [country, setCountry] = useState();
+
+  const [confirm, setConfirm] = useState(null);
+  const [code, setCode] = useState('');
+  const [countryCode, setCountryCode] = useState('92');
+  const [cca2, setcca2] = useState('PK');
+  const [otpInput, setOtpInput] = useState(false);
+
+  const onSelect = country => {
+    setCountry(country);
+    setcca2(country?.cca2);
+    setCountryCode(country?.callingCode[0]);
+  };
+
+  const signInWithPhoneNumber = () => {
+    CheckConnectivity().then(connected => {
+      if (connected) {
+        setIsLoading(true);
+        signIn();
+      } else {
+        alert('Check your internet connection');
+      }
+    });
+  };
+  
+  async function signIn() {
+    try {
+      const phone = `+${country ? country.callingCode : '92'}${phoneNum}`;
+      const confirmation = await auth().signInWithPhoneNumber(phone);
+      if (confirmation) {
+        setIsLoading(false);
+        setConfirm(confirmation);
+        setOtpInput(true);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      alert(error);
+    }
+  }
+
+  useEffect(() => {
+    if (code.length === 6) {
+      confirmCode();
+    }
+  }, [code]);
+
+  async function confirmCode() {
+    setIsLoading(true);
+    try {
+      await confirm.confirm(code).then(res => {
+        setIsLoading(false);
+        console.log('Registered User Id:', res?.user?.uid);
+        setOtpInput(false);
+        setPhoneNum('');
+        alert('Successfully Registered');
+      });
+    } catch (error) {
+      setIsLoading(false);
+      alert('Invalid code.');
+    }
+  }
+
+  const onSendCode = () => {
+    Keyboard.dismiss();
+    if (phoneNum === '') {
+      ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
+      return;
+    } else {
+      signInWithPhoneNumber();
+    }
+  };
+
   return (
     <>
       <CustomHeader navigation={props?.navigation} backButton={true} />
-
       <Container padding={0}>
         <View style={styles.viewCon}>
           <Text style={[theme.Text.h1Bold, styles.heading]}>
@@ -19,9 +96,19 @@ function SignUp(props) {
           <Text style={[theme.Text.h2Bold]}>
             {_.startCase(I18n.t('mobile_number'))}
           </Text>
-          <OtpValidator />
+          <OtpValidator
+            phoneNumber={phoneNum}
+            chnagePhone={val => setPhoneNum(val)}
+            selectedCountry={country}
+            onCountrySelect={onSelect}
+            onSendCodePress={onSendCode}
+            defaultCountryCode={cca2}
+            otpCodeArea={otpInput}
+            enteredCode={code => setCode(code)}
+          />
         </View>
       </Container>
+      {isLoading ? <Loader /> : null}
     </>
   );
 }

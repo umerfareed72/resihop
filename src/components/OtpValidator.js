@@ -16,7 +16,16 @@ import CountDownTimer from 'react-native-countdown-timer-hooks';
 import {useNavigation} from '@react-navigation/native';
 import I18n from '../utilities/translations';
 
-const OtpValidator = ({isSignUp}) => {
+const OtpValidator = ({
+  phoneNumber,
+  chnagePhone,
+  selectedCountry,
+  onCountrySelect,
+  onSendCodePress,
+  defaultCountryCode,
+  otpCodeArea,
+  enteredCode
+}) => {
   const navigation = useNavigation();
   const [country, setCountry] = useState();
   const [phoneNum, setPhoneNum] = useState('');
@@ -25,10 +34,12 @@ const OtpValidator = ({isSignUp}) => {
   const [otpArea, setOtpArea] = useState(false);
   const refTimer = useRef();
   const numRef = useRef();
-  const onSelect = country => {
-    setCountry(country);
-    numRef.current.focus();
-  };
+
+  // const onSelect = country => {
+  //   setCountry(country);
+  //   numRef.current.focus();
+  // };
+
   const [timerEnd, setTimerEnd] = useState(false);
   const timerCallbackFunc = timerFlag => {
     // Setting timer flag to finished
@@ -36,22 +47,22 @@ const OtpValidator = ({isSignUp}) => {
     setOtpArea(!otpArea);
   };
 
-  const onSendCodePress = () => {
-    Keyboard.dismiss();
-    if (phoneNum === '') {
-      ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
-      return;
-    }
-    setOtpArea(true);
-    const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-    reactotron.log(phone);
-    reactotron.log(phoneNum);
-    // if (!isSignUp) {
+  // const onSendCodePress = () => {
+  //   Keyboard.dismiss();
+  //   if (phoneNum === '') {
+  //     ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
+  //     return;
+  //   }
+  //   setOtpArea(true);
+  //   const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+  //   reactotron.log(phone);
+  //   reactotron.log(phoneNum);
+  //   // if (!isSignUp) {
 
-    // } else {
-    //   // goToHome();
-    // }
-  };
+  //   // } else {
+  //   //   // goToHome();
+  //   // }
+  // };
 
   return (
     <View style={styles.viewCon}>
@@ -62,7 +73,7 @@ const OtpValidator = ({isSignUp}) => {
             setCountryModalOpen(true);
           }}>
           <CountryPicker
-            countryCode={country ? country.cca2 : 'NO'} // number to open on norway only at start
+            countryCode={defaultCountryCode}
             withCallingCode
             withEmoji
             modalProps={{
@@ -70,7 +81,7 @@ const OtpValidator = ({isSignUp}) => {
             }}
             withCallingCodeButton
             withFlagButton={false}
-            onSelect={onSelect}
+            onSelect={onCountrySelect}
             onClose={() => {
               setCountryModalOpen(false);
             }}
@@ -91,15 +102,13 @@ const OtpValidator = ({isSignUp}) => {
           keyboardType={'phone-pad'}
           style={{width: '50%', padding: 5}}
           ref={numRef}
-          onChangeText={text => {
-            setPhoneNum(text);
-          }}
-          value={phoneNum}
+          onChangeText={chnagePhone}
+          value={phoneNumber}
         />
         <Button
           title={I18n.t('send_code')}
-          onPress={() => onSendCodePress()}
-          disabled={otpArea}
+          onPress={onSendCodePress}
+          disabled={otpCodeArea}
           buttonStyle={[theme.Button.buttonStyle]}
           titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
           disabledTitleStyle={theme.Button.disabledTitleStyle}
@@ -111,15 +120,11 @@ const OtpValidator = ({isSignUp}) => {
       </View>
       <Divider width={1} color={theme.colors.black} />
 
-      {otpArea && (
+      {otpCodeArea && (
         <View style={styles.otpCon}>
           <Text style={[theme.Text.h2Bold]}>{I18n.t('verify_code')}</Text>
           <Input
-            onChangeText={text => {
-              if (text.length === 6) {
-                navigation.navigate('PersonalDetails');
-              }
-            }}
+            onChangeText={enteredCode}
             keyboardAppearance="light"
             placeholder={'OTP'}
             maxLength={6}

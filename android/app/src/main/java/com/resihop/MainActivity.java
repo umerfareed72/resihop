@@ -1,4 +1,4 @@
-package com.resihop;
+package com.reactnative.resihop;
 
 import com.facebook.react.ReactActivity;
 
