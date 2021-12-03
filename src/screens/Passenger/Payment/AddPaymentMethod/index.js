@@ -1,5 +1,12 @@
 import React, {useRef, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  Dimensions,
+} from 'react-native';
 import {
   AddWalletModal,
   BankCard,
@@ -21,15 +28,18 @@ const index = ({navigation}) => {
   const [paymentSuccess, setpaymentSuccessonSuccess] = useState(false);
   const [paymentFailed, setpaymentSuccessonFailed] = useState(false);
   const [addMoney, onAddMoney] = useState(false);
-
   const modalRef = useRef(null);
 
   const onPressModalButton = () => {
     if (addMoney) {
       setpaymentSuccessonFailed(true);
       onAddMoney(false);
+      setpaymentSuccessonSuccess(false);
     } else {
       modalRef?.current?.close();
+      onAddMoney(false);
+      setpaymentSuccessonFailed(false);
+      setpaymentSuccessonSuccess(false);
       navigation?.navigate('StartMatching', {modalName: 'pickUpInfo'});
     }
   };
@@ -80,6 +90,8 @@ const index = ({navigation}) => {
             onPressAddMoney={() => {
               modalRef?.current?.open();
               onAddMoney(true);
+              setpaymentSuccessonSuccess(false);
+              setpaymentSuccessonFailed(false);
             }}
             title={I18n.t('wallet_balance')}
             add_Money={I18n.t('add_cards')}
@@ -100,7 +112,7 @@ const index = ({navigation}) => {
             onPress={() => {
               navigation?.navigate('TransactionHistory');
             }}
-            title={'Transaction History'}
+            title={I18n.t('trnsaction_history')}
             image={appIcons.sort}
           />
           {cardScreen && (
@@ -143,6 +155,7 @@ const index = ({navigation}) => {
         </View>
       </KeyboardAwareScrollView>
       <AddWalletModal
+        height={Dimensions.get('screen').height / 2.2}
         btnText={I18n.t('ok')}
         title={I18n.t('add_to_wallet')}
         addMoney={addMoney}
@@ -154,15 +167,13 @@ const index = ({navigation}) => {
         icon={paymentSuccess ? appIcons.tickBg : appIcons.cancel}
         h1={
           paymentFailed
-            ? 'Your amount exceeds Balance'
+            ? I18n.t('failed_payment')
             : '' || paymentSuccess
-            ? 'Transaction Successful!'
+            ? I18n.t('success_payment')
             : ''
         }
         show={modalRef}
-        h2={
-          'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
-        }
+        h2={I18n.t('lorem')}
       />
     </>
   );

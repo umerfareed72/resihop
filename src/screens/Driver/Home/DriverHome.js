@@ -19,11 +19,10 @@ import I18n from '../../../utilities/translations';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 //Data
 var TimeList = {
   id: 1,
-  title: 'Time',
+  title: I18n.t('time'),
   items: [
     {id: 1, text: '08:00 to 12:00', status: false},
     {id: 2, text: '08:00 to 12:00', status: false},
@@ -33,7 +32,7 @@ var TimeList = {
 
 var RideStatusList = {
   id: 1,
-  title: 'Ride Status',
+  title: I18n.t('ride_status'),
   items: [
     {id: 1, text: 'Confirmed', status: false},
     {id: 2, text: 'Waiting for Match', status: false},
@@ -43,7 +42,7 @@ var RideStatusList = {
 
 const rideTypeList = {
   id: 4,
-  title: 'Ride Type',
+  title: I18n.t('ride_type'),
   items: [
     {id: 1, text: 'All Rides'},
     {id: 2, text: 'Destination Rides'},
@@ -53,7 +52,7 @@ const rideTypeList = {
 
 const DateList = {
   id: 1,
-  title: 'Date',
+  title: I18n.t('date'),
   items: [
     {id: 1, text: '12 June'},
     {id: 2, text: '13 June'},
@@ -65,7 +64,7 @@ const DateList = {
 
 const seatsList = {
   id: 5,
-  title: 'Seat',
+  title: I18n.t('seat'),
   items: [
     {id: 1, icon: appImages.seatBlue},
     {id: 2, icon: appImages.seatBlue},
@@ -75,6 +74,7 @@ const seatsList = {
     {id: 6, icon: appImages.seatBlue},
   ],
 };
+
 const DriverHome = ({navigation}) => {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
@@ -165,7 +165,7 @@ const DriverHome = ({navigation}) => {
                 color: colors.white,
                 fontFamily: fonts.regular,
               }}>
-              Switch to Passenger
+              {I18n.t('switch_passenger')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -187,7 +187,7 @@ const DriverHome = ({navigation}) => {
                 resizeMode="contain"
               />
               <Text style={[styles.cardTxt, {marginTop: 14}]}>
-                Create Drive
+                {I18n.t('create_drive')}
               </Text>
             </View>
           </TouchableOpacity>
@@ -203,7 +203,7 @@ const DriverHome = ({navigation}) => {
                 style={styles.cardInterior}
                 resizeMode="contain"
               />
-              <Text style={styles.cardTxt}>My Recurring Drives</Text>
+              <Text style={styles.cardTxt}>{I18n.t('recurring_drives')}</Text>
             </View>
           </TouchableOpacity>
           <View style={styles.cardContainer}>
@@ -219,7 +219,9 @@ const DriverHome = ({navigation}) => {
                 style={styles.cardInterior}
                 resizeMode="contain"
               />
-              <Text style={styles.cardTxt}>City to City Drives</Text>
+              <Text style={styles.cardTxt}>
+                {I18n.t('city_to_city_drives')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -255,7 +257,7 @@ const DriverHome = ({navigation}) => {
             <TouchableOpacity
               style={styles.createRideBtnContainer}
               onPress={() => navigation.navigate('CreateDrive')}>
-              <Text style={styles.btnTxt}>Create your Frist Drive</Text>
+              <Text style={styles.btnTxt}>{I18n.t('create_first_drive')}</Text>
             </TouchableOpacity>
           </ScrollView>
         ) : (
@@ -270,7 +272,9 @@ const DriverHome = ({navigation}) => {
               <TouchableOpacity
                 style={styles.createRideBtnContainer}
                 onPress={() => navigation.navigate('CreateDrive')}>
-                <Text style={styles.btnTxt}>Create your Frist Drive</Text>
+                <Text style={styles.btnTxt}>
+                  {I18n.t('create_first_drive')}
+                </Text>
               </TouchableOpacity>
             )}
           />

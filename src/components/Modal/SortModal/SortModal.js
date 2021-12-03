@@ -18,33 +18,34 @@ import {
   appImages,
   appIcons,
 } from '../../../utilities';
+import I18n from '../../../utilities/translations';
 
 export const SortModal = ({show, onPress}) => {
   const items = [
     {
       id: 1,
-      title: 'Sort by Date (Ascending Order)',
+      title: I18n.t('sort_by_date_as'),
       onPress: () => {
         show?.current?.close();
       },
     },
     {
       id: 2,
-      title: 'Sort by Date (Descending Order)',
+      title: I18n.t('sort_by_date_ds'),
       onPress: () => {
         show?.current?.close();
       },
     },
     {
       id: 3,
-      title: 'Sort by Destination (A-Ö)',
+      title: I18n.t('sort_by_date_ao'),
       onPress: () => {
         show?.current?.close();
       },
     },
     {
       id: 4,
-      title: 'Sort by Destination (Ö-A)',
+      title: I18n.t('sort_by_date_oa'),
       onPress: () => {
         show?.current?.close();
       },

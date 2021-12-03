@@ -24,6 +24,8 @@ export default {
   lorem:
     'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   first_ride: 'Create your First Ride',
+  success_payment: 'Transaction Successful!',
+  failed_payment: 'Your amount exceeds Balance',
   review_details: 'Review Your Details',
   car_company_text: 'Car Company',
   model_name_text: 'Model Name',
@@ -75,6 +77,7 @@ export default {
   welcome_to_resihop_msg: 'Welcome To Res ihop',
   add_to_wallet: 'Add Money to Wallet',
   ok: 'OK',
+
   //Payment Method S
   my_payment_method: 'My Payment Methods',
   add_card: 'Add Card',
@@ -86,6 +89,8 @@ export default {
   add_card_info: 'Save your card to autopay for your ride payments',
   pay_with_wallet: 'SEK 35 Pay From Wallet',
   pay_with_card: 'SEK 35 Pay From Card',
+  pay_from_wallet: 'Pay From Wallet',
+  amount: 'Amount',
   card_detail: 'Card Details',
   edit_card: 'Edit Card',
   remove_card: 'Remove Card',
@@ -108,7 +113,16 @@ export default {
   blocked_list: 'Blocked Lists',
   language: 'Language',
   change_language: 'Change Language',
-
+  //Time
+  time: 'Time',
+  ride_status: 'Ride Status',
+  ride_type: 'Ride Type',
+  date: 'Date',
+  seat: 'Seat',
+  sort_by_date_as: 'Sort by Date (Ascending Order)',
+  sort_by_date_ds: 'Sort by Date (Descending Order)',
+  sort_by_date_ao: 'Sort by Destination (A-Ö)',
+  sort_by_date_oa: 'Sort by Destination (Ö-A)',
   //Driver Strings
   driver_home: 'Driver Home',
   ride_detail: 'Ride Details',
@@ -116,4 +130,24 @@ export default {
   driver_ride_detail: 'Drive Details',
   add_to_favourite: 'Add to Favorites',
   add_experience: 'Rate your Ride Experience',
+
+  //Driver Side
+  create_drive: 'Create Drive',
+  switch_passenger: 'Switch to Passenger',
+  recurring_drives: 'My Recurring Drives',
+  city_to_city_drives: 'City to City Drives',
+  create_first_drive: 'Create your Frist Drive',
+  single_trip: 'Single Trip',
+  recurring_ride: 'Recurring Ride',
+  start_location: 'Start Location',
+  destination: 'Destination',
+  book_seat: 'Book Your Seats',
+  need_to_arrive: 'Need to arrive no later than',
+  select_date: 'Select Date',
+  return_trip: 'Return Trip',
+  departure_time: 'Departure Time (Return)',
+  departure_time_desc: '(Add a time bracket when you want ride for return)',
+  to: 'To',
+  available_drivers: 'Available Drivers',
+  booking_detail: 'Booking Details',
 };

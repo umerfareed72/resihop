@@ -31,11 +31,12 @@ export const AddWalletModal = ({
   h1,
   h2,
   icon,
+  height,
 }) => {
   return (
     <RBSheet
       ref={show}
-      height={350}
+      height={height}
       customStyles={{
         wrapper: {
           backgroundColor: 'rgba(16,16,16,0.5)',

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Dimensions,
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {AddWalletModal, CustomHeader} from '../../components';
@@ -80,6 +81,7 @@ const TransactionDetails = ({navigation}) => {
         </View>
       </SafeAreaView>
       <AddWalletModal
+        height={Dimensions.get('screen').height / 2.7}
         btnText={'OK'}
         onSuccess={true}
         onPress={() => {

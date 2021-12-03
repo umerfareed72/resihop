@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../theme/theme';
 import {appIcons, appImages, colors} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -233,6 +233,7 @@ const RideStatusCards = ({statusType}) => {
         />
       )}
       <AddWalletModal
+        height={Dimensions.get('screen').height / 2.7}
         show={walletRef}
         onSuccess={true}
         onPress={() => {
