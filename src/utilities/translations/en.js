@@ -14,6 +14,14 @@ export default {
   personal_details_text: 'Personal Details',
   get_details_text: 'get details',
   license_plate_text: 'License plate',
+
+  //Approval Screen
+  waiting_approval: 'Waiting For Approval',
+  approved_desc:
+    'You can always switch back to Driver in the app with just one click!',
+  congratulation: 'Congratulations!',
+  registered_driver: 'Your Driver Registration has \n been Approved',
+  set_driver: 'Set your First Drive',
   //Passenger Home
   passenger_home: 'Passenger Home',
   switch_driver: 'Switch to Driver',
@@ -77,8 +85,9 @@ export default {
   welcome_to_resihop_msg: 'Welcome To Res ihop',
   add_to_wallet: 'Add Money to Wallet',
   ok: 'OK',
-
-  //Payment Method S
+  //Passenger
+  create_ride: 'Create Ride',
+  //Payment Method
   my_payment_method: 'My Payment Methods',
   add_card: 'Add Card',
   credit_card: 'Credit/Debit Card',
@@ -150,4 +159,5 @@ export default {
   to: 'To',
   available_drivers: 'Available Drivers',
   booking_detail: 'Booking Details',
+  apply: 'Apply',
 };

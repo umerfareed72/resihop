@@ -19,6 +19,7 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from './FavouriteLocations';
 import {CustomHeader} from '../components';
 import CalendarSheet from './CalendarSheet';
+import I18n from '../utilities/translations';
 
 const CreateRide = () => {
   let navigation = useNavigation();
@@ -38,7 +39,7 @@ const CreateRide = () => {
       <CustomHeader
         backButton={true}
         navigation={navigation}
-        title={'Create Ride'}
+        title={I18n.t('create_ride')}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.tripBtnWrapper}>
@@ -50,7 +51,7 @@ const CreateRide = () => {
               styles.tripBtnContainer,
               {backgroundColor: screen ? colors.btnGray : colors.green},
             ]}>
-            <Text style={styles.btnTxt}>Single Trip</Text>
+            <Text style={styles.btnTxt}>{I18n.t('single_trip')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -61,7 +62,7 @@ const CreateRide = () => {
               styles.tripBtnContainer,
               {backgroundColor: screen ? colors.green : colors.btnGray},
             ]}>
-            <Text style={styles.btnTxt}>Recurring Ride</Text>
+            <Text style={styles.btnTxt}>{I18n.t('recurring_ride')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -74,7 +75,7 @@ const CreateRide = () => {
                 })
               }
               style={[styles.txtInput, {marginBottom: 20}]}>
-              <Text style={styles.startTxt}>Start Location</Text>
+              <Text style={styles.startTxt}>{I18n.t('start_location')}</Text>
               <View style={styles.startDot} />
             </TouchableOpacity>
             <TouchableOpacity
@@ -82,7 +83,7 @@ const CreateRide = () => {
                 navigation.navigate('StartLocation', {modalName: 'destination'})
               }
               style={styles.txtInput}>
-              <Text style={styles.startTxt}>Destination City</Text>
+              <Text style={styles.startTxt}>{I18n.t('destination')}</Text>
               <View style={styles.destSquare} />
             </TouchableOpacity>
           </View>
@@ -105,7 +106,7 @@ const CreateRide = () => {
             />
           </View>
         </View>
-        <Text style={styles.bookSeatsTxt}>Book Your Seats</Text>
+        <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
             <Image
@@ -118,9 +119,9 @@ const CreateRide = () => {
         </View>
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
-            Need to arrive no later than
+            {I18n.t('need_to_arrive')}
           </Text>
-          <Text style={styles.selectTxt}>Select Date</Text>
+          <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
           <TextInput
@@ -145,7 +146,7 @@ const CreateRide = () => {
           />
         </View>
         <View style={styles.returnTripWrapper}>
-          <Text style={styles.returnTxt}>Return Trip</Text>
+          <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
           <ToggleSwitch
             isOn={toggleEnabled}
             onColor={colors.green}
@@ -161,7 +162,7 @@ const CreateRide = () => {
               <View>
                 <View style={{marginBottom: 20}}>
                   <TextInput
-                    placeholder="Start Location"
+                    placeholder={I18n.t('start_location')}
                     placeholderTextColor={colors.inputTxtGray}
                     value={startLocation}
                     onChangeText={setStartLocation}
@@ -171,7 +172,7 @@ const CreateRide = () => {
                 </View>
                 <View>
                   <TextInput
-                    placeholder="Destination"
+                    placeholder={I18n.t('destination')}
                     placeholderTextColor={colors.inputTxtGray}
                     value={destination}
                     onChangeText={setDestination}
@@ -187,9 +188,11 @@ const CreateRide = () => {
               </View>
             </View>
             <View style={{marginLeft: 26}}>
-              <Text style={styles.returntimeTxt}>Departure Time (Return)</Text>
+              <Text style={styles.returntimeTxt}>
+                {I18n.t('departure_time')}
+              </Text>
               <Text style={styles.timeBracketTxt}>
-                (Add a time bracket when you want ride for return)
+                {I18n.t('departure_time_desc')}
               </Text>
             </View>
             <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
@@ -200,7 +203,7 @@ const CreateRide = () => {
                 onChangeText={setNoLaterTime}
                 style={styles.noLater}
               />
-              <Text>To</Text>
+              <Text> {I18n.t('to')}</Text>
               <TextInput
                 placeholder="XX:XX"
                 placeholderTextColor={colors.btnGray}
@@ -221,7 +224,7 @@ const CreateRide = () => {
           onPress={() =>
             navigation.navigate('StartMatching', {modalName: 'startMatching'})
           }>
-          <Text style={styles.nextTxt}>Next</Text>
+          <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

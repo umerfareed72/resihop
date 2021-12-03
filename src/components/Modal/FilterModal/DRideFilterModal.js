@@ -20,7 +20,7 @@ import {
   appIcons,
 } from '../../../utilities';
 import {PaymentButtons} from '../../Buttons/Payment/PaymentButtons';
-
+import I18n from '../../../utilities/translations';
 export const DRideFilterModal = ({
   h1,
   h2,
@@ -164,7 +164,7 @@ export const DRideFilterModal = ({
           <View style={{padding: 20}}>
             <PaymentButtons
               onPress={onApply}
-              title={'Apply'}
+              title={I18n.t('apply')}
               bgColor={colors.green}
               txtColor={colors.white}
             />

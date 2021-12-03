@@ -20,16 +20,12 @@ const index = ({navigation}) => {
         <View style={styles.contentContainer}>
           {!time && (
             <ApprovalCard
-              h1={'Waiting For Approval'}
-              h2={
-                ' Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumyeirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diamvoluptua.'
-              }
-              btnText={'Switch to Passenger'}
+              h1={I18n.t('waiting_approval')}
+              h2={I18n.t('lorem')}
+              btnText={I18n.t('switch_passenger')}
               height={120}
               width={111}
-              h4={
-                'You can always switch back to Driver in the app with just one click!'
-              }
+              h4={I18n.t('approved_desc')}
               image={appIcons.timer}
               fontSize={size.normal}
               textColor={colors.g3}
@@ -41,14 +37,12 @@ const index = ({navigation}) => {
           )}
           {time && (
             <ApprovalCard
-              h1={'Congratulations!'}
-              h2={'Your Driver Registration has \n been Approved'}
-              btnText={'Set your First Drive'}
+              h1={I18n.t('congratulation')}
+              h2={I18n.t('registered_driver')}
+              btnText={I18n.t('set_driver')}
               height={120}
               width={111}
-              h3={
-                'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.'
-              }
+              h3={I18n.t('lorem')}
               fontSize={size.large}
               textColor={colors.light_black}
               fontFamily={family.product_sans_bold}

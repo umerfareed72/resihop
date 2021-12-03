@@ -240,7 +240,7 @@ const CreateDrive = () => {
         <TouchableOpacity
           style={styles.nextBtnContainer}
           onPress={() => navigation.navigate('SelectRoute')}>
-          <Text style={styles.nextTxt}>Next</Text>
+          <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
