@@ -7,6 +7,7 @@ I18n.fallbacks = false;
 
 I18n.translations = {
   en,
+  sw,
 };
 
 /*
