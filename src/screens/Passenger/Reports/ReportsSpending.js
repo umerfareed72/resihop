@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React, {useRef, useState} from 'react';
 import {
   Image,
@@ -31,39 +32,49 @@ const ReportsSpending = ({onPressYear}) => {
             </View>
             <View style={styles.monthContainer}>
               <TouchableOpacity style={styles.monthView}>
-                <Text style={styles.monthText}>This Month</Text>
+                <Text style={styles.monthText}>{I18n.t('rep_month')}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.monthView}>
-                <Text style={styles.monthText}>This Year</Text>
+                <Text style={styles.monthText}>{I18n.t('rep_year')}</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.secondContainer}>
             <View style={styles.leftRideContainer}>
-              <Text style={styles.promoStyle}>Total Rides</Text>
+              <Text style={styles.promoStyle}>{I18n.t('rep_total_rides')}</Text>
               <Text style={styles.promoText}>120</Text>
             </View>
             <View style={styles.rightRideContainer}>
-              <Text style={styles.promoStyle}>Total Spending</Text>
+              <Text style={styles.promoStyle}>
+                {I18n.t('rep_total_spending')}
+              </Text>
               <Text style={styles.promoText}>SEK 2500</Text>
             </View>
           </View>
         </LinearGradient>
-        <Text style={styles.downloadReport}>Download Reports</Text>
+        <Text style={styles.downloadReport}>{I18n.t('rep_download_rep')}</Text>
         <View style={styles.monthButtonContainer}>
           <TouchableOpacity style={styles.buttonMonthStyle}>
-            <Text style={styles.buttonMonthText}>Last Month</Text>
+            <Text style={styles.buttonMonthText}>
+              {I18n.t('rep_last_month')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttonMonthStyle}>
-            <Text style={styles.buttonMonthText}>Last 6 Months</Text>
+            <Text style={styles.buttonMonthText}>
+              {I18n.t('rep_last_6month')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttonMonthStyle}>
-            <Text style={styles.buttonMonthText}>Last 1 Year</Text>
+            <Text style={styles.buttonMonthText}>
+              {I18n.t('rep_last_year')}
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.rangeContainer}>
-          <Text style={styles.downloadReport}>Select Range</Text>
+          <Text style={styles.downloadReport}>
+            {I18n.t('rep_select_range')}
+          </Text>
           <TouchableOpacity
             onPress={onPressYear}
             style={{
@@ -75,7 +86,9 @@ const ReportsSpending = ({onPressYear}) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={styles.promoStyleReplica}>Select Calendar Year</Text>
+            <Text style={styles.promoStyleReplica}>
+              {I18n.t('rep_select_calendar')}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -121,7 +134,7 @@ const ReportsSpending = ({onPressYear}) => {
             fontFamily: family.product_sans_regular,
             fontSize: size.xsmall,
           }}>
-          Select Atleast 1 Month Time Bracket
+          {I18n.t('rep_condition')}
         </Text>
         <View
           style={{
@@ -160,7 +173,7 @@ const ReportsSpending = ({onPressYear}) => {
               fontFamily: family.product_sans_bold,
               color: colors.white,
             }}>
-            Download Report
+            {I18n.t('rep_download_rep')}
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React, {useState} from 'react';
 import {
   View,
@@ -36,23 +37,20 @@ const Invite = ({navigation}) => {
   };
   return (
     <>
-      <CustomHeader navigation={navigation} title="Invite" backButton={true} />
+      <CustomHeader
+        navigation={navigation}
+        title={I18n.t('invite_title')}
+        backButton={true}
+      />
       <SafeAreaView style={styles.container}>
         <View style={styles.contentContainer}>
           <View style={styles.subContainerOne}>
             <Image source={appImages.inviteImage} />
-            <Text style={styles.headingText}>Invite your Friends</Text>
-            <Text style={styles.descriptionText}>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur
-            </Text>
+            <Text style={styles.headingText}>{I18n.t('invite_friend')}</Text>
+            <Text style={styles.descriptionText}>{I18n.t('lorem')}</Text>
             <View style={styles.codeContainer}>
               <Text style={styles.codeText}>ABCD1234</Text>
-              <Text style={styles.copyText}>Copy Code</Text>
+              <Text style={styles.copyText}>{I18n.t('invite_copy_code')}</Text>
             </View>
           </View>
           <View style={styles.subContainerTwo}>
@@ -72,7 +70,7 @@ const Invite = ({navigation}) => {
                   fontFamily: family.product_sans_bold,
                   color: colors.white,
                 }}>
-                Invite Friends
+                {I18n.t('invite_friend')}
               </Text>
             </TouchableOpacity>
           </View>

@@ -34,45 +34,45 @@ const Settings = ({navigation}) => {
 
   let data = [
     {
-      title: 'Language',
+      title: I18n.t('set_lang'),
       onPress: () => navigation.navigate('MultiLanguage'),
     },
     {
-      title: 'Help & Support',
+      title: I18n.t('set_help'),
       onPress: () => navigation.navigate('Help'),
     },
     {
-      title: 'Notifications Settings',
+      title: I18n.t('set_notif_set'),
       onPress: () => navigation.navigate('NotificationSettings'),
     },
     {
-      title: 'Blocked List',
+      title: I18n.t('set_block'),
       onPress: () => navigation.navigate('BlockedList'),
     },
     {
-      title: 'FAQs',
+      title: I18n.t('set_faq'),
       onPress: () => navigation.navigate('Faq'),
     },
     {
-      title: 'About Us',
+      title: I18n.t('set_about'),
       onPress: () => navigation.navigate('AboutUs'),
     },
     {
-      title: 'Terms & Conditions',
+      title: I18n.t('set_terms'),
       onPress: () => navigation.navigate('Terms'),
     },
     {
-      title: 'Privacy Policy',
+      title: I18n.t('set_privacy'),
       onPress: () => navigation.navigate('Privacy'),
     },
     {
-      title: 'Rate Us',
+      title: I18n.t('set_rate'),
       onPress: () => {
         setShow(!show);
       },
     },
     {
-      title: 'App Version',
+      title: I18n.t('set_app_version'),
       onPress: () => alert('Clicked'),
     },
   ];
@@ -80,7 +80,7 @@ const Settings = ({navigation}) => {
   return (
     <>
       <CustomHeader
-        title="Settings"
+        title={I18n.t('setting')}
         backButton={true}
         navigation={navigation}
       />

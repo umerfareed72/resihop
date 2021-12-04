@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React, {useRef, useState} from 'react';
 import {
   Image,
@@ -20,12 +21,8 @@ const ReportsEarning = () => {
   return (
     <View style={styles.container}>
       <Image style={{marginTop: HP('8')}} source={appIcons.noPayment} />
-      <Text style={styles.headingText}>You have no Earnings</Text>
-      <Text style={styles.sampleText}>
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-        voluptua.
-      </Text>
+      <Text style={styles.headingText}>{I18n.t('rep_earn_text')}</Text>
+      <Text style={styles.sampleText}>{I18n.t('lorem')}</Text>
     </View>
   );
 };

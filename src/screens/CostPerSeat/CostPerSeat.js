@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/core';
+import I18n from 'i18n-js';
 import React, {useRef} from 'react';
 import {
   View,
@@ -16,7 +17,7 @@ const CostPerSeat = ({navigation}) => {
   return (
     <>
       <CustomHeader
-        title="Cost Per Seat"
+        title={I18n.t('cost_per_seat')}
         backButton={true}
         navigation={navigation}
       />

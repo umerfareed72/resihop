@@ -19,7 +19,6 @@ function languageSelect(props) {
           <View style={styles.imgCon}>
             <Image source={appIcons.landing_img} style={styles.img} />
           </View>
-
           <Text style={[theme.Text.h1Bold, styles.heading]}>
             {I18n.t('select_language_title')}
           </Text>

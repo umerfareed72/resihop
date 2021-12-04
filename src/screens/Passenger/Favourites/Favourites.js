@@ -10,6 +10,7 @@ import {
 import {CustomHeader} from '../../../components';
 import {colors, family, HP, size} from '../../../utilities';
 import {FavDriver, FavPassenger, FavLocation} from '../../../components';
+import I18n from 'i18n-js';
 
 const Favourites = ({navigation}) => {
   const [selected, setSelected] = useState(1);
@@ -17,7 +18,7 @@ const Favourites = ({navigation}) => {
     <>
       <CustomHeader
         navigation={navigation}
-        title="Favourites"
+        title={I18n.t('fav_title')}
         backButton={true}
       />
       <SafeAreaView style={styles.container}>
@@ -31,7 +32,7 @@ const Favourites = ({navigation}) => {
                   styles.tabText,
                   {color: selected === 1 ? colors.green : colors.light_black},
                 ]}>
-                Driver
+                {I18n.t('fav_driver')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -42,7 +43,7 @@ const Favourites = ({navigation}) => {
                   styles.tabTextReplica,
                   {color: selected === 2 ? colors.green : colors.light_black},
                 ]}>
-                Passenger
+                {I18n.t('fav_passenger')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -53,7 +54,7 @@ const Favourites = ({navigation}) => {
                   styles.tabTextReplica,
                   {color: selected === 3 ? colors.green : colors.light_black},
                 ]}>
-                Location
+                {I18n.t('fav_location')}
               </Text>
             </TouchableOpacity>
           </View>
