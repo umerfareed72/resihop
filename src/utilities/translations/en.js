@@ -174,4 +174,26 @@ export default {
 
   //Privacy Policy
   privacy_title: 'Privacy Policy',
+
+  //FAQ
+  faq_title: 'FAQs',
+
+  //Settings
+  setting: 'Settings',
+  set_lang: 'Language',
+  set_help: 'Help & Support',
+  set_notif_set: 'Notifications Settings',
+  set_block: 'Blocked List',
+  set_faq: 'FAQs',
+  set_about: 'About Us',
+  set_terms: 'Terms & Conditions',
+  set_privacy: 'Privacy Policy',
+  set_rate: 'Rate Us',
+  set_app_version: 'App Version',
+
+  //Unblock button
+  unblock: 'Unblock',
+
+  //Cost per seat
+  cost_per_seat: 'Cost Per Seat',
 };
