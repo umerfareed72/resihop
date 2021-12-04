@@ -11,6 +11,7 @@ import {
 import {CustomHeader} from '../../../components';
 import {colors, family, HP, size} from '../../../utilities';
 import {Divider, Icon} from 'react-native-elements';
+import I18n from 'i18n-js';
 
 const Faq = ({navigation}) => {
   //useState here
@@ -113,7 +114,11 @@ const Faq = ({navigation}) => {
 
   return (
     <>
-      <CustomHeader navigation={navigation} title="FAQs" backButton={true} />
+      <CustomHeader
+        navigation={navigation}
+        title={I18n.t('faq_title')}
+        backButton={true}
+      />
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <View style={styles.mainContainer}>

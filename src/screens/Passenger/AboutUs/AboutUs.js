@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React, {Component} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -12,13 +13,13 @@ const AboutUs = ({navigation}) => {
     <>
       <CustomHeader
         navigation={navigation}
-        title={'About Us'}
+        title={I18n.t('about_us')}
         backButton={true}
       />
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <View style={styles.mainView}>
-            <TermsView title="About Us" description={description} />
+            <TermsView title={I18n.t('about_us')} description={description} />
           </View>
         </ScrollView>
       </SafeAreaView>

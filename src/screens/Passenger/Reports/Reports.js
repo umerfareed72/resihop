@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React, {useRef, useState} from 'react';
 import {
   Image,
@@ -26,7 +27,11 @@ const Reports = ({navigation}) => {
 
   return (
     <>
-      <CustomHeader navigation={navigation} title="Reports" backButton={true} />
+      <CustomHeader
+        navigation={navigation}
+        title={I18n.t('report')}
+        backButton={true}
+      />
       <SafeAreaView style={styles.container}>
         <View style={styles.mainView}>
           <View style={styles.containerOne}>
@@ -39,7 +44,7 @@ const Reports = ({navigation}) => {
                     styles.leftTabText,
                     {color: selected === 1 ? colors.blue : colors.light_black},
                   ]}>
-                  Earnings
+                  {I18n.t('rep_earning')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -50,7 +55,7 @@ const Reports = ({navigation}) => {
                     styles.rightTabText,
                     {color: selected === 2 ? colors.blue : colors.light_black},
                   ]}>
-                  Spending
+                  {I18n.t('rep_spending')}
                 </Text>
               </TouchableOpacity>
             </View>

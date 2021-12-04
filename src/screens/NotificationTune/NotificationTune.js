@@ -17,6 +17,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Icon} from 'react-native-elements';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {TextInput} from 'react-native-gesture-handler';
+import I18n from 'i18n-js';
 
 const NotificationTune = ({navigation}) => {
   // ../../assets/icons/png/ticketBg.png
@@ -50,7 +51,7 @@ const NotificationTune = ({navigation}) => {
     <>
       <CustomHeader
         navigation={navigation}
-        title="Notifications Tone"
+        title={I18n.t('notif_tune')}
         backButton={true}
       />
       <SafeAreaView style={styles.container}>

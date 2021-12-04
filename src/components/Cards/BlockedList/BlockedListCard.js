@@ -1,3 +1,4 @@
+import I18n from 'i18n-js';
 import React from 'react';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
@@ -91,7 +92,7 @@ export const BlockedListCard = ({card1}) => {
           </>
         )}
         <TouchableOpacity style={styles.btnContainer}>
-          <Text style={styles.btnText}>Unblock</Text>
+          <Text style={styles.btnText}>{I18n.t('unblock')}</Text>
         </TouchableOpacity>
       </View>
     </View>
