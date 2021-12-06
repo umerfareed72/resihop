@@ -12,6 +12,7 @@ import {appImages, colors, family, size} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
 import {fonts} from '../theme';
 import CalendarSheet from '../screens/CalendarSheet';
+import I18n from '../utilities/translations';
 
 const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
   let navigation = useNavigation();
@@ -32,13 +33,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
           <CustomHeader
             backButton={true}
             navigation={navigation}
-            title={
-              modalName === 'startLocation'
-                ? 'Start Location'
-                : modalName === 'returnTrip'
-                ? 'Return Trip'
-                : 'Destination'
-            }
+            title={getModalName(modalName)}
           />
           <View style={styles.startInputWrapper}>
             {modalName === 'returnTrip' ? (
@@ -46,7 +41,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                 <View>
                   <View style={{marginBottom: 20}}>
                     <TextInput
-                      placeholder="Start Location"
+                      placeholder={I18n.t('start_location')}
                       placeholderTextColor={colors.inputTxtGray}
                       value={startLocation}
                       onChangeText={setStartLocation}
@@ -56,7 +51,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                   </View>
                   <View>
                     <TextInput
-                      placeholder="Destination"
+                      placeholder={I18n.t('destination')}
                       placeholderTextColor={colors.inputTxtGray}
                       value={destination}
                       onChangeText={setDestination}
@@ -85,21 +80,18 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
               </>
             )}
           </View>
-          <Text style={styles.favLocation}>
-            {' '}
-            Add this Location to Favorite Locations
-          </Text>
+          <Text style={styles.favLocation}> {I18n.t('add_this_to_fav')}</Text>
           <View style={styles.faveBtnWrapper}>
             <TouchableOpacity style={styles.favLocationBtn}>
-              <Text style={styles.favLocationBtnTxt}>Home</Text>
+              <Text style={styles.favLocationBtnTxt}>{I18n.t('home')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.favLocationBtn}>
-              <Text style={styles.favLocationBtnTxt}>Office</Text>
+              <Text style={styles.favLocationBtnTxt}>{I18n.t('office')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.favLocationBtn}
               onPress={() => addfavrouiteAddressRef.current.open()}>
-              <Text style={styles.favLocationBtnTxt}>Other</Text>
+              <Text style={styles.favLocationBtnTxt}>{I18n.t('other')}</Text>
             </TouchableOpacity>
           </View>
           {modalName === 'startLocation' ? (
@@ -122,7 +114,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
             <>
               <View style={{marginLeft: 26}}>
                 <Text style={styles.returntimeTxt}>
-                  Departure Time (Return)
+                  {I18n.t('departure_time')}
                 </Text>
               </View>
               <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
@@ -133,7 +125,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                   onChangeText={setNoLaterTime}
                   style={styles.noLater}
                 />
-                <Text>To</Text>
+                <Text>{I18n.t('to')}</Text>
                 <TextInput
                   placeholder="XX:XX"
                   placeholderTextColor={colors.btnGray}
@@ -147,9 +139,9 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
             <>
               <View style={styles.selectWrapper}>
                 <Text style={[styles.selectTxt, {marginRight: 23}]}>
-                  Need to arrive no later than
+                  {I18n.t('need_to_arrive')}
                 </Text>
-                <Text style={styles.selectTxt}>Select Date</Text>
+                <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
               </View>
               <View style={styles.selectionInputWrapper}>
                 <TextInput
@@ -195,7 +187,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
               },
             ]}
             onPress={onPress}>
-            <Text style={styles.nextTxt}>Next</Text>
+            <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
           </TouchableOpacity>
         </View>
       ) : null}
@@ -384,3 +376,15 @@ const styles = StyleSheet.create({
 });
 
 export default AddressCards;
+
+const getModalName = modalName => {
+  if (modalName === 'startLocation') {
+    return I18n.t('start_location');
+  }
+
+  if (modalName === 'returnTrip') {
+    return I18n.t('return_trip');
+  }
+
+  return I18n.t('destination');
+};

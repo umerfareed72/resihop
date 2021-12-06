@@ -42,7 +42,7 @@ const AvailableDrivers = props => {
                   style={styles.driver}
                 />
                 <View>
-                  <Text style={styles.driverName}>John Deo</Text>
+                  <Text style={styles.driverName}>{I18n.t('john')}</Text>
                   <View style={styles.ratingContainer}>
                     <StarIcon name="star" size={17} color={colors.white} />
                     <Text style={styles.ratingTxt}>4.5</Text>
@@ -78,20 +78,20 @@ const AvailableDrivers = props => {
                   resizeMode="contain"
                   style={styles.seatGreen}
                 />
-                <Text style={styles.seatNum}>4 Seat Available</Text>
+                <Text style={styles.seatNum}>{I18n.t('seat_available')}</Text>
               </View>
               <View style={styles.carDetailsTxt}>
-                <Text style={styles.carDetails}>Ford, Focus,</Text>
+                <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
                 <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-                  White, XT32TTU8
+                  {I18n.t('car_detail')}
                 </Text>
               </View>
             </View>
             <View style={styles.availableMain}>
               <View style={styles.availableBox}>
-                <Text style={styles.availableTxt}>Available</Text>
+                <Text style={styles.availableTxt}>{I18n.t('Available')}</Text>
               </View>
-              <Text style={styles.date}>12 June 2020</Text>
+              <Text style={styles.date}>{I18n.t('dateInt')}</Text>
             </View>
             <TouchableOpacity
               style={styles.btnContainer}

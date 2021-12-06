@@ -2,13 +2,14 @@ import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {appImages, colors} from '../utilities';
 import {fonts} from '../theme/theme';
+import I18n from '../utilities/translations';
 
 const SelectRouteCard = ({setModal}) => {
   const [data, setData] = useState([1, 2, 3, 4]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.detail}>24 min (15.6 km) | 14 Passenger</Text>
+      <Text style={styles.detail}>{I18n.t('min24')}</Text>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
           123 abc apartment abc street abc...
@@ -22,7 +23,7 @@ const SelectRouteCard = ({setModal}) => {
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.dateContainer}>
-        <Text style={styles.dateTxt}>12 June, 08:00</Text>
+        <Text style={styles.dateTxt}>{I18n.t('date_time')}</Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           {data.map(() => (
             <Image
@@ -36,7 +37,7 @@ const SelectRouteCard = ({setModal}) => {
       <TouchableOpacity
         style={styles.btnContainer}
         onPress={() => setModal('availablePassenger')}>
-        <Text style={styles.btnTxt}>Select Route</Text>
+        <Text style={styles.btnTxt}>{I18n.t('select_route')}</Text>
       </TouchableOpacity>
     </View>
   );

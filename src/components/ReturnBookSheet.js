@@ -4,6 +4,7 @@ import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
 import {fonts} from '../theme';
+import I18n from '../utilities/translations';
 
 const ReturnBookSheet = ({returnBookSheetRef, onPressReturn, onPressSkip}) => {
   let navigation = useNavigation();
@@ -21,17 +22,17 @@ const ReturnBookSheet = ({returnBookSheetRef, onPressReturn, onPressSkip}) => {
           borderTopLeftRadius: 35,
         },
       }}>
-      <Text style={styles.question}>Do you want to book Return Trip?</Text>
+      <Text style={styles.question}>{I18n.t('want_return_trip')}</Text>
       <TouchableOpacity
         onPress={onPressReturn}
         style={[
           styles.btnContainer,
           {backgroundColor: colors.green, marginBottom: 19},
         ]}>
-        <Text style={styles.btnTxt}>OK</Text>
+        <Text style={styles.btnTxt}>{I18n.t('ok')}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.btnContainer} onPress={onPressSkip}>
-        <Text style={styles.btnTxt}>Skip</Text>
+        <Text style={styles.btnTxt}>{I18n.t('skip')}</Text>
       </TouchableOpacity>
     </RBSheet>
   );

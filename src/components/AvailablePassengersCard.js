@@ -5,6 +5,7 @@ import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fonts} from '../theme/theme';
 import {useNavigation} from '@react-navigation/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import I18n from '../utilities/translations';
 
 const AvailablePassengersCard = () => {
   const [seat, setSeats] = useState([1, 2]);
@@ -20,7 +21,7 @@ const AvailablePassengersCard = () => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.available}>Available Passenger</Text>
+      <Text style={styles.available}>{I18n.t('available_passenger')}</Text>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
           123 abc apartment abc street abc...
@@ -41,7 +42,7 @@ const AvailablePassengersCard = () => {
             style={styles.driver}
           />
           <View style={{marginLeft: 13}}>
-            <Text style={styles.name}>John Deo</Text>
+            <Text style={styles.name}>{I18n.t('john')}</Text>
             <View style={styles.ratingContainer}>
               <StarIcon name="star" size={17} color={colors.white} />
               <Text style={styles.ratingTxt}>4.5</Text>
@@ -64,11 +65,11 @@ const AvailablePassengersCard = () => {
               />
             ))}
           </View>
-          <Text style={{fontFamily: fonts.regular}}>12 June, 08:00</Text>
+          <Text style={{fontFamily: fonts.regular}}>{I18n.t('date_time')}</Text>
         </View>
       </View>
       <TouchableOpacity style={styles.btnContainer} onPress={getData}>
-        <Text style={styles.btnTxt}>Show All Passenger</Text>
+        <Text style={styles.btnTxt}>{I18n.t('show_all_passenger')}</Text>
       </TouchableOpacity>
     </View>
   );

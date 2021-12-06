@@ -18,6 +18,7 @@ import {CustomHeader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
 import {useNavigation} from '@react-navigation/core';
 import {fonts} from '../../../theme/theme';
+import I18n from '../../../utilities/translations';
 
 const UpdateRide = () => {
   let navigation = useNavigation();
@@ -49,7 +50,7 @@ const UpdateRide = () => {
                     modalName: 'startLocation',
                   })
                 }>
-                <Text style={styles.startTxt}>Start Location</Text>
+                <Text style={styles.startTxt}>{I18n.t('start_location')}</Text>
               </TouchableOpacity>
               <View style={styles.startDot} />
             </View>
@@ -61,7 +62,7 @@ const UpdateRide = () => {
                     modalName: 'destination',
                   })
                 }>
-                <Text style={styles.startTxt}>Destination</Text>
+                <Text style={styles.startTxt}>{I18n.t('destination')}</Text>
               </TouchableOpacity>
               <View style={styles.destSquare} />
             </View>
@@ -84,7 +85,7 @@ const UpdateRide = () => {
             />
           </View>
         </View>
-        <Text style={styles.bookSeatsTxt}>Book Your Seats</Text>
+        <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
             <Image
@@ -97,7 +98,7 @@ const UpdateRide = () => {
         </View>
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
-            Need to arrive no later than
+            {I18n.t('need_to_arrive')}
           </Text>
         </View>
         <View style={styles.selectionInputWrapper}>
@@ -110,7 +111,7 @@ const UpdateRide = () => {
           />
         </View>
         <View style={styles.returnTripWrapper}>
-          <Text style={styles.returnTxt}>Return Trip</Text>
+          <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
           <ToggleSwitch
             isOn={toggleEnabled}
             onColor={colors.green}
@@ -132,7 +133,9 @@ const UpdateRide = () => {
                         modalName: 'startLocation',
                       })
                     }>
-                    <Text style={styles.startTxt}>Start Location</Text>
+                    <Text style={styles.startTxt}>
+                      {I18n.t('start_location')}
+                    </Text>
                   </TouchableOpacity>
                   <View style={styles.startDot} />
                 </View>
@@ -144,7 +147,7 @@ const UpdateRide = () => {
                         modalName: 'destination',
                       })
                     }>
-                    <Text style={styles.startTxt}>Destination</Text>
+                    <Text style={styles.startTxt}>{I18n.t('destination')}</Text>
                   </TouchableOpacity>
                   <View style={styles.destSquare} />
                 </View>
@@ -156,9 +159,11 @@ const UpdateRide = () => {
               </View>
             </View>
             <View style={{marginLeft: 26}}>
-              <Text style={styles.returntimeTxt}>Departure Time (Return)</Text>
+              <Text style={styles.returntimeTxt}>
+                {I18n.t('departure_time')}
+              </Text>
               <Text style={styles.timeBracketTxt}>
-                (Add a time bracket when you want ride for return)
+                {I18n.t('departure_time_desc')}
               </Text>
             </View>
             <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
@@ -186,7 +191,7 @@ const UpdateRide = () => {
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity style={styles.nextBtnContainer}>
-          <Text style={styles.nextTxt}>Update</Text>
+          <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
