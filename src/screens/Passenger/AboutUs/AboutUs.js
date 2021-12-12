@@ -1,28 +1,58 @@
 import I18n from 'i18n-js';
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CustomHeader} from '../../../components/Header/CustomHeader';
 import TermsView from '../../../components/TermsView/TermsView';
-import {colors, HP} from '../../../utilities';
+import {colors, GET_ABOUT_US, HP, responseValidator} from '../../../utilities';
+import {get} from '../../../services';
+import Loading from '../../../components/Loading';
 
 const AboutUs = ({navigation}) => {
-  let description =
-    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua';
+  const [description, setDescription] = useState('');
+  const [loading, setloading] = useState(false);
+  useEffect(() => {
+    getAboutUs();
+  }, []);
+
+  const getAboutUs = async () => {
+    setloading(true);
+    try {
+      const response = await get(`${GET_ABOUT_US}`);
+      if (response.data) {
+        setDescription(response.data?.description);
+        setloading(false);
+      }
+    } catch (error) {
+      setloading(false);
+      let status = JSON.stringify(error.message);
+      let msg = error.response.data.message;
+      responseValidator(status, msg);
+    }
+  };
   return (
     <>
-      <CustomHeader
-        navigation={navigation}
-        title={I18n.t('about_us')}
-        backButton={true}
-      />
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <View style={styles.mainView}>
-            <TermsView title={I18n.t('about_us')} description={description} />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      {!loading ? (
+        <>
+          <CustomHeader
+            navigation={navigation}
+            title={I18n.t('about_us')}
+            backButton={true}
+          />
+          <SafeAreaView style={styles.container}>
+            <ScrollView>
+              <View style={styles.mainView}>
+                <TermsView
+                  title={I18n.t('about_us')}
+                  description={description}
+                />
+              </View>
+            </ScrollView>
+          </SafeAreaView>
+        </>
+      ) : (
+        <Loading />
+      )}
     </>
   );
 };
