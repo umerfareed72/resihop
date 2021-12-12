@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import {CustomHeader} from '../../../components';
 import {colors, family, HP, size, GET_FAQS} from '../../../utilities';
@@ -16,14 +17,22 @@ import {Divider, Icon} from 'react-native-elements';
 import I18n from 'i18n-js';
 
 const Faq = ({navigation}) => {
-  const [getFaqs, setFaqs] = useState([]);
+  const [getFaqs, setFaqs] = useState();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getFaqsHanlder();
   }, []);
   const getFaqsHanlder = async () => {
     const response = await get(`${GET_FAQS}`);
     if (response.data) {
-      setFaqs(response?.data);
+      let faqData = response?.data.map(data => {
+        return {
+          ...data,
+          expanded: false,
+        };
+      });
+      setFaqs(faqData);
+      setLoading(false);
     }
   };
   //useState here
@@ -131,15 +140,19 @@ const Faq = ({navigation}) => {
         title={I18n.t('faq_title')}
         backButton={true}
       />
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <View style={styles.mainContainer}>
-            {data.map(item => (
-              <ItemView data={item} />
-            ))}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      {loading === true ? (
+        <ActivityIndicator size="large" color={colors.green} />
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <ScrollView>
+            <View style={styles.mainContainer}>
+              {data.map(item => (
+                <ItemView data={item} />
+              ))}
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      )}
     </>
   );
 };
