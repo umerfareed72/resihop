@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,11 +9,23 @@ import {
   TextInput,
 } from 'react-native';
 import {CustomHeader} from '../../../components';
-import {colors, family, HP, size} from '../../../utilities';
+import {colors, family, HP, size, GET_FAQS} from '../../../utilities';
+import {get} from '../../../services';
+
 import {Divider, Icon} from 'react-native-elements';
 import I18n from 'i18n-js';
 
 const Faq = ({navigation}) => {
+  const [getFaqs, setFaqs] = useState([]);
+  useEffect(() => {
+    getFaqsHanlder();
+  }, []);
+  const getFaqsHanlder = async () => {
+    const response = await get(`${GET_FAQS}`);
+    if (response.data) {
+      setFaqs(response?.data);
+    }
+  };
   //useState here
   const [data, setData] = useState([
     {

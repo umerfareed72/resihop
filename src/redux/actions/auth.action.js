@@ -3,7 +3,6 @@ import {header} from '../../utilities';
 import {post} from '../../Services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {responseValidator} from '../../utilities/helpers/responseValidator';
-import {baseURL} from '../../utilities';
 
 /////////////////////////////////////////  Login   ////////////////////////////
 
