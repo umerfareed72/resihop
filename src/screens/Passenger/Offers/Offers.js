@@ -1,30 +1,41 @@
 import I18n from 'i18n-js';
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {CustomHeader} from '../../../components/Header/CustomHeader';
-import {colors, family, HP, size} from '../../../utilities';
+import {CustomHeader} from '../../../components';
+import {
+  colors,
+  family,
+  GET_OFFERS,
+  HP,
+  responseValidator,
+  size,
+} from '../../../utilities';
+import {get} from '../../../services';
+import Loading from '../../../components/Loading';
 
 const Offers = ({navigation}) => {
-  let data = [
-    {
-      title: 'Welcome Offer',
-      description: 'Welcome to ÅK IHOP',
-      promo: I18n.t('offer_promo'),
-    },
-    {
-      title: 'Welcome Offer',
-      description: 'Welcome to ÅK IHOP',
-      promo: I18n.t('offer_promo'),
-    },
-    {
-      title: 'Welcome Offer',
-      description: 'Welcome to ÅK IHOP',
-      promo: I18n.t('offer_promo'),
-    },
-  ];
-
+  const [offers, setoffers] = useState([]);
+  const [loading, setloading] = useState(false);
+  useEffect(() => {
+    getOffer();
+  }, []);
+  const getOffer = async () => {
+    setloading(true);
+    try {
+      const response = await get(`${GET_OFFERS}`);
+      if (response.data) {
+        setloading(false);
+        setoffers(response.data);
+      }
+    } catch (error) {
+      setloading(false);
+      let status = JSON.stringify(error.message);
+      let msg = error.response.data.message;
+      responseValidator(status, msg);
+    }
+  };
   const OfferCard = ({data}) => {
     console.log('data val is   ', data);
     return (
@@ -33,7 +44,9 @@ const Offers = ({navigation}) => {
           <Text style={styles.titleText}>{data?.item?.title}</Text>
           <Text style={styles.desciptionText}>{data?.item?.description}</Text>
           <View style={styles.promoStyle}>
-            <Text style={styles.promoText}>{data?.item?.promo}</Text>
+            <Text style={styles.promoText}>
+              {data?.item?.promo != null ? data?.item?.promo : 'PM01234'}
+            </Text>
           </View>
         </View>
       </LinearGradient>
@@ -42,14 +55,23 @@ const Offers = ({navigation}) => {
 
   return (
     <>
-      <CustomHeader
-        navigation={navigation}
-        title={I18n.t('offer_title')}
-        backButton={true}
-      />
-      <SafeAreaView style={styles.container}>
-        <FlatList data={data} renderItem={item => <OfferCard data={item} />} />
-      </SafeAreaView>
+      {!loading ? (
+        <>
+          <CustomHeader
+            navigation={navigation}
+            title={I18n.t('offer_title')}
+            backButton={true}
+          />
+          <SafeAreaView style={styles.container}>
+            <FlatList
+              data={offers}
+              renderItem={item => <OfferCard data={item} />}
+            />
+          </SafeAreaView>
+        </>
+      ) : (
+        <Loading />
+      )}
     </>
   );
 };

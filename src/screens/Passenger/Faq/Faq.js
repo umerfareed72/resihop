@@ -11,7 +11,6 @@ import {
 import {CustomHeader} from '../../../components';
 import {colors, family, HP, size, GET_FAQS} from '../../../utilities';
 import {get} from '../../../services';
-
 import {Divider, Icon} from 'react-native-elements';
 import I18n from 'i18n-js';
 
