@@ -1,8 +1,8 @@
 import * as Types from '../types/auth.types';
 import {header} from '../../utilities';
-import {post} from '../../Services';
+import {post} from '../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {responseValidator} from '../../utilities/helpers/responseValidator';
+import {responseValidator} from '../../utilities';
 
 /////////////////////////////////////////  Login   ////////////////////////////
 
