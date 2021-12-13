@@ -1,15 +1,45 @@
-import dayjs from 'dayjs';
+import {Alert} from 'react-native';
 
-export const validatePhone = phone => {
-  // const reg = /^[0]?[789]\d{9}$/;
-  const pattern = new RegExp(/^[0-9\b]+$/);
-  return pattern.test(phone);
-};
+export const responseValidator = (msg, code) => {
+  console.log('Api Error:-', msg);
+  if (code == 'Error') {
+    Alert.alert(
+      'error',
+      'This Phone Number is Already Registered!',
+      [{text: 'ok', onPress: () => console.log('Cancelled')}],
+      {cancelable: false},
+    );
+  }
+  // let errorCode = response.substring(32, 36);
+  // if (errorCode == 401) {
+  //   Alert.alert(
+  //     I18n.t('error'),
+  //     I18n.t('backend_error'),
+  //     [{text: I18n.t('ok'), onPress: () => console.log('Cancelled')}],
+  //     {cancelable: false},
+  //   );
+  // } else if (errorCode == 400) {
+  //   Alert.alert(
+  //     I18n.t('error'),
+  //     I18n.t('backend_error'),
+  //     [{text: I18n.t('ok'), onPress: () => console.log('Cancelled')}],
+  //     {cancelable: false},
+  //   );
+  // } else if (errorCode == 404) {
+  //   Alert.alert(
+  //     I18n.t('error'),
+  //     I18n.t('backend_error'),
+  //     [{text: I18n.t('ok'), onPress: () => console.log('Cancelled')}],
+  //     {cancelable: false},
+  //   );
+  // } else if (errorCode == 500) {
+  //   Alert.alert(
+  //     I18n.t('error'),
+  //     I18n.t('backend_error'),
 
-export const getTodaysDate = () => {
-  return dayjs(dayjs().toDate().toUTCString()).format('YYYY-MM-DD');
-};
-
-export const getDateForPicker = date => {
-  return dayjs(dayjs(date)).format('DD-MMM');
+  //     [{text: I18n.t('ok'), onPress: () => console.log('Cancelled')}],
+  //     {cancelable: false},
+  //   );
+  // } else {
+  // }
 };

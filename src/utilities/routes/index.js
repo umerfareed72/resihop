@@ -1,1 +1,2 @@
-export const baseURL = 'https://simma-staging.herokuapp.com/api/v1';
+export const baseURL = 'https://resihop-server.herokuapp.com/';
+export const AUTH_CONST = 'auth/local/';

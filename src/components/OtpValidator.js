@@ -100,10 +100,11 @@ const OtpValidator = ({
         />
         <TextInput
           keyboardType={'phone-pad'}
-          style={{width: '50%', padding: 5}}
+          style={{width: '50%', padding: 5, color: 'black'}}
           ref={numRef}
           onChangeText={chnagePhone}
           value={phoneNumber}
+          maxLength={10}
         />
         <Button
           title={I18n.t('send_code')}

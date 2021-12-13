@@ -1,26 +1,26 @@
 import * as Types from '../types/auth.types';
-import {header} from '../../Theme/Constants';
-import {post} from '../../Services';
+import {header} from '../../utilities/constants';
+import {post} from '../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {responseValidator} from './helper';
-import {AUTH_CONST, AUTH_PW_CONST} from '../../Theme/routes';
+import {responseValidator} from '../../utilities/helpers';
+import {AUTH_CONST, AUTH_PW_CONST} from '../../utilities/routes';
 
 /////////////////////////////////////////  Login   ////////////////////////////
 
-export const userEmailLogin = (user, callBack) => async dispatch => {
+export const userEmailLogin = (body, callBack) => async dispatch => {
   try {
     dispatch({type: Types.Set_loader, payload: true});
-    const response = await post(`${AUTH_CONST}login`, user);
-    AsyncStorage.setItem('usertoken', response.data.result.access_token);
+    const response = await post(`auth/local`, body);
+    AsyncStorage.setItem('usertoken', response.data.jwt);
     dispatch({
       type: Types.Login_Success,
-      payload: response?.data?.result,
+      payload: response?.data,
     });
-    console.log('Login Successfully', response.data.result.access_token);
-    callBack();
+    console.log('Login Successfully', response.data);
+    callBack(response.data);
   } catch (error) {
-    let status = JSON.stringify(error.message);
-    let msg = error.response.data.message;
+    let status = error.name;
+    let msg = error.message;
     responseValidator(status, msg);
     dispatch({
       type: Types.Login_Failure,
@@ -56,31 +56,38 @@ export const logout = (token, callBack) => async dispatch => {
     });
     let status = JSON.stringify(error.message);
     let msg = error.response.data.message;
-
     responseValidator(status, msg);
   }
 };
 
 /////////////////////////////////////////  Registeration ////////////////////////////
 
-export const userEmailSignup = (user, callBack) => async dispatch => {
+export const userEmailSignup = (body, callBack) => async dispatch => {
   try {
     dispatch({type: Types.Set_loader, payload: true});
-    const response = await post(AUTH_CONST + 'signup', user);
-    AsyncStorage.setItem('usertoken', response.data.result.access_token);
-    dispatch({
-      type: Types.Signup_Success,
-      payload: response?.data?.result,
-    });
-    callBack();
+    console.log('body-', body);
+    await post(`${AUTH_CONST}register`, body)
+      .then(response => {
+        console.log('Res------->', response);
+        AsyncStorage.setItem('usertoken', response?.data?.jwt);
+        dispatch({
+          type: Types.Signup_Success,
+          payload: response?.data,
+        });
+        callBack(response?.data);
+      })
+      .catch(err => {
+        console.log('Error------->', JSON.stringify(err));
+        dispatch({
+          type: Types.Signup_Failure,
+          payload: null,
+        });
+        let msg = err.message;
+        let status = err.name;
+        responseValidator(msg, status);
+      });
   } catch (error) {
-    dispatch({
-      type: Types.Signup_Failure,
-      payload: null,
-    });
-    let msg = error.response.data.message;
-    let status = JSON.stringify(error.message);
-    responseValidator(status, msg);
+    console.log('Error:', JSON.stringify(error));
   }
 };
 
