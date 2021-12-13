@@ -22,9 +22,9 @@ const OtpValidator = ({
   selectedCountry,
   onCountrySelect,
   onSendCodePress,
-  defaultCountryCode,
+  defaultCountryCode = 'PK',
   otpCodeArea,
-  enteredCode
+  enteredCode,
 }) => {
   const navigation = useNavigation();
   const [country, setCountry] = useState();

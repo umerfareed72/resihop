@@ -4,11 +4,10 @@ import {Chip} from 'react-native-elements';
 import {fonts, theme} from '../theme';
 
 const user = {
-    Passenger: 'Passenger',
-    Driver: 'Driver',
-    Both: 'Driver/Passenger both',
-  };
-  
+  Passenger: 'Passenger',
+  Driver: 'Driver',
+  Both: 'Driver/Passenger both',
+};
 
 const littleChips = [
   {

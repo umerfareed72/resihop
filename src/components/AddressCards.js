@@ -10,7 +10,6 @@ import {
 import {CustomHeader} from './Header/CustomHeader';
 import {appImages, colors, family, size} from '../utilities';
 import {useNavigation} from '@react-navigation/core';
-import {fonts} from '../theme';
 import CalendarSheet from '../screens/CalendarSheet';
 
 const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
@@ -243,7 +242,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 45,
     color: colors.inputTxtGray,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   startDot: {
     height: 16,
@@ -263,7 +262,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     color: colors.txtBlack,
     marginTop: 26,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   favLocationBtn: {
     height: 32,
@@ -284,14 +283,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     color: colors.white,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   bookSeatsTxt: {
     fontSize: 14,
     lineHeight: 24,
     marginTop: 27,
     marginLeft: 28,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   seat: {
     height: 31,
@@ -316,7 +315,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
-    fontFamily: fonts.bold,
+    fontFamily: family.product_sans_bold,
   },
   destSquare: {
     height: 16,
@@ -336,7 +335,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   noLater: {
     height: 44,
@@ -348,7 +347,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.inputTxtGray,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
     justifyContent: 'center',
   },
   calendarIcon: {
@@ -379,7 +378,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     marginTop: 20,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
 });
 
