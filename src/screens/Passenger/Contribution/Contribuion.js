@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   ImageBackground,
@@ -16,24 +16,32 @@ import {
   size,
   colors,
   family,
+  MY_CONTRIBUTION,
+  responseValidator,
+  header,
 } from '../../../utilities';
 import {ContributionCard} from '../../../components';
-const Contribution = ({navigation}) => {
-  const data = [
-    {
-      title: '100',
-      description: 'Ride(s) Shared',
-    },
-    {
-      title: '350 KM',
-      description: 'Distance Shared',
-    },
-    {
-      title: 'SEK 1000',
-      description: 'Amount Saved',
-    },
-  ];
+import {get} from '../../../services';
 
+const Contribution = ({navigation}) => {
+  const [getContribution, setContributions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getContributions();
+  }, []);
+  const getContributions = async () => {
+    try {
+      const response = await get(`${MY_CONTRIBUTION}`, await header());
+      setContributions(response?.data);
+    } catch (error) {
+      // console.log(error);
+      setLoading(false);
+      let status = JSON.stringify(error.message);
+      let msg = error.response.data.message;
+      responseValidator(status, msg);
+    }
+  };
   return (
     <ImageBackground style={{flex: 1}} source={appImages.tree}>
       <CustomHeader
@@ -61,7 +69,7 @@ const Contribution = ({navigation}) => {
           <Text style={styles.buttonText}>100 KG(s) CO2 Reduced</Text>
         </TouchableOpacity>
         <FlatList
-          data={data}
+          data={getContribution}
           contentContainerStyle={{marginVertical: HP('4')}}
           numColumns="2"
           renderItem={item => <ContributionCard data={item} />}
