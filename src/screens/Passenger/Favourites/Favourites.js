@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,10 +10,26 @@ import {
 import {CustomHeader} from '../../../components';
 import {colors, family, HP, size} from '../../../utilities';
 import {FavDriver, FavPassenger, FavLocation} from '../../../components';
+import {getFavouriteData} from '../../../redux/actions/favourite-action';
+import {useSelector, useDispatch} from 'react-redux';
 import I18n from 'i18n-js';
 
 const Favourites = ({navigation}) => {
+  const dispatch = useDispatch();
+  //useState here
   const [selected, setSelected] = useState(1);
+
+  //useEffect here
+  useEffect(() => {
+    getFavouritesData();
+  }, []);
+
+  //methods here
+
+  const getFavouritesData = () => {
+    dispatch(getFavouriteData())
+  };
+
   return (
     <>
       <CustomHeader
