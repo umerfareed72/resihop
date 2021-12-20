@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,9 +13,17 @@ import {useNavigation} from '@react-navigation/core';
 import {fonts} from '../theme';
 import CalendarSheet from '../screens/CalendarSheet';
 import I18n from '../utilities/translations';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {
+  setOrigin,
+  setMapDestination,
+  setAvailableSeats,
+} from '../redux/actions/map.actions';
+import {useDispatch, useSelector} from 'react-redux';
 
 const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
   let navigation = useNavigation();
+  let dispatch = useDispatch();
   const calenderSheetRef = useRef(null);
 
   const [destination, setDestination] = useState('');
@@ -23,6 +31,8 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
   const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+
+  const availableSeats = useSelector(state => state.map.availableSeats);
 
   return (
     <>
@@ -63,13 +73,61 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
               </View>
             ) : (
               <>
-                <TextInput
-                  placeholder="123 abc apartment abc street abc..."
+                <GooglePlacesAutocomplete
+                  placeholder={I18n.t('address_placeholder')}
+                  onPress={(data, details = null) => {
+                    if (modalName === 'startLocation') {
+                      dispatch(
+                        setOrigin({
+                          location: details.geometry.location,
+                          description: data.description,
+                        }),
+                      );
+                    }
+
+                    if (modalName === 'destination') {
+                      dispatch(
+                        setMapDestination({
+                          location: details.geometry.location,
+                          description: data.description,
+                        }),
+                      );
+                    }
+                  }}
+                  query={{
+                    key: 'AIzaSyBGAcF8ef7sdugk0h9us-J12pidnXqgmmQ',
+                    language: 'en',
+                  }}
+                  debounce={400}
+                  fetchDetails={true}
+                  nearbyPlacesAPI="GooglePlacesSearch"
+                  enablePoweredByContainer={false}
+                  returnKeyType={'search'}
+                  minLength={2}
+                  styles={{
+                    container: {
+                      flex: 0,
+                      width: 326,
+                    },
+                    textInput: {
+                      height: 44,
+                      borderWidth: 1,
+                      borderColor: colors.greyBorder,
+                      borderRadius: 10,
+                      paddingLeft: 45,
+                      fontSize: 13,
+                      color: colors.inputTxtGray,
+                      fontFamily: fonts.regular,
+                    },
+                  }}
+                />
+                {/* <TextInput
+                  placeholder={I18n.t('address_placeholder')}
                   placeholderTextColor={colors.inputTxtGray}
                   value={startLocation}
                   onChangeText={setStartLocation}
                   style={styles.txtInput}
-                />
+                /> */}
                 <View
                   style={
                     modalName === 'startLocation'
@@ -101,12 +159,19 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
               </Text>
               <View style={styles.seatsWrapper}>
                 {seats.map(seat => (
-                  <Image
+                  <TouchableOpacity
                     key={seat}
-                    source={appImages.seatBlue}
-                    resizeMode="contain"
-                    style={styles.seat}
-                  />
+                    onPress={() => dispatch(setAvailableSeats(seat))}>
+                    <Image
+                      source={
+                        seat <= availableSeats
+                          ? appImages.seatGreen
+                          : appImages.seatBlue
+                      }
+                      resizeMode="contain"
+                      style={styles.seat}
+                    />
+                  </TouchableOpacity>
                 ))}
               </View>
             </>
@@ -186,7 +251,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                     : 25,
               },
             ]}
-            onPress={onPress}>
+            onPress={() => navigation.goBack()}>
             <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
           </TouchableOpacity>
         </View>

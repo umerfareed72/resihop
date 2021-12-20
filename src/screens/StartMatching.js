@@ -4,13 +4,35 @@ import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import MyStatusBar from '../components/Header/statusBar';
 import MapViewComponent from '../components/MapViewComponent';
 import {appIcons, colors} from '../utilities';
+import {useSelector, useDispatch} from 'react-redux';
+import {SearchDrives} from '../redux/actions/map.actions';
 
 const StartMatching = props => {
+  let dispatch = useDispatch();
+
   const isFocus = useIsFocused();
   const [modal, setModal] = useState(null);
+
+  const origin = useSelector(state => state.map.origin);
+  const destinationMap = useSelector(state => state.map.destination);
+  const availableSeats = useSelector(state => state.map.availableSeats);
+
+  const {dateTimeStamp} = props.route.params;
+
   useEffect(() => {
     if (isFocus) {
       setModal(props?.route?.params?.modalName);
+      dispatch(
+        SearchDrives({
+          startLocation: [origin.location.lat, origin.location.lng],
+          destinationLocation: [
+            destinationMap.location.lat,
+            destinationMap.location.lng,
+          ],
+          time: dateTimeStamp,
+          seats: availableSeats,
+        }),
+      );
     }
   }, [isFocus]);
 

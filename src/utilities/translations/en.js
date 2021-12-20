@@ -314,4 +314,7 @@ export default {
   start_matching: 'Start Matching',
 
   ride: 'Ride',
+  address_placeholder: '123 abc apartment abc street abc...',
+
+  availableSeats: 'Available Seats',
 };

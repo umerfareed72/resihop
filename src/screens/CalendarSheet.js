@@ -7,7 +7,7 @@ import moment from 'moment';
 import {fonts} from '../theme/theme';
 import I18n from '../utilities/translations';
 
-const CalendarSheet = ({calendarSheetRef, setDate}) => {
+const CalendarSheet = ({calendarSheetRef, setDate, setDateTimeStamp}) => {
   const [markedDate, setMarkedDate] = useState();
 
   LocaleConfig.locales['en'] = {
@@ -39,6 +39,7 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
   LocaleConfig.defaultLocale = 'en';
 
   const handleDayPress = date => {
+    setDateTimeStamp(date.timestamp);
     let markedObj = {};
     const selectedDate = moment(date.dateString).format('YYYY-MM-DD');
     markedObj[selectedDate] = {

@@ -1,25 +1,61 @@
 import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import {appImages, colors} from '../utilities';
 import {fonts} from '../theme/theme';
 import I18n from '../utilities/translations';
+import {useSelector, useDispatch} from 'react-redux';
+import {SearchRides} from '../redux/actions/map.actions';
 
-const SelectRouteCard = ({setModal}) => {
+const SelectRouteCard = ({setModal, setHeight}) => {
+  let dispatch = useDispatch();
   const [data, setData] = useState([1, 2, 3, 4]);
+
+  const distanceAndTime = useSelector(state => state.map.distanceAndTime);
+  const availableSeats = useSelector(state => state.map.availableSeats);
+  const origin = useSelector(state => state.map.origin);
+  const destinationMap = useSelector(state => state.map.destination);
+  const searchRideResponse = useSelector(state => state.map.searchRideResponse);
+
+  useEffect(() => {
+    let array = [];
+
+    setHeight(Dimensions.get('screen').height - 320);
+    for (let i = 0; i < availableSeats; i++) {
+      array[i] = i + 1;
+    }
+    setData(array);
+
+    dispatch(
+      SearchRides({
+        startLocation: [origin.location.lat, origin.location.lng],
+        destinationLocation: [
+          destinationMap.location.lat,
+          destinationMap.location.lng,
+        ],
+      }),
+    );
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.detail}>{I18n.t('min24')}</Text>
+      <Text style={styles.detail}>{`${distanceAndTime?.duration.toFixed(
+        0,
+      )} min (${distanceAndTime?.distance.toFixed(2)} km) | ${
+        searchRideResponse?.length
+      } Passengers`}</Text>
       <View style={styles.addressContainer}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{origin?.description}</Text>
         <View style={styles.addressCircle} />
       </View>
       <View style={[styles.addressContainer, {marginTop: 21}]}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{destinationMap?.description}</Text>
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.dateContainer}>

@@ -17,6 +17,13 @@ import {RideFilterModal, SortModal} from '../../../components';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import I18n from '../../../utilities/translations';
+import {
+  setOrigin,
+  setMapDestination,
+  SearchDrives,
+  SearchRides,
+} from '../../../redux/actions/map.actions';
+import {useDispatch} from 'react-redux';
 
 //Data
 var TimeList = {
@@ -74,6 +81,8 @@ const seatsList = {
   ],
 };
 const PassengerHome = ({navigation}) => {
+  let dispatch = useDispatch();
+
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   //States
@@ -158,6 +167,10 @@ const PassengerHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
+              dispatch(setOrigin(null));
+              dispatch(setMapDestination(null));
+              dispatch(SearchDrives(null));
+              dispatch(SearchRides(null));
               navigation?.navigate('ApprovalStatus');
             }}
             style={styles.switchToDriverBtnContainer}>

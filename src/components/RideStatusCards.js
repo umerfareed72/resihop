@@ -14,7 +14,6 @@ import {DeleteCardModal} from './Modal/DeleteCard/DeleteCardModal';
 import I18n from '../utilities/translations';
 import {AddWalletModal} from '.';
 import {drawerIcons} from '../utilities/images';
-import I18n from '../utilities/translations';
 
 const RideStatusCards = ({statusType}) => {
   let navigation = useNavigation();
