@@ -12,7 +12,7 @@ export let authHeader = {
 };
 export let header = async () => ({
   'Content-Type': 'application/json',
-  Authorization: `BearereyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNmRhNWE3OGIyZDVkNDVjNDc5NWEwNCIsImlhdCI6MTYzOTMzMzc1MSwiZXhwIjoxNjQxOTI1NzUxfQ.3t0ZKd2y1UvTA9KvMdrdPhdiJEoYocOZalA114Fqdk4`,
+  Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNmRhNWE3OGIyZDVkNDVjNDc5NWEwNCIsImlhdCI6MTYzOTMzMzc1MSwiZXhwIjoxNjQxOTI1NzUxfQ.3t0ZKd2y1UvTA9KvMdrdPhdiJEoYocOZalA114Fqdk4`,
   //  ${await GetToken()},
 });
 export let GetToken = async () => {
