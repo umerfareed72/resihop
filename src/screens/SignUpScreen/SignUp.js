@@ -1,5 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Text, View, StyleSheet, Keyboard, ToastAndroid} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Keyboard,
+  ToastAndroid,
+  Alert,
+} from 'react-native';
 import {CustomHeader} from '../../components';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
@@ -9,8 +16,11 @@ import I18n from '../../utilities/translations';
 import auth from '@react-native-firebase/auth';
 import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
 import Loader from '../../components/Loader/Loader';
+import {useDispatch} from 'react-redux';
+import {userEmailSignup} from '../../redux/actions/auth.action';
 
 function SignUp(props) {
+  const dispatch = useDispatch(null);
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNum, setPhoneNum] = useState('');
   const [country, setCountry] = useState();
@@ -37,7 +47,7 @@ function SignUp(props) {
       }
     });
   };
-  
+
   async function signIn() {
     try {
       const phone = `+${country ? country.callingCode : '92'}${phoneNum}`;
@@ -67,15 +77,17 @@ function SignUp(props) {
         console.log('Registered User Id:', res?.user?.uid);
         setOtpInput(false);
         setPhoneNum('');
-        alert('Successfully Registered');
+        userRegistrationApi();
       });
     } catch (error) {
+      console.log('Error:-', error);
       setIsLoading(false);
       alert('Invalid code.');
     }
   }
 
   const onSendCode = () => {
+    console.log('Send Code Button pressed');
     Keyboard.dismiss();
     if (phoneNum === '') {
       ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
@@ -83,6 +95,24 @@ function SignUp(props) {
     } else {
       signInWithPhoneNumber();
     }
+  };
+
+  const userRegistrationApi = () => {
+    const phone = `+${country ? country.callingCode : '92'}${phoneNum}`;
+    const requestBody = {
+      username: phone,
+      email: `${phone}@resihop.com`,
+      password: '123456',
+    };
+    dispatch(
+      userEmailSignup(requestBody, res => {
+        console.log('Registration Api Response:-', res);
+        if (res) {
+          Alert.alert('Success', 'User sucessfully registered');
+          props.navigation.navigate('SignInScreen');
+        }
+      }),
+    );
   };
 
   return (

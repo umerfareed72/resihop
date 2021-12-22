@@ -1,37 +1,54 @@
-import React, {useEffect} from 'react';
-import {SafeAreaView, View, StyleSheet, Image, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {CustomHeader} from '../../../components/Header/CustomHeader';
-import {appImages, colors, family, size} from '../../../utilities';
+import {
+  appImages,
+  colors,
+  family,
+  size,
+  responseValidator,
+} from '../../../utilities';
 import {Divider} from 'react-native-elements/dist/divider/Divider';
+import {GET_NOTIFICATION_LIST} from '../../../utilities/routes';
+import {get} from '../../../services';
 
 const NotificationList = ({navigation}) => {
-  const data = [
-    {
-      image: appImages.app_logo,
-      title: 'Lorem ipsum dolor sit amet',
-      description:
-        'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
-    },
-    {
-      image: appImages.app_logo,
-      title: 'Lorem ipsum dolor sit amet',
-      description:
-        'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
-    },
-    {
-      image: appImages.app_logo,
-      title: 'Lorem ipsum dolor sit amet',
-      description:
-        'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
-    },
-    {
-      image: appImages.app_logo,
-      title: 'Lorem ipsum dolor sit amet',
-      description:
-        'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
-    },
-  ];
+  //useState here
+  const [notifData, setNotifData] = useState();
+  const [loading, setLoading] = useState(true);
+
+  //useEffect here
+
+  useEffect(() => {
+    getNotificationList();
+  }, []);
+
+  //methods here
+
+  const getNotificationList = async () => {
+    try {
+      const response = await get(`${GET_NOTIFICATION_LIST}`);
+      if (response.data) {
+        console.log('DATA ===>   ', response.data);
+
+        setNotifData(response.data);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      let status = JSON.stringify(error.message);
+      let msg = error.response.data.message;
+      responseValidator(status, msg);
+    }
+  };
 
   const NotificationItem = ({data}) => {
     console.log('data in NotificationItem  ', data);
@@ -59,13 +76,18 @@ const NotificationList = ({navigation}) => {
         title={'Notifications'}
         backButton={true}
       />
-
-      <SafeAreaView style={styles.container}>
-        <FlatList
-          data={data}
-          renderItem={item => <NotificationItem data={item} />}
-        />
-      </SafeAreaView>
+      {loading === true ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color={colors.green} />
+        </View>
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <FlatList
+            data={notifData}
+            renderItem={item => <NotificationItem data={item} />}
+          />
+        </SafeAreaView>
+      )}
     </>
   );
 };

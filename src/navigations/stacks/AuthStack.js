@@ -11,7 +11,8 @@ import Pledge from '../../screens/Pledge';
 import PermissionScreen from '../../screens/PermissionScreen';
 import VahicleInfo from '../../screens/VahicleInfo';
 import Terms from '../../screens/Passenger/Terms/Terms';
-import ReviewDetails from '../../screens/ReviewDetails'
+import ReviewDetails from '../../screens/ReviewDetails';
+import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
 
@@ -20,32 +21,6 @@ function AuthStack(props) {
     <Stack.Navigator
       initialRouteName="LanguageSelect"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="LanguageSelect"
-        component={languageSelect}
-      />
-
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="WalkThrough"
-        component={walkThrough}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="LandingUser"
-        component={landingUser}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="SignInScreen"
-        component={SignIn}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="SignUpScreen"
-        component={SignUp}
-      />
       <Stack.Screen
         options={{headerShown: false}}
         name="PersonalDetails"
@@ -80,6 +55,32 @@ function AuthStack(props) {
         options={{headerShown: false}}
         name="ReviewDetails"
         component={ReviewDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="LanguageSelect"
+        component={languageSelect}
+      />
+
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="WalkThrough"
+        component={walkThrough}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="LandingUser"
+        component={landingUser}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="SignInScreen"
+        component={SignIn}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="SignUpScreen"
+        component={SignUp}
       />
     </Stack.Navigator>
   );

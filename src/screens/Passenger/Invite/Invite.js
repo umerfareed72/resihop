@@ -11,16 +11,22 @@ import {
 } from 'react-native';
 import {CustomHeader} from '../../../components';
 import {colors, appImages, HP, size, family} from '../../../utilities';
+import Clipboard from '@react-native-clipboard/clipboard';
+import Toast from 'react-native-tiny-toast';
 
 const Invite = ({navigation}) => {
+  const copyToClipboard = text => {
+    Clipboard.setString(text);
+    alert('Code copied');
+  };
   const onInviteFriend = async () => {
     try {
       const result = await Share.share({
         title: 'Pawtai',
         message:
           Platform.OS == 'android'
-            ? `Your Pawtai Joining Code is ${code}, Link to Download Application from PlayStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`
-            : `Your Pawtai Joining Code is ${code}, Link to Download Application from AppStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`,
+            ? `Link to Download Application from PlayStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`
+            : ` Link to Download Application from AppStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -50,7 +56,14 @@ const Invite = ({navigation}) => {
             <Text style={styles.descriptionText}>{I18n.t('lorem')}</Text>
             <View style={styles.codeContainer}>
               <Text style={styles.codeText}>ABCD1234</Text>
-              <Text style={styles.copyText}>{I18n.t('invite_copy_code')}</Text>
+
+              <Text
+                onPress={() => {
+                  copyToClipboard('ABCD1234');
+                }}
+                style={styles.copyText}>
+                {I18n.t('invite_copy_code')}
+              </Text>
             </View>
           </View>
           <View style={styles.subContainerTwo}>
