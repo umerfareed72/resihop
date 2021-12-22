@@ -16,6 +16,7 @@ import {appIcons, colors} from '../../utilities';
 import {theme} from '../../theme';
 import UploadImage from '../../components/UploadImage';
 import GenderChips from '../../components/GenderChips';
+import I18n from '../../utilities/translations';
 
 const formFields = {
   firstName: '',
