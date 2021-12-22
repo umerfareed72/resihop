@@ -19,6 +19,7 @@ import {
   setAvailableSeats,
 } from '../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
+import {fonts} from '../theme';
 
 const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
   let navigation = useNavigation();
