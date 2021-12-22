@@ -5,7 +5,7 @@ import {theme} from '../theme';
 function Loading({}) {
   return (
     <View style={styles.loadingCon}>
-      <ActivityIndicator size={'large'} color={theme.colors.white} />
+      <ActivityIndicator size={'large'} color={theme.colors.black} />
     </View>
   );
 }
@@ -15,13 +15,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#00000050',
+    backgroundColor: 'white',
   },
   loadingCon: {
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-    backgroundColor: theme.colors.loadingBgColor,
+    backgroundColor: 'white',
     alignItems: 'center',
   },
   alert: {

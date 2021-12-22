@@ -1,34 +1,20 @@
 import React, {useState, useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  TextInput,
-  Keyboard,
-  ToastAndroid,
-} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, TextInput} from 'react-native';
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
-import CountryPicker, {Country} from 'react-native-country-picker-modal';
+import CountryPicker from 'react-native-country-picker-modal';
 import {theme} from '../theme';
-
-import reactotron from 'reactotron-react-native';
 import CountDownTimer from 'react-native-countdown-timer-hooks';
-import {useNavigation} from '@react-navigation/native';
 import I18n from '../utilities/translations';
 
 const OtpValidator = ({
   phoneNumber,
   chnagePhone,
-  selectedCountry,
   onCountrySelect,
   onSendCodePress,
-  defaultCountryCode,
+  defaultCountryCode = 'PK',
   otpCodeArea,
-  enteredCode
+  enteredCode,
 }) => {
-  const navigation = useNavigation();
-  const [country, setCountry] = useState();
-  const [phoneNum, setPhoneNum] = useState('');
   const [countDown, setCountDown] = useState(30);
   const [countryModalOpen, setCountryModalOpen] = useState(false);
   const [otpArea, setOtpArea] = useState(false);
@@ -100,10 +86,11 @@ const OtpValidator = ({
         />
         <TextInput
           keyboardType={'phone-pad'}
-          style={{width: '50%', padding: 5}}
+          style={{width: '50%', padding: 5, color: 'black'}}
           ref={numRef}
           onChangeText={chnagePhone}
           value={phoneNumber}
+          maxLength={10}
         />
         <Button
           title={I18n.t('send_code')}
@@ -142,7 +129,9 @@ const OtpValidator = ({
             <CountDownTimer
               ref={refTimer}
               timestamp={countDown}
-              timerCallback={timerCallbackFunc}
+              timerCallback={timerFlag => {
+                setTimerEnd(timerFlag);
+              }}
               containerStyle={{
                 height: 56,
                 width: '100%',

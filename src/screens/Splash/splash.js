@@ -1,15 +1,46 @@
 import React, {useEffect} from 'react';
-import {View, Image, StyleSheet} from 'react-native';
-import {app_logo} from '../../assets';
-import {appImages, colors} from '../../utilities';
+import {View, Image, StyleSheet, Alert} from 'react-native';
+import {
+  appImages,
+  colors,
+  LocalNotification,
+  Notification_Listner,
+  registerAppWithFCM,
+  requestPermission,
+} from '../../utilities';
 import I18n from '../../utilities/translations';
 import MyStatusBar from '../../components/Header/statusBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch} from 'react-redux';
+import messaging from '@react-native-firebase/messaging';
+import auth from '@react-native-firebase/auth';
 
 function splash(props) {
+  const user = auth().currentUser;
+
+  //Rdux States
+  const dispatch = useDispatch();
+  //Component Did Mount
   useEffect(() => {
     handleNavigation();
+    handlerNotifications();
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
   }, []);
+
+  const handlerNotifications = () => {
+    //Register App with FCM
+    registerAppWithFCM();
+    //Request Permissions and get Token
+    requestPermission();
+    //Notification Listner
+    Notification_Listner(dispatch, props);
+    //On  local Notification
+    LocalNotification();
+  };
+
   const handleNavigation = async () => {
     const lang = await AsyncStorage.getItem('lang');
     if (lang === null || lang === undefined) {
@@ -24,7 +55,12 @@ function splash(props) {
       //   navigation.replace('Auth');
       //   // navigation.replace('App', {screen: 'Cart'});
       // }
-      props.navigation.replace('PassengerDashboard');
+      if (user) {
+        // props.navigation.replace('PassengerDashboard');
+        props.navigation.replace('PassengerDashboard');
+      } else {
+        props.navigation.replace('AuthStack');
+      }
     }, 2000);
   };
 

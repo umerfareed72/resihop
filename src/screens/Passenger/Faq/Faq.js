@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -7,70 +7,54 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import {CustomHeader} from '../../../components';
-import {colors, family, HP, size} from '../../../utilities';
+import {
+  colors,
+  family,
+  HP,
+  size,
+  GET_FAQS,
+  responseValidator,
+} from '../../../utilities';
+import {get} from '../../../services';
 import {Divider, Icon} from 'react-native-elements';
 import I18n from 'i18n-js';
 
 const Faq = ({navigation}) => {
-  //useState here
-  const [data, setData] = useState([
-    {
-      id: 1,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 2,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 3,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 4,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 5,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 6,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 7,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-  ]);
+  const [getFaqs, setFaqs] = useState();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    getFaqsHanlder();
+  }, []);
+  const getFaqsHanlder = async () => {
+    try {
+      const response = await get(`${GET_FAQS}`);
+      if (response.data) {
+        console.log('DATA ===>   ', response.data);
+        let faqData = response?.data.map(data => {
+          return {
+            ...data,
+            expanded: false,
+          };
+        });
+        console.log('FAQ DAta ===>   ', faqData);
+        setFaqs(faqData);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      let status = JSON.stringify(error.message);
+      let msg = error.response.data.message;
+      responseValidator(status, msg);
+    }
+  };
 
   //methods here
   const updateData = ({id}) => {
-    setData(
-      data.map(item => {
+    setFaqs(
+      getFaqs.map(item => {
         console.log('id in update DAta is  ', id);
         if (item?.id === id) {
           return {
@@ -89,6 +73,7 @@ const Faq = ({navigation}) => {
 
   //component here
   const ItemView = ({data}) => {
+    console.log('ItemView  =>  ', data);
     return (
       <>
         <View style={styles.itemView}>
@@ -104,7 +89,7 @@ const Faq = ({navigation}) => {
         </View>
         {data?.expanded && (
           <View>
-            <Text style={styles.descriptionText}>{data?.descripion}</Text>
+            <Text style={styles.descriptionText}>{data?.description}</Text>
           </View>
         )}
         <Divider />
@@ -119,15 +104,21 @@ const Faq = ({navigation}) => {
         title={I18n.t('faq_title')}
         backButton={true}
       />
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <View style={styles.mainContainer}>
-            {data.map(item => (
-              <ItemView data={item} />
-            ))}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      {loading === true ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color={colors.green} />
+        </View>
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <ScrollView>
+            <View style={styles.mainContainer}>
+              {getFaqs.map(item => (
+                <ItemView data={item} />
+              ))}
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      )}
     </>
   );
 };
