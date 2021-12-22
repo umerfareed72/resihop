@@ -21,6 +21,7 @@ import {CustomHeader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
 import ArrowDown from 'react-native-vector-icons/MaterialIcons';
 import {fonts} from '../../../theme/theme';
+import I18n from '../../../utilities/translations';
 
 const UpdateDrive = () => {
   let navigation = useNavigation();
@@ -51,7 +52,7 @@ const UpdateDrive = () => {
                   type: 'startLocation',
                 })
               }>
-              <Text style={styles.locationTxt}>Start Location</Text>
+              <Text style={styles.locationTxt}>{I18n.t('start_location')}</Text>
             </TouchableOpacity>
             <View style={styles.startDot} />
             <View>
@@ -62,7 +63,7 @@ const UpdateDrive = () => {
                     type: 'destination',
                   })
                 }>
-                <Text style={styles.locationTxt}>Destination</Text>
+                <Text style={styles.locationTxt}>{I18n.t('destination')}</Text>
               </TouchableOpacity>
               <View style={styles.destSquare} />
             </View>
@@ -85,7 +86,7 @@ const UpdateDrive = () => {
             />
           </View>
         </View>
-        <Text style={styles.bookSeatsTxt}>Book Your Seats</Text>
+        <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
             <Image
@@ -97,8 +98,8 @@ const UpdateDrive = () => {
           ))}
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt]}>Need to arrive no later than</Text>
-          <Text style={styles.selectTxt}>Select Date</Text>
+          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
+          <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
           <TextInput
@@ -122,7 +123,7 @@ const UpdateDrive = () => {
             style={styles.calendarIcon}
           />
         </View>
-        <Text style={styles.presetTxt}>Preset cost for each passenger</Text>
+        <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
         <TouchableOpacity style={styles.presetCostContainer}>
           <Text style={{fontFamily: fonts.regular}}>SEK 20</Text>
           <ArrowDown
@@ -132,7 +133,7 @@ const UpdateDrive = () => {
           />
         </TouchableOpacity>
         <View style={styles.returnTripWrapper}>
-          <Text style={styles.returnTxt}>Return Trip</Text>
+          <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
           <ToggleSwitch
             isOn={toggleEnabled}
             onColor={colors.green}
@@ -154,7 +155,9 @@ const UpdateDrive = () => {
                         type: 'startLocation',
                       })
                     }>
-                    <Text style={styles.locationTxt}>Start Location</Text>
+                    <Text style={styles.locationTxt}>
+                      {I18n.t('start_location')}
+                    </Text>
                   </TouchableOpacity>
                   <View style={styles.startDot} />
                 </View>
@@ -166,7 +169,9 @@ const UpdateDrive = () => {
                         type: 'destination',
                       })
                     }>
-                    <Text style={styles.locationTxt}>Destination</Text>
+                    <Text style={styles.locationTxt}>
+                      {I18n.t('destination')}
+                    </Text>
                   </TouchableOpacity>
                   <View style={styles.destSquare} />
                 </View>
@@ -178,9 +183,11 @@ const UpdateDrive = () => {
               </View>
             </View>
             <View style={{marginLeft: 26}}>
-              <Text style={styles.returntimeTxt}>Departure Time (Return)</Text>
+              <Text style={styles.returntimeTxt}>
+                {I18n.t('departure_time')}
+              </Text>
               <Text style={styles.timeBracketTxt}>
-                (Add a time bracket when you want ride for return)
+                {I18n.t('departure_time_desc')}
               </Text>
             </View>
             <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
@@ -191,7 +198,7 @@ const UpdateDrive = () => {
                 onChangeText={setNoLaterTime}
                 style={styles.noLater}
               />
-              <Text style={{fontFamily: fonts.regular}}>To</Text>
+              <Text style={{fontFamily: fonts.regular}}>{I18n.t('to')}</Text>
               <TextInput
                 placeholder="XX:XX"
                 placeholderTextColor={colors.btnGray}
@@ -208,7 +215,7 @@ const UpdateDrive = () => {
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity style={styles.nextBtnContainer}>
-          <Text style={styles.nextTxt}>Update</Text>
+          <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

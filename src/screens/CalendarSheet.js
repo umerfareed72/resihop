@@ -5,8 +5,9 @@ import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {colors} from '../utilities';
 import moment from 'moment';
 import {fonts} from '../theme/theme';
+import I18n from '../utilities/translations';
 
-const CalendarSheet = ({calendarSheetRef, setDate}) => {
+const CalendarSheet = ({calendarSheetRef, setDate, setDateTimeStamp}) => {
   const [markedDate, setMarkedDate] = useState();
 
   LocaleConfig.locales['en'] = {
@@ -38,6 +39,7 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
   LocaleConfig.defaultLocale = 'en';
 
   const handleDayPress = date => {
+    setDateTimeStamp(date.timestamp);
     let markedObj = {};
     const selectedDate = moment(date.dateString).format('YYYY-MM-DD');
     markedObj[selectedDate] = {
@@ -62,7 +64,7 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
           borderTopLeftRadius: 35,
         },
       }}>
-      <Text style={styles.slectDateTxt}>Select Date</Text>
+      <Text style={styles.slectDateTxt}>{I18n.t('select_date')}</Text>
       <Calendar
         onDayPress={handleDayPress}
         markedDates={markedDate}
@@ -89,7 +91,7 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
       <TouchableOpacity
         style={styles.okBtn}
         onPress={() => calendarSheetRef.current.close()}>
-        <Text style={styles.okTxt}>OK</Text>
+        <Text style={styles.okTxt}>{I18n.t('ok')}</Text>
       </TouchableOpacity>
     </RBSheet>
   );

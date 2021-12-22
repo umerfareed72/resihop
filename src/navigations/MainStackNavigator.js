@@ -30,7 +30,7 @@ const DriverNavigator = () => {
 
 function MainStackNavigator() {
   const user = auth().currentUser;
-console.log(user);
+  console.log(user);
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -39,26 +39,21 @@ console.log(user);
           name="Splash"
           component={splash}
         />
-        {user ? (
-          <>
-            <Stack.Screen
-              options={{headerShown: false}}
-              name="PassengerDashboard"
-              component={PassengerNavigator}
-            />
-            <Stack.Screen
-              options={{headerShown: false}}
-              name="DriverDashboard"
-              component={DriverNavigator}
-            />
-          </>
-        ) : (
-          <Stack.Screen
-            options={{headerShown: false}}
-            name="AuthStack"
-            component={AuthStack}
-          />
-        )}
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="PassengerDashboard"
+          component={PassengerNavigator}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="DriverDashboard"
+          component={DriverNavigator}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="AuthStack"
+          component={AuthStack}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -5,6 +5,7 @@ import {CustomHeader} from '../../../components/Header/CustomHeader';
 import {useNavigation} from '@react-navigation/core';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fonts} from '../../../theme';
+import I18n from '../../../utilities/translations';
 
 const AvailablePassenger = () => {
   let navigation = useNavigation();
@@ -45,7 +46,7 @@ const AvailablePassenger = () => {
                   style={styles.driver}
                 />
                 <View style={{marginLeft: 13}}>
-                  <Text style={styles.name}>John Deo</Text>
+                  <Text style={styles.name}>{I18n.t('john')}</Text>
                   <View style={styles.ratingContainer}>
                     <StarIcon name="star" size={17} color={colors.white} />
                     <Text style={styles.ratingTxt}>4.5</Text>
@@ -68,7 +69,9 @@ const AvailablePassenger = () => {
                     />
                   ))}
                 </View>
-                <Text style={{fontFamily: fonts.regular}}>12 June, 08:00</Text>
+                <Text style={{fontFamily: fonts.regular}}>
+                  {I18n.t('date_time')}
+                </Text>
               </View>
             </View>
           </View>

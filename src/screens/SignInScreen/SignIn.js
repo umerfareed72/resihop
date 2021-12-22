@@ -39,14 +39,8 @@ function signIn(props) {
   };
 
   const signInWithPhoneNumber = () => {
-    CheckConnectivity().then(connected => {
-      if (connected) {
-        setIsLoading(true);
-        signIn();
-      } else {
-        alert('Check your internet connection');
-      }
-    });
+    setIsLoading(true);
+    signIn();
   };
 
   async function signIn() {

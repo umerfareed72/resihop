@@ -11,15 +11,13 @@ import {
 import I18n from '../../utilities/translations';
 import MyStatusBar from '../../components/Header/statusBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
-import auth from '@react-native-firebase/auth';
 
 function splash(props) {
-  const user = auth().currentUser;
-
   //Rdux States
   const dispatch = useDispatch();
+  const auth = useSelector(state => state.auth);
   //Component Did Mount
   useEffect(() => {
     handleNavigation();
@@ -49,17 +47,10 @@ function splash(props) {
       I18n.locale = lang;
     }
     setTimeout(() => {
-      // if (login?.userdata !== null) {
-      //   navigation.replace('App', {screen: 'Cart'});
-      // } else {
-      //   navigation.replace('Auth');
-      //   // navigation.replace('App', {screen: 'Cart'});
-      // }
-      if (user) {
-        // props.navigation.replace('PassengerDashboard');
-        props.navigation.replace('PassengerDashboard');
+      if (auth?.userdata !== null) {
+        props?.navigation.replace('PassengerDashboard');
       } else {
-        props.navigation.replace('AuthStack');
+        props?.navigation.replace('AuthStack');
       }
     }, 2000);
   };

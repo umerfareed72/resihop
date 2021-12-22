@@ -109,7 +109,7 @@ function SignUp(props) {
         console.log('Registration Api Response:-', res);
         if (res) {
           Alert.alert('Success', 'User sucessfully registered');
-          props.navigation.navigate('SignInScreen');
+          props.navigation.navigate('PersonalDetails');
         }
       }),
     );

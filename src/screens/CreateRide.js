@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -20,19 +20,40 @@ import FavouriteLocations from './FavouriteLocations';
 import {CustomHeader} from '../components';
 import CalendarSheet from './CalendarSheet';
 import I18n from '../utilities/translations';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setAvailableSeats,
+  setOrigin,
+  setMapDestination,
+  CreateRideRequest,
+} from '../redux/actions/map.actions';
 
 const CreateRide = () => {
   let navigation = useNavigation();
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
+  let dispatch = useDispatch();
+
+  const origin = useSelector(state => state.map.origin);
+  const destinationMap = useSelector(state => state.map.destination);
+  const availableSeats = useSelector(state => state.map.availableSeats);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
+  const [dateTimeStamp, setDateTimeStamp] = useState('');
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setAvailableSeats(0));
+      dispatch(setOrigin(null));
+      dispatch(setMapDestination(null));
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,7 +96,11 @@ const CreateRide = () => {
                 })
               }
               style={[styles.txtInput, {marginBottom: 20}]}>
-              <Text style={styles.startTxt}>{I18n.t('start_location')}</Text>
+              <Text style={styles.startTxt}>
+                {origin !== null
+                  ? origin.description
+                  : I18n.t('start_location')}
+              </Text>
               <View style={styles.startDot} />
             </TouchableOpacity>
             <TouchableOpacity
@@ -83,7 +108,11 @@ const CreateRide = () => {
                 navigation.navigate('StartLocation', {modalName: 'destination'})
               }
               style={styles.txtInput}>
-              <Text style={styles.startTxt}>{I18n.t('destination')}</Text>
+              <Text style={styles.startTxt}>
+                {destinationMap !== null
+                  ? destinationMap.description
+                  : I18n.t('destination')}
+              </Text>
               <View style={styles.destSquare} />
             </TouchableOpacity>
           </View>
@@ -109,12 +138,19 @@ const CreateRide = () => {
         <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
-            <Image
+            <TouchableOpacity
               key={seat}
-              source={appImages.seatBlue}
-              resizeMode="contain"
-              style={styles.seat}
-            />
+              onPress={() => dispatch(setAvailableSeats(seat))}>
+              <Image
+                source={
+                  seat <= availableSeats
+                    ? appImages.seatGreen
+                    : appImages.seatBlue
+                }
+                resizeMode="contain"
+                style={styles.seat}
+              />
+            </TouchableOpacity>
           ))}
         </View>
         <View style={styles.selectWrapper}>
@@ -155,7 +191,11 @@ const CreateRide = () => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
-        <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
+        <CalendarSheet
+          calendarSheetRef={calendarSheetRef}
+          setDate={setDate}
+          setDateTimeStamp={setDateTimeStamp}
+        />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -221,9 +261,23 @@ const CreateRide = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          onPress={() =>
-            navigation.navigate('StartMatching', {modalName: 'startMatching'})
-          }>
+          onPress={() => {
+            dispatch(
+              CreateRideRequest({
+                startLocation: [origin.location.lat, origin.location.lng],
+                destinationLocation: [
+                  destinationMap.location.lat,
+                  destinationMap.location.lng,
+                ],
+                date: dateTimeStamp,
+                requiredSeats: availableSeats,
+              }),
+            );
+            navigation.navigate('StartMatching', {
+              modalName: 'startMatching',
+              dateTimeStamp: dateTimeStamp,
+            });
+          }}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

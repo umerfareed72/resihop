@@ -14,6 +14,7 @@ import {DeleteCardModal} from './Modal/DeleteCard/DeleteCardModal';
 import I18n from '../utilities/translations';
 import {AddWalletModal} from '.';
 import {drawerIcons} from '../utilities/images';
+
 const RideStatusCards = ({statusType}) => {
   let navigation = useNavigation();
 
@@ -27,7 +28,7 @@ const RideStatusCards = ({statusType}) => {
   if (currentRide) {
     return (
       <View style={styles.currentRideContainer}>
-        <Text style={styles.destinationTxt}>Destination 10 KM (20 Min)</Text>
+        <Text style={styles.destinationTxt}>{I18n.t('destination10_km')}</Text>
         <View style={styles.addressContainer}>
           <Text style={styles.addressTxt}>
             123 abc apartment abc street abc...
@@ -60,10 +61,10 @@ const RideStatusCards = ({statusType}) => {
           <View style={styles.addressSquare} />
         </View>
         <View style={styles.dateTimeContainer}>
-          <Text style={styles.dateTimeTxt}>12 June, 08:00</Text>
+          <Text style={styles.dateTimeTxt}>{I18n.t('date_time')}</Text>
           {statusType === 'Confirmed' && (
             <View style={styles.confirmedWrapper}>
-              <Text style={styles.confirmedTxt}>confirmed</Text>
+              <Text style={styles.confirmedTxt}>{I18n.t('confirmed')}</Text>
             </View>
           )}
           <View style={styles.seats}>
@@ -88,7 +89,7 @@ const RideStatusCards = ({statusType}) => {
             />
             <View style={{width: '80%'}}>
               <View style={styles.nameRating}>
-                <Text style={styles.driverName}>John Deo</Text>
+                <Text style={styles.driverName}>{I18n.t('john')}</Text>
                 <View style={styles.ratingContainer}>
                   <StarIcon name="star" size={17} color={colors.white} />
                   <Text style={styles.ratingTxt}>4.5</Text>
@@ -108,9 +109,9 @@ const RideStatusCards = ({statusType}) => {
                 }}>
                 <Text style={styles.fair}>SEK 20</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={styles.carDetails}>Ford, Focus,</Text>
+                  <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
                   <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-                    White, XT32TTU8
+                    {I18n.t('car_detail')}
                   </Text>
                 </View>
               </View>
@@ -136,7 +137,7 @@ const RideStatusCards = ({statusType}) => {
                         statusType === 'Confirmed' ? colors.g1 : colors.black,
                     },
                   ]}>
-                  Call Now
+                  {I18n.t('call_now')}
                 </Text>
               </TouchableOpacity>
 
@@ -149,20 +150,17 @@ const RideStatusCards = ({statusType}) => {
                 <Text style={styles.borderBtnTxt}>Pickup Info</Text>
               </TouchableOpacity>
             </View>
-            <Text style={styles.warnTxt}>
-              (Calls are allowed after, when it is 1 hour remaining from the
-              departure time)
-            </Text>
+            <Text style={styles.warnTxt}>{I18n.t('calls_allowed_txt')}</Text>
             <View style={styles.btnMainContainer}>
               <TouchableOpacity style={styles.btnContainer}>
-                <Text style={styles.btnTxt}>Copy</Text>
+                <Text style={styles.btnTxt}>{I18n.t('copy')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   setShowModal(true);
                 }}
                 style={styles.btnContainer}>
-                <Text style={styles.btnTxt}>Cancel</Text>
+                <Text style={styles.btnTxt}>{I18n.t('cancel')}</Text>
               </TouchableOpacity>
             </View>
             {statusType === 'Matching Done' && (
@@ -174,7 +172,7 @@ const RideStatusCards = ({statusType}) => {
                   size={30}
                   color={colors.white}
                 />
-                <Text style={styles.startTripTxt}>Start Trip</Text>
+                <Text style={styles.startTripTxt}>{I18n.t('start_trip')}</Text>
               </TouchableOpacity>
             )}
           </>
@@ -183,19 +181,19 @@ const RideStatusCards = ({statusType}) => {
             <View style={styles.rideEndedbtns}>
               <TouchableOpacity style={styles.favBtnContainer}>
                 <HeartIcon name="heart" size={15} color={'red'} />
-                <Text style={styles.favTxt}>Add to Favorites</Text>
+                <Text style={styles.favTxt}>{I18n.t('add_to_favourite')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.rateBtnContainer}
                 onPress={() => setShowRatingModal(true)}>
                 <Star name="star" size={18} color={colors.black} />
-                <Text style={styles.rateTxt}>Rate Driver</Text>
+                <Text style={styles.rateTxt}>{I18n.t('rate_driver')}</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
               style={styles.passengerHomeBtn}
               onPress={() => navigation.navigate('PassengerHome')}>
-              <Text style={styles.homeTxt}>Passenger Home</Text>
+              <Text style={styles.homeTxt}>{I18n.t('passenger_home')}</Text>
             </TouchableOpacity>
           </>
         )}

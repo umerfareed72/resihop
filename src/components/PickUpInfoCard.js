@@ -3,14 +3,15 @@ import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import {appIcons, colors, family, size} from '../utilities';
 import {fonts} from '../theme';
 import {useNavigation} from '@react-navigation/core';
+import I18n from '../utilities/translations';
 
 const PickUpInfoCard = ({title}) => {
   const navigation = useNavigation();
   return (
     <View style={[styles.container]}>
       <View style={{marginHorizontal: 22, marginTop: 38}}>
-        <Text style={styles.walking}>Walking 300 M (5 Min)</Text>
-        <Text style={styles.estimated}>Estimated Arrival 10 KM (20 Min)</Text>
+        <Text style={styles.walking}>{I18n.t('walking')}</Text>
+        <Text style={styles.estimated}>{I18n.t('estimated')}</Text>
       </View>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
@@ -33,7 +34,7 @@ const PickUpInfoCard = ({title}) => {
               color: '#777777',
               fontSize: size.xxsmall,
             }}>
-            Please Call your Driver to coordinate pickup with your driver.
+            {I18n.t('call_driver')}
           </Text>
           <TouchableOpacity style={styles.btnContainer1}>
             <Image
@@ -51,7 +52,7 @@ const PickUpInfoCard = ({title}) => {
                 fontFamily: family.product_sans_regular,
                 color: colors.white,
               }}>
-              Call Now
+              {I18n.t('call_now')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -63,7 +64,7 @@ const PickUpInfoCard = ({title}) => {
         onPress={() => {
           navigation?.replace('PassengerHome');
         }}>
-        <Text style={styles.btnTxt}>Passenger Home</Text>
+        <Text style={styles.btnTxt}>{I18n.t('passenger_home')}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -30,33 +30,19 @@ export const userEmailLogin = (body, callBack) => async dispatch => {
 };
 /////////////////////////////////////////  Logout  ////////////////////////////
 
-export const logout = (token, callBack) => async dispatch => {
+export const logout = callBack => async dispatch => {
   try {
-    var form = new FormData();
-    form.append('token_value', token);
-    const response = await post(`${AUTH_CONST}logout`, form, await header());
     dispatch({
       type: Types.Logout_Success,
       payload: null,
     });
-    dispatch({
-      type: Types.Logout_Success,
-      payload: null,
-    });
-    if (response) {
-      // console.log('Data',response.data.result);
-      AsyncStorage.clear();
-      callBack();
-    }
+    AsyncStorage.clear();
+    callBack();
   } catch (error) {
-    console.log('errr', error);
     dispatch({
       type: Types.Logout_Failure,
       payload: null,
     });
-    let status = JSON.stringify(error.message);
-    let msg = error.response.data.message;
-    responseValidator(status, msg);
   }
 };
 

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -20,19 +20,41 @@ import CalendarSheet from '../../CalendarSheet';
 import ArrowDown from 'react-native-vector-icons/MaterialIcons';
 import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setAvailableSeats,
+  setOrigin,
+  setMapDestination,
+  CreateDriveRequest,
+} from '../../../redux/actions/map.actions';
 
 const CreateDrive = () => {
   let navigation = useNavigation();
+  let dispatch = useDispatch();
+
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
+
+  const origin = useSelector(state => state.map.origin);
+  const destinationMap = useSelector(state => state.map.destination);
+  const availableSeats = useSelector(state => state.map.availableSeats);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
+  const [dateTimeStamp, setDateTimeStamp] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setAvailableSeats(0));
+      dispatch(setOrigin(null));
+      dispatch(setMapDestination(null));
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,7 +99,9 @@ const CreateDrive = () => {
                   })
                 }>
                 <Text style={styles.locationTxt}>
-                  {I18n.t('start_location')}
+                  {origin !== null
+                    ? origin.description
+                    : I18n.t('start_location')}
                 </Text>
               </TouchableOpacity>
               <View style={styles.startDot} />
@@ -90,7 +114,11 @@ const CreateDrive = () => {
                     type: 'destination',
                   })
                 }>
-                <Text style={styles.locationTxt}>{I18n.t('destination')}</Text>
+                <Text style={styles.locationTxt}>
+                  {destinationMap !== null
+                    ? destinationMap.description
+                    : I18n.t('destination')}
+                </Text>
               </TouchableOpacity>
               <View style={styles.destSquare} />
             </View>
@@ -113,15 +141,22 @@ const CreateDrive = () => {
             />
           </View>
         </View>
-        <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
+        <Text style={styles.bookSeatsTxt}>{I18n.t('availableSeats')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
-            <Image
+            <TouchableOpacity
               key={seat}
-              source={appImages.seatBlue}
-              resizeMode="contain"
-              style={styles.seat}
-            />
+              onPress={() => dispatch(setAvailableSeats(seat))}>
+              <Image
+                source={
+                  seat <= availableSeats
+                    ? appImages.seatGreen
+                    : appImages.seatBlue
+                }
+                resizeMode="contain"
+                style={styles.seat}
+              />
+            </TouchableOpacity>
           ))}
         </View>
         <View style={styles.selectWrapper}>
@@ -173,7 +208,11 @@ const CreateDrive = () => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
-        <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
+        <CalendarSheet
+          calendarSheetRef={calendarSheetRef}
+          setDate={setDate}
+          setDateTimeStamp={setDateTimeStamp}
+        />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -239,7 +278,24 @@ const CreateDrive = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          onPress={() => navigation.navigate('SelectRoute')}>
+          disabled={!origin && !destination}
+          onPress={() => {
+            dispatch(
+              CreateDriveRequest({
+                startLocation: [origin.location.lat, origin.location.lng],
+                destinationLocation: [
+                  destinationMap.location.lat,
+                  destinationMap.location.lng,
+                ],
+                date: dateTimeStamp,
+                availableSeats: availableSeats,
+                path: 0,
+                costPerSeat: 200.0,
+                interCity: false,
+              }),
+            );
+            navigation.navigate('SelectRoute');
+          }}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

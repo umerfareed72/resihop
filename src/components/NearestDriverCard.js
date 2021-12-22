@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {appIcons, appImages, colors, family, size, HP} from '../utilities';
 import {fonts} from '../theme';
+import I18n from '../utilities/translations';
 
 const NearestDriverCard = ({setModal, setHeight, modalName}) => {
   useEffect(() => {
@@ -23,7 +24,7 @@ const NearestDriverCard = ({setModal, setHeight, modalName}) => {
   return (
     <View style={styles.mainWrapper}>
       {modalName === 'selectRoute' && (
-        <Text style={styles.topText}>24 min (15.6 km) | 6 Passenger</Text>
+        <Text style={styles.topText}>{I18n.t('min24')}</Text>
       )}
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
@@ -38,7 +39,7 @@ const NearestDriverCard = ({setModal, setHeight, modalName}) => {
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.rideInfoContainer}>
-        <Text style={styles.date}>12 June, 08:00</Text>
+        <Text style={styles.date}>{I18n.t('date_time')}</Text>
         <View style={styles.imagesContainer}>
           <Image
             source={appImages.seatGreen}
@@ -53,11 +54,11 @@ const NearestDriverCard = ({setModal, setHeight, modalName}) => {
         </View>
       </View>
       {modalName !== 'selectRoute' && (
-        <Text style={styles.driverTxt}>Finding Nearest Driver...</Text>
+        <Text style={styles.driverTxt}>{I18n.t('finding')}</Text>
       )}
       {modalName === 'selectRoute' && (
         <TouchableOpacity style={styles.selectRouteButtom}>
-          <Text style={styles.routeText}>Select Route</Text>
+          <Text style={styles.routeText}>{I18n.t('select_route')}</Text>
         </TouchableOpacity>
       )}
     </View>

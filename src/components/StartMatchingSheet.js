@@ -10,6 +10,7 @@ import {
 import Slider from '@react-native-community/slider';
 import {appIcons, appImages, colors} from '../utilities';
 import {fonts} from '../theme';
+import I18n from '../utilities/translations';
 
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   const [sliderValue, setSliderValue] = useState(0);
@@ -21,9 +22,7 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.walkDistaceTxt}>
-          Walk Distance to pick up Location
-        </Text>
+        <Text style={styles.walkDistaceTxt}>{I18n.t('walk_to_pickUp')}</Text>
         <Text style={styles.distance}>300 M</Text>
       </View>
       <Slider
@@ -42,7 +41,7 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
       <TouchableOpacity
         style={styles.btnWrapper}
         onPress={() => setModal('finding')}>
-        <Text style={styles.btnTxt}>Start Matching</Text>
+        <Text style={styles.btnTxt}>{I18n.t('start_matching')}</Text>
       </TouchableOpacity>
     </View>
   );

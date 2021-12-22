@@ -18,10 +18,12 @@ import {LogoutModal} from '../Modal/LogoutModal/LogoutModal';
 import I18n from '../../utilities/translations';
 import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
 import auth from '@react-native-firebase/auth';
+import {useDispatch} from 'react-redux';
+import {logout} from '../../redux/actions/auth.action';
 
 const DrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
-
+  const dispatch = useDispatch(null);
   const list = [
     {
       icon: drawerIcons.rides_history,
@@ -110,21 +112,11 @@ const DrawerComponent = ({navigation}) => {
   ];
 
   async function Signout() {
-    CheckConnectivity().then(res => {
-      if (res) {
-        auth()
-          .signOut()
-          .then(res => {
-            console.log('User signed out!', res);
-          });
-      } else {
-        setLoading(false);
-        Alert.alert('Internet Error', 'Check your internet connection');
-      }
-    });
-    // await services.DataManager.clearAuthSession().then(() =>
-    //   props.setUser(null),
-    // );
+    dispatch(
+      logout(() => {
+        navigation.replace('AuthStack');
+      }),
+    );
   }
 
   return (
@@ -191,7 +183,6 @@ const DrawerComponent = ({navigation}) => {
             onPress={() => {
               modalRef?.current?.close();
               Signout();
-              navigation.replace('AuthStack');
             }}
             btnText={I18n.t('yes')}
             btnText2={I18n.t('cancel')}

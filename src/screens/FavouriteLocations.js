@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
+import I18n from '../utilities/translations';
 
 const FavouriteLocations = ({favourteLocationRef}) => {
   const data = [
@@ -43,7 +44,7 @@ const FavouriteLocations = ({favourteLocationRef}) => {
       }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.selectTxt}>
-          Select from your Favorite Locations
+          {I18n.t('select_from_fav_location')}
         </Text>
         <View style={styles.favAddressWrapper}>
           {data.map(item => (
@@ -61,7 +62,7 @@ const FavouriteLocations = ({favourteLocationRef}) => {
           onPress={() => {
             favourteLocationRef.current.close();
           }}>
-          <Text style={styles.cancelTxt}>Cancel</Text>
+          <Text style={styles.cancelTxt}>{I18n.t('cancel')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </RBSheet>

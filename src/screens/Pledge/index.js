@@ -26,7 +26,7 @@ const index = ({navigation}) => {
           <View style={styles.btnWrapper}>
             <AgreeButton
               onPress={() => {
-                navigation?.navigate('PassengerDashboard');
+                navigation?.replace('PassengerDashboard');
               }}
               fontWeight={'bold'}
               bgColor={colors.primary}
