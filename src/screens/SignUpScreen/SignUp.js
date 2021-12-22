@@ -1,5 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Text, View, StyleSheet, Keyboard, ToastAndroid} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Keyboard,
+  ToastAndroid,
+  Alert,
+} from 'react-native';
 import {CustomHeader} from '../../components';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
@@ -99,8 +106,9 @@ function SignUp(props) {
     };
     dispatch(
       userEmailSignup(requestBody, res => {
-        console.log(res);
+        console.log('Registration Api Response:-', res);
         if (res) {
+          Alert.alert('Success', 'User sucessfully registered');
           props.navigation.navigate('SignInScreen');
         }
       }),

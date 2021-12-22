@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Image, StyleSheet} from 'react-native';
-import {app_logo} from '../../assets';
+import {View, Image, StyleSheet, Alert} from 'react-native';
 import {
   appImages,
   colors,
@@ -14,8 +13,11 @@ import MyStatusBar from '../../components/Header/statusBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
+import auth from '@react-native-firebase/auth';
 
 function splash(props) {
+  const user = auth().currentUser;
+
   //Rdux States
   const dispatch = useDispatch();
   //Component Did Mount
@@ -53,7 +55,12 @@ function splash(props) {
       //   navigation.replace('Auth');
       //   // navigation.replace('App', {screen: 'Cart'});
       // }
-      props.navigation.replace('PassengerDashboard');
+      if (user) {
+        // props.navigation.replace('PassengerDashboard');
+        props.navigation.replace('PassengerDashboard');
+      } else {
+        props.navigation.replace('AuthStack');
+      }
     }, 2000);
   };
 

@@ -65,10 +65,8 @@ export const logout = (token, callBack) => async dispatch => {
 export const userEmailSignup = (body, callBack) => async dispatch => {
   try {
     dispatch({type: Types.Set_loader, payload: true});
-    console.log('body-', body);
     await post(`${AUTH_CONST}register`, body)
       .then(response => {
-        console.log('Res------->', response);
         AsyncStorage.setItem('usertoken', response?.data?.jwt);
         dispatch({
           type: Types.Signup_Success,
@@ -77,7 +75,6 @@ export const userEmailSignup = (body, callBack) => async dispatch => {
         callBack(response?.data);
       })
       .catch(err => {
-        console.log('Error------->', JSON.stringify(err));
         dispatch({
           type: Types.Signup_Failure,
           payload: null,

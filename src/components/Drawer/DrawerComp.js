@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {colors, family, HP, size, WP} from '../../utilities';
 import {ListItem} from 'react-native-elements';
@@ -15,6 +16,8 @@ import {appImages, drawerIcons} from '../../utilities/images';
 import MyStatusBar from '../Header/statusBar';
 import {LogoutModal} from '../Modal/LogoutModal/LogoutModal';
 import I18n from '../../utilities/translations';
+import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
+import auth from '@react-native-firebase/auth';
 
 const DrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
@@ -106,6 +109,24 @@ const DrawerComponent = ({navigation}) => {
     },
   ];
 
+  async function Signout() {
+    CheckConnectivity().then(res => {
+      if (res) {
+        auth()
+          .signOut()
+          .then(res => {
+            console.log('User signed out!', res);
+          });
+      } else {
+        setLoading(false);
+        Alert.alert('Internet Error', 'Check your internet connection');
+      }
+    });
+    // await services.DataManager.clearAuthSession().then(() =>
+    //   props.setUser(null),
+    // );
+  }
+
   return (
     <>
       <MyStatusBar
@@ -169,6 +190,7 @@ const DrawerComponent = ({navigation}) => {
             h2={I18n.t('logout_text')}
             onPress={() => {
               modalRef?.current?.close();
+              Signout();
               navigation.replace('AuthStack');
             }}
             btnText={I18n.t('yes')}

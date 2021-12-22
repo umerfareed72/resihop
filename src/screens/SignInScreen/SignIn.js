@@ -108,7 +108,12 @@ function signIn(props) {
       userEmailLogin(requestBody, res => {
         console.log(res);
         if (res) {
-          props.navigation.navigate('PersonalDetails');
+          Alert.alert('Success', 'User sucessfully logged in', [
+            {
+              text: 'OK',
+              onPress: () => props.navigation.navigate('PersonalDetails'),
+            },
+          ]);
         } else {
           Alert.alert('Error', 'This Number is not Registered');
         }
