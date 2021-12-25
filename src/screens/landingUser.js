@@ -1,16 +1,8 @@
 import React from 'react';
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-} from 'react-native';
-import {Button, Icon, Text} from 'react-native-elements';
+import {StyleSheet, View, Image, ScrollView} from 'react-native';
+import {Button, Text} from 'react-native-elements';
 import {CustomHeader} from '../components';
 import {Container} from '../components/Container';
-import MyStatusBar from '../components/Header/statusBar';
 import {theme} from '../theme';
 
 import {appIcons, colors} from '../utilities';
@@ -19,16 +11,14 @@ import I18n from '../utilities/translations';
 function landingUser({navigation}) {
   return (
     <>
-      <View style={{flex: 1, backgroundColor: colors.white}}>
-        <ImageBackground
-          source={appIcons.landing_user_img}
-          style={styles.imgCon}
-          imageStyle={{height: '100%'}}
-          resizeMode={'cover'}>
-          <CustomHeader navigation={navigation} backButton={true} />
-        </ImageBackground>
-        <ScrollView showsVerticalScrollIndicator={false} >
+      <View style={{flex: 1, backgroundColor: colors.red}}>
+        <CustomHeader navigation={navigation} backButton={true} />
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Container padding={0}>
+            <Image
+              source={appIcons.landing_user_img}
+              style={styles.imgCon}
+            />
             <Text style={[theme.Text.h1Bold, styles.heading]}>
               {I18n.t('welcome_to_resihop_msg')}
             </Text>
@@ -82,7 +72,7 @@ const styles = StyleSheet.create({
   },
   imgCon: {
     width: '100%',
-    height: '50%',
+    height: 300,
   },
   heading: {
     textAlign: 'center',

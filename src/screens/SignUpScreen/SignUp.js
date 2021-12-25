@@ -27,8 +27,8 @@ function SignUp(props) {
 
   const [confirm, setConfirm] = useState(null);
   const [code, setCode] = useState('');
-  const [countryCode, setCountryCode] = useState('92');
-  const [cca2, setcca2] = useState('PK');
+  const [countryCode, setCountryCode] = useState('47');
+  const [cca2, setcca2] = useState('NO');
   const [otpInput, setOtpInput] = useState(false);
 
   const onSelect = country => {
@@ -50,7 +50,7 @@ function SignUp(props) {
 
   async function signIn() {
     try {
-      const phone = `+${country ? country.callingCode : '92'}${phoneNum}`;
+      const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
       const confirmation = await auth().signInWithPhoneNumber(phone);
       if (confirmation) {
         setIsLoading(false);
@@ -98,48 +98,48 @@ function SignUp(props) {
   };
 
   const userRegistrationApi = () => {
-    const phone = `+${country ? country.callingCode : '92'}${phoneNum}`;
+    setIsLoading(true);
+    const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
     const requestBody = {
       username: phone,
       email: `${phone}@resihop.com`,
       password: '123456',
     };
     dispatch(
-      userEmailSignup(requestBody, res => {
+      userEmailSignup(requestBody, setIsLoading, res => {
         console.log('Registration Api Response:-', res);
         if (res) {
+          setIsLoading(false);
           Alert.alert('Success', 'User sucessfully registered');
-          props.navigation.navigate('PersonalDetails');
+          props.navigation.navigate('PersonFalDetails');
         }
       }),
     );
   };
 
   return (
-    <>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <CustomHeader navigation={props?.navigation} backButton={true} />
-      <Container padding={0}>
-        <View style={styles.viewCon}>
-          <Text style={[theme.Text.h1Bold, styles.heading]}>
-            {_.startCase(I18n.t('sign_up'))}
-          </Text>
-          <Text style={[theme.Text.h2Bold]}>
-            {_.startCase(I18n.t('mobile_number'))}
-          </Text>
-          <OtpValidator
-            phoneNumber={phoneNum}
-            chnagePhone={val => setPhoneNum(val)}
-            selectedCountry={country}
-            onCountrySelect={onSelect}
-            onSendCodePress={onSendCode}
-            defaultCountryCode={cca2}
-            otpCodeArea={otpInput}
-            enteredCode={code => setCode(code)}
-          />
-        </View>
-      </Container>
+      <View style={styles.viewCon}>
+        <Text style={[theme.Text.h1Bold, styles.heading]}>
+          {_.startCase(I18n.t('sign_up'))}
+        </Text>
+        <Text style={[theme.Text.h2Bold]}>
+          {_.startCase(I18n.t('mobile_number'))}
+        </Text>
+        <OtpValidator
+          phoneNumber={phoneNum}
+          chnagePhone={val => setPhoneNum(val)}
+          selectedCountry={country}
+          onCountrySelect={onSelect}
+          onSendCodePress={onSendCode}
+          defaultCountryCode={cca2}
+          otpCodeArea={otpInput}
+          enteredCode={code => setCode(code)}
+        />
+      </View>
       {isLoading ? <Loader /> : null}
-    </>
+    </View>
   );
 }
 
@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
   },
   viewCon: {
     padding: 20,
+    bottom: 20,
   },
   heading: {
     marginBottom: 20,
