@@ -7,27 +7,29 @@ import {AUTH_CONST, AUTH_PW_CONST} from '../../utilities/routes';
 
 /////////////////////////////////////////  Login   ////////////////////////////
 
-export const userEmailLogin = (body, callBack) => async dispatch => {
-  try {
-    dispatch({type: Types.Set_loader, payload: true});
-    const response = await post(`auth/local`, body);
-    AsyncStorage.setItem('usertoken', response.data.jwt);
-    dispatch({
-      type: Types.Login_Success,
-      payload: response?.data,
-    });
-    console.log('Login Successfully', response.data);
-    callBack(response.data);
-  } catch (error) {
-    let status = error.name;
-    let msg = error.message;
-    responseValidator(status, msg);
-    dispatch({
-      type: Types.Login_Failure,
-      payload: null,
-    });
-  }
-};
+export const userEmailLogin =
+  (body, setIsLoading, callBack) => async dispatch => {
+    try {
+      dispatch({type: Types.Set_loader, payload: true});
+      const response = await post(`auth/local`, body);
+      AsyncStorage.setItem('usertoken', response.data.jwt);
+      dispatch({
+        type: Types.Login_Success,
+        payload: response?.data,
+      });
+      console.log('Login Successfully', response.data);
+      callBack(response.data);
+    } catch (error) {
+      setIsLoading(false)
+      let status = error.name;
+      let msg = error.message;
+      responseValidator(status, msg);
+      dispatch({
+        type: Types.Login_Failure,
+        payload: null,
+      });
+    }
+  };
 /////////////////////////////////////////  Logout  ////////////////////////////
 
 export const logout = callBack => async dispatch => {
@@ -48,31 +50,34 @@ export const logout = callBack => async dispatch => {
 
 /////////////////////////////////////////  Registeration ////////////////////////////
 
-export const userEmailSignup = (body, callBack) => async dispatch => {
-  try {
-    dispatch({type: Types.Set_loader, payload: true});
-    await post(`${AUTH_CONST}register`, body)
-      .then(response => {
-        AsyncStorage.setItem('usertoken', response?.data?.jwt);
-        dispatch({
-          type: Types.Signup_Success,
-          payload: response?.data,
+export const userEmailSignup =
+  (body, setIsLoading, callBack) => async dispatch => {
+    try {
+      dispatch({type: Types.Set_loader, payload: true});
+      await post(`${AUTH_CONST}register`, body)
+        .then(response => {
+          setIsLoading(false);
+          AsyncStorage.setItem('usertoken', response?.data?.jwt);
+          dispatch({
+            type: Types.Signup_Success,
+            payload: response?.data,
+          });
+          callBack(response?.data);
+        })
+        .catch(err => {
+          setIsLoading(false);
+          dispatch({
+            type: Types.Signup_Failure,
+            payload: null,
+          });
+          let msg = err.message;
+          let status = err.name;
+          responseValidator(msg, status);
         });
-        callBack(response?.data);
-      })
-      .catch(err => {
-        dispatch({
-          type: Types.Signup_Failure,
-          payload: null,
-        });
-        let msg = err.message;
-        let status = err.name;
-        responseValidator(msg, status);
-      });
-  } catch (error) {
-    console.log('Error:', JSON.stringify(error));
-  }
-};
+    } catch (error) {
+      console.log('Error:', JSON.stringify(error));
+    }
+  };
 
 /////////////////////////////////////////Forgot Password////////////////////////////
 
