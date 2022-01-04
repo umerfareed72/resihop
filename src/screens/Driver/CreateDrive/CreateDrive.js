@@ -26,7 +26,9 @@ import {
   setOrigin,
   setMapDestination,
   CreateDriveRequest,
+  setDateTimeStamp,
 } from '../../../redux/actions/map.actions';
+import moment from 'moment';
 
 const CreateDrive = () => {
   let navigation = useNavigation();
@@ -38,12 +40,12 @@ const CreateDrive = () => {
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
   const availableSeats = useSelector(state => state.map.availableSeats);
+  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
-  const [dateTimeStamp, setDateTimeStamp] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
@@ -53,6 +55,7 @@ const CreateDrive = () => {
       dispatch(setAvailableSeats(0));
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
+      dispatch(setDateTimeStamp(null));
     };
   }, []);
 
@@ -181,7 +184,11 @@ const CreateDrive = () => {
               styles.noLater,
               {justifyContent: 'center', marginRight: 11},
             ]}>
-            <Text style={styles.dateTxt}>{date !== '' ? date : 'Date'}</Text>
+            <Text style={styles.dateTxt}>
+              {dateTimeStamp !== null
+                ? moment(dateTimeStamp).format('DD MMM')
+                : 'Date'}
+            </Text>
           </TouchableOpacity>
           <Image
             source={appImages.calendar}
@@ -208,11 +215,7 @@ const CreateDrive = () => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
-        <CalendarSheet
-          calendarSheetRef={calendarSheetRef}
-          setDate={setDate}
-          setDateTimeStamp={setDateTimeStamp}
-        />
+        <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -292,6 +295,8 @@ const CreateDrive = () => {
                 path: 0,
                 costPerSeat: 200.0,
                 interCity: false,
+                startDes: origin.description,
+                destDes: destinationMap.description,
               }),
             );
             navigation.navigate('SelectRoute');

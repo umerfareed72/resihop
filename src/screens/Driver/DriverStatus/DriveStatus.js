@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {colors, appIcons} from '../../../utilities';
 import MapViewComponent from '../../../components/MapViewComponent';
@@ -6,13 +6,47 @@ import {fonts} from '../../../theme';
 import {useNavigation} from '@react-navigation/core';
 import {DeleteCardModal} from '../../../components';
 import I18n from '../../../utilities/translations';
+import {
+  setOrigin,
+  setMapDestination,
+  setIDToUpdateDrive,
+} from '../../../redux/actions/map.actions';
+import {useDispatch} from 'react-redux';
 
 const DriveStatus = ({route}) => {
   let navigation = useNavigation();
+  let dispatch = useDispatch();
+
   const [show, setshow] = useState(false);
   const [selected, setSelected] = useState(false);
   const [modal, setModal] = useState('driveStatus');
   const {status} = route.params;
+
+  useEffect(() => {
+    const {startLocation, destinationLocation, startDes, destDes, id} =
+      route.params;
+
+    dispatch(
+      setOrigin({
+        location: {lat: startLocation.latitude, lng: startLocation.longitude},
+        description: startDes,
+      }),
+    );
+    dispatch(
+      setMapDestination({
+        location: {
+          lat: destinationLocation.latitude,
+          lng: destinationLocation.longitude,
+        },
+        description: destDes,
+      }),
+    );
+
+    return () => {
+      dispatch(setOrigin(null));
+      dispatch(setMapDestination(null));
+    };
+  }, []);
 
   return (
     <>

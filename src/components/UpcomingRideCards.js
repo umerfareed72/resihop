@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {appImages, colors} from '../utilities';
 import {fonts} from '../theme/theme';
+import moment from 'moment';
 
 const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
   const CardSelect = id => {
@@ -10,6 +11,14 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
     } else setSelectedCard([id, ...selectedCard]);
   };
 
+  const [seats, setSeats] = useState([]);
+
+  useEffect(() => {
+    for (let i = 0; i < item.availableSeats; i++) {
+      seats[i] = i;
+    }
+  }, []);
+
   return (
     <View>
       <TouchableOpacity
@@ -17,19 +26,15 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
         onPress={onPress}
         onLongPress={() => CardSelect(item.id)}>
         <View style={styles.addressContainer}>
-          <Text style={styles.addressTxt}>
-            123 abc apartment abc street abc...
-          </Text>
+          <Text style={styles.addressTxt}>{item.startDes}</Text>
           <View style={styles.addressCircle} />
         </View>
         <View style={[styles.addressContainer, {marginTop: 10}]}>
-          <Text style={styles.addressTxt}>
-            123 abc apartment abc street abc...
-          </Text>
+          <Text style={styles.addressTxt}>{item.destDes}</Text>
           <View style={styles.addressSquare} />
         </View>
         <View style={styles.dateWrapper}>
-          <Text style={styles.date}>{item.date}</Text>
+          <Text style={styles.date}>{moment(item.date).format('DD-MMM')}</Text>
           <View
             style={[
               styles.statusWrapper,
@@ -41,12 +46,12 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
           </View>
         </View>
         <View style={styles.dateWrapper}>
-          <Text style={styles.fair}>SEK 20</Text>
+          <Text style={styles.fair}>{`SEk ${item.costPerSeat}`}</Text>
           <View style={styles.seatContainer}>
-            {item?.seats.map(seat => (
+            {seats?.map(seat => (
               <Image
                 key={seat}
-                source={appImages.seatGreen}
+                source={appImages.seatBlue}
                 resizeMode="contain"
                 style={styles.green}
               />
@@ -149,7 +154,7 @@ const styles = StyleSheet.create({
     color: colors.txtBlack,
   },
   status: {
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 16,
     color: colors.green,
     textTransform: 'uppercase',
@@ -190,7 +195,7 @@ const getStatusColor = status => {
   if (status === 'Matching Done' || status === 'Partially Booked') {
     return colors.blue;
   }
-  if (status === 'Waiting for Match') {
+  if (status === 'WAITING_FOR_MATCH') {
     return colors.orange;
   }
 };
