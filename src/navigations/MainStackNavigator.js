@@ -5,6 +5,7 @@ import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
 import {DrawerNavigator} from './PassengerDrawerNav';
 import {DriverDrawerNavigator} from './DriverDraweNavigator';
+import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -28,6 +29,8 @@ const DriverNavigator = () => {
 };
 
 function MainStackNavigator() {
+  const user = auth().currentUser;
+  console.log(user);
   return (
     <NavigationContainer>
       <Stack.Navigator>

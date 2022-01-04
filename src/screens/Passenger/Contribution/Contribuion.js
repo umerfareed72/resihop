@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   ImageBackground,
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: HP('2'),
     backgroundColor: 'orange,',
+    alignItems: 'center',
   },
   imgStyle: {
     width: HP('12'),
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
   buttonText: {
     fontSize: size.h5,

@@ -5,6 +5,7 @@ import _ from 'lodash/string';
 import {theme} from '../../theme';
 import {CustomHeader} from '../../components';
 import OtpValidator from '../../components/OtpValidator';
+import I18n from '../../utilities/translations';
 
 function signIn(props) {
   return (

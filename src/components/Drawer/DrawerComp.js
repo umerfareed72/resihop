@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {colors, family, HP, size, WP} from '../../utilities';
 import {ListItem} from 'react-native-elements';
@@ -15,10 +16,14 @@ import {appImages, drawerIcons} from '../../utilities/images';
 import MyStatusBar from '../Header/statusBar';
 import {LogoutModal} from '../Modal/LogoutModal/LogoutModal';
 import I18n from '../../utilities/translations';
+import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
+import auth from '@react-native-firebase/auth';
+import {useDispatch} from 'react-redux';
+import {logout} from '../../redux/actions/auth.action';
 
 const DrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
-
+  const dispatch = useDispatch(null);
   const list = [
     {
       icon: drawerIcons.rides_history,
@@ -106,6 +111,14 @@ const DrawerComponent = ({navigation}) => {
     },
   ];
 
+  async function Signout() {
+    dispatch(
+      logout(() => {
+        navigation.replace('AuthStack');
+      }),
+    );
+  }
+
   return (
     <>
       <MyStatusBar
@@ -169,7 +182,7 @@ const DrawerComponent = ({navigation}) => {
             h2={I18n.t('logout_text')}
             onPress={() => {
               modalRef?.current?.close();
-              navigation.replace('AuthStack');
+              Signout();
             }}
             btnText={I18n.t('yes')}
             btnText2={I18n.t('cancel')}

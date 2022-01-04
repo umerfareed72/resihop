@@ -3,7 +3,7 @@ const initialState = {
   loading: false,
   success: false,
   failure: false,
-  userdata: {},
+  userdata: null,
   reset_data: {},
   pwd_data: {},
 };
@@ -58,7 +58,7 @@ export default (state = initialState, action = {}) => {
         loading: false,
         success: true,
         failure: false,
-        userdata: payload,
+        userdata: null,
       };
     case Types.Forgot_Password_Success:
       return {

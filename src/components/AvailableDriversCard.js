@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     color: colors.txtBlack,
     marginTop: 24,
     marginLeft: 24,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   addressContainer: {
     height: 42,
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     paddingLeft: 40,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
     color: colors.txtBlack,
   },
   addressCircle: {
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 30,
     color: colors.black,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   matchingTxt: {
     fontSize: 16,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.txtBlack,
     marginLeft: 7,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   driver: {
     height: 58,
@@ -317,14 +317,14 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     //lineHeight: 37,
     color: colors.white,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   driverName: {
     fontSize: 18,
     lineHeight: 22,
     color: colors.txtBlack,
     marginBottom: 7,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   seatGreen: {
     height: 16,
@@ -351,13 +351,13 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.txtBlack,
     marginLeft: 6,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   carDetails: {
     fontSize: 14,
     lineHeight: 22,
     color: colors.txtGray,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   availableMain: {
     flexDirection: 'row',
@@ -379,13 +379,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     color: colors.white,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   date: {
     fontSize: 14,
     lineHeight: 22,
     color: colors.txtBlack,
-    fontFamily: fonts.regular,
+    fontFamily: family.product_sans_regular,
   },
   btnMainContainer: {
     flexDirection: 'row',
@@ -408,10 +408,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.txtBlack,
-    fontFamily: fonts.bold,
+    fontFamily: family.product_sans_bold,
   },
   fair: {
-    fontFamily: fonts.bold,
+    fontFamily: family.product_sans_bold,
     fontSize: 18,
     lineHeight: 22,
     color: colors.txtBlack,

@@ -281,7 +281,9 @@ const CreateDrive = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          disabled={!origin && !destination}
+          disabled={
+            !origin || !destination || !availableSeats || !dateTimeStamp
+          }
           onPress={() => {
             dispatch(
               CreateDriveRequest({
