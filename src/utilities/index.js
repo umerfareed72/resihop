@@ -5,7 +5,7 @@ export {baseURL, GET_FAQS, GET_OFFERS, GET_ABOUT_US} from './routes';
 export {size, family} from './sizes';
 export {responseValidator} from './helpers/responseValidator';
 export * from './permissions';
-export {header} from './constants';
+export {header, GetToken} from './constants';
 export {
   registerAppWithFCM,
   requestPermission,

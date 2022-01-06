@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as Types from '../types/map.types';
-const TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZDNlM2U5ZmExMjNlMDAxNjYyZGMxYSIsImlhdCI6MTY0MTMyMzY0MCwiZXhwIjoxNjQzOTE1NjQwfQ.TXRQQFunwVL4nBEWA-wdLo5HU2z0MjWdxsyKxcEz9xg';
+import {GetToken} from '../../utilities';
+
 export const setOrigin = data => async dispatch => {
   dispatch({
     type: Types.origin,
@@ -39,6 +39,8 @@ export const setDateTimeStamp = data => async dispatch => {
   });
 };
 export const CreateDriveRequest = data => async dispatch => {
+  let Token = await GetToken();
+
   try {
     const response = await fetch(
       'https://resihop-server.herokuapp.com/drives',
@@ -46,7 +48,7 @@ export const CreateDriveRequest = data => async dispatch => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${TOKEN}`,
+          Authorization: `Bearer ${Token}`,
         },
         body: JSON.stringify(data),
       },
@@ -62,17 +64,22 @@ export const CreateDriveRequest = data => async dispatch => {
   }
 };
 export const CreateRideRequest = data => async dispatch => {
+  let Token = await GetToken();
+
+  console.log('Data', data);
+
   try {
     const response = await fetch('https://resihop-server.herokuapp.com/rides', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${TOKEN}`,
+        Authorization: `Bearer ${Token}`,
       },
       body: JSON.stringify(data),
     });
 
     const responseJson = await response.json();
+    console.log('Create Ride', responseJson);
     dispatch({
       type: Types.createRideRequest,
       payload: responseJson,
@@ -82,6 +89,8 @@ export const CreateRideRequest = data => async dispatch => {
   }
 };
 export const SearchRides = data => async dispatch => {
+  let Token = await GetToken();
+
   if (data === null) {
     dispatch({
       type: Types.searchRides,
@@ -97,7 +106,7 @@ export const SearchRides = data => async dispatch => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${TOKEN}`,
+          Authorization: `Bearer ${Token}`,
         },
         body: JSON.stringify(data),
       },
@@ -113,6 +122,8 @@ export const SearchRides = data => async dispatch => {
   }
 };
 export const SearchDrives = data => async dispatch => {
+  let Token = await GetToken();
+
   if (data === null) {
     dispatch({
       type: Types.searchDrives,
@@ -127,7 +138,7 @@ export const SearchDrives = data => async dispatch => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${TOKEN}`,
+          Authorization: `Bearer ${Token}`,
         },
         body: JSON.stringify(data),
       },
@@ -144,6 +155,8 @@ export const SearchDrives = data => async dispatch => {
 };
 
 export const MyDrives = data => async dispatch => {
+  let Token = await GetToken();
+
   try {
     const response = await fetch(
       'https://resihop-server.herokuapp.com/drives',
@@ -151,7 +164,7 @@ export const MyDrives = data => async dispatch => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${TOKEN}`,
+          Authorization: `Bearer ${Token}`,
         },
       },
     );
@@ -170,12 +183,14 @@ export const MyDrives = data => async dispatch => {
   }
 };
 export const MyRides = data => async dispatch => {
+  let Token = await GetToken();
+
   try {
     const response = await fetch('https://resihop-server.herokuapp.com/rides', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${TOKEN}`,
+        Authorization: `Bearer ${Token}`,
       },
     });
 
@@ -194,9 +209,10 @@ export const MyRides = data => async dispatch => {
 };
 
 export const setUpdateDrive = data => async dispatch => {
+  let Token = await GetToken();
+
   const id = data.id;
   delete data['id'];
-  console.log(JSON.stringify(data));
   try {
     axios
       .put(
@@ -205,7 +221,7 @@ export const setUpdateDrive = data => async dispatch => {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${TOKEN}`,
+            Authorization: `Bearer ${Token}`,
           },
         },
       )
