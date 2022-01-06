@@ -16,7 +16,6 @@ const PassengerNavigator = () => {
       screenOptions={{headerShown: false}}
       initialRouteName={'PassengerHome'}>
       <Stack.Screen name={'PassengerHome'} component={DrawerNavigator} />
-      <Stack.Screen name={'AuthStack'} component={AuthStack} />
     </Stack.Navigator>
   );
 };
@@ -32,11 +31,6 @@ const DriverNavigator = () => {
 };
 
 function MainStackNavigator() {
-  const UserData = useSelector(state => state.auth);
-  const user = auth().currentUser;
-  console.log('Main Stack Auth---', UserData?.userdata);
-  console.log('Firebase User---', user);
-
   return (
     <NavigationContainer>
       <Stack.Navigator>

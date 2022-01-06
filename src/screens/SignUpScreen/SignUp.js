@@ -8,16 +8,15 @@ import {
   Alert,
 } from 'react-native';
 import {CustomHeader} from '../../components';
-import {Container} from '../../components/Container';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
 import I18n from '../../utilities/translations';
 import auth from '@react-native-firebase/auth';
-import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
 import Loader from '../../components/Loader/Loader';
 import {useDispatch} from 'react-redux';
 import {userEmailSignup} from '../../redux/actions/auth.action';
+import {checkConnected} from '../../utilities';
 
 function SignUp(props) {
   const dispatch = useDispatch(null);
@@ -37,15 +36,14 @@ function SignUp(props) {
     setCountryCode(country?.callingCode[0]);
   };
 
-  const signInWithPhoneNumber = () => {
-    CheckConnectivity().then(connected => {
-      if (connected) {
-        setIsLoading(true);
-        signIn();
-      } else {
-        alert('Check your internet connection');
-      }
-    });
+  const signInWithPhoneNumber = async () => {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setIsLoading(true);
+      signIn();
+    } else {
+      alert('Check your internet connection');
+    }
   };
 
   async function signIn() {

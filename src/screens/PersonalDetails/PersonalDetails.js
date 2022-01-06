@@ -22,6 +22,7 @@ import {CustomHeader, Header, IncorrectRefCode} from '../../components';
 import I18n from '../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
+import axios from 'axios';
 
 const user = {
   Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
@@ -75,37 +76,31 @@ function PersonalDetails(props) {
       role: {
         _id: roleId,
       },
+      details: true,
     };
-    const requestOptions = {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(requestBody),
-    };
-    fetch(
-      `https://resihop-server.herokuapp.com/users/${userId}`,
-      requestOptions,
-    )
-      .then(response => response.json())
-      .then(data => {
-        if (data) {
+    axios
+      .put(`https://resihop-server.herokuapp.com/users/${userId}`, requestBody)
+
+      .then(res => {
+        if (res.data) {
           setIsLoading(false);
           console.log('Response--->', data);
-          Alert.alert(
-            'Success',
-            'Your personal details successfuly saved',
-            [
-              {
-                text: 'OK',
-                onPress: () => props.navigation.navigate('VahicleInformation'),
-              },
-            ],
-            {cancelable: false},
-          );
         }
       })
       .catch(err => {
         setIsLoading(false);
-        console.log('Error', err);
+        console.log('Error', err?.response?.data);
+        Alert.alert(
+          'Success',
+          'Your personal details successfuly saved',
+          [
+            {
+              text: 'OK',
+              onPress: () => props.navigation.navigate('VahicleInformation'),
+            },
+          ],
+          {cancelable: false},
+        );
       });
   };
 

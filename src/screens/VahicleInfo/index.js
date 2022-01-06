@@ -14,7 +14,7 @@ import {CustomHeader} from '../../components';
 import * as Yup from 'yup';
 import {fonts, theme} from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import {get} from '../../services';
 import {appIcons, colors} from '../../utilities';
 import I18n from '../../utilities/translations';
 import {useSelector} from 'react-redux';

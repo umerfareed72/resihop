@@ -12,3 +12,8 @@ export {
   Notification_Listner,
   LocalNotification,
 } from './helpers/NotificationHandler';
+export {
+  checkConnected,
+  OnlineStatusProvider,
+  useOnlineStatus,
+} from './helpers/index';
