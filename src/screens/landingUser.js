@@ -11,7 +11,7 @@ import I18n from '../utilities/translations';
 function landingUser({navigation}) {
   return (
     <>
-      <View style={{flex: 1, backgroundColor: colors.red}}>
+      <View style={{flex: 1, backgroundColor: colors.white}}>
         <CustomHeader navigation={navigation} backButton={true} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Container padding={0}>

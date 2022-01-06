@@ -9,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {colors, family, HP, size, WP} from '../../utilities';
+import {checkConnected, colors, family, HP, size, WP} from '../../utilities';
 import {ListItem} from 'react-native-elements';
 import {Icon} from 'react-native-elements';
 import {appImages, drawerIcons} from '../../utilities/images';
@@ -20,6 +20,7 @@ import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
 import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {logout} from '../../redux/actions/auth.action';
+import {Logout_Failure} from '../../redux/types/auth.types';
 
 const DrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
@@ -112,11 +113,27 @@ const DrawerComponent = ({navigation}) => {
   ];
 
   async function Signout() {
-    dispatch(
-      logout(() => {
-        navigation.replace('AuthStack');
-      }),
-    );
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      auth()
+        .signOut()
+        .then(() => {
+          console.log('User signout---');
+          dispatch(logout());
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'AuthStack'}],
+          });
+        });
+    } else {
+      Alert.alert('Internet Error', 'Check your internet connection');
+    }
+
+    // dispatch(
+    //   logout(() => {
+    //     navigation.replace('AuthStack');
+    //   }),
+    // );
   }
 
   return (

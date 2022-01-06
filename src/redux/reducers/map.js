@@ -8,6 +8,10 @@ const initialState = {
   createRideRequestResponse: null,
   searchRideResponse: null,
   searchDriveResponse: null,
+  myDrivesData: null,
+  myRidesData: null,
+  idToUpdateDrive: null,
+  dateTimeStamp: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -52,6 +56,26 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         searchRideResponse: payload,
+      };
+    case Types.myDrives:
+      return {
+        ...state,
+        myDrivesData: payload,
+      };
+    case Types.idToUpdateDrive:
+      return {
+        ...state,
+        idToUpdateDrive: payload,
+      };
+    case Types.myRides:
+      return {
+        ...state,
+        myRidesData: payload,
+      };
+    case Types.dateTimeStamp:
+      return {
+        ...state,
+        dateTimeStamp: payload,
       };
     default:
       return state;

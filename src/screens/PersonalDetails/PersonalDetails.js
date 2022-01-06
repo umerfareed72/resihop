@@ -6,6 +6,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Linking,
+  Alert,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -19,20 +20,28 @@ import SigninViaBankID from '../../components/SigninViaBankID';
 import BankWebView from '../../components/BankWebView';
 import {CustomHeader, Header, IncorrectRefCode} from '../../components';
 import I18n from '../../utilities/translations';
+import {useDispatch, useSelector} from 'react-redux';
+import Loader from '../../components/Loader/Loader';
+import axios from 'axios';
+
 const user = {
-  Passenger: 'Passenger',
-  Driver: 'Driver',
-  Both: 'Driver/Passenger both',
+  Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
+  Driver: 'Driver', // 616e6a8c6fc87c0016b740e8
+  Both: 'Driver/Passenger both', // 616da5478b2d5d45c479591c
 };
 
 const gender = {
-  Male: I18n.t('male'),
-  Female: I18n.t('female'),
-  Other: I18n.t('other'),
+  Male: 'male',
+  Female: 'female',
+  Other: 'other',
 };
 
 function PersonalDetails(props) {
+  const dispatch = useDispatch(null);
+  const userId = useSelector(state => state.auth?.userdata?.user?.id);
   const [imagePicker, setImagePicker] = useState(false);
+  const [codeId, setCodeId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
@@ -43,7 +52,78 @@ function PersonalDetails(props) {
   const refReferral = useRef();
   const refEmail = useRef();
   const refCodeSheet = useRef(null);
-  const userIsPassenger = user === user.Passenger;
+
+  const userDetailsApi = inputData => {
+    setIsLoading(true);
+    let roleId = '';
+    if (userType === 'Driver') {
+      roleId = '616e6a8c6fc87c0016b740e8';
+    } else if (userType === 'Passenger') {
+      roleId = '616e6aae6fc87c0016b7413f';
+    } else {
+      roleId = '616da5478b2d5d45c479591c';
+    }
+    const {firstName, lastName, email} = inputData;
+    const requestBody = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      isDriverAndPassenger: false,
+      gender: genderType,
+      referral: {
+        _id: codeId,
+      },
+      role: {
+        _id: roleId,
+      },
+      details: true,
+    };
+    axios
+      .put(`https://resihop-server.herokuapp.com/users/${userId}`, requestBody)
+
+      .then(res => {
+        if (res.data) {
+          setIsLoading(false);
+          console.log('Response--->', data);
+        }
+      })
+      .catch(err => {
+        setIsLoading(false);
+        console.log('Error', err?.response?.data);
+        Alert.alert(
+          'Success',
+          'Your personal details successfuly saved',
+          [
+            {
+              text: 'OK',
+              onPress: () => props.navigation.navigate('VahicleInformation'),
+            },
+          ],
+          {cancelable: false},
+        );
+      });
+  };
+
+  const getReferalCode = code => {
+    setIsLoading(true);
+    fetch(`https://resihop-server.herokuapp.com/referrals?code=${code}`, {
+      method: 'GET',
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        if (responseData.length > 0) {
+          setIsLoading(false);
+          responseData.map(i => {
+            setCodeId(i.id);
+          });
+        } else {
+          setIsLoading(false);
+          refCodeSheet?.current?.open();
+        }
+      })
+      .done();
+  };
+
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -55,7 +135,8 @@ function PersonalDetails(props) {
             validationSchema={personalFormSchema}
             onSubmit={values => {
               Keyboard.dismiss();
-              refCodeSheet?.current?.open();
+              userDetailsApi(values);
+              // refCodeSheet?.current?.open();
               // props.navigation.navigate('Pledge');
               // values.PERSONAL_FORM.gender = genderType;
               // values.role = userType;
@@ -140,8 +221,14 @@ function PersonalDetails(props) {
                     errorMessage={errors.lastName}
                   />
                   <Input
+                    maxLength={4}
                     ref={refReferral}
-                    onChangeText={handleChange('refCode')}
+                    onChangeText={val => {
+                      // handleChange('refCode');
+                      if (val.length == 4) {
+                        getReferalCode(val);
+                      }
+                    }}
                     keyboardAppearance="light"
                     placeholder={I18n.t('referral_code_opt_text')}
                     style={theme.Input.inputStyle}
@@ -196,7 +283,7 @@ function PersonalDetails(props) {
                     }}
                   />
 
-                  {userType === 'Passenger' ? (
+                  {userType === 'abx' ? (
                     <SigninViaBankID
                       disabled={!pic || !isValid}
                       onBankIdPress={async () => {
@@ -224,6 +311,7 @@ function PersonalDetails(props) {
                           color={theme.colors.white}
                         />
                       }
+                      x
                       iconPosition={'right'}
                       buttonStyle={[
                         theme.Button.buttonStyle,
@@ -249,10 +337,11 @@ function PersonalDetails(props) {
           </View>
         ) : null}
       </View>
+      {isLoading ? <Loader /> : null}
       <IncorrectRefCode
         show={refCodeSheet}
         onPress={() => {
-          props.navigation.navigate('VahicleInformation');
+          // props.navigation.navigate('VahicleInformation');
           refCodeSheet.current.close();
         }}
       />
@@ -277,7 +366,7 @@ export const personalFormSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required'),
-  refCode: Yup.string().min(5, 'Too Short!').max(50, 'Too Long!'),
+  refCode: Yup.string().min(4, 'Too Short!').max(50, 'Too Long!'),
   email: Yup.string().email('Invalid email').required('Required'),
 });
 

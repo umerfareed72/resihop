@@ -26,7 +26,9 @@ import {
   setOrigin,
   setMapDestination,
   CreateRideRequest,
+  setDateTimeStamp,
 } from '../redux/actions/map.actions';
+import moment from 'moment';
 
 const CreateRide = () => {
   let navigation = useNavigation();
@@ -37,13 +39,13 @@ const CreateRide = () => {
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
   const availableSeats = useSelector(state => state.map.availableSeats);
+  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
-  const [dateTimeStamp, setDateTimeStamp] = useState('');
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
 
@@ -52,6 +54,7 @@ const CreateRide = () => {
       dispatch(setAvailableSeats(0));
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
+      dispatch(setDateTimeStamp(null));
     };
   }, []);
 
@@ -173,7 +176,11 @@ const CreateRide = () => {
               styles.noLater,
               {justifyContent: 'center', marginRight: 11},
             ]}>
-            <Text style={styles.dateTxt}>{date !== '' ? date : 'Date'}</Text>
+            <Text style={styles.dateTxt}>
+              {dateTimeStamp !== null
+                ? moment(dateTimeStamp).format('DD MMM')
+                : 'Date'}
+            </Text>
           </TouchableOpacity>
           <Image
             source={appImages.calendar}
@@ -191,11 +198,7 @@ const CreateRide = () => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
-        <CalendarSheet
-          calendarSheetRef={calendarSheetRef}
-          setDate={setDate}
-          setDateTimeStamp={setDateTimeStamp}
-        />
+        <CalendarSheet calendarSheetRef={calendarSheetRef} />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -261,6 +264,12 @@ const CreateRide = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
+          disabled={
+            origin === null ||
+            destination === null ||
+            availableSeats === null ||
+            dateTimeStamp === null
+          }
           onPress={() => {
             dispatch(
               CreateRideRequest({
@@ -271,6 +280,8 @@ const CreateRide = () => {
                 ],
                 date: dateTimeStamp,
                 requiredSeats: availableSeats,
+                startDes: origin.description,
+                destDes: destinationMap.description,
               }),
             );
             navigation.navigate('StartMatching', {

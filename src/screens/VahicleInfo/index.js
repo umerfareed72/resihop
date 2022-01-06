@@ -1,5 +1,5 @@
 import {Formik} from 'formik';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -17,6 +17,8 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {get} from '../../services';
 import {appIcons, colors} from '../../utilities';
 import I18n from '../../utilities/translations';
+import {useSelector} from 'react-redux';
+import Loader from '../../components/Loader/Loader';
 
 const vahicleFormFields = {
   licencePlate: '',
@@ -31,18 +33,27 @@ export const vahicleFormSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required'),
-  carCompany: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  modelName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+  // carCompany: Yup.string()
+  //   .min(2, 'Too Short!')
+  //   .max(50, 'Too Long!')
+  //   .required('Required'),
+  // modelName: Yup.string()
+  //   .min(2, 'Too Short!')
+  //   .max(50, 'Too Long!')
+  //   .required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
 });
 
 function index(props) {
+  const firstName = useSelector(state => state.auth?.userdata?.user?.firstName);
+  const lastName = useSelector(state => state.auth?.userdata?.user?.lastName);
+  const [licencePlateNumber, setLicencePlateNumber] = useState('');
+  const [carMakerCompany, setCarMakerCompany] = useState('');
+  const [carModel, setcarModel] = useState('');
+  const [carColor, setcarColor] = useState('');
+  const [engineSize, setEngineSize] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -56,7 +67,40 @@ function index(props) {
   const carCompany = React.useRef();
   const modelName = React.useRef();
   const vahicleColor = React.useRef();
-  const getVehcileData = () => {};
+
+  const getVahicleDetail = () => {
+    const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckSweden?RegistrationNumber=${licencePlateNumber}&username=DawoodAbrar`;
+    setIsLoading(true);
+    var parseString = require('react-native-xml2js').parseString;
+    fetch(url, {
+      method: 'GET',
+    })
+      .then(response => response.text())
+      .then(responseData => {
+        setIsLoading(false);
+        try {
+          if (responseData) {
+            parseString(responseData, {trim: true}, function (err, result) {
+              if (result) {
+                setIsLoading(false);
+                const {CarMake, CarModel, Colour, EngineSize} = JSON.parse(
+                  result?.Vehicle?.vehicleJson,
+                );
+                setCarMakerCompany(CarMake.CurrentTextValue);
+                setcarModel(CarModel.CurrentTextValue);
+                setcarColor(Colour);
+                setEngineSize(EngineSize.CurrentTextValue);
+              }
+            });
+          }
+        } catch (err) {
+          setIsLoading(false);
+          console.log('Error:', err);
+        }
+      })
+      .done();
+  };
+
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -101,7 +145,14 @@ function index(props) {
                       maxLength={8}
                       ref={licencePlate}
                       keyboardAppearance="light"
-                      onChangeText={handleChange('licencePlate')}
+                      onChangeText={val => {
+                        // handleChange('licencePlate')}
+                        if (val.length > 5) {
+                          // getVahicleDetail(val);
+                          setgetDetailsBtn(false);
+                          setLicencePlateNumber(val);
+                        }
+                      }}
                       inputContainerStyle={{width: '100%'}}
                       placeholder={I18n.t('license_plate')}
                       autoFocus={false}
@@ -117,8 +168,9 @@ function index(props) {
                       errorMessage={errors.licencePlate}
                     />
                     <Button
+                      disabled={getDetailsBtn}
                       title={I18n.t('get_details')}
-                      onPress={() => getVehcileData()}
+                      onPress={() => getVahicleDetail()}
                       buttonStyle={[theme.Button.buttonStyle]}
                       titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                       disabledTitleStyle={theme.Button.disabledTitleStyle}
@@ -130,6 +182,8 @@ function index(props) {
                     />
                   </View>
                   <Input
+                    editable={false}
+                    value={carMakerCompany}
                     ref={carCompany}
                     keyboardAppearance="light"
                     onChangeText={handleChange('carCompany')}
@@ -147,6 +201,8 @@ function index(props) {
                     errorMessage={errors.carCompany}
                   />
                   <Input
+                    editable={false}
+                    value={carModel}
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
@@ -164,6 +220,8 @@ function index(props) {
                     errorMessage={errors.modelName}
                   />
                   <Input
+                    editable={false}
+                    value={carColor}
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
@@ -182,6 +240,8 @@ function index(props) {
                   />
 
                   <Input
+                    editable={false}
+                    value={engineSize}
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
@@ -225,7 +285,12 @@ function index(props) {
                     {I18n.t('cost_detail')}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => props.navigation.navigate('ReviewDetails')}
+                    onPress={() =>
+                      props.navigation.navigate('ReviewDetails', {
+                        plateNumber: licencePlateNumber,
+                        PresetCost: value,
+                      })
+                    }
                     activeOpacity={0.8}
                     style={[
                       styles.reviewBtn,
@@ -301,6 +366,7 @@ function index(props) {
           </Formik>
         </ScrollView>
       </View>
+      {isLoading ? <Loader /> : null}
     </>
   );
 }

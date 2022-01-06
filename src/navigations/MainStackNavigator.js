@@ -3,8 +3,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
+import UserDetailStack from './stacks/UserDetailStack';
 import {DrawerNavigator} from './PassengerDrawerNav';
 import {DriverDrawerNavigator} from './DriverDraweNavigator';
+import {useDispatch, useSelector} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
@@ -29,8 +31,6 @@ const DriverNavigator = () => {
 };
 
 function MainStackNavigator() {
-  const user = auth().currentUser;
-  console.log(user);
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -53,6 +53,11 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="AuthStack"
           component={AuthStack}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="UserDetailStack"
+          component={UserDetailStack}
         />
       </Stack.Navigator>
     </NavigationContainer>

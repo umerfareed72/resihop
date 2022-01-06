@@ -66,8 +66,6 @@ const MapViewComponent = ({
     });
   }, [origin, destination, searchRideResponse]);
 
-  console.log('Search Drives', searchDrivesResponse);
-
   const getLocation = async () => {
     let permission;
 
