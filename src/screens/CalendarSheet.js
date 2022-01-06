@@ -61,8 +61,6 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
       selectedColor: colors.green,
     };
     setMarkedDate(markedObj);
-
-    setDate(moment(date.dateString).format('DD MMM'));
   };
 
   return (

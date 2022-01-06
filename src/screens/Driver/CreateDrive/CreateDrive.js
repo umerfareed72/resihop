@@ -42,6 +42,8 @@ const CreateDrive = () => {
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
 
+  console.log(origin, destinationMap, availableSeats, dateTimeStamp);
+
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
@@ -282,7 +284,10 @@ const CreateDrive = () => {
         <TouchableOpacity
           style={styles.nextBtnContainer}
           disabled={
-            !origin || !destination || !availableSeats || !dateTimeStamp
+            origin === null ||
+            destination === null ||
+            availableSeats === null ||
+            dateTimeStamp === null
           }
           onPress={() => {
             dispatch(

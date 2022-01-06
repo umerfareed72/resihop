@@ -288,7 +288,7 @@ function PersonalDetails(props) {
                     }}
                   />
 
-                  {userType === 'Passenger' ? (
+                  {userType === 'abx' ? (
                     <SigninViaBankID
                       disabled={!pic || !isValid}
                       onBankIdPress={async () => {

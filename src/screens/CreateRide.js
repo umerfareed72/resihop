@@ -265,7 +265,10 @@ const CreateRide = () => {
         <TouchableOpacity
           style={styles.nextBtnContainer}
           disabled={
-            !origin || !destination || !dateTimeStamp || !availableSeats
+            origin === null ||
+            destination === null ||
+            availableSeats === null ||
+            dateTimeStamp === null
           }
           onPress={() => {
             dispatch(
@@ -277,6 +280,8 @@ const CreateRide = () => {
                 ],
                 date: dateTimeStamp,
                 requiredSeats: availableSeats,
+                startDes: origin.description,
+                destDes: destinationMap.description,
               }),
             );
             navigation.navigate('StartMatching', {

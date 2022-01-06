@@ -25,6 +25,7 @@ import {
   MyRides,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 
 //Data
 var TimeList = {
@@ -83,6 +84,7 @@ const seatsList = {
 };
 const PassengerHome = ({navigation}) => {
   let dispatch = useDispatch();
+  let isFocused = useIsFocused();
 
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
@@ -98,7 +100,7 @@ const PassengerHome = ({navigation}) => {
 
   useEffect(() => {
     dispatch(MyRides());
-  }, []);
+  }, [isFocused]);
 
   const selectTime = val => {
     settime(val);
