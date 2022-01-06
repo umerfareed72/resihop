@@ -111,7 +111,7 @@ function SignUp(props) {
         if (res) {
           setIsLoading(false);
           Alert.alert('Success', 'User sucessfully registered');
-          props.navigation.navigate('PersonFalDetails');
+          props.navigation.navigate('UserDetailStack');
         }
       }),
     );

@@ -9,6 +9,7 @@ import {AUTH_CONST, AUTH_PW_CONST} from '../../utilities/routes';
 
 export const userEmailLogin =
   (body, setIsLoading, callBack) => async dispatch => {
+    console.log("BODY", body);
     try {
       dispatch({type: Types.Set_loader, payload: true});
       const response = await post(`auth/local`, body);
@@ -20,14 +21,16 @@ export const userEmailLogin =
       console.log('Login Successfully', response.data);
       callBack(response.data);
     } catch (error) {
-      setIsLoading(false)
+      console.log('Error:', error);
+      setIsLoading(false);
       let status = error.name;
       let msg = error.message;
       responseValidator(status, msg);
       dispatch({
         type: Types.Login_Failure,
-        payload: null,
+        payload: error,
       });
+      callBack(error);
     }
   };
 /////////////////////////////////////////  Logout  ////////////////////////////
@@ -39,7 +42,7 @@ export const logout = callBack => async dispatch => {
       payload: null,
     });
     AsyncStorage.clear();
-    callBack();
+    callBack(null);
   } catch (error) {
     dispatch({
       type: Types.Logout_Failure,

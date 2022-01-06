@@ -17,6 +17,7 @@ import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import {userEmailLogin} from '../../redux/actions/auth.action';
 import Loader from '../../components/Loader/Loader';
+import {Login_Failure} from '../../redux/types/auth.types';
 
 function signIn(props) {
   const dispatch = useDispatch(null);
@@ -100,18 +101,18 @@ function signIn(props) {
     };
     dispatch(
       userEmailLogin(requestBody, setIsLoading, res => {
-        console.log(res);
-        if (res) {
+        console.log('LOGIN API RESPONSE:', res.toString());
+        if (res.toString() === 'Error: Request failed with status code 400') {
+          setIsLoading(false);
+          Alert.alert('Error', 'Something went wrong');
+        } else {
           setIsLoading(false);
           Alert.alert('Success', 'User sucessfully logged in', [
             {
               text: 'OK',
-              onPress: () => props.navigation.navigate('PersonalDetails'),
+              onPress: () => props.navigation.navigate('UserDetailStack'),
             },
           ]);
-        } else {
-          setIsLoading(false);
-          Alert.alert('Error', 'This Number is not Registered');
         }
       }),
     );

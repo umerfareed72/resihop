@@ -20,6 +20,7 @@ import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
 import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {logout} from '../../redux/actions/auth.action';
+import {Logout_Failure} from '../../redux/types/auth.types';
 
 const DrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
@@ -112,11 +113,25 @@ const DrawerComponent = ({navigation}) => {
   ];
 
   async function Signout() {
-    dispatch(
-      logout(() => {
-        navigation.replace('AuthStack');
-      }),
-    );
+    CheckConnectivity().then(res => {
+      if (res) {
+        auth()
+          .signOut()
+          .then(() => {
+            console.log('User signout---');
+            dispatch(logout());
+            navigation.replace('AuthStack');
+          });
+      } else {
+        Alert.alert('Internet Error', 'Check your internet connection');
+      }
+    });
+
+    // dispatch(
+    //   logout(() => {
+    //     navigation.replace('AuthStack');
+    //   }),
+    // );
   }
 
   return (

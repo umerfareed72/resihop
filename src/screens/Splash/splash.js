@@ -18,6 +18,7 @@ function splash(props) {
   //Rdux States
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth);
+  console.log('Auth---', auth?.userdata);
   //Component Did Mount
   useEffect(() => {
     handleNavigation();
@@ -47,10 +48,10 @@ function splash(props) {
       I18n.locale = lang;
     }
     setTimeout(() => {
-      if (auth?.userdata !== null) {
-        props?.navigation.replace('PassengerDashboard');
-      } else {
+      if (auth?.userdata == null) {
         props?.navigation.replace('AuthStack');
+      } else {
+        props?.navigation.replace('PassengerDashboard');
       }
     }, 2000);
   };

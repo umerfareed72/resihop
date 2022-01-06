@@ -3,8 +3,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import splash from '../screens/Splash/splash';
 import AuthStack from './stacks/AuthStack';
+import UserDetailStack from './stacks/UserDetailStack';
 import {DrawerNavigator} from './PassengerDrawerNav';
 import {DriverDrawerNavigator} from './DriverDraweNavigator';
+import {useDispatch, useSelector} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator();
@@ -14,6 +16,7 @@ const PassengerNavigator = () => {
       screenOptions={{headerShown: false}}
       initialRouteName={'PassengerHome'}>
       <Stack.Screen name={'PassengerHome'} component={DrawerNavigator} />
+      <Stack.Screen name={'AuthStack'} component={AuthStack} />
     </Stack.Navigator>
   );
 };
@@ -29,8 +32,11 @@ const DriverNavigator = () => {
 };
 
 function MainStackNavigator() {
+  const UserData = useSelector(state => state.auth);
   const user = auth().currentUser;
-  console.log(user);
+  console.log('Main Stack Auth---', UserData?.userdata);
+  console.log('Firebase User---', user);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -53,6 +59,11 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="AuthStack"
           component={AuthStack}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="UserDetailStack"
+          component={UserDetailStack}
         />
       </Stack.Navigator>
     </NavigationContainer>
