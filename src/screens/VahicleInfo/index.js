@@ -14,7 +14,7 @@ import {CustomHeader} from '../../components';
 import * as Yup from 'yup';
 import {fonts, theme} from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import {get} from '../../services';
 import {appIcons, colors} from '../../utilities';
 import I18n from '../../utilities/translations';
 
@@ -56,7 +56,7 @@ function index(props) {
   const carCompany = React.useRef();
   const modelName = React.useRef();
   const vahicleColor = React.useRef();
-
+  const getVehcileData = () => {};
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -118,7 +118,7 @@ function index(props) {
                     />
                     <Button
                       title={I18n.t('get_details')}
-                      onPress={() => console.log('Pressed!')}
+                      onPress={() => getVehcileData()}
                       buttonStyle={[theme.Button.buttonStyle]}
                       titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                       disabledTitleStyle={theme.Button.disabledTitleStyle}
