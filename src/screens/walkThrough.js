@@ -75,7 +75,7 @@ function walkThrough(props) {
                 scrollEventThrottle={16}
                 renderItem={item => {
                   return (
-                    <View key={item.item.key}>
+                    <View style={{flex: 1, bottom: 10}} key={item.item.key}>
                       <Image
                         source={item.item.img}
                         style={{
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignSelf: 'center',
     position: 'absolute',
-    bottom: 5
+    bottom: 5,
   },
   skipText: {
     height: '30%',
