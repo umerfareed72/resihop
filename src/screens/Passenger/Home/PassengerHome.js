@@ -287,7 +287,7 @@ const PassengerHome = ({navigation}) => {
         ) : (
           <>
             <FlatList
-              data={ridesData}
+              data={myRidesData}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => (

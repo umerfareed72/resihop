@@ -48,6 +48,8 @@ const MapViewComponent = ({
     state => state.map.searchDriveResponse,
   );
 
+  console.log('Search Drive', searchDrivesResponse);
+
   const mapRef = useRef();
 
   useEffect(() => {

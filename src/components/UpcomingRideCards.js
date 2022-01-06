@@ -14,8 +14,14 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
   const [seats, setSeats] = useState([]);
 
   useEffect(() => {
-    for (let i = 0; i < item.availableSeats; i++) {
-      seats[i] = i;
+    if (item.availableSeats) {
+      for (let i = 0; i < item.availableSeats; i++) {
+        seats[i] = i;
+      }
+    } else {
+      for (let i = 0; i < item.requiredSeats; i++) {
+        seats[i] = i;
+      }
     }
   }, []);
 
@@ -46,7 +52,11 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
           </View>
         </View>
         <View style={styles.dateWrapper}>
-          <Text style={styles.fair}>{`SEk ${item.costPerSeat}`}</Text>
+          {item.costPerSeat ? (
+            <Text style={styles.fair}>{`SEk ${item.costPerSeat}`}</Text>
+          ) : (
+            <View />
+          )}
           <View style={styles.seatContainer}>
             {seats?.map(seat => (
               <Image
