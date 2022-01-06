@@ -6,9 +6,23 @@ import {colors} from '../utilities';
 import moment from 'moment';
 import {fonts} from '../theme/theme';
 import I18n from '../utilities/translations';
+import {setDateTimeStamp} from '../redux/actions/map.actions';
+import {useDispatch} from 'react-redux';
 
-const CalendarSheet = ({calendarSheetRef, setDate, setDateTimeStamp}) => {
+const CalendarSheet = ({calendarSheetRef, setDate}) => {
+  let dispatch = useDispatch();
+
   const [markedDate, setMarkedDate] = useState();
+
+  useEffect(() => {
+    let markedObj = {};
+    const selectedDate = moment(new Date().toDateString()).format('YYYY-MM-DD');
+    markedObj[selectedDate] = {
+      selected: true,
+      selectedColor: colors.green,
+    };
+    setMarkedDate(markedObj);
+  }, []);
 
   LocaleConfig.locales['en'] = {
     monthNames: [
@@ -39,7 +53,7 @@ const CalendarSheet = ({calendarSheetRef, setDate, setDateTimeStamp}) => {
   LocaleConfig.defaultLocale = 'en';
 
   const handleDayPress = date => {
-    setDateTimeStamp(date.timestamp);
+    dispatch(setDateTimeStamp(date.timestamp));
     let markedObj = {};
     const selectedDate = moment(date.dateString).format('YYYY-MM-DD');
     markedObj[selectedDate] = {

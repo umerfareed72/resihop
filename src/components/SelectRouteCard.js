@@ -32,15 +32,15 @@ const SelectRouteCard = ({setModal, setHeight}) => {
     }
     setData(array);
 
-    dispatch(
-      SearchRides({
-        startLocation: [origin.location.lat, origin.location.lng],
-        destinationLocation: [
-          destinationMap.location.lat,
-          destinationMap.location.lng,
-        ],
-      }),
-    );
+    // dispatch(
+    //   SearchRides({
+    //     startLocation: [origin.location.lat, origin.location.lng],
+    //     destinationLocation: [
+    //       destinationMap.location.lat,
+    //       destinationMap.location.lng,
+    //     ],
+    //   }),
+    // );
   }, []);
 
   return (
