@@ -23,6 +23,7 @@ function SignUp(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNum, setPhoneNum] = useState('');
   const [country, setCountry] = useState();
+  const [phoneError, setPhoneError] = useState('');
 
   const [confirm, setConfirm] = useState(null);
   const [code, setCode] = useState('');
@@ -35,6 +36,17 @@ function SignUp(props) {
     setcca2(country?.cca2);
     setCountryCode(country?.callingCode[0]);
   };
+
+  function validate() {
+    setPhoneError('');
+    if (phoneNum.length == 0) {
+      return setPhoneError('Please Enter Valid Phone Number');
+    }
+    if (isNaN(phoneNum)) {
+      return setPhoneError('Your Phone Number is not valid');
+    }
+    return true;
+  }
 
   const signInWithPhoneNumber = async () => {
     const isConnected = await checkConnected();
@@ -85,12 +97,8 @@ function SignUp(props) {
   }
 
   const onSendCode = () => {
-    console.log('Send Code Button pressed');
     Keyboard.dismiss();
-    if (phoneNum === '') {
-      ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
-      return;
-    } else {
+    if (validate()) {
       signInWithPhoneNumber();
     }
   };
@@ -135,6 +143,7 @@ function SignUp(props) {
           otpCodeArea={otpInput}
           setOtpCodeArea={setOtpInput}
           enteredCode={code => setCode(code)}
+          phoneError={phoneError}
         />
       </View>
       {isLoading ? <Loader /> : null}

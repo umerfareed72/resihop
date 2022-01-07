@@ -15,6 +15,7 @@ const OtpValidator = ({
   otpCodeArea,
   setOtpCodeArea,
   enteredCode,
+  phoneError
 }) => {
   const [countDown, setCountDown] = useState(60);
   const [countryModalOpen, setCountryModalOpen] = useState(false);
@@ -107,6 +108,8 @@ const OtpValidator = ({
         />
       </View>
       <Divider width={1} color={theme.colors.black} />
+      <View style={styles.phoneErrorContainer} />
+      {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
 
       {otpCodeArea && (
         <View style={styles.otpCon}>
@@ -168,5 +171,16 @@ const styles = StyleSheet.create({
   },
   otpCon: {
     marginTop: 50,
+  },
+  phoneErrorContainer: {
+    width: '100%',
+    height: 1,
+    borderColor: '#80808090',
+    borderWidth: 0.5,
+  },
+  errorText: {
+    fontSize: 12,
+    color: 'red',
+    margin: 3,
   },
 });
