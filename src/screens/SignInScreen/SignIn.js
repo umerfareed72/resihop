@@ -8,7 +8,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import {CustomHeader, Header, NetInfoModal} from '../../components';
+import {CustomHeader, NetInfoModal} from '../../components';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
@@ -17,9 +17,7 @@ import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import {userEmailLogin} from '../../redux/actions/auth.action';
 import Loader from '../../components/Loader/Loader';
-import {Login_Failure} from '../../redux/types/auth.types';
-import {checkConnected, useOnlineStatus} from '../../utilities';
-import {Platform} from 'react-native';
+import {checkConnected} from '../../utilities';
 
 function signIn(props) {
   const dispatch = useDispatch(null);
@@ -29,6 +27,7 @@ function signIn(props) {
   const [country, setCountry] = useState();
 
   const [confirm, setConfirm] = useState(null);
+  const [phoneError, setPhoneError] = useState('');
   const [code, setCode] = useState('');
   const [countryCode, setCountryCode] = useState('47');
   const [cca2, setcca2] = useState('NO');
@@ -39,6 +38,17 @@ function signIn(props) {
     setcca2(country?.cca2);
     setCountryCode(country?.callingCode[0]);
   };
+
+  function validate() {
+    setPhoneError("")
+    if (phoneNum.length == 0) {
+      return setPhoneError('Please Enter Valid Phone Number');
+    }
+    if (isNaN(phoneNum)) {
+      return setPhoneError('Your Phone Number is not valid');
+    }
+    return true;
+  }
 
   const signInWithPhoneNumber = () => {
     setIsLoading(true);
@@ -99,14 +109,7 @@ function signIn(props) {
 
   const onSendCode = () => {
     Keyboard.dismiss();
-    if (phoneNum === '') {
-      if (Platform.OS === 'android') {
-        ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
-      } else {
-        alert(I18n.t('please_enter_phone_msg'));
-      }
-      return;
-    } else {
+    if (validate()) {
       signInWithPhoneNumber();
     }
   };
@@ -155,6 +158,7 @@ function signIn(props) {
           otpCodeArea={otpInput}
           setOtpCodeArea={setOtpInput}
           enteredCode={code => setCode(code)}
+          phoneError={phoneError}
         />
       </View>
       {isLoading ? <Loader /> : null}

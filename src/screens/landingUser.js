@@ -1,7 +1,13 @@
 import React from 'react';
-import {StyleSheet, View, Image, ScrollView, SafeAreaView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import {Button, Text} from 'react-native-elements';
-import {CustomHeader} from '../components';
 import {Container} from '../components/Container';
 import {theme} from '../theme';
 
@@ -11,9 +17,7 @@ import I18n from '../utilities/translations';
 function landingUser({navigation}) {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
-      <CustomHeader navigation={navigation} backButton={true} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Container padding={0}>
           <Image source={appIcons.landing_user_img} style={styles.imgCon} />
           <Text style={[theme.Text.h1Bold, styles.heading]}>
             {I18n.t('welcome_to_resihop_msg')}
@@ -34,7 +38,7 @@ function landingUser({navigation}) {
               containerStyle={{
                 width: '90%',
                 alignSelf: 'center',
-                marginTop: 30,
+                marginTop: 35,
               }}
             />
 
@@ -53,8 +57,14 @@ function landingUser({navigation}) {
               }}
             />
           </View>
-        </Container>
       </ScrollView>
+      <TouchableOpacity
+        style={styles.headerContainer}
+        onPress={() => {
+          navigation.goBack();
+        }}>
+        <Image source={appIcons.backArrow} style={styles.imageStyle} />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -67,7 +77,7 @@ const styles = StyleSheet.create({
   },
   imgCon: {
     width: '100%',
-    height: 300,
+    height: 340,
   },
   heading: {
     textAlign: 'center',
@@ -91,5 +101,11 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     resizeMode: 'contain',
+  },
+  headerContainer: {
+    paddingRight: 20,
+    position: 'absolute',
+    top: 50,
+    left: 20,
   },
 });
