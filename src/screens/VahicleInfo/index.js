@@ -69,7 +69,7 @@ function index(props) {
   const vahicleColor = React.useRef();
 
   const getVahicleDetail = () => {
-    const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckSweden?RegistrationNumber=${licencePlateNumber}&username=DawoodAbrar`;
+    const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckSweden?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
     setIsLoading(true);
     var parseString = require('react-native-xml2js').parseString;
     fetch(url, {

@@ -26,7 +26,6 @@ function SignUp(props) {
   const [phoneError, setPhoneError] = useState('');
 
   const [confirm, setConfirm] = useState(null);
-  const [code, setCode] = useState('');
   const [countryCode, setCountryCode] = useState('47');
   const [cca2, setcca2] = useState('NO');
   const [otpInput, setOtpInput] = useState(false);
@@ -73,13 +72,7 @@ function SignUp(props) {
     }
   }
 
-  useEffect(() => {
-    if (code.length === 6) {
-      confirmCode();
-    }
-  }, [code]);
-
-  async function confirmCode() {
+  async function confirmCode(code) {
     setIsLoading(true);
     try {
       await confirm.confirm(code).then(res => {
@@ -116,8 +109,17 @@ function SignUp(props) {
         console.log('Registration Api Response:-', res);
         if (res) {
           setIsLoading(false);
-          Alert.alert('Success', 'User sucessfully registered');
-          props.navigation.navigate('UserDetailStack');
+          Alert.alert(
+            'Success',
+            'User Registered Successfully',
+            [
+              {
+                text: 'ok',
+                onPress: () => props.navigation.navigate('UserDetailStack'),
+              },
+            ],
+            {cancelable: false},
+          );
         }
       }),
     );
@@ -142,7 +144,11 @@ function SignUp(props) {
           defaultCountryCode={cca2}
           otpCodeArea={otpInput}
           setOtpCodeArea={setOtpInput}
-          enteredCode={code => setCode(code)}
+          enteredCode={code => {
+            if (code.length === 6) {
+              confirmCode(code);
+            }
+          }}
           phoneError={phoneError}
         />
       </View>

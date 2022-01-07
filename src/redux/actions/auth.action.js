@@ -9,7 +9,7 @@ import {AUTH_CONST, AUTH_PW_CONST} from '../../utilities/routes';
 
 export const userEmailLogin =
   (body, setIsLoading, callBack) => async dispatch => {
-    console.log("BODY", body);
+    console.log('BODY', body);
     try {
       dispatch({type: Types.Set_loader, payload: true});
       const response = await post(`auth/local`, body);
@@ -21,16 +21,16 @@ export const userEmailLogin =
       console.log('Login Successfully', response.data);
       callBack(response.data);
     } catch (error) {
-      console.log('Error:', error);
       setIsLoading(false);
-      let status = error.name;
-      let msg = error.message;
-      responseValidator(status, msg);
+      let status = error?.response?.data?.statusCode;
+      responseValidator(
+        status,
+        error?.response?.data?.message[0]?.messages[0]?.message,
+      );
       dispatch({
         type: Types.Login_Failure,
         payload: error,
       });
-      callBack(error);
     }
   };
 /////////////////////////////////////////  Logout  ////////////////////////////
@@ -60,7 +60,7 @@ export const userEmailSignup =
       await post(`${AUTH_CONST}register`, body)
         .then(response => {
           setIsLoading(false);
-          AsyncStorage.setItem('usertoken', response?.data?.jwt);
+          // AsyncStorage.setItem('usertoken', response?.data?.jwt);
           dispatch({
             type: Types.Signup_Success,
             payload: response?.data,
@@ -73,12 +73,15 @@ export const userEmailSignup =
             type: Types.Signup_Failure,
             payload: null,
           });
-          let msg = err.message;
-          let status = err.name;
-          responseValidator(msg, status);
+          let status = error?.response?.data?.statusCode;
+          responseValidator(
+            status,
+            error?.response?.data?.message[0]?.messages[0]?.message,
+          );
         });
     } catch (error) {
       console.log('Error:', JSON.stringify(error));
+      alert('Something went wrong');
     }
   };
 
@@ -103,10 +106,11 @@ export const forgotPassword = (user, callBack) => async dispatch => {
       type: Types.Forgot_Password_Failure,
       payload: null,
     });
-    let status = JSON.stringify(error.message);
-    let msg = error.response.data.message;
-
-    responseValidator(status, msg);
+    let status = error?.response?.data?.statusCode;
+    responseValidator(
+      status,
+      error?.response?.data?.message[0]?.messages[0]?.message,
+    );
   }
 };
 
@@ -127,8 +131,10 @@ export const resetPassword = (user, callBack) => async dispatch => {
       type: Types.Reset_Password_Failure,
       payload: null,
     });
-    let status = JSON.stringify(error.message);
-    let msg = error.response.data.message;
-    responseValidator(status, msg);
+    let status = error?.response?.data?.statusCode;
+    responseValidator(
+      status,
+      error?.response?.data?.message[0]?.messages[0]?.message,
+    );
   }
 };
