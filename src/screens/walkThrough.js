@@ -6,6 +6,8 @@ import {
   Dimensions,
   FlatList,
   ScrollView,
+  SafeAreaView,
+  ImageBackground,
 } from 'react-native';
 import PagerView, {PagerViewOnPageScrollEvent} from 'react-native-pager-view';
 import {Container} from '../components/Container';
@@ -50,7 +52,7 @@ function walkThrough(props) {
   const viewConfigRef = React.useRef({viewAreaCoveragePercentThreshold: 50});
 
   return (
-    <>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <CustomHeader navigation={props.navigation} backButton={true} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Container padding={0} flexGrow={2} paddingBottom={100} bounce={false}>
@@ -76,7 +78,7 @@ function walkThrough(props) {
                 renderItem={item => {
                   return (
                     <View style={{flex: 1, bottom: 10}} key={item.item.key}>
-                      <Image
+                      <ImageBackground
                         source={item.item.img}
                         style={{
                           width: width,
@@ -151,7 +153,7 @@ function walkThrough(props) {
           </View>
         </Container>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }
 
@@ -182,9 +184,10 @@ const styles = StyleSheet.create({
     width: '90%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     alignSelf: 'center',
     position: 'absolute',
-    bottom: 5,
+    bottom: 10,
   },
   skipText: {
     height: '30%',

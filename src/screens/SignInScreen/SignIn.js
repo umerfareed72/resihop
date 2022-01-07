@@ -6,9 +6,9 @@ import {
   ToastAndroid,
   Keyboard,
   Alert,
+  Platform,
 } from 'react-native';
-import {CustomHeader, Header} from '../../components';
-import {Container} from '../../components/Container';
+import {CustomHeader} from '../../components';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
@@ -17,7 +17,6 @@ import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import {userEmailLogin} from '../../redux/actions/auth.action';
 import Loader from '../../components/Loader/Loader';
-import {Login_Failure} from '../../redux/types/auth.types';
 
 function signIn(props) {
   const dispatch = useDispatch(null);
@@ -82,10 +81,13 @@ function signIn(props) {
   }
 
   const onSendCode = () => {
-    console.log('Send Code Button pressed');
     Keyboard.dismiss();
     if (phoneNum === '') {
-      ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
+      } else {
+        alert(I18n.t('please_enter_phone_msg'));
+      }
       return;
     } else {
       signInWithPhoneNumber();
@@ -135,6 +137,7 @@ function signIn(props) {
           onSendCodePress={onSendCode}
           defaultCountryCode={cca2}
           otpCodeArea={otpInput}
+          setOtpCodeArea={setOtpInput}
           enteredCode={code => setCode(code)}
         />
       </View>

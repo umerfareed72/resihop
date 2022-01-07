@@ -113,25 +113,13 @@ const DrawerComponent = ({navigation}) => {
   ];
 
   async function Signout() {
-    CheckConnectivity().then(res => {
-      if (res) {
-        auth()
-          .signOut()
-          .then(() => {
-            console.log('User signout---');
-            dispatch(logout());
-            navigation.replace('AuthStack');
-          });
-      } else {
-        Alert.alert('Internet Error', 'Check your internet connection');
-      }
-    });
-
-    // dispatch(
-    //   logout(() => {
-    //     navigation.replace('AuthStack');
-    //   }),
-    // );
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signout---');
+        dispatch(logout());
+        navigation.replace('AuthStack');
+      });
   }
 
   return (
