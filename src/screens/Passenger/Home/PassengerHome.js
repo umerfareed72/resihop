@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -22,8 +22,10 @@ import {
   setMapDestination,
   SearchDrives,
   SearchRides,
+  MyRides,
 } from '../../../redux/actions/map.actions';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 
 //Data
 var TimeList = {
@@ -82,6 +84,7 @@ const seatsList = {
 };
 const PassengerHome = ({navigation}) => {
   let dispatch = useDispatch();
+  let isFocused = useIsFocused();
 
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
@@ -92,6 +95,12 @@ const PassengerHome = ({navigation}) => {
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
   const [selectedCard, setSelectedCard] = useState([]);
+
+  const myRidesData = useSelector(state => state.map.myRidesData);
+
+  useEffect(() => {
+    dispatch(MyRides());
+  }, [isFocused]);
 
   const selectTime = val => {
     settime(val);
@@ -261,7 +270,7 @@ const PassengerHome = ({navigation}) => {
           </View>
         </View>
 
-        {ridesData.length === 0 ? (
+        {myRidesData === null || myRidesData.length === 0 ? (
           <>
             <Image
               source={appIcons.noUpcomingRide}

@@ -8,7 +8,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import {CustomHeader} from '../../components';
+import {CustomHeader, Header, NetInfoModal} from '../../components';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
@@ -17,9 +17,13 @@ import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import {userEmailLogin} from '../../redux/actions/auth.action';
 import Loader from '../../components/Loader/Loader';
+import {Login_Failure} from '../../redux/types/auth.types';
+import {checkConnected, useOnlineStatus} from '../../utilities';
+import {Platform} from 'react-native';
 
 function signIn(props) {
   const dispatch = useDispatch(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNum, setPhoneNum] = useState('');
   const [country, setCountry] = useState();
@@ -29,7 +33,7 @@ function signIn(props) {
   const [countryCode, setCountryCode] = useState('47');
   const [cca2, setcca2] = useState('NO');
   const [otpInput, setOtpInput] = useState(false);
-
+  const [isOnline, setisOnline] = useState(false);
   const onSelect = country => {
     setCountry(country);
     setcca2(country?.cca2);
@@ -42,18 +46,24 @@ function signIn(props) {
   };
 
   async function signIn() {
-    setIsLoading(true);
-    try {
-      const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-      const confirmation = await auth().signInWithPhoneNumber(phone);
-      if (confirmation) {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setIsLoading(true);
+      try {
+        const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+        const confirmation = await auth().signInWithPhoneNumber(phone);
+        if (confirmation) {
+          setIsLoading(false);
+          setConfirm(confirmation);
+          setOtpInput(true);
+        }
+      } catch (error) {
         setIsLoading(false);
-        setConfirm(confirmation);
-        setOtpInput(true);
+        alert(error);
       }
-    } catch (error) {
+    } else {
+      setisOnline(true);
       setIsLoading(false);
-      alert(error);
     }
   }
 
@@ -64,19 +74,26 @@ function signIn(props) {
   }, [code]);
 
   async function confirmCode() {
-    setIsLoading(true);
-    try {
-      await confirm.confirm(code).then(res => {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setisOnline(false);
+      setIsLoading(true);
+      try {
+        await confirm.confirm(code).then(res => {
+          setIsLoading(false);
+          console.log('Registered User Id:', res?.user?.uid);
+          setOtpInput(false);
+          setPhoneNum('');
+          userLgoinApi();
+        });
+      } catch (error) {
+        console.log('Error:-', error);
         setIsLoading(false);
-        console.log('Registered User Id:', res?.user?.uid);
-        setOtpInput(false);
-        setPhoneNum('');
-        userLgoinApi();
-      });
-    } catch (error) {
-      console.log('Error:-', error);
+        alert('Invalid code.');
+      }
+    } else {
+      setisOnline(true);
       setIsLoading(false);
-      alert('Invalid code.');
     }
   }
 
@@ -109,12 +126,11 @@ function signIn(props) {
           Alert.alert('Error', 'Something went wrong');
         } else {
           setIsLoading(false);
-          Alert.alert('Success', 'User sucessfully logged in', [
-            {
-              text: 'OK',
-              onPress: () => props.navigation.navigate('UserDetailStack'),
-            },
-          ]);
+          if (res?.user?.details) {
+            props.navigation.replace('PassengerDashboard');
+          } else {
+            props.navigation.navigate('UserDetailStack');
+          }
         }
       }),
     );
@@ -142,6 +158,16 @@ function signIn(props) {
         />
       </View>
       {isLoading ? <Loader /> : null}
+      <NetInfoModal
+        show={isOnline}
+        onRetry={async () => {
+          const isConnected = await checkConnected();
+          if (isConnected) {
+            setisOnline(false);
+          }
+        }}
+        isRetrying={isLoading}
+      />
     </View>
   );
 }

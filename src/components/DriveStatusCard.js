@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/core';
 import I18n from '../utilities/translations';
 
 const DriveStatusCard = ({status, setModal, onPressCancel}) => {
-  const [seats, setSeats] = useState([1, 2, 3, 4]);
+  const [seats, setSeats] = useState([]);
 
   let navigation = useNavigation();
 
@@ -46,7 +46,7 @@ const DriveStatusCard = ({status, setModal, onPressCancel}) => {
     },
   ];
 
-  if (status === 'Waiting for Match') {
+  if (status === 'WAITING_FOR_MATCH') {
     return (
       <View style={styles.waitcontainer}>
         <View style={styles.heading}>
@@ -334,7 +334,7 @@ const getStatusColo = status => {
   if (status === 'Partially Booked') {
     return colors.blue;
   }
-  if (status === 'Waiting for Match') {
+  if (status === 'WAITING_FOR_MATCH') {
     return colors.orange;
   }
 };

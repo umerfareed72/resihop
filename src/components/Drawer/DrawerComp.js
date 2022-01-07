@@ -9,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {colors, family, HP, size, WP} from '../../utilities';
+import {checkConnected, colors, family, HP, size, WP} from '../../utilities';
 import {ListItem} from 'react-native-elements';
 import {Icon} from 'react-native-elements';
 import {appImages, drawerIcons} from '../../utilities/images';
@@ -113,13 +113,21 @@ const DrawerComponent = ({navigation}) => {
   ];
 
   async function Signout() {
-    auth()
-      .signOut()
-      .then(() => {
-        console.log('User signout---');
-        dispatch(logout());
-        navigation.replace('AuthStack');
-      });
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      auth()
+        .signOut()
+        .then(() => {
+          console.log('User signout---');
+          dispatch(logout());
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'AuthStack'}],
+          });
+        });
+    } else {
+      Alert.alert('Internet Error', 'Check your internet connection');
+    }
   }
 
   return (

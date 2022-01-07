@@ -19,6 +19,7 @@ import {
   setAvailableSeats,
 } from '../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
+import moment from 'moment';
 import {fonts} from '../theme';
 
 const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
@@ -33,6 +34,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
 
   const availableSeats = useSelector(state => state.map.availableSeats);
+  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
 
   return (
     <>
@@ -227,7 +229,9 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                       fontSize: size.normal,
                       color: colors.btnGray,
                     }}>
-                    Date
+                    {dateTimeStamp !== null
+                      ? moment(dateTimeStamp).format('DD MMM')
+                      : 'Date'}
                   </Text>
                   <Image
                     source={appImages.calendar}
@@ -256,7 +260,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
           </TouchableOpacity>
         </View>
       ) : null}
-      <CalendarSheet calendarSheetRef={calenderSheetRef} setDate={setDate} />
+      <CalendarSheet calendarSheetRef={calenderSheetRef} />
     </>
   );
 };
