@@ -128,12 +128,6 @@ const DrawerComponent = ({navigation}) => {
     } else {
       Alert.alert('Internet Error', 'Check your internet connection');
     }
-
-    // dispatch(
-    //   logout(() => {
-    //     navigation.replace('AuthStack');
-    //   }),
-    // );
   }
 
   return (

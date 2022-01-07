@@ -6,6 +6,7 @@ import {
   ToastAndroid,
   Keyboard,
   Alert,
+  Platform,
 } from 'react-native';
 import {CustomHeader, Header, NetInfoModal} from '../../components';
 import _ from 'lodash/string';
@@ -97,10 +98,13 @@ function signIn(props) {
   }
 
   const onSendCode = () => {
-    console.log('Send Code Button pressed');
     Keyboard.dismiss();
     if (phoneNum === '') {
-      ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
+      } else {
+        alert(I18n.t('please_enter_phone_msg'));
+      }
       return;
     } else {
       signInWithPhoneNumber();
@@ -149,6 +153,7 @@ function signIn(props) {
           onSendCodePress={onSendCode}
           defaultCountryCode={cca2}
           otpCodeArea={otpInput}
+          setOtpCodeArea={setOtpInput}
           enteredCode={code => setCode(code)}
         />
       </View>

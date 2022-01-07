@@ -13,9 +13,10 @@ const OtpValidator = ({
   onSendCodePress,
   defaultCountryCode = 'PK',
   otpCodeArea,
+  setOtpCodeArea,
   enteredCode,
 }) => {
-  const [countDown, setCountDown] = useState(30);
+  const [countDown, setCountDown] = useState(60);
   const [countryModalOpen, setCountryModalOpen] = useState(false);
   const [otpArea, setOtpArea] = useState(false);
   const refTimer = useRef();
@@ -93,7 +94,7 @@ const OtpValidator = ({
           maxLength={10}
         />
         <Button
-          title={I18n.t('send_code')}
+          title={timerEnd ? 'Resend Code' : 'Send Code'}
           onPress={onSendCodePress}
           disabled={otpCodeArea}
           buttonStyle={[theme.Button.buttonStyle]}
@@ -125,12 +126,13 @@ const OtpValidator = ({
           <Text style={[theme.Text.h4Normal, {textAlign: 'center'}]}>
             {I18n.t('verify_your_code')}
           </Text>
-          <View style={{display: timerEnd ? 'none' : 'flex'}}>
+          <View>
             <CountDownTimer
               ref={refTimer}
               timestamp={countDown}
               timerCallback={timerFlag => {
                 setTimerEnd(timerFlag);
+                setOtpCodeArea(false);
               }}
               containerStyle={{
                 height: 56,

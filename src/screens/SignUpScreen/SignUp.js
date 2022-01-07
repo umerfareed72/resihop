@@ -133,6 +133,7 @@ function SignUp(props) {
           onSendCodePress={onSendCode}
           defaultCountryCode={cca2}
           otpCodeArea={otpInput}
+          setOtpCodeArea={setOtpInput}
           enteredCode={code => setCode(code)}
         />
       </View>
