@@ -1,5 +1,4 @@
 import * as Types from '../types/auth.types';
-import {header} from '../../utilities/constants';
 import {post} from '../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {responseValidator} from '../../utilities/helpers';
@@ -13,7 +12,9 @@ export const userEmailLogin =
     try {
       dispatch({type: Types.Set_loader, payload: true});
       const response = await post(`auth/local`, body);
+      // if (response?.data?.user?.details) {
       AsyncStorage.setItem('usertoken', response.data.jwt);
+      // }
       dispatch({
         type: Types.Login_Success,
         payload: response?.data,
@@ -60,7 +61,7 @@ export const userEmailSignup =
       await post(`${AUTH_CONST}register`, body)
         .then(response => {
           setIsLoading(false);
-          // AsyncStorage.setItem('usertoken', response?.data?.jwt);
+          AsyncStorage.setItem('usertoken', response?.data?.jwt);
           dispatch({
             type: Types.Signup_Success,
             payload: response?.data,

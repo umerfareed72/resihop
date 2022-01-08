@@ -14,11 +14,12 @@ import {CustomHeader} from '../../components';
 import * as Yup from 'yup';
 import {fonts, theme} from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {get} from '../../services';
+import {get, post} from '../../services';
 import {appIcons, colors} from '../../utilities';
 import I18n from '../../utilities/translations';
 import {useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
+import {Alert} from 'react-native';
 
 const vahicleFormFields = {
   licencePlate: '',
@@ -45,7 +46,7 @@ export const vahicleFormSchema = Yup.object().shape({
 });
 
 function index(props) {
-  const firstName = useSelector(state => state.auth?.userdata?.user?.firstName);
+  const userid = useSelector(state => state.auth?.userdata?.user?._id);
   const lastName = useSelector(state => state.auth?.userdata?.user?.lastName);
   const [licencePlateNumber, setLicencePlateNumber] = useState('');
   const [carMakerCompany, setCarMakerCompany] = useState('');
@@ -57,16 +58,17 @@ function index(props) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'SEK 10', value: 'sek 10'},
-    {label: 'SEK 15', value: 'sek 15'},
-    {label: 'SEK 20', value: 'sek 20'},
-    {label: 'SEK 25', value: 'sek 25'},
+    {label: 'SEK 10', value: 10},
+    {label: 'SEK 15', value: 15},
+    {label: 'SEK 20', value: 20},
+    {label: 'SEK 25', value: 25},
   ]);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
+  const [next, setNext] = React.useState(false);
+
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
   const modelName = React.useRef();
-  const vahicleColor = React.useRef();
 
   const getVahicleDetail = () => {
     const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckSweden?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
@@ -90,6 +92,7 @@ function index(props) {
                 setcarModel(CarModel.CurrentTextValue);
                 setcarColor(Colour);
                 setEngineSize(EngineSize.CurrentTextValue);
+                setNext(true);
               }
             });
           }
@@ -100,7 +103,42 @@ function index(props) {
       })
       .done();
   };
+  const addVehicelInfo = async () => {
+    setIsLoading(true);
+    const requestBody = {
+      user: {
+        _id: userid,
+      },
+      color: carColor,
+      licencePlateNumber: licencePlateNumber,
+      vehicleModelName: carModel,
+      vehicleCompanyName: carMakerCompany,
+      CO2Emissions: engineSize,
+      presetCostPerPassenger: value,
+    };
+    try {
+      const response = await post(`vehicles`, requestBody);
+      if (response?.data) {
+        setIsLoading(false);
 
+        Alert.alert(
+          'Success',
+          'Vehicle Info Added Successfully',
+          [
+            {
+              text: 'OK',
+              onPress: () => props.navigation.navigate('Pledge'),
+            },
+          ],
+          {cancelable: false},
+        );
+      }
+    } catch (error) {
+      setIsLoading(false);
+
+      console.log(error?.response?.data);
+    }
+  };
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -289,6 +327,10 @@ function index(props) {
                       props.navigation.navigate('ReviewDetails', {
                         plateNumber: licencePlateNumber,
                         PresetCost: value,
+                        CarMake: carMakerCompany,
+                        CarModel: carModel,
+                        Colour: carColor,
+                        EngineSize: engineSize,
                       })
                     }
                     activeOpacity={0.8}
@@ -325,17 +367,20 @@ function index(props) {
                   </View>
                   <TouchableOpacity
                     activeOpacity={props.disabled ? 1 : 0.2}
-                    onPress={() => props.navigation.navigate('Pledge')}
+                    onPress={() => addVehicelInfo()}
+                    disabled={value != null && next ? false : true}
                     style={[
                       props.disabled
                         ? theme.Button.disabledStyle
                         : theme.Button.buttonStyle,
+
                       {
                         justifyContent: 'space-between',
                         width: '100%',
                         flexDirection: 'row',
                         marginTop: 10,
-                        backgroundColor: colors.green,
+                        backgroundColor:
+                          value != null && next ? colors.green : colors.btnGray,
                       },
                     ]}>
                     <View style={styles.bankIDBtnCon}>

@@ -117,7 +117,7 @@ export default {
   logout: 'Log out',
   cancel: 'Cancel',
   logout_text: 'Are you sure you want to Logout?',
-  pledge_text_h1: 'ÅK IHOP Pledge',
+  pledge_text_h1: 'RES IHOP Pledge',
   pledge_agree: 'I Agree',
   blocked_list: 'Blocked Lists',
   language: 'Language',
