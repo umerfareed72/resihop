@@ -14,6 +14,9 @@ module.exports = {
   //Sign Up
   Signup_Success: 'Signup_Success',
   Signup_Failure: 'Signup_Failure',
+  //Sign Up
+  Info_Success: 'Info_Success',
+  Info_Failure: 'Info_Failure',
   //Logout
   Logout_Success: 'Logout_Success',
   Logout_Failure: 'Logout_Failure',

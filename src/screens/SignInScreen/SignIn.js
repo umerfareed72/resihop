@@ -25,7 +25,6 @@ function signIn(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNum, setPhoneNum] = useState('');
   const [country, setCountry] = useState();
-
   const [confirm, setConfirm] = useState(null);
   const [phoneError, setPhoneError] = useState('');
   const [countryCode, setCountryCode] = useState('47');
@@ -50,7 +49,7 @@ function signIn(props) {
   }
 
   const signInWithPhoneNumber = () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     signIn();
   };
 
@@ -108,12 +107,19 @@ function signIn(props) {
   };
 
   const userLgoinApi = () => {
+    let phone;
     setIsLoading(true);
-    const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+    if (phoneNum.charAt(0) == 0) {
+      let myPhone = parseInt(phoneNum, 10);
+      phone = `+${country ? country.callingCode : '47'}${myPhone}`;
+    } else {
+      phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+    }
     const requestBody = {
       identifier: phone,
       password: '123456',
     };
+    console.log(requestBody);
     dispatch(
       userEmailLogin(requestBody, setIsLoading, res => {
         console.log('LOGIN API RESPONSE:', res.toString());
@@ -125,6 +131,7 @@ function signIn(props) {
         }
       }),
     );
+    setIsLoading(false);
   };
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>

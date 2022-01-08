@@ -17,6 +17,7 @@ import Loader from '../../components/Loader/Loader';
 import {useDispatch} from 'react-redux';
 import {userEmailSignup} from '../../redux/actions/auth.action';
 import {checkConnected} from '../../utilities';
+import {get} from '../../services';
 
 function SignUp(props) {
   const dispatch = useDispatch(null);
@@ -24,7 +25,6 @@ function SignUp(props) {
   const [phoneNum, setPhoneNum] = useState('');
   const [country, setCountry] = useState();
   const [phoneError, setPhoneError] = useState('');
-
   const [confirm, setConfirm] = useState(null);
   const [countryCode, setCountryCode] = useState('47');
   const [cca2, setcca2] = useState('NO');
@@ -59,12 +59,32 @@ function SignUp(props) {
 
   async function signIn() {
     try {
-      const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-      const confirmation = await auth().signInWithPhoneNumber(phone);
-      if (confirmation) {
+      const mobilePhone = `%2b${
+        country ? country.callingCode : '47'
+      }${phoneNum}`;
+      const getUser = await get(`users?mobile=${mobilePhone}`);
+      if (getUser?.data?.length == 0) {
+        const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+        const confirmation = await auth().signInWithPhoneNumber(phone);
+        if (confirmation) {
+          setIsLoading(false);
+          setConfirm(confirmation);
+          setOtpInput(true);
+        }
+      } else {
         setIsLoading(false);
-        setConfirm(confirmation);
-        setOtpInput(true);
+
+        Alert.alert(
+          'Failed',
+          'User Alredy Registered',
+          [
+            {
+              text: 'ok',
+              onPress: () => console.log('OK'),
+            },
+          ],
+          {cancelable: false},
+        );
       }
     } catch (error) {
       setIsLoading(false);
@@ -96,17 +116,17 @@ function SignUp(props) {
     }
   };
 
-  const userRegistrationApi = () => {
+  const userRegistrationApi = async () => {
     setIsLoading(true);
     const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
     const requestBody = {
       username: phone,
       email: `${phone}@resihop.com`,
       password: '123456',
+      mobile: phone,
     };
     dispatch(
       userEmailSignup(requestBody, setIsLoading, res => {
-        console.log('Registration Api Response:-', res);
         if (res) {
           setIsLoading(false);
           Alert.alert(

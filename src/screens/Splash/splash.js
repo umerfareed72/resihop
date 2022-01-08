@@ -49,11 +49,10 @@ function splash(props) {
     }
     setTimeout(async () => {
       const token = await AsyncStorage.getItem('usertoken');
-      console.log('>>>>>>>>>', token);
-      if (token == null) {
-        props?.navigation.replace('AuthStack');
-      } else {
+      if (token != null && auth?.userInfo?.details) {
         props?.navigation.replace('PassengerDashboard');
+      } else {
+        props?.navigation.replace('AuthStack');
       }
     }, 2000);
   };

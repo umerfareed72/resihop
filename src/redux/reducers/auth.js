@@ -6,6 +6,7 @@ const initialState = {
   userdata: null,
   reset_data: {},
   pwd_data: {},
+  userInfo: {},
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -93,7 +94,11 @@ export default (state = initialState, action = {}) => {
         failure: true,
         pwd_data: payload,
       };
-
+    case Types.Info_Success:
+      return {
+        ...state,
+        userInfo: payload,
+      };
     case Types.Set_loader:
       return {
         ...state,

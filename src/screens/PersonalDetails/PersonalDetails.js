@@ -25,6 +25,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import axios from 'axios';
 import {baseURL, colors} from '../../utilities';
+import {updateInfo} from '../../redux/actions/auth.action';
+import {responseValidator} from '../../utilities/helpers';
 
 const user = {
   Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
@@ -84,11 +86,15 @@ function PersonalDetails(props) {
       .then(res => {
         if (res.data) {
           imageUpload(pic);
-          console.log('Response--->', res.data);
+          dispatch(updateInfo(res?.data));
         }
       })
-      .catch(err => {
-        alert('Something Went Wrong!');
+      .catch(error => {
+        let status = error?.response?.data?.statusCode;
+        responseValidator(
+          status,
+          error?.response?.data?.message[0]?.messages[0]?.message,
+        );
         setIsLoading(false);
       });
   };
@@ -107,42 +113,24 @@ function PersonalDetails(props) {
     axios
       .post(`${baseURL}upload/`, form)
       .then(res => {
-        setIsLoading(false);
-        Alert.alert(
-          'Success',
-          'Your personal details successfuly saved',
-          [
-            {
-              text: 'OK',
-              onPress: () => props.navigation.navigate('VahicleInformation'),
-            },
-          ],
-          {cancelable: false},
-        );
+        if (res.data) {
+          setIsLoading(false);
+          Alert.alert(
+            'Success',
+            'Your personal details successfuly saved',
+            [
+              {
+                text: 'OK',
+                onPress: () => props.navigation.navigate('VahicleInformation'),
+              },
+            ],
+            {cancelable: false},
+          );
+        }
       })
       .catch(error => {
         console.log('error', error?.response?.data);
       });
-  };
-
-  const getReferalCode = code => {
-    setIsLoading(true);
-    fetch(`https://resihop-server.herokuapp.com/referrals?code=${code}`, {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(responseData => {
-        if (responseData.length > 0) {
-          setIsLoading(false);
-          responseData.map(i => {
-            setCodeId(i.id);
-          });
-        } else {
-          setIsLoading(false);
-          refCodeSheet?.current?.open();
-        }
-      })
-      .done();
   };
 
   return (
@@ -157,12 +145,6 @@ function PersonalDetails(props) {
             onSubmit={values => {
               Keyboard.dismiss();
               userDetailsApi(values);
-              // refCodeSheet?.current?.open();
-              // props.navigation.navigate('Pledge');
-              // values.PERSONAL_FORM.gender = genderType;
-              // values.role = userType;
-              // values.mobile = ${country.callingCode}${mobileNum};
-              // attemptToSignUp(values, pic);
             }}>
             {({
               handleChange,
@@ -170,187 +152,216 @@ function PersonalDetails(props) {
               values,
               errors,
               isValid,
+              setFieldValue,
               handleBlur,
-            }) => (
-              <>
-                <View style={styles.viewCon}>
-                  <Text style={[theme.Text.h1Bold, styles.heading]}>
-                    {_.startCase(I18n.t('personal_details_text'))}
-                  </Text>
-                  <Text style={theme.Text.h2Bold}>
-                    {_.startCase(I18n.t('enter_your_personal_details_text'))}
-                  </Text>
-                </View>
-                <Chips
-                  horizontal={false}
-                  onChipPress={chips => {
-                    const type = chips[0].text;
-                    setUserType(type);
-                    // if (type === user.Driver) {
-                    //   // controlIsDriver(true);
-                    // }
-                  }}
-                />
-
-                <KeyboardAvoidingView style={styles.inputCon}>
-                  <Input
-                    ref={refFirstName}
-                    keyboardAppearance="light"
-                    onChangeText={handleChange('firstName')}
-                    placeholder={
-                      userType === 'Passenger'
-                        ? I18n.t('first_name_text')
-                        : I18n.t('first_name_driver_text')
+            }) => {
+              const getReferalCode = code => {
+                setIsLoading(true);
+                fetch(
+                  `https://resihop-server.herokuapp.com/referrals?code=${code}`,
+                  {
+                    method: 'GET',
+                  },
+                )
+                  .then(response => response.json())
+                  .then(responseData => {
+                    if (responseData.length > 0) {
+                      setIsLoading(false);
+                      responseData.map(i => {
+                        setCodeId(i.id);
+                      });
+                    } else {
+                      setIsLoading(false);
+                      setFieldValue('refCode', '');
+                      refCodeSheet?.current?.open();
                     }
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    style={theme.Input.inputStyle}
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      refLastName.current.focus();
-                    }}
-                    inputContainerStyle={
-                      errors.firstName
-                        ? theme.Input.inputErrorContainerStyle
-                        : theme.Input.inputContainerStyle
-                    }
-                    errorMessage={errors.firstName}
-                  />
-                  <Input
-                    ref={refLastName}
-                    keyboardAppearance="light"
-                    onChangeText={handleChange('lastName')}
-                    style={theme.Input.inputStyle}
-                    placeholder={
-                      userType === 'Passenger'
-                        ? I18n.t('last_name_text')
-                        : I18n.t('last_name_driver_text')
-                    }
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      refReferral.current.focus();
-                    }}
-                    inputContainerStyle={
-                      errors.lastName
-                        ? theme.Input.inputErrorContainerStyle
-                        : theme.Input.inputContainerStyle
-                    }
-                    errorMessage={errors.lastName}
-                  />
-                  <Input
-                    maxLength={4}
-                    ref={refReferral}
-                    onChangeText={val => {
-                      // handleChange('refCode');
-                      if (val.length == 4) {
-                        getReferalCode(val);
-                      }
-                    }}
-                    keyboardAppearance="light"
-                    placeholder={I18n.t('referral_code_opt_text')}
-                    style={theme.Input.inputStyle}
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      refEmail.current.focus();
-                    }}
-                    inputContainerStyle={
-                      errors.refCode
-                        ? theme.Input.inputErrorContainerStyle
-                        : theme.Input.inputContainerStyle
-                    }
-                    errorMessage={errors.refCode}
-                  />
-                  <Input
-                    ref={refEmail}
-                    keyboardAppearance="light"
-                    onChangeText={handleChange('email')}
-                    placeholder={I18n.t('email_address_text')}
-                    style={theme.Input.inputStyle}
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    returnKeyType={'done'}
-                    onSubmitEditing={() => {
-                      Keyboard.dismiss();
-                    }}
-                    inputContainerStyle={
-                      errors.email
-                        ? theme.Input.inputErrorContainerStyle
-                        : theme.Input.inputContainerStyle
-                    }
-                    errorMessage={errors.email}
-                  />
-                </KeyboardAvoidingView>
-                <View style={styles.bottomCon}>
-                  <Text style={[theme.Text.h2Bold]}>
-                    {_.startCase(I18n.t('gender_text'))}
-                  </Text>
-                  <GenderChips
+                  })
+                  .done();
+              };
+              return (
+                <>
+                  <View style={styles.viewCon}>
+                    <Text style={[theme.Text.h1Bold, styles.heading]}>
+                      {_.startCase(I18n.t('personal_details_text'))}
+                    </Text>
+                    <Text style={theme.Text.h2Bold}>
+                      {_.startCase(I18n.t('enter_your_personal_details_text'))}
+                    </Text>
+                  </View>
+                  <Chips
+                    horizontal={false}
                     onChipPress={chips => {
-                      setGenderType(chips[0].text);
-                    }}
-                  />
-                  <UploadImage
-                    profile_url={''}
-                    getPicUri={asset => {
-                      setPic(asset);
-                      // imageUpload(asset);
+                      const type = chips[0].text;
+                      setUserType(type);
+                      // if (type === user.Driver) {
+                      //   // controlIsDriver(true);
+                      // }
                     }}
                   />
 
-                  {userType === 'abx' ? (
-                    <SigninViaBankID
-                      disabled={!pic || !isValid}
-                      onBankIdPress={async () => {
-                        try {
-                          const item = await Linking.canOpenURL(
-                            'http://com.bankid.bus',
-                          );
-                          console.log(item);
-                          setBankView(true);
-                        } catch (e) {
-                          console.log(e);
+                  <KeyboardAvoidingView style={styles.inputCon}>
+                    <Input
+                      ref={refFirstName}
+                      keyboardAppearance="light"
+                      onChangeText={handleChange('firstName')}
+                      placeholder={
+                        userType === 'Passenger'
+                          ? I18n.t('first_name_text')
+                          : I18n.t('first_name_driver_text')
+                      }
+                      autoFocus={false}
+                      autoCapitalize="none"
+                      style={theme.Input.inputStyle}
+                      autoCorrect={false}
+                      returnKeyType="next"
+                      onSubmitEditing={() => {
+                        refLastName.current.focus();
+                      }}
+                      inputContainerStyle={
+                        errors.firstName
+                          ? theme.Input.inputErrorContainerStyle
+                          : theme.Input.inputContainerStyle
+                      }
+                      errorMessage={errors.firstName}
+                    />
+                    <Input
+                      ref={refLastName}
+                      keyboardAppearance="light"
+                      onChangeText={handleChange('lastName')}
+                      style={theme.Input.inputStyle}
+                      placeholder={
+                        userType === 'Passenger'
+                          ? I18n.t('last_name_text')
+                          : I18n.t('last_name_driver_text')
+                      }
+                      autoFocus={false}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      returnKeyType="next"
+                      onSubmitEditing={() => {
+                        refReferral.current.focus();
+                      }}
+                      inputContainerStyle={
+                        errors.lastName
+                          ? theme.Input.inputErrorContainerStyle
+                          : theme.Input.inputContainerStyle
+                      }
+                      errorMessage={errors.lastName}
+                    />
+                    <Input
+                      maxLength={4}
+                      ref={refReferral}
+                      onChangeText={val => {
+                        // handleChange('refCode');
+                        if (val.length == 4) {
+                          getReferalCode(val);
                         }
                       }}
-                    />
-                  ) : (
-                    <Button
-                      title={I18n.t('next')}
-                      onPress={() => handleSubmit()}
-                      disabled={!pic || !isValid}
-                      icon={
-                        <Icon
-                          name={'arrowright'}
-                          type={'antdesign'}
-                          style={{marginRight: 20}}
-                          color={theme.colors.white}
-                        />
+                      value={values?.refCode}
+                      keyboardAppearance="light"
+                      placeholder={I18n.t('referral_code_opt_text')}
+                      style={theme.Input.inputStyle}
+                      autoFocus={false}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      returnKeyType="next"
+                      onSubmitEditing={() => {
+                        refEmail.current.focus();
+                      }}
+                      inputContainerStyle={
+                        errors.refCode
+                          ? theme.Input.inputErrorContainerStyle
+                          : theme.Input.inputContainerStyle
                       }
-                      iconPosition={'right'}
-                      buttonStyle={[
-                        theme.Button.buttonStyle,
-                        {justifyContent: 'space-between'},
-                      ]}
-                      titleStyle={[theme.Button.titleStyle, {paddingLeft: 20}]}
-                      disabledTitleStyle={theme.Button.disabledTitleStyle}
-                      containerStyle={{
-                        width: '90%',
-                        alignSelf: 'center',
-                        paddingVertical: 10,
+                      errorMessage={errors.refCode}
+                    />
+                    <Input
+                      ref={refEmail}
+                      keyboardAppearance="light"
+                      onChangeText={handleChange('email')}
+                      placeholder={I18n.t('email_address_text')}
+                      style={theme.Input.inputStyle}
+                      autoFocus={false}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      keyboardType="email-address"
+                      returnKeyType={'done'}
+                      onSubmitEditing={() => {
+                        Keyboard.dismiss();
+                      }}
+                      inputContainerStyle={
+                        errors.email
+                          ? theme.Input.inputErrorContainerStyle
+                          : theme.Input.inputContainerStyle
+                      }
+                      errorMessage={errors.email}
+                    />
+                  </KeyboardAvoidingView>
+                  <View style={styles.bottomCon}>
+                    <Text style={[theme.Text.h2Bold]}>
+                      {_.startCase(I18n.t('gender_text'))}
+                    </Text>
+                    <GenderChips
+                      onChipPress={chips => {
+                        setGenderType(chips[0].text);
                       }}
                     />
-                  )}
-                </View>
-              </>
-            )}
+                    <UploadImage
+                      profile_url={''}
+                      getPicUri={asset => {
+                        setPic(asset);
+                      }}
+                    />
+
+                    {userType === 'abx' ? (
+                      <SigninViaBankID
+                        disabled={!pic || !isValid}
+                        onBankIdPress={async () => {
+                          try {
+                            const item = await Linking.canOpenURL(
+                              'http://com.bankid.bus',
+                            );
+                            console.log(item);
+                            setBankView(true);
+                          } catch (e) {
+                            console.log(e);
+                          }
+                        }}
+                      />
+                    ) : (
+                      <Button
+                        title={I18n.t('next')}
+                        onPress={() => handleSubmit()}
+                        disabled={!pic || !isValid}
+                        icon={
+                          <Icon
+                            name={'arrowright'}
+                            type={'antdesign'}
+                            style={{marginRight: 20}}
+                            color={theme.colors.white}
+                          />
+                        }
+                        iconPosition={'right'}
+                        buttonStyle={[
+                          theme.Button.buttonStyle,
+                          {justifyContent: 'space-between'},
+                        ]}
+                        titleStyle={[
+                          theme.Button.titleStyle,
+                          {paddingLeft: 20},
+                        ]}
+                        disabledTitleStyle={theme.Button.disabledTitleStyle}
+                        containerStyle={{
+                          width: '90%',
+                          alignSelf: 'center',
+                          paddingVertical: 10,
+                        }}
+                      />
+                    )}
+                  </View>
+                </>
+              );
+            }}
           </Formik>
         </ScrollView>
         {bankView ? (
