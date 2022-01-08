@@ -28,7 +28,6 @@ function signIn(props) {
 
   const [confirm, setConfirm] = useState(null);
   const [phoneError, setPhoneError] = useState('');
-  const [code, setCode] = useState('');
   const [countryCode, setCountryCode] = useState('47');
   const [cca2, setcca2] = useState('NO');
   const [otpInput, setOtpInput] = useState(false);
@@ -40,7 +39,7 @@ function signIn(props) {
   };
 
   function validate() {
-    setPhoneError("")
+    setPhoneError('');
     if (phoneNum.length == 0) {
       return setPhoneError('Please Enter Valid Phone Number');
     }
@@ -77,13 +76,7 @@ function signIn(props) {
     }
   }
 
-  useEffect(() => {
-    if (code.length === 6) {
-      confirmCode();
-    }
-  }, [code]);
-
-  async function confirmCode() {
+  async function confirmCode(code) {
     const isConnected = await checkConnected();
     if (isConnected) {
       setisOnline(false);
@@ -124,16 +117,11 @@ function signIn(props) {
     dispatch(
       userEmailLogin(requestBody, setIsLoading, res => {
         console.log('LOGIN API RESPONSE:', res.toString());
-        if (res.toString() === 'Error: Request failed with status code 400') {
-          setIsLoading(false);
-          Alert.alert('Error', 'Something went wrong');
+        setIsLoading(false);
+        if (res?.user?.details) {
+          props.navigation.replace('PassengerDashboard');
         } else {
-          setIsLoading(false);
-          if (res?.user?.details) {
-            props.navigation.replace('PassengerDashboard');
-          } else {
-            props.navigation.navigate('UserDetailStack');
-          }
+          props.navigation.navigate('UserDetailStack');
         }
       }),
     );
@@ -157,7 +145,11 @@ function signIn(props) {
           defaultCountryCode={cca2}
           otpCodeArea={otpInput}
           setOtpCodeArea={setOtpInput}
-          enteredCode={code => setCode(code)}
+          enteredCode={code => {
+            if (code.length === 6) {
+              confirmCode(code);
+            }
+          }}
           phoneError={phoneError}
         />
       </View>

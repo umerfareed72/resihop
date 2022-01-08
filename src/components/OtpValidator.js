@@ -15,7 +15,8 @@ const OtpValidator = ({
   otpCodeArea,
   setOtpCodeArea,
   enteredCode,
-  phoneError
+  phoneError,
+  onEndEditing,
 }) => {
   const [countDown, setCountDown] = useState(60);
   const [countryModalOpen, setCountryModalOpen] = useState(false);
@@ -124,6 +125,7 @@ const OtpValidator = ({
             autoCorrect={false}
             keyboardType="numeric"
             returnKeyType="next"
+            onEndEditing={onEndEditing}
           />
 
           <Text style={[theme.Text.h4Normal, {textAlign: 'center'}]}>

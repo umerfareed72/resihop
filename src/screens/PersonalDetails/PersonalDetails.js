@@ -6,6 +6,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Linking,
+  ActivityIndicator,
   Alert,
 } from 'react-native';
 import {Formik} from 'formik';
@@ -23,6 +24,7 @@ import I18n from '../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import axios from 'axios';
+import {baseURL, colors} from '../../utilities';
 
 const user = {
   Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
@@ -42,7 +44,6 @@ function PersonalDetails(props) {
   const [imagePicker, setImagePicker] = useState(false);
   const [codeId, setCodeId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
   const [bankView, setBankView] = useState(false);
@@ -68,7 +69,7 @@ function PersonalDetails(props) {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      isDriverAndPassenger: false,
+      isDriverAndPassenger: userType === 'Driver/Passenger both' ? true : false,
       gender: genderType,
       referral: {
         _id: codeId,
@@ -80,16 +81,33 @@ function PersonalDetails(props) {
     };
     axios
       .put(`https://resihop-server.herokuapp.com/users/${userId}`, requestBody)
-
       .then(res => {
         if (res.data) {
-          setIsLoading(false);
-          console.log('Response--->', data);
+          imageUpload(pic);
+          console.log('Response--->', res.data);
         }
       })
       .catch(err => {
+        alert('Something Went Wrong!');
         setIsLoading(false);
-        console.log('Error', err?.response?.data);
+      });
+  };
+
+  const imageUpload = data => {
+    var form = new FormData();
+    form.append('files', {
+      name: data?.fileName,
+      type: data?.type,
+      uri: data?.uri,
+    });
+    form.append('refid', userId);
+    form.append('ref', 'user');
+    form.append('field', 'picture');
+    form.append('source', 'users.permissions');
+    axios
+      .post(`${baseURL}upload/`, form)
+      .then(res => {
+        setIsLoading(false);
         Alert.alert(
           'Success',
           'Your personal details successfuly saved',
@@ -101,6 +119,9 @@ function PersonalDetails(props) {
           ],
           {cancelable: false},
         );
+      })
+      .catch(error => {
+        console.log('error', error?.response?.data);
       });
   };
 
@@ -165,9 +186,9 @@ function PersonalDetails(props) {
                   onChipPress={chips => {
                     const type = chips[0].text;
                     setUserType(type);
-                    if (type === user.Driver) {
-                      // controlIsDriver(true);
-                    }
+                    // if (type === user.Driver) {
+                    //   // controlIsDriver(true);
+                    // }
                   }}
                 />
 
@@ -278,8 +299,10 @@ function PersonalDetails(props) {
                     }}
                   />
                   <UploadImage
+                    profile_url={''}
                     getPicUri={asset => {
                       setPic(asset);
+                      // imageUpload(asset);
                     }}
                   />
 
@@ -311,7 +334,6 @@ function PersonalDetails(props) {
                           color={theme.colors.white}
                         />
                       }
-                      x
                       iconPosition={'right'}
                       buttonStyle={[
                         theme.Button.buttonStyle,
@@ -322,7 +344,7 @@ function PersonalDetails(props) {
                       containerStyle={{
                         width: '90%',
                         alignSelf: 'center',
-                        marginTop: 20,
+                        paddingVertical: 10,
                       }}
                     />
                   )}
