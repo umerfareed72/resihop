@@ -93,7 +93,7 @@ const OtpValidator = ({
           ref={numRef}
           onChangeText={chnagePhone}
           value={phoneNumber}
-          maxLength={10}
+          maxLength={14}
         />
         <Button
           title={timerEnd ? 'Resend Code' : 'Send Code'}

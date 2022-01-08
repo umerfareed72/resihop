@@ -139,3 +139,9 @@ export const resetPassword = (user, callBack) => async dispatch => {
     );
   }
 };
+export const updateInfo = user => async dispatch => {
+  dispatch({
+    type: Types.Info_Success,
+    payload: user,
+  });
+};
