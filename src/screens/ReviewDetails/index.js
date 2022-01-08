@@ -14,45 +14,7 @@ function index(props) {
       fieldValue: 'SEK 20',
     },
   ]);
-  const [carMakerCompany, setCarMakerCompany] = useState('');
-  const [carModel, setcarModel] = useState('');
-  const [carColor, setcarColor] = useState('');
-  const [engineSize, setEngineSize] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const {plateNumber} = props.route.params;
-    const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckSweden?RegistrationNumber=${plateNumber}&username=DawoodAbrar`;
-    var parseString = require('react-native-xml2js').parseString;
-    fetch(url, {
-      method: 'GET',
-    })
-      .then(response => response.text())
-      .then(responseData => {
-        setIsLoading(false);
-        try {
-          if (responseData) {
-            parseString(responseData, {trim: true}, function (err, result) {
-              if (result) {
-                setIsLoading(false);
-                const {CarMake, CarModel, Colour, EngineSize} = JSON.parse(
-                  result?.Vehicle?.vehicleJson,
-                );
-                setCarMakerCompany(CarMake.CurrentTextValue);
-                setcarModel(CarModel.CurrentTextValue);
-                setcarColor(Colour);
-                setEngineSize(EngineSize.CurrentTextValue);
-              }
-            });
-          }
-        } catch (err) {
-          setIsLoading(false);
-          console.log('Error:', err);
-        }
-      })
-      .done();
-  }, []);
 
   return (
     <>
@@ -78,19 +40,25 @@ function index(props) {
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>{'Car Company'}</Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>{carMakerCompany}</Text>
+                <Text style={theme.Text.h4Normal}>
+                  {props.route.params.CarMake}
+                </Text>
               </View>
             </View>
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>{'Model Name'}</Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>{carModel}</Text>
+                <Text style={theme.Text.h4Normal}>
+                  {props.route.params.CarModel}
+                </Text>
               </View>
             </View>
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>{'Vahicle Colour'}</Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>{carColor}</Text>
+                <Text style={theme.Text.h4Normal}>
+                  {props.route.params.Colour}
+                </Text>
               </View>
             </View>
             <View style={styles.textContainer}>
@@ -98,7 +66,9 @@ function index(props) {
                 {'CO2 EMISSIONS (g CO2 / km)'}
               </Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>{engineSize}</Text>
+                <Text style={theme.Text.h4Normal}>
+                  {props.route.params.EngineSize}
+                </Text>
               </View>
             </View>
             <View style={styles.textContainer}>
@@ -118,7 +88,7 @@ function index(props) {
               }}>
               <Button
                 title={'OK'}
-                onPress={() => console.log('Pressed!')}
+                onPress={() => props.navigation.navigate('VahicleInformation')}
                 buttonStyle={[theme.Button.buttonStyle]}
                 titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                 disabledTitleStyle={theme.Button.disabledTitleStyle}
@@ -129,7 +99,7 @@ function index(props) {
               />
               <Button
                 title={'Edit'}
-                onPress={() => console.log('Pressed!')}
+                onPress={() => props.navigation.navigate('VahicleInformation')}
                 buttonStyle={[
                   theme.Button.buttonStyle,
                   {

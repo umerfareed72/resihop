@@ -9,7 +9,9 @@ export const userPersonalDetail =
     console.log('BODY', body);
     try {
       const response = await post(USER_DETAIL, body);
-      AsyncStorage.setItem('usertoken', response.data.jwt);
+      if (response?.data) {
+        AsyncStorage.setItem('usertoken', response.data.jwt);
+      }
       dispatch({
         type: Types.User_Detail_Success,
         payload: response?.data,

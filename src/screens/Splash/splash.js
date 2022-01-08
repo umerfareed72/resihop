@@ -47,8 +47,10 @@ function splash(props) {
     } else {
       I18n.locale = lang;
     }
-    setTimeout(() => {
-      if (auth?.userdata == null) {
+    setTimeout(async () => {
+      const token = await AsyncStorage.getItem('usertoken');
+      console.log('>>>>>>>>>', token);
+      if (token == null) {
         props?.navigation.replace('AuthStack');
       } else {
         props?.navigation.replace('PassengerDashboard');
