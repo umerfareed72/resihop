@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
-import {View, Image, StyleSheet, Alert} from 'react-native';
+import {View, Image, StyleSheet, Alert, Text} from 'react-native';
 import {
   appImages,
   colors,
+  HP,
   LocalNotification,
   Notification_Listner,
   registerAppWithFCM,
@@ -13,6 +14,7 @@ import MyStatusBar from '../../components/Header/statusBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
+import {theme} from '../../theme';
 
 function splash(props) {
   //Rdux States
@@ -60,7 +62,16 @@ function splash(props) {
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
-      <Image source={appImages.app_logo} resizeMode={'contain'} />
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <Image
+          source={appImages.app_logo}
+          style={{width: 160, height: 160}}
+          resizeMode={'contain'}
+        />
+        <Text style={{color: 'green', fontSize: 25, marginTop: '-4%'}}>
+          RESI HOP
+        </Text>
+      </View>
     </View>
   );
 }

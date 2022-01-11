@@ -7,12 +7,10 @@ import {
   FlatList,
   ScrollView,
   SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
   StatusBar,
   Platform,
 } from 'react-native';
-import {Container} from '../components/Container';
 import {theme} from '../theme';
 import {Image, Button, Text, Icon} from 'react-native-elements';
 import {ExpandingDot} from 'react-native-animated-pagination-dots';
@@ -78,7 +76,7 @@ function walkThrough(props) {
               renderItem={item => {
                 return (
                   <View style={{flex: 1}} key={item.item.key}>
-                    <ImageBackground
+                    <Image
                       source={item.item.img}
                       style={{
                         width: width,
@@ -92,7 +90,11 @@ function walkThrough(props) {
             />
           </View>
           <View
-            style={{flex: 1, justifyContent: 'space-evenly', marginTop: '5%'}}>
+            style={{
+              flex: 1,
+              justifyContent: 'space-evenly',
+              marginTop: '5%',
+            }}>
             <ExpandingDot
               data={introData}
               expandingDotWidth={30}
@@ -118,14 +120,27 @@ function walkThrough(props) {
             }}>
             <Image source={appIcons.backArrow} style={styles.imageStyle} />
           </TouchableOpacity>
-          <View style={styles.bottomCon}>
-            <Text style={[theme.Text.h1Bold, styles.heading]}>
-              {I18n.t('welcome_to_resihop_msg')}
-            </Text>
-            <Text style={[theme.Text.h3Normal, styles.headingSaying]}>
-              {I18n.t('walkthrough_msg_one')}
-            </Text>
-          </View>
+          {activeIndex == 0 ? (
+            <View style={styles.bottomCon}>
+              <Text style={[theme.Text.h1Bold, styles.heading]}>
+                {I18n.t('welcome_to_resihop_msg')}
+              </Text>
+              <Text style={[theme.Text.h3Normal, styles.headingSaying]}>
+                {I18n.t('walkthrough_msg_one')}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.bottomCon}>
+              <Text style={[theme.Text.h1Bold, styles.heading]}>
+                {'Välkommen Till Res ihop'}
+              </Text>
+              <Text style={[theme.Text.h3Normal, styles.headingSaying]}>
+                {
+                  'Erbjud tomma platser i bilen på väg till jobbet och få ersättning av de som reser. Oroa dig inte, vi tar hand om alla anslutningar, du anger bara din rutt du anger bara din rutt.'
+                }
+              </Text>
+            </View>
+          )}
         </View>
         <View style={styles.bottomBtnCon}>
           <Text
