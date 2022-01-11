@@ -252,12 +252,12 @@ function PersonalDetails(props) {
                       maxLength={4}
                       ref={refReferral}
                       onChangeText={val => {
-                        // handleChange('refCode');
+                        handleChange('refCode');
                         if (val.length == 4) {
                           getReferalCode(val);
                         }
                       }}
-                      value={values?.refCode}
+                      // value={values?.refCode}
                       keyboardAppearance="light"
                       placeholder={I18n.t('referral_code_opt_text')}
                       style={theme.Input.inputStyle}
