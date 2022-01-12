@@ -18,6 +18,7 @@ import auth from '@react-native-firebase/auth';
 import {userEmailLogin} from '../../redux/actions/auth.action';
 import Loader from '../../components/Loader/Loader';
 import {checkConnected} from '../../utilities';
+import {get} from '../../services';
 
 function signIn(props) {
   const dispatch = useDispatch(null);
@@ -58,12 +59,32 @@ function signIn(props) {
     if (isConnected) {
       setIsLoading(true);
       try {
-        const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-        const confirmation = await auth().signInWithPhoneNumber(phone);
-        if (confirmation) {
+        const mobilePhone = `%2b${
+          country ? country.callingCode : '47'
+        }${phoneNum}`;
+        const getUser = await get(`users?mobile=${mobilePhone}`);
+        if (getUser?.data?.length > 0) {
+          const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+          const confirmation = await auth().signInWithPhoneNumber(phone);
+          if (confirmation) {
+            setIsLoading(false);
+            setConfirm(confirmation);
+            setOtpInput(true);
+          }
+        } else {
           setIsLoading(false);
-          setConfirm(confirmation);
-          setOtpInput(true);
+
+          Alert.alert(
+            'Failed',
+            'User not exists',
+            [
+              {
+                text: 'ok',
+                onPress: () => console.log('OK'),
+              },
+            ],
+            {cancelable: false},
+          );
         }
       } catch (error) {
         setIsLoading(false);
