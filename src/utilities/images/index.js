@@ -61,7 +61,7 @@ export const appImages = {
   seatBlue: require('../../assets/icons/png/seat_blue.png'),
   seatGreen: require('../../assets/icons/png/seat_green.png'),
   calendar: require('../../assets/icons/png/calendar.png'),
-  app_logo: require('../../assets/icons/png/app_logo.png'),
+  app_logo: require('../../assets/icons/png/icon.png'),
   valley: require('../../assets/images/valley.png'),
   inviteImage: require('../../assets/icons/png/invite_prop.png'),
   driver: require('../../assets/icons/png/driver/driver.png'),

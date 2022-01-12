@@ -140,7 +140,6 @@ function signIn(props) {
       identifier: phone,
       password: '123456',
     };
-    console.log(requestBody);
     dispatch(
       userEmailLogin(requestBody, setIsLoading, res => {
         console.log('LOGIN API RESPONSE:', res.toString());
