@@ -9,7 +9,6 @@ import {AUTH_CONST, AUTH_PW_CONST} from '../../utilities/routes';
 
 export const userEmailLogin =
   (body, setIsLoading, callBack) => async dispatch => {
-    console.log("BODY", body);
     try {
       dispatch({type: Types.Set_loader, payload: true});
       const response = await post(`auth/local`, body);

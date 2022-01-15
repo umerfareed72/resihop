@@ -11,4 +11,5 @@ module.exports = {
   idToUpdateDrive: 'UpdateDriveID',
   myRides: 'MyRides',
   dateTimeStamp: 'TimeStamp',
+  bookRide: 'BookRide',
 };

@@ -13,6 +13,7 @@ import {colors, appImages} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
+import {useSelector} from 'react-redux';
 
 const BookingDetails = () => {
   let navigation = useNavigation();

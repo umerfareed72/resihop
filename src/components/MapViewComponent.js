@@ -48,8 +48,6 @@ const MapViewComponent = ({
     state => state.map.searchDriveResponse,
   );
 
-  console.log('Search Drive', searchDrivesResponse);
-
   const mapRef = useRef();
 
   useEffect(() => {
@@ -58,15 +56,18 @@ const MapViewComponent = ({
 
   useEffect(() => {
     if (!origin || !destination || !searchRideResponse) return;
-    mapRef.current.fitToSuppliedMarkers(['location', 'destination', 'ride'], {
-      edgePadding: {
-        top: 70,
-        right: 70,
-        bottom: 70,
-        left: 70,
+    mapRef.current.fitToSuppliedMarkers(
+      ['location', 'destination', 'ride, driver'],
+      {
+        edgePadding: {
+          top: 70,
+          right: 70,
+          bottom: 70,
+          left: 70,
+        },
       },
-    });
-  }, [origin, destination, searchRideResponse]);
+    );
+  }, [origin, destination, searchRideResponse, searchDrivesResponse]);
 
   const getLocation = async () => {
     let permission;
@@ -181,6 +182,18 @@ const MapViewComponent = ({
                 coordinate={{
                   latitude: ride.startLat,
                   longitude: ride.startLng,
+                }}
+              />
+            ))
+          : null}
+
+        {searchDrivesResponse !== null && searchDrivesResponse?.length > 0
+          ? searchDrivesResponse.map(driver => (
+              <Marker
+                identifier="driver"
+                coordinate={{
+                  latitude: driver?.drive?.startLocation?.latitude,
+                  longitude: driver?.drive?.startLocation?.longitude,
                 }}
               />
             ))

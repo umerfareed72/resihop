@@ -11,6 +11,7 @@ import Slider from '@react-native-community/slider';
 import {appIcons, appImages, colors} from '../utilities';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
+import {useSelector} from 'react-redux';
 
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   const [sliderValue, setSliderValue] = useState(0);
@@ -18,6 +19,10 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   useEffect(() => {
     setHeight(Dimensions.get('screen').height - 200);
   }, []);
+
+  const searchDrivesResponse = useSelector(
+    state => state.map.searchDriveResponse,
+  );
 
   return (
     <View style={styles.container}>
@@ -40,6 +45,7 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
       </View>
       <TouchableOpacity
         style={styles.btnWrapper}
+        disabled={searchDrivesResponse.length === 0}
         onPress={() => setModal('finding')}>
         <Text style={styles.btnTxt}>{I18n.t('start_matching')}</Text>
       </TouchableOpacity>
