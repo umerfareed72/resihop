@@ -84,7 +84,6 @@ const DriverHome = ({navigation}) => {
   let dispatch = useDispatch();
 
   const myDrives = useSelector(state => state.map.myDrivesData);
-
   //States
   const [time, settime] = useState('');
   const [date, setdate] = useState('');
@@ -264,7 +263,7 @@ const DriverHome = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        {myDrives === null || myDrives?.length === 0 ? (
+        {myDrives === null || myDrives?.length === 0 || myDrives ? (
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={{marginBottom: 10}}>

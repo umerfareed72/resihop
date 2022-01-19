@@ -145,3 +145,10 @@ export const updateInfo = user => async dispatch => {
     payload: user,
   });
 };
+export const LanguageInfo = (lang, callBack) => async dispatch => {
+  dispatch({
+    type: Types.Language_Success,
+    payload: lang,
+  });
+  callBack();
+};

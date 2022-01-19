@@ -58,13 +58,13 @@ function PersonalDetails(props) {
 
   const userDetailsApi = inputData => {
     setIsLoading(true);
-    let roleId = '';
+    let user = '';
     if (userType === 'Driver') {
-      roleId = '616e6a8c6fc87c0016b740e8';
+      user = 'DRIVER';
     } else if (userType === 'Passenger') {
-      roleId = '616e6aae6fc87c0016b7413f';
+      user = 'PASSENGER';
     } else {
-      roleId = '616da5478b2d5d45c479591c';
+      user = '';
     }
     const {firstName, lastName, email} = inputData;
     const requestBody = {
@@ -73,12 +73,15 @@ function PersonalDetails(props) {
       email: email,
       isDriverAndPassenger: userType === 'Driver/Passenger both' ? true : false,
       gender: genderType,
-      referral: {
-        _id: codeId,
-      },
-      role: {
-        _id: roleId,
-      },
+      referral:
+        codeId != ''
+          ? {
+              _id: codeId,
+            }
+          : {
+              _id: null,
+            },
+      type: user,
       details: true,
     };
     axios
@@ -130,6 +133,8 @@ function PersonalDetails(props) {
       })
       .catch(error => {
         console.log('error', error?.response?.data);
+        Alert.alert('Failed to Upload Image');
+        setIsLoading(false);
       });
   };
 

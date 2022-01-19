@@ -20,6 +20,9 @@ module.exports = {
   //Logout
   Logout_Success: 'Logout_Success',
   Logout_Failure: 'Logout_Failure',
+  // Language Info
+  Language_Success: 'Language_Success',
+  Language_Failure: 'Language_Failure',
   //Loader
   Set_loader: 'Set_Loader',
 };

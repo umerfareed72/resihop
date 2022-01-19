@@ -156,7 +156,6 @@ export const SearchDrives = data => async dispatch => {
 
 export const MyDrives = data => async dispatch => {
   let Token = await GetToken();
-
   try {
     const response = await fetch(
       'https://resihop-server.herokuapp.com/drives',
@@ -178,7 +177,7 @@ export const MyDrives = data => async dispatch => {
     console.log(error);
     dispatch({
       type: Types.myDrives,
-      payload: responseJson,
+      payload: null,
     });
   }
 };

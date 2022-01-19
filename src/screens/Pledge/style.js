@@ -6,9 +6,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
-  contentContainer: {
-    paddingHorizontal: WP('5'),
-  },
+  contentContainer: {},
   h1: {
     fontSize: size.h2,
     color: colors.light_black,
@@ -23,5 +21,7 @@ export default StyleSheet.create({
   btnWrapper: {
     // paddingVertical: 20,
     // paddingHorizontal: 10,
+    width: '90%',
+    alignSelf: 'center',
   },
 });

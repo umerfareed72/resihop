@@ -7,6 +7,7 @@ const initialState = {
   reset_data: {},
   pwd_data: {},
   userInfo: {},
+  language: '',
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -98,6 +99,11 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         userInfo: payload,
+      };
+    case Types.Language_Success:
+      return {
+        ...state,
+        language: payload,
       };
     case Types.Set_loader:
       return {
