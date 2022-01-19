@@ -88,8 +88,14 @@ function index(props) {
               }}>
               <Button
                 title={'OK'}
-                onPress={() => props.navigation.navigate('VahicleInformation')}
+                onPress={() => props.navigation.navigate('Pledge')}
                 buttonStyle={[theme.Button.buttonStyle]}
+                disabled={
+                  props.route.params?.PresetCost != null &&
+                  props.route.params?.CarMake != ''
+                    ? false
+                    : true
+                }
                 titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                 disabledTitleStyle={theme.Button.disabledTitleStyle}
                 containerStyle={{
@@ -99,7 +105,9 @@ function index(props) {
               />
               <Button
                 title={'Edit'}
-                onPress={() => props.navigation.navigate('VahicleInformation')}
+                onPress={() => {
+                  props.navigation.navigate('VahicleInformation');
+                }}
                 buttonStyle={[
                   theme.Button.buttonStyle,
                   {

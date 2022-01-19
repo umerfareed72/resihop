@@ -157,7 +157,10 @@ function SignUp(props) {
         </Text>
         <OtpValidator
           phoneNumber={phoneNum}
-          chnagePhone={val => setPhoneNum(val)}
+          chnagePhone={val => {
+            let s = val.replace(/^0+/, '');
+            setPhoneNum(s);
+          }}
           selectedCountry={country}
           onCountrySelect={onSelect}
           onSendCodePress={onSendCode}

@@ -48,20 +48,25 @@ export const vahicleFormSchema = Yup.object().shape({
 function index(props) {
   const userid = useSelector(state => state.auth?.userdata?.user?._id);
   const lastName = useSelector(state => state.auth?.userdata?.user?.lastName);
+  const language = useSelector(state => state.auth?.language);
   const [licencePlateNumber, setLicencePlateNumber] = useState('');
   const [carMakerCompany, setCarMakerCompany] = useState('');
   const [carModel, setcarModel] = useState('');
   const [carColor, setcarColor] = useState('');
   const [engineSize, setEngineSize] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'SEK 10', value: 10},
-    {label: 'SEK 15', value: 15},
-    {label: 'SEK 20', value: 20},
-    {label: 'SEK 25', value: 25},
+    {label: 'NOK 10', value: 10},
+    {label: 'NOK 15', value: 15},
+    {label: 'NOK 20', value: 20},
+    {label: 'NOK 25', value: 25},
+    {label: 'NOK 30', value: 30},
+    {label: 'NOK 35', value: 35},
+    {label: 'NOK 40', value: 40},
+    {label: 'NOK 45', value: 45},
+    {label: 'NOK 50', value: 50},
   ]);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
   const [next, setNext] = React.useState(false);
@@ -71,7 +76,8 @@ function index(props) {
   const modelName = React.useRef();
 
   const getVahicleDetail = () => {
-    const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckSweden?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
+    const country = language == 'English' ? 'CheckSweden' : 'CheckNorway';
+    const url = `https://www.regcheck.org.uk/api/reg.asmx/${country}?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
     setIsLoading(true);
     var parseString = require('react-native-xml2js').parseString;
     fetch(url, {
@@ -85,13 +91,17 @@ function index(props) {
             parseString(responseData, {trim: true}, function (err, result) {
               if (result) {
                 setIsLoading(false);
-                const {CarMake, CarModel, Colour, EngineSize} = JSON.parse(
-                  result?.Vehicle?.vehicleJson,
-                );
-                setCarMakerCompany(CarMake.CurrentTextValue);
-                setcarModel(CarModel.CurrentTextValue);
+                const {CarMake, CarModel, Colour, ExtendedInformation} =
+                  JSON.parse(result?.Vehicle?.vehicleJson);
+                if (ExtendedInformation) {
+                  delete Object?.assign(ExtendedInformation, {
+                    ['co2']: ExtendedInformation['co2-utslipp'],
+                  })['co2-utslipp'];
+                  setEngineSize(ExtendedInformation?.co2);
+                }
+                setCarMakerCompany(CarMake?.CurrentTextValue);
+                setcarModel(CarModel?.CurrentTextValue);
                 setcarColor(Colour);
-                setEngineSize(EngineSize.CurrentTextValue);
                 setNext(true);
               }
             });
@@ -120,7 +130,6 @@ function index(props) {
       const response = await post(`vehicles`, requestBody);
       if (response?.data) {
         setIsLoading(false);
-
         Alert.alert(
           'Success',
           'Vehicle Info Added Successfully',
@@ -373,12 +382,11 @@ function index(props) {
                       props.disabled
                         ? theme.Button.disabledStyle
                         : theme.Button.buttonStyle,
-
                       {
                         justifyContent: 'space-between',
                         width: '100%',
                         flexDirection: 'row',
-                        marginTop: 10,
+                        marginVertical: 10,
                         backgroundColor:
                           value != null && next ? colors.green : colors.btnGray,
                       },

@@ -2,19 +2,16 @@ import React, {Component} from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {appIcons, appImages, colors, size} from '../../../utilities';
 
-export const PledgeCard = ({data}) => {
+export const PledgeCard = ({h1, h2, imageURL}) => {
   return (
     <View style={styles.container}>
       <View style={styles.cardStyle}>
         <View style={styles.leftContainer}>
-          <Image source={appIcons.spread_goodness} style={styles.imageStyle} />
+          <Image source={{uri: imageURL}} style={styles.imageStyle} />
         </View>
         <View style={styles.rightContainer}>
-          <Text style={styles.h1}>Respect Each other</Text>
-          <Text style={styles.h2}>
-            I will respect fellow riders and value their time & space. I would
-            never treat as driver/passenger.
-          </Text>
+          <Text style={styles.h1}>{h1}</Text>
+          <Text style={styles.h2}>{h2}</Text>
           <View style={styles.separator} />
         </View>
       </View>
@@ -26,26 +23,28 @@ const styles = StyleSheet.create({
   cardStyle: {
     width: '100%',
     flexDirection: 'row',
-    marginVertical: 20,
+    marginVertical: 10,
   },
   container: {
     flex: 1,
   },
   leftContainer: {
-    width: 142,
-    height: 100,
-    marginRight: 20,
+    width: 150,
+    height: 120,
+    marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   rightContainer: {
-    width: '70%',
-    height: 100,
+    width: '80%',
+    paddingVertical: 10,
+    // alignItems: 'center',
+    justifyContent: 'center',
   },
   imageStyle: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   h1: {
     fontSize: size.normal,
@@ -55,7 +54,8 @@ const styles = StyleSheet.create({
   h2: {
     fontSize: size.xxsmall,
     color: colors.g3,
-    paddingVertical: 10,
+    paddingTop: 10,
+    width: '60%',
   },
   separator: {
     borderBottomWidth: 0.5,

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View, Text} from 'react-native';
 import {CustomHeader} from '../../components/Header/CustomHeader';
 import styles from './style';
@@ -6,7 +6,32 @@ import I18n from '../../utilities/translations';
 import {FlatList} from 'react-native-gesture-handler';
 import {PledgeCard, AgreeButton} from '../../components';
 import {colors} from '../../utilities';
+import {get} from '../../services';
+import {responseValidator} from '../../utilities/helpers';
+import Loader from '../../components/Loader/Loader';
 const index = ({navigation}) => {
+  const [loading, setloading] = useState(false);
+  const [getPledges, setgetPledges] = useState([]);
+  useEffect(() => {
+    getPledge();
+  }, []);
+  //Get Pledge
+  const getPledge = async () => {
+    setloading(true);
+    try {
+      const res = await get(`pledges`);
+      setgetPledges(res?.data);
+      setloading(false);
+    } catch (error) {
+      console.log('Error', error);
+      let status = error?.response?.data?.statusCode;
+      responseValidator(
+        status,
+        error?.response?.data?.message[0]?.messages[0]?.message,
+      );
+      setloading(false);
+    }
+  };
   return (
     <>
       <CustomHeader navigation={navigation} backButton={true} />
@@ -15,12 +40,19 @@ const index = ({navigation}) => {
           <View style={styles.h1Container}>
             <Text style={styles.h1}>{I18n.t('pledge_text_h1')}</Text>
           </View>
+
           <FlatList
             style={{height: '80%'}}
             showsVerticalScrollIndicator={false}
-            data={[1, 2, 3]}
-            renderItem={() => {
-              return <PledgeCard />;
+            data={getPledges}
+            renderItem={({item}) => {
+              return (
+                <PledgeCard
+                  h1={item?.heading}
+                  h2={item?.description}
+                  imageURL={item?.image?.url}
+                />
+              );
             }}
           />
           <View style={styles.btnWrapper}>
@@ -35,6 +67,7 @@ const index = ({navigation}) => {
             />
           </View>
         </View>
+        {loading ? <Loader /> : null}
       </SafeAreaView>
     </>
   );

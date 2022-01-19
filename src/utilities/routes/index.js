@@ -1,4 +1,4 @@
-export const baseURL = 'https://resihop-server.herokuapp.com/';
+export const baseURL = 'https://api.resihop.com/';
 export const AUTH_CONST = 'auth/local/';
 export const USER_DETAIL = 'vehicles';
 export const GET_FAQS = 'faqs';
