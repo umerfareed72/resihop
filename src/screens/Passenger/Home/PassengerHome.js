@@ -95,6 +95,7 @@ const PassengerHome = ({navigation}) => {
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
   const [selectedCard, setSelectedCard] = useState([]);
+  const auth = useSelector(state => state.auth);
 
   const myRidesData = useSelector(state => state.map.myRidesData);
 
@@ -176,11 +177,17 @@ const PassengerHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              dispatch(setOrigin(null));
-              dispatch(setMapDestination(null));
-              dispatch(SearchDrives(null));
-              dispatch(SearchRides(null));
-              navigation?.navigate('ApprovalStatus');
+              if (auth?.userInfo?.type == 'PASSENGER') {
+                dispatch(setOrigin(null));
+                dispatch(setMapDestination(null));
+                dispatch(SearchDrives(null));
+                dispatch(SearchRides(null));
+                navigation?.navigate('ApprovalStatus');
+              } else if (auth?.userInfo?.type == 'DRIVER') {
+                navigation?.replace('DriverDashboard');
+              } else {
+                navigation.replace('VehicleInfo');
+              }
             }}
             style={styles.switchToDriverBtnContainer}>
             <Text

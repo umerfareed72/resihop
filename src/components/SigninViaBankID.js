@@ -34,6 +34,7 @@ function SigninViaBankID({onBankIdPress, disabled = true}) {
       <TouchableOpacity
         activeOpacity={disabled ? 1 : 0.2}
         onPress={onBankIdPress}
+        disabled={disabled}
         style={[
           disabled ? theme.Button.disabledStyle : theme.Button.buttonStyle,
           {

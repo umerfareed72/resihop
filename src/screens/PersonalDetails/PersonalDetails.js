@@ -64,7 +64,7 @@ function PersonalDetails(props) {
     } else if (userType === 'Passenger') {
       user = 'PASSENGER';
     } else {
-      user = '';
+      user = 'BOTH';
     }
     const {firstName, lastName, email} = inputData;
     const requestBody = {
@@ -88,8 +88,26 @@ function PersonalDetails(props) {
       .put(`https://resihop-server.herokuapp.com/users/${userId}`, requestBody)
       .then(res => {
         if (res.data) {
-          imageUpload(pic);
+          // imageUpload(pic);
           dispatch(updateInfo(res?.data));
+          setIsLoading(false);
+          Alert.alert(
+            'Success',
+            'Your personal details successfuly saved',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  if (userType === 'Passenger') {
+                    props?.navigation?.navigate('Pledge');
+                  } else {
+                    props.navigation.navigate('VahicleInformation');
+                  }
+                },
+              },
+            ],
+            {cancelable: false},
+          );
         }
       })
       .catch(error => {
@@ -137,7 +155,6 @@ function PersonalDetails(props) {
         setIsLoading(false);
       });
   };
-
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -198,9 +215,6 @@ function PersonalDetails(props) {
                     onChipPress={chips => {
                       const type = chips[0].text;
                       setUserType(type);
-                      // if (type === user.Driver) {
-                      //   // controlIsDriver(true);
-                      // }
                     }}
                   />
 
@@ -318,20 +332,10 @@ function PersonalDetails(props) {
                       }}
                     />
 
-                    {userType === 'abx' ? (
+                    {userType === 'Passenger' ? (
                       <SigninViaBankID
                         disabled={!pic || !isValid}
-                        onBankIdPress={async () => {
-                          try {
-                            const item = await Linking.canOpenURL(
-                              'http://com.bankid.bus',
-                            );
-                            console.log(item);
-                            setBankView(true);
-                          } catch (e) {
-                            console.log(e);
-                          }
-                        }}
+                        onBankIdPress={handleSubmit}
                       />
                     ) : (
                       <Button
