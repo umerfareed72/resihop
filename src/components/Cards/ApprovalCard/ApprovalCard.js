@@ -44,16 +44,17 @@ export const ApprovalCard = ({
         {h2}
       </Text>
       {h3 && <Text style={styles.h3}>{h3} </Text>}
-
-      <View style={{padding: 20}}>
-        <PaymentButtons
-          onPress={onPress}
-          bgColor={colors.blue}
-          title={btnText}
-          txtColor={colors.white}
-          fontFamily={family.product_sans_bold}
-        />
-      </View>
+      {btnText && (
+        <View style={{padding: 20}}>
+          <PaymentButtons
+            onPress={onPress}
+            bgColor={colors.blue}
+            title={btnText}
+            txtColor={colors.white}
+            fontFamily={family.product_sans_bold}
+          />
+        </View>
+      )}
       {h4 && <Text style={styles.h3}>{h4} </Text>}
     </View>
   );

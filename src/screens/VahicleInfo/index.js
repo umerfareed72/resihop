@@ -20,6 +20,7 @@ import I18n from '../../utilities/translations';
 import {useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import {Alert} from 'react-native';
+import SigninViaBankID from '../../components/SigninViaBankID';
 
 const vahicleFormFields = {
   licencePlate: '',
@@ -358,70 +359,16 @@ function index(props) {
                     ]}>
                     <Text>{I18n.t('review_details')}</Text>
                   </TouchableOpacity>
-                  <View style={{margin: 12}}>
-                    <Text style={theme.Text.h4Normal}>
-                      {I18n.t('by_clicking_bank_id_text')}
-                    </Text>
-                    <View style={styles.textCon}>
-                      <Text
-                        style={[theme.Text.h4Normal, {paddingHorizontal: 2}]}>
-                        {I18n.t('i_agree_to_res_ihop')}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          props.navigation.navigate('Terms');
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: 15,
-                            fontFamily: fonts.bold,
-                            textDecorationLine: 'underline',
-                            color: theme.colors.black,
-                          }}>
-                          {I18n.t('terms_and_condition_text')}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <TouchableOpacity
-                    activeOpacity={props.disabled ? 1 : 0.2}
-                    onPress={() => addVehicelInfo()}
-                    disabled={value != null && next ? false : true}
-                    style={[
-                      props.disabled
-                        ? theme.Button.disabledStyle
-                        : theme.Button.buttonStyle,
-                      {
-                        justifyContent: 'space-between',
-                        width: '100%',
-                        flexDirection: 'row',
-                        marginVertical: 10,
-                        backgroundColor:
-                          value != null && next ? colors.green : colors.btnGray,
-                      },
-                    ]}>
-                    <View style={styles.bankIDBtnCon}>
-                      <View
-                        style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={[theme.Button.titleStyle]}>
-                          {I18n.t('sign_in_with_bank_id')}
-                        </Text>
-                        <Image
-                          source={appIcons.bank_id}
-                          style={{
-                            width: 50,
-                            height: 35,
-                            resizeMode: 'contain',
-                          }}
-                        />
-                      </View>
 
-                      <Image
-                        style={{height: 14, width: 21}}
-                        source={appIcons.rightArrow}
-                      />
-                    </View>
-                  </TouchableOpacity>
+                  <SigninViaBankID
+                    disabled={value != null && next ? false : true}
+                    onBankIdPress={() => {
+                      addVehicelInfo();
+                    }}
+                    onPressTerms={() => {
+                      props.navigation.navigate('Terms');
+                    }}
+                  />
                 </KeyboardAvoidingView>
               </>
             )}
@@ -451,7 +398,7 @@ const styles = StyleSheet.create({
     height: 55,
     backgroundColor: 'white',
     alignSelf: 'center',
-    marginTop: '7%',
+    marginVertical: '5%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,

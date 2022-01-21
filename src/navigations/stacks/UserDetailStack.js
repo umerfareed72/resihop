@@ -8,6 +8,7 @@ import PermissionScreen from '../../screens/PermissionScreen';
 import VahicleInfo from '../../screens/VahicleInfo';
 import Terms from '../../screens/Passenger/Terms/Terms';
 import ReviewDetails from '../../screens/ReviewDetails';
+import ApprovalStatus from '../../screens/ApprovalStatus';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,11 @@ function UserDetailStack() {
         options={{headerShown: false}}
         name="ReviewDetails"
         component={ReviewDetails}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="ApprovalStatus"
+        component={ApprovalStatus}
       />
     </Stack.Navigator>
   );

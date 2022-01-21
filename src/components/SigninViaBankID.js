@@ -6,7 +6,7 @@ import {Icon, Text} from 'react-native-elements';
 import {appIcons} from '../utilities';
 import I18n from '../utilities/translations';
 
-function SigninViaBankID({onBankIdPress, disabled = true}) {
+function SigninViaBankID({onBankIdPress, disabled = true, onPressTerms}) {
   return (
     <View style={styles.bankIDCon}>
       <Text style={theme.Text.h4Normal}>
@@ -16,10 +16,7 @@ function SigninViaBankID({onBankIdPress, disabled = true}) {
         <Text style={[theme.Text.h4Normal, {paddingHorizontal: 2}]}>
           {I18n.t('i_agree_to_res_ihop')}
         </Text>
-        <TouchableOpacity
-          onPress={() => {
-            alert('YET TO BE INTRODUCED');
-          }}>
+        <TouchableOpacity onPress={onPressTerms}>
           <Text
             style={{
               fontSize: 15,
@@ -68,7 +65,7 @@ const styles = StyleSheet.create({
   bankIDCon: {
     width: '100%',
     alignItems: 'flex-start',
-    marginVertical: 10,
+    marginVertical: 5,
   },
   imgBtn: {
     borderColor: theme.colors.grey,

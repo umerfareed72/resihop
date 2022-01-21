@@ -100,6 +100,11 @@ export default (state = initialState, action = {}) => {
         ...state,
         userInfo: payload,
       };
+    case Types.Info_Failure:
+      return {
+        ...state,
+        userInfo: null,
+      };
     case Types.Language_Success:
       return {
         ...state,
