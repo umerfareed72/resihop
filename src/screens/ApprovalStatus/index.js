@@ -10,7 +10,7 @@ const index = ({navigation}) => {
   const [time, settime] = useState(false);
   useEffect(() => {
     setTimeout(() => {
-      navigation?.navigate('Pledge');
+      navigation?.replace('Pledge');
     }, 3000);
   }, []);
   return (

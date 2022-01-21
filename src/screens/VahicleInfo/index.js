@@ -142,7 +142,7 @@ function index(props) {
             {
               text: 'OK',
               onPress: () => {
-                props.navigation.navigate('Pledge');
+                props?.navigation?.replace('ApprovalStatus');
               },
             },
           ],
@@ -151,7 +151,6 @@ function index(props) {
       }
     } catch (error) {
       setIsLoading(false);
-
       console.log(error?.response?.data);
     }
   };
