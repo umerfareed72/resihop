@@ -5,8 +5,6 @@ import {
   StyleSheet,
   Keyboard,
   KeyboardAvoidingView,
-  Linking,
-  ActivityIndicator,
   Alert,
 } from 'react-native';
 import {Formik} from 'formik';
@@ -64,71 +62,89 @@ function PersonalDetails(props) {
     } else if (userType === 'Passenger') {
       user = 'PASSENGER';
     } else {
-      user = '';
+      user = 'BOTH';
     }
     const {firstName, lastName, email} = inputData;
-    const requestBody = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      isDriverAndPassenger: userType === 'Driver/Passenger both' ? true : false,
-      gender: genderType,
-      referral:
-        codeId != ''
-          ? {
-              _id: codeId,
-            }
-          : {
-              _id: null,
-            },
-      type: user,
-      details: true,
-    };
-    axios
-      .put(`https://resihop-server.herokuapp.com/users/${userId}`, requestBody)
-      .then(res => {
-        if (res.data) {
-          imageUpload(pic);
-          dispatch(updateInfo(res?.data));
-        }
-      })
-      .catch(error => {
-        setIsLoading(false);
-        let status = error?.response?.data?.statusCode;
-        responseValidator(
-          status,
-          error?.response?.data?.message[0]?.messages[0]?.message,
-        );
-      });
+    //Call Image Upload Function
+    imageUpload(pic, res => {
+      console.log(res);
+      const requestBody = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        isDriverAndPassenger:
+          userType === 'Driver/Passenger both' ? true : false,
+        gender: genderType,
+        referral:
+          codeId != ''
+            ? {
+                _id: codeId,
+              }
+            : {
+                _id: null,
+              },
+        type: user,
+        details: true,
+      };
+      dispatch(
+        updateInfo(
+          userId,
+          requestBody,
+          () => {
+            Alert.alert(
+              'Success',
+              'Your personal details successfuly saved',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    Alert.alert(
+                      'Success',
+                      'Your personal details successfuly saved',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => {
+                            setIsLoading(false);
+                            if (userType === 'Passenger') {
+                              props?.navigation?.navigate('Pledge');
+                            } else {
+                              props.navigation.navigate('VahicleInformation');
+                            }
+                          },
+                        },
+                      ],
+                      {cancelable: false},
+                    );
+                  },
+                },
+              ],
+              {cancelable: false},
+            );
+          },
+          error => {
+            console.log('Failed to add details', error);
+            setIsLoading(false);
+          },
+        ),
+      );
+    });
   };
-
-  const imageUpload = data => {
+  //Image Uploading
+  const imageUpload = (data, callBack) => {
     var form = new FormData();
     form.append('files', {
       name: data?.fileName,
       type: data?.type,
       uri: data?.uri,
     });
-    form.append('refid', userId);
-    form.append('ref', 'user');
-    form.append('field', 'picture');
-    form.append('source', 'users.permissions');
+    console.log(data);
     axios
       .post(`${baseURL}upload/`, form)
       .then(res => {
         if (res.data) {
           setIsLoading(false);
-          Alert.alert(
-            'Success',
-            'Your personal details successfuly saved',
-            [
-              {
-                text: 'OK',
-                onPress: () => props.navigation.navigate('VahicleInformation'),
-              },
-            ],
-            {cancelable: false},
-          );
+          callBack(res?.data);
         }
       })
       .catch(error => {
@@ -137,7 +153,6 @@ function PersonalDetails(props) {
         setIsLoading(false);
       });
   };
-
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -198,9 +213,6 @@ function PersonalDetails(props) {
                     onChipPress={chips => {
                       const type = chips[0].text;
                       setUserType(type);
-                      // if (type === user.Driver) {
-                      //   // controlIsDriver(true);
-                      // }
                     }}
                   />
 
@@ -317,20 +329,12 @@ function PersonalDetails(props) {
                         setPic(asset);
                       }}
                     />
-
-                    {userType === 'abx' ? (
+                    {userType === 'Passenger' ? (
                       <SigninViaBankID
                         disabled={!pic || !isValid}
-                        onBankIdPress={async () => {
-                          try {
-                            const item = await Linking.canOpenURL(
-                              'http://com.bankid.bus',
-                            );
-                            console.log(item);
-                            setBankView(true);
-                          } catch (e) {
-                            console.log(e);
-                          }
+                        onBankIdPress={handleSubmit}
+                        onPressTerms={() => {
+                          props.navigation.navigate('Terms');
                         }}
                       />
                     ) : (
@@ -379,7 +383,6 @@ function PersonalDetails(props) {
       <IncorrectRefCode
         show={refCodeSheet}
         onPress={() => {
-          // props.navigation.navigate('VahicleInformation');
           refCodeSheet.current.close();
         }}
       />

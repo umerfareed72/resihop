@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
-    marginVertical: 10,
+    marginTop: 10,
   },
   imgBtn: {
     borderColor: theme.colors.grey,

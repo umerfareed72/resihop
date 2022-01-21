@@ -1,5 +1,5 @@
 import * as Types from '../types/auth.types';
-import {post} from '../../services';
+import {post, put} from '../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {responseValidator} from '../../utilities/helpers';
 import {AUTH_CONST, AUTH_PW_CONST} from '../../utilities/routes';
@@ -139,12 +139,29 @@ export const resetPassword = (user, callBack) => async dispatch => {
     );
   }
 };
-export const updateInfo = user => async dispatch => {
-  dispatch({
-    type: Types.Info_Success,
-    payload: user,
-  });
-};
+export const updateInfo =
+  (userId, user, onSuccess, onFailure) => async dispatch => {
+    try {
+      const responseData = await put(`users/${userId}`, user);
+
+      dispatch({
+        type: Types.Info_Success,
+        payload: responseData?.data,
+      });
+      onSuccess();
+    } catch (error) {
+      onFailure(error);
+      dispatch({
+        type: Types.Info_Failure,
+        payload: null,
+      });
+      let status = error?.response?.data?.statusCode;
+      responseValidator(
+        status,
+        error?.response?.data?.message[0]?.messages[0]?.message,
+      );
+    }
+  };
 export const LanguageInfo = (lang, callBack) => async dispatch => {
   dispatch({
     type: Types.Language_Success,

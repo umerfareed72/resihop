@@ -20,6 +20,7 @@ import I18n from '../../utilities/translations';
 import {useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import {Alert} from 'react-native';
+import SigninViaBankID from '../../components/SigninViaBankID';
 
 const vahicleFormFields = {
   licencePlate: '',
@@ -48,7 +49,6 @@ export const vahicleFormSchema = Yup.object().shape({
 function index(props) {
   const userid = useSelector(state => state.auth?.userdata?.user?._id);
   const lastName = useSelector(state => state.auth?.userdata?.user?.lastName);
-  const language = useSelector(state => state.auth?.language);
   const [licencePlateNumber, setLicencePlateNumber] = useState('');
   const [carMakerCompany, setCarMakerCompany] = useState('');
   const [carModel, setcarModel] = useState('');
@@ -70,14 +70,12 @@ function index(props) {
   ]);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
   const [next, setNext] = React.useState(false);
-
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
   const modelName = React.useRef();
 
   const getVahicleDetail = () => {
-    const country = language == 'English' ? 'CheckSweden' : 'CheckNorway';
-    const url = `https://www.regcheck.org.uk/api/reg.asmx/${country}?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
+    const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
     setIsLoading(true);
     var parseString = require('react-native-xml2js').parseString;
     fetch(url, {
@@ -87,7 +85,8 @@ function index(props) {
       .then(responseData => {
         setIsLoading(false);
         try {
-          if (responseData) {
+          const split = responseData.substring(17, 23);
+          if (split != 'failed') {
             parseString(responseData, {trim: true}, function (err, result) {
               if (result) {
                 setIsLoading(false);
@@ -97,14 +96,20 @@ function index(props) {
                   delete Object?.assign(ExtendedInformation, {
                     ['co2']: ExtendedInformation['co2-utslipp'],
                   })['co2-utslipp'];
+                  delete Object?.assign(ExtendedInformation, {
+                    ['color']: ExtendedInformation['farge'],
+                  })['farge'];
                   setEngineSize(ExtendedInformation?.co2);
                 }
                 setCarMakerCompany(CarMake?.CurrentTextValue);
                 setcarModel(CarModel?.CurrentTextValue);
-                setcarColor(Colour);
+                setcarColor(ExtendedInformation?.color);
                 setNext(true);
               }
             });
+          } else {
+            Alert.alert('No Record Found!');
+            setIsLoading(false);
           }
         } catch (err) {
           setIsLoading(false);
@@ -136,7 +141,9 @@ function index(props) {
           [
             {
               text: 'OK',
-              onPress: () => props.navigation.navigate('Pledge'),
+              onPress: () => {
+                props.navigation.navigate('Pledge');
+              },
             },
           ],
           {cancelable: false},
@@ -148,6 +155,9 @@ function index(props) {
       console.log(error?.response?.data);
     }
   };
+  useEffect(() => {
+    setValue(items[2].value);
+  }, []);
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -349,70 +359,16 @@ function index(props) {
                     ]}>
                     <Text>{I18n.t('review_details')}</Text>
                   </TouchableOpacity>
-                  <View style={{margin: 12}}>
-                    <Text style={theme.Text.h4Normal}>
-                      {I18n.t('by_clicking_bank_id_text')}
-                    </Text>
-                    <View style={styles.textCon}>
-                      <Text
-                        style={[theme.Text.h4Normal, {paddingHorizontal: 2}]}>
-                        {I18n.t('i_agree_to_res_ihop')}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          props.navigation.navigate('Terms');
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: 15,
-                            fontFamily: fonts.bold,
-                            textDecorationLine: 'underline',
-                            color: theme.colors.black,
-                          }}>
-                          {I18n.t('terms_and_condition_text')}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <TouchableOpacity
-                    activeOpacity={props.disabled ? 1 : 0.2}
-                    onPress={() => addVehicelInfo()}
-                    disabled={value != null && next ? false : true}
-                    style={[
-                      props.disabled
-                        ? theme.Button.disabledStyle
-                        : theme.Button.buttonStyle,
-                      {
-                        justifyContent: 'space-between',
-                        width: '100%',
-                        flexDirection: 'row',
-                        marginVertical: 10,
-                        backgroundColor:
-                          value != null && next ? colors.green : colors.btnGray,
-                      },
-                    ]}>
-                    <View style={styles.bankIDBtnCon}>
-                      <View
-                        style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={[theme.Button.titleStyle]}>
-                          {I18n.t('sign_in_with_bank_id')}
-                        </Text>
-                        <Image
-                          source={appIcons.bank_id}
-                          style={{
-                            width: 50,
-                            height: 35,
-                            resizeMode: 'contain',
-                          }}
-                        />
-                      </View>
 
-                      <Image
-                        style={{height: 14, width: 21}}
-                        source={appIcons.rightArrow}
-                      />
-                    </View>
-                  </TouchableOpacity>
+                  <SigninViaBankID
+                    disabled={value != null && next ? false : true}
+                    onBankIdPress={() => {
+                      addVehicelInfo();
+                    }}
+                    onPressTerms={() => {
+                      props.navigation.navigate('Terms');
+                    }}
+                  />
                 </KeyboardAvoidingView>
               </>
             )}
@@ -442,7 +398,7 @@ const styles = StyleSheet.create({
     height: 55,
     backgroundColor: 'white',
     alignSelf: 'center',
-    marginTop: '7%',
+    marginVertical: '5%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
@@ -466,6 +422,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderBottomColor: 'grey',
     borderRadius: 0,
+    paddingHorizontal: 0,
   },
   itemListStyle: {
     borderColor: 'white',

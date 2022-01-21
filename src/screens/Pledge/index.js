@@ -9,9 +9,13 @@ import {colors} from '../../utilities';
 import {get} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
 import Loader from '../../components/Loader/Loader';
+import {useSelector} from 'react-redux';
 const index = ({navigation}) => {
   const [loading, setloading] = useState(false);
   const [getPledges, setgetPledges] = useState([]);
+  const auth = useSelector(state => {
+    state?.auth;
+  });
   useEffect(() => {
     getPledge();
   }, []);
@@ -23,13 +27,13 @@ const index = ({navigation}) => {
       setgetPledges(res?.data);
       setloading(false);
     } catch (error) {
+      setloading(false);
       console.log('Error', error);
       let status = error?.response?.data?.statusCode;
       responseValidator(
         status,
         error?.response?.data?.message[0]?.messages[0]?.message,
       );
-      setloading(false);
     }
   };
   return (
@@ -58,7 +62,9 @@ const index = ({navigation}) => {
           <View style={styles.btnWrapper}>
             <AgreeButton
               onPress={() => {
-                navigation?.replace('PassengerDashboard');
+                auth?.userInfo?.type == 'Passenger'
+                  ? navigation?.replace('PassengerDashboard')
+                  : navigation?.replace('DriverDashboard');
               }}
               fontWeight={'bold'}
               bgColor={colors.primary}

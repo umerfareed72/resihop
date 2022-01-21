@@ -52,7 +52,11 @@ function splash(props) {
     setTimeout(async () => {
       const token = await AsyncStorage.getItem('usertoken');
       if (token != null && auth?.userInfo?.details) {
-        props?.navigation.replace('PassengerDashboard');
+        if (auth?.userInfo?.type === 'Passenger') {
+          props?.navigation.replace('PassengerDashboard');
+        } else {
+          props?.navigation.replace('DriverDashboard');
+        }
       } else {
         props?.navigation.replace('AuthStack');
       }

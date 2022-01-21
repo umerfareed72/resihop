@@ -59,7 +59,7 @@ function PassengerStack(props) {
         name="Favourites"
         component={Favourites}
       />
-        <Stack.Screen
+      <Stack.Screen
         options={{headerShown: false}}
         name="ApprovalStatus"
         component={ApprovalStatus}

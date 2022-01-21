@@ -77,7 +77,7 @@ function index(props) {
               </Text>
               <View style={{width: '35%'}}>
                 <Text style={theme.Text.h4Normal}>
-                  {props.route.params.PresetCost}
+                  {props.route.params.PresetCost} NOK
                 </Text>
               </View>
             </View>
@@ -88,7 +88,7 @@ function index(props) {
               }}>
               <Button
                 title={'OK'}
-                onPress={() => props.navigation.navigate('Pledge')}
+                onPress={() => props?.navigation?.navigate('ApprovalStatus')}
                 buttonStyle={[theme.Button.buttonStyle]}
                 disabled={
                   props.route.params?.PresetCost != null &&
