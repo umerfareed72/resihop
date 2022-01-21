@@ -121,9 +121,7 @@ function index(props) {
   const addVehicelInfo = async () => {
     setIsLoading(true);
     const requestBody = {
-      user: {
-        _id: userid,
-      },
+      user: userid,
       color: carColor,
       licencePlateNumber: licencePlateNumber,
       vehicleModelName: carModel,
