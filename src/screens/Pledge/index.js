@@ -38,7 +38,7 @@ const index = ({navigation}) => {
   };
   return (
     <>
-      <CustomHeader navigation={navigation} backButton={true} />
+      <CustomHeader navigation={navigation} backButton={false} />
       <SafeAreaView style={styles.container}>
         <View style={styles.contentContainer}>
           <View style={styles.h1Container}>

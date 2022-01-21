@@ -67,11 +67,12 @@ function PersonalDetails(props) {
     const {firstName, lastName, email} = inputData;
     //Call Image Upload Function
     imageUpload(pic, res => {
-      console.log(res);
+      console.log(res[0]._id);
       const requestBody = {
         firstName: firstName,
         lastName: lastName,
         email: email,
+        picture: res[0]?._id,
         isDriverAndPassenger:
           userType === 'Driver/Passenger both' ? true : false,
         gender: genderType,
@@ -91,6 +92,7 @@ function PersonalDetails(props) {
           userId,
           requestBody,
           () => {
+            setIsLoading(false);
             Alert.alert(
               'Success',
               'Your personal details successfuly saved',
@@ -98,24 +100,11 @@ function PersonalDetails(props) {
                 {
                   text: 'OK',
                   onPress: () => {
-                    Alert.alert(
-                      'Success',
-                      'Your personal details successfuly saved',
-                      [
-                        {
-                          text: 'OK',
-                          onPress: () => {
-                            setIsLoading(false);
-                            if (userType === 'Passenger') {
-                              props?.navigation?.navigate('Pledge');
-                            } else {
-                              props.navigation.navigate('VahicleInformation');
-                            }
-                          },
-                        },
-                      ],
-                      {cancelable: false},
-                    );
+                    if (userType === 'Passenger') {
+                      props?.navigation?.navigate('Pledge');
+                    } else {
+                      props.navigation.navigate('VahicleInformation');
+                    }
                   },
                 },
               ],
@@ -143,7 +132,6 @@ function PersonalDetails(props) {
       .post(`${baseURL}upload/`, form)
       .then(res => {
         if (res.data) {
-          setIsLoading(false);
           callBack(res?.data);
         }
       })
@@ -177,12 +165,9 @@ function PersonalDetails(props) {
             }) => {
               const getReferalCode = code => {
                 setIsLoading(true);
-                fetch(
-                  `https://resihop-server.herokuapp.com/referrals?code=${code}`,
-                  {
-                    method: 'GET',
-                  },
-                )
+                fetch(`${baseURL}referrals?code=${code}`, {
+                  method: 'GET',
+                })
                   .then(response => response.json())
                   .then(responseData => {
                     if (responseData.length > 0) {
@@ -194,6 +179,7 @@ function PersonalDetails(props) {
                       setIsLoading(false);
                       setFieldValue('refCode', '');
                       refCodeSheet?.current?.open();
+                      setCodeId('');
                     }
                   })
                   .done();

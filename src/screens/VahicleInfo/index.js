@@ -121,9 +121,7 @@ function index(props) {
   const addVehicelInfo = async () => {
     setIsLoading(true);
     const requestBody = {
-      user: {
-        _id: userid,
-      },
+      user: userid,
       color: carColor,
       licencePlateNumber: licencePlateNumber,
       vehicleModelName: carModel,
@@ -142,7 +140,7 @@ function index(props) {
             {
               text: 'OK',
               onPress: () => {
-                props.navigation.navigate('Pledge');
+                props?.navigation?.replace('ApprovalStatus');
               },
             },
           ],
@@ -151,7 +149,6 @@ function index(props) {
       }
     } catch (error) {
       setIsLoading(false);
-
       console.log(error?.response?.data);
     }
   };
