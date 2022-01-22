@@ -16,4 +16,5 @@ export const putData = axios.create({
   baseURL: baseURL,
   method: 'PUT',
   withCredentials: true,
+  timeout: 5000,
 });

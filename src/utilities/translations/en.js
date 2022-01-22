@@ -22,6 +22,8 @@ export default {
   congratulation: 'Congratulations!',
   registered_driver: 'Your Driver Registration has \n been Approved',
   set_driver: 'Set your First Drive',
+  register: 'Register',
+
   //Passenger Home
   passenger_home: 'Passenger Home',
   switch_driver: 'Switch to Driver',

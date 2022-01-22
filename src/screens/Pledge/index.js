@@ -13,9 +13,7 @@ import {useSelector} from 'react-redux';
 const index = ({navigation}) => {
   const [loading, setloading] = useState(false);
   const [getPledges, setgetPledges] = useState([]);
-  const auth = useSelector(state => {
-    state?.auth;
-  });
+  const auth = useSelector(state => state.auth);
   useEffect(() => {
     getPledge();
   }, []);
@@ -62,7 +60,7 @@ const index = ({navigation}) => {
           <View style={styles.btnWrapper}>
             <AgreeButton
               onPress={() => {
-                auth?.userInfo?.type == 'Passenger'
+                auth?.userInfo?.type === 'PASSENGER'
                   ? navigation?.replace('PassengerDashboard')
                   : navigation?.replace('DriverDashboard');
               }}

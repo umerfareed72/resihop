@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 import {theme} from '../../theme';
+import {isVehcile} from '../../redux/actions/auth.action';
 
 function splash(props) {
   //Rdux States
@@ -51,11 +52,26 @@ function splash(props) {
     }
     setTimeout(async () => {
       const token = await AsyncStorage.getItem('usertoken');
-      if (token != null && auth?.userInfo?.details) {
-        if (auth?.userInfo?.type === 'Passenger') {
-          props?.navigation.replace('PassengerDashboard');
+      if (token != null) {
+        if (auth?.userInfo?.details || auth?.userdata?.user?.details) {
+          if (
+            auth?.userInfo?.type === 'PASSENGER' ||
+            auth?.userdata?.user?.type === 'PASSENGER'
+          ) {
+            props?.navigation.replace('PassengerDashboard');
+          } else {
+            if (auth?.userdata?.user?.vehicle || auth?.userInfo?.vehicle) {
+              props?.navigation.replace('DriverDashboard');
+            } else {
+              dispatch(
+                isVehcile(true, () => {
+                  props?.navigation.replace('VehicleStack');
+                }),
+              );
+            }
+          }
         } else {
-          props?.navigation.replace('DriverDashboard');
+          props?.navigation.replace('UserDetailStack');
         }
       } else {
         props?.navigation.replace('AuthStack');

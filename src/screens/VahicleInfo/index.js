@@ -17,10 +17,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {get, post} from '../../services';
 import {appIcons, colors} from '../../utilities';
 import I18n from '../../utilities/translations';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import {Alert} from 'react-native';
 import SigninViaBankID from '../../components/SigninViaBankID';
+import {userEmailLogin} from '../../redux/actions/auth.action';
 
 const vahicleFormFields = {
   licencePlate: '',
@@ -48,7 +49,9 @@ export const vahicleFormSchema = Yup.object().shape({
 
 function index(props) {
   const userid = useSelector(state => state.auth?.userdata?.user?._id);
-  const lastName = useSelector(state => state.auth?.userdata?.user?.lastName);
+  const mobile = useSelector(state => state.auth?.userdata?.user?.mobile);
+  const switching = useSelector(state => state.auth?.switching);
+  const vehicle = useSelector(state => state.auth?.is_vehicle);
   const [licencePlateNumber, setLicencePlateNumber] = useState('');
   const [carMakerCompany, setCarMakerCompany] = useState('');
   const [carModel, setcarModel] = useState('');
@@ -73,7 +76,8 @@ function index(props) {
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
   const modelName = React.useRef();
-
+  const dispatch = useDispatch(null);
+  //Get Latest Car Detail
   const getVahicleDetail = () => {
     const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
     setIsLoading(true);
@@ -85,38 +89,44 @@ function index(props) {
       .then(responseData => {
         setIsLoading(false);
         try {
-          const split = responseData.substring(17, 23);
-          if (split != 'failed') {
-            parseString(responseData, {trim: true}, function (err, result) {
-              if (result) {
-                setIsLoading(false);
-                const {CarMake, CarModel, Colour, ExtendedInformation} =
-                  JSON.parse(result?.Vehicle?.vehicleJson);
-                if (ExtendedInformation) {
-                  delete Object?.assign(ExtendedInformation, {
-                    ['co2']: ExtendedInformation['co2-utslipp'],
-                  })['co2-utslipp'];
-                  delete Object?.assign(ExtendedInformation, {
-                    ['color']: ExtendedInformation['farge'],
-                  })['farge'];
-                  setEngineSize(ExtendedInformation?.co2);
-                }
-                setCarMakerCompany(CarMake?.CurrentTextValue);
-                setcarModel(CarModel?.CurrentTextValue);
-                setcarColor(ExtendedInformation?.color);
-                setNext(true);
-              }
-            });
+          if (responseData.match('Out of credit')) {
+            alert(responseData);
           } else {
-            Alert.alert('No Record Found!');
-            setIsLoading(false);
+            const split = responseData.substring(17, 23);
+            if (split != 'failed') {
+              parseString(responseData, {trim: true}, function (err, result) {
+                if (result) {
+                  setIsLoading(false);
+                  const {CarMake, CarModel, Colour, ExtendedInformation} =
+                    JSON.parse(result?.Vehicle?.vehicleJson);
+                  if (ExtendedInformation) {
+                    delete Object?.assign(ExtendedInformation, {
+                      ['co2']: ExtendedInformation['co2-utslipp'],
+                    })['co2-utslipp'];
+                    delete Object?.assign(ExtendedInformation, {
+                      ['color']: ExtendedInformation['farge'],
+                    })['farge'];
+                    setEngineSize(ExtendedInformation?.co2);
+                  }
+                  setCarMakerCompany(CarMake?.CurrentTextValue);
+                  setcarModel(CarModel?.CurrentTextValue);
+                  setcarColor(ExtendedInformation?.color);
+                  setNext(true);
+                }
+              });
+            } else {
+              Alert.alert('No Record Found!');
+              setIsLoading(false);
+            }
           }
         } catch (err) {
           setIsLoading(false);
           console.log('Error:', err);
         }
       })
-      .done();
+      .catch(error => {
+        console.log('Error', error);
+      });
   };
   const addVehicelInfo = async () => {
     setIsLoading(true);
@@ -132,20 +142,44 @@ function index(props) {
     try {
       const response = await post(`vehicles`, requestBody);
       if (response?.data) {
-        setIsLoading(false);
-        Alert.alert(
-          'Success',
-          'Vehicle Info Added Successfully',
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                props?.navigation?.replace('ApprovalStatus');
+        if (!switching) {
+          setIsLoading(false);
+          Alert.alert(
+            'Success',
+            'Vehicle Info Added Successfully',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  const requestBody = {
+                    identifier: mobile,
+                    password: '123456',
+                  };
+                  dispatch(
+                    userEmailLogin(requestBody, setIsLoading, res => {
+                      setIsLoading(false);
+                      props?.navigation?.replace('ApprovalStatus');
+                    }),
+                  );
+                },
               },
-            },
-          ],
-          {cancelable: false},
-        );
+            ],
+            {cancelable: false},
+          );
+        } else {
+          const requestBody = {
+            identifier: mobile,
+            password: '123456',
+          };
+          dispatch(
+            userEmailLogin(requestBody, setIsLoading, res => {
+              setIsLoading(false);
+              props?.navigation?.replace('ApprovalStatus', {
+                isRegister: true,
+              });
+            }),
+          );
+        }
       }
     } catch (error) {
       setIsLoading(false);
@@ -158,7 +192,10 @@ function index(props) {
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
-        <CustomHeader backButton={true} navigation={props?.navigation} />
+        <CustomHeader
+          backButton={vehicle ? false : true}
+          navigation={props?.navigation}
+        />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Formik
             initialValues={vahicleFormFields}
@@ -356,16 +393,45 @@ function index(props) {
                     ]}>
                     <Text>{I18n.t('review_details')}</Text>
                   </TouchableOpacity>
-
-                  <SigninViaBankID
-                    disabled={value != null && next ? false : true}
-                    onBankIdPress={() => {
-                      addVehicelInfo();
-                    }}
-                    onPressTerms={() => {
-                      props.navigation.navigate('Terms');
-                    }}
-                  />
+                  {!switching ? (
+                    <SigninViaBankID
+                      disabled={value != null && next ? false : true}
+                      onBankIdPress={() => {
+                        addVehicelInfo();
+                      }}
+                      onPressTerms={() => {
+                        props.navigation.navigate('Terms');
+                      }}
+                    />
+                  ) : (
+                    <Button
+                      title={I18n.t('register')}
+                      disabled={value != null && next ? false : true}
+                      onPress={() => {
+                        addVehicelInfo();
+                      }}
+                      icon={
+                        <Icon
+                          name={'arrowright'}
+                          type={'antdesign'}
+                          style={{marginRight: 20}}
+                          color={theme.colors.white}
+                        />
+                      }
+                      iconPosition={'right'}
+                      buttonStyle={[
+                        theme.Button.buttonStyle,
+                        {justifyContent: 'space-between'},
+                      ]}
+                      titleStyle={[theme.Button.titleStyle, {paddingLeft: 20}]}
+                      disabledTitleStyle={theme.Button.disabledTitleStyle}
+                      containerStyle={{
+                        width: '90%',
+                        alignSelf: 'center',
+                        paddingVertical: 10,
+                      }}
+                    />
+                  )}
                 </KeyboardAvoidingView>
               </>
             )}

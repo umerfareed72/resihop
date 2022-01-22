@@ -6,8 +6,7 @@ import AuthStack from './stacks/AuthStack';
 import UserDetailStack from './stacks/UserDetailStack';
 import {DrawerNavigator} from './PassengerDrawerNav';
 import {DriverDrawerNavigator} from './DriverDraweNavigator';
-import {useDispatch, useSelector} from 'react-redux';
-import auth from '@react-native-firebase/auth';
+import VehcileStack from './stacks/VehcileStack';
 
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
@@ -44,6 +43,7 @@ function MainStackNavigator() {
           name="PassengerDashboard"
           component={PassengerNavigator}
         />
+
         <Stack.Screen
           options={{headerShown: false}}
           name="DriverDashboard"
@@ -58,6 +58,11 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="UserDetailStack"
           component={UserDetailStack}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="VehicleStack"
+          component={VehcileStack}
         />
       </Stack.Navigator>
     </NavigationContainer>

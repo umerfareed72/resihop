@@ -8,6 +8,8 @@ const initialState = {
   pwd_data: {},
   userInfo: {},
   language: '',
+  switching: false,
+  is_vehicle: false,
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -60,7 +62,16 @@ export default (state = initialState, action = {}) => {
         loading: false,
         success: true,
         failure: false,
+        loading: false,
+        success: false,
+        failure: false,
         userdata: null,
+        reset_data: null,
+        pwd_data: null,
+        userInfo: null,
+        language: '',
+        switching: false,
+        is_vehicle: false,
       };
     case Types.Forgot_Password_Success:
       return {
@@ -109,6 +120,16 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         language: payload,
+      };
+    case Types.Switch_Driver:
+      return {
+        ...state,
+        switching: payload,
+      };
+    case Types.Is_Vehicle:
+      return {
+        ...state,
+        is_vehicle: payload,
       };
     case Types.Set_loader:
       return {

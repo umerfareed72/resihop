@@ -16,6 +16,7 @@ export const ApprovalCard = ({
   fontSize,
   fontFamily,
   h4,
+  switching,
 }) => {
   return (
     <View>
@@ -44,7 +45,7 @@ export const ApprovalCard = ({
         {h2}
       </Text>
       {h3 && <Text style={styles.h3}>{h3} </Text>}
-      {btnText && (
+      {btnText && switching ? (
         <View style={{padding: 20}}>
           <PaymentButtons
             onPress={onPress}
@@ -54,8 +55,10 @@ export const ApprovalCard = ({
             fontFamily={family.product_sans_bold}
           />
         </View>
+      ) : (
+        false
       )}
-      {h4 && <Text style={styles.h3}>{h4} </Text>}
+      {h4 && switching ? <Text style={styles.h3}>{h4} </Text> : false}
     </View>
   );
 };

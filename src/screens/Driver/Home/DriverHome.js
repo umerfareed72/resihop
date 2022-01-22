@@ -138,7 +138,6 @@ const DriverHome = ({navigation}) => {
       seats: [1, 2],
     },
   ];
-
   const onPress = item => {
     dispatch(setIDToUpdateDrive(item));
     navigation.navigate('DriveStatus', {

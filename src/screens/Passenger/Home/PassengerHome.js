@@ -26,6 +26,7 @@ import {
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
+import {SwitchDrive} from '../../../redux/actions/auth.action';
 
 //Data
 var TimeList = {
@@ -146,7 +147,6 @@ const PassengerHome = ({navigation}) => {
       seats: [1, 2],
     },
   ];
-
   const onPress = item => {
     navigation.navigate('RideStatus', {status: item.status});
   };
@@ -177,16 +177,28 @@ const PassengerHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              if (auth?.userInfo?.type == 'PASSENGER') {
+              if (
+                auth?.userInfo?.type == 'PASSENGER' ||
+                auth?.userdata?.user?.type === 'PASSENGER'
+              ) {
                 dispatch(setOrigin(null));
                 dispatch(setMapDestination(null));
                 dispatch(SearchDrives(null));
                 dispatch(SearchRides(null));
-                navigation?.navigate('ApprovalStatus');
-              } else if (auth?.userInfo?.type == 'DRIVER') {
-                navigation?.replace('DriverDashboard');
+                if (auth?.userdata?.user?.vehicle) {
+                  navigation?.replace('DriverDashboard');
+                } else {
+                  const body = {
+                    switching: true,
+                  };
+                  dispatch(
+                    SwitchDrive(body, () => {
+                      navigation?.navigate('VehicleStack');
+                    }),
+                  );
+                }
               } else {
-                navigation.replace('VehicleInfo');
+                navigation?.replace('DriverDashboard');
               }
             }}
             style={styles.switchToDriverBtnContainer}>
