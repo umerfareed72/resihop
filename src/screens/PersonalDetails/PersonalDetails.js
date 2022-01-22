@@ -23,7 +23,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import axios from 'axios';
 import {baseURL, colors} from '../../utilities';
-import {updateInfo} from '../../redux/actions/auth.action';
+import {SwitchDrive, updateInfo} from '../../redux/actions/auth.action';
 import {responseValidator} from '../../utilities/helpers';
 
 const user = {
@@ -37,7 +37,23 @@ const gender = {
   Female: 'female',
   Other: 'other',
 };
-
+const littleChips = [
+  {
+    key: 0,
+    text: user.Driver,
+    isSelected: true,
+  },
+  {
+    key: 1,
+    text: user.Passenger,
+    isSelected: false,
+  },
+  {
+    key: 2,
+    text: user.Both,
+    isSelected: false,
+  },
+];
 function PersonalDetails(props) {
   const dispatch = useDispatch(null);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
@@ -67,7 +83,6 @@ function PersonalDetails(props) {
     const {firstName, lastName, email} = inputData;
     //Call Image Upload Function
     imageUpload(pic, res => {
-      console.log(res[0]._id);
       const requestBody = {
         firstName: firstName,
         lastName: lastName,
@@ -103,7 +118,14 @@ function PersonalDetails(props) {
                     if (userType === 'Passenger') {
                       props?.navigation?.navigate('Pledge');
                     } else {
-                      props.navigation.navigate('VahicleInformation');
+                      const body = {
+                        switching: false,
+                      };
+                      dispatch(
+                        SwitchDrive(body, () => {
+                          props.navigation.navigate('VehcileStack');
+                        }),
+                      );
                     }
                   },
                 },
@@ -113,6 +135,7 @@ function PersonalDetails(props) {
           },
           error => {
             console.log('Failed to add details', error);
+            Alert.alert('Something went wrong!');
             setIsLoading(false);
           },
         ),
@@ -172,14 +195,10 @@ function PersonalDetails(props) {
                   .then(responseData => {
                     if (responseData.length > 0) {
                       setIsLoading(false);
-                      responseData.map(i => {
-                        setCodeId(i.id);
-                      });
                     } else {
                       setIsLoading(false);
-                      setFieldValue('refCode', '');
-                      refCodeSheet?.current?.open();
                       setCodeId('');
+                      refCodeSheet?.current?.open();
                     }
                   })
                   .done();
@@ -200,6 +219,7 @@ function PersonalDetails(props) {
                       const type = chips[0].text;
                       setUserType(type);
                     }}
+                    littleChips={littleChips}
                   />
 
                   <KeyboardAvoidingView style={styles.inputCon}>
@@ -255,12 +275,12 @@ function PersonalDetails(props) {
                       maxLength={4}
                       ref={refReferral}
                       onChangeText={val => {
-                        handleChange('refCode');
+                        setCodeId(val);
                         if (val.length == 4) {
                           getReferalCode(val);
                         }
                       }}
-                      // value={values?.refCode}
+                      value={codeId}
                       keyboardAppearance="light"
                       placeholder={I18n.t('referral_code_opt_text')}
                       style={theme.Input.inputStyle}

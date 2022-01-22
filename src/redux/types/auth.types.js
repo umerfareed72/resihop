@@ -23,6 +23,9 @@ module.exports = {
   // Language Info
   Language_Success: 'Language_Success',
   Language_Failure: 'Language_Failure',
+  Switch_Driver: 'Switch_Driver',
+  Is_Vehicle: 'Is_Vehicle',
+
   //Loader
   Set_loader: 'Set_Loader',
 };
