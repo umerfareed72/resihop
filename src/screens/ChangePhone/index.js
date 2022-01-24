@@ -1,13 +1,166 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
-import {CustomHeader} from '../../components';
+import {CustomHeader, NetInfoModal} from '../../components';
 import OtpValidator from '../../components/OtpValidator';
 import I18n from '../../utilities/translations';
+import {useDispatch, useSelector} from 'react-redux';
+import Loader from '../../components/Loader/Loader';
+import {checkConnected} from '../../utilities';
+import {get} from '../../services';
+import {Keyboard} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import {Alert} from 'react-native';
+import {updateInfo} from '../../redux/actions/auth.action';
 
 function signIn(props) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [phoneNum, setPhoneNum] = useState('');
+  const [country, setCountry] = useState();
+  const [confirm, setConfirm] = useState(null);
+  const [phoneError, setPhoneError] = useState('');
+  const [countryCode, setCountryCode] = useState('47');
+  const [cca2, setcca2] = useState('NO');
+  const [otpInput, setOtpInput] = useState(false);
+  const [isOnline, setisOnline] = useState(false);
+  const Userdata = useSelector(state => state.auth);
+  const dispatch = useDispatch(null);
+
+  const onSelect = country => {
+    setCountry(country);
+    setcca2(country?.cca2);
+    setCountryCode(country?.callingCode[0]);
+  };
+
+  function validate() {
+    setPhoneError('');
+    if (phoneNum.length == 0) {
+      return setPhoneError('Please Enter Valid Phone Number');
+    }
+    if (isNaN(phoneNum)) {
+      return setPhoneError('Your Phone Number is not valid');
+    }
+    return true;
+  }
+
+  const signInWithPhoneNumber = () => {
+    // setIsLoading(true);
+    signIn();
+  };
+  async function signIn() {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setIsLoading(true);
+      try {
+        const mobilePhone = `%2b${
+          country ? country.callingCode : '47'
+        }${phoneNum}`;
+        console.log(mobilePhone);
+
+        const getUser = await get(`users?mobile=${mobilePhone}`);
+        if (getUser?.data?.length === 0) {
+          const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+          const confirmation = await auth().signInWithPhoneNumber(phone);
+          if (confirmation) {
+            setIsLoading(false);
+            setConfirm(confirmation);
+            setOtpInput(true);
+          }
+        } else {
+          setIsLoading(false);
+          Alert.alert(
+            'Failed',
+            'User alredy exist with this phone number',
+            [
+              {
+                text: 'ok',
+                onPress: () => console.log('OK'),
+              },
+            ],
+            {cancelable: false},
+          );
+        }
+      } catch (error) {
+        setIsLoading(false);
+        alert(error);
+      }
+    } else {
+      setisOnline(true);
+      setIsLoading(false);
+    }
+  }
+
+  async function confirmCode(code) {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setisOnline(false);
+      setIsLoading(true);
+      try {
+        await confirm.confirm(code).then(res => {
+          setIsLoading(false);
+          console.log('Registered User Id:', res?.user?.uid);
+          setOtpInput(false);
+          setPhoneNum('');
+          ChangePhoneNumber();
+        });
+      } catch (error) {
+        console.log('Error:-', error);
+        setIsLoading(false);
+        alert('Invalid code.');
+      }
+    } else {
+      setisOnline(true);
+      setIsLoading(false);
+    }
+  }
+
+  const onSendCode = () => {
+    Keyboard.dismiss();
+    if (validate()) {
+      signInWithPhoneNumber();
+    }
+  };
+  const ChangePhoneNumber = () => {
+    setIsLoading(true);
+    let phone;
+    setIsLoading(true);
+    phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+
+    const requestBody = {
+      username: phone,
+      identifier: phone,
+      mobile: phone,
+    };
+    dispatch(
+      updateInfo(
+        Userdata?.userdata?.user?.id,
+        requestBody,
+        () => {
+          setIsLoading(false);
+          Alert.alert(
+            'Success',
+            'Phone number changed successfully!',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  console.log('Updated');
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        },
+        error => {
+          console.log('Failed to update data', error);
+          setIsLoading(false);
+        },
+      ),
+    );
+  };
+
   return (
     <>
       <CustomHeader
@@ -20,8 +173,37 @@ function signIn(props) {
           <Text style={[theme.Text.h2Bold]}>
             {_.startCase(I18n.t('mobile_number'))}
           </Text>
-          <OtpValidator />
+          <OtpValidator
+            phoneNumber={phoneNum}
+            chnagePhone={val => {
+              let s = val.replace(/^0+/, '');
+              setPhoneNum(s);
+            }}
+            selectedCountry={country}
+            onCountrySelect={onSelect}
+            onSendCodePress={onSendCode}
+            defaultCountryCode={cca2}
+            otpCodeArea={otpInput}
+            setOtpCodeArea={setOtpInput}
+            enteredCode={code => {
+              if (code.length === 6) {
+                confirmCode(code);
+              }
+            }}
+            phoneError={phoneError}
+          />
         </View>
+        {isLoading ? <Loader /> : null}
+        <NetInfoModal
+          show={isOnline}
+          onRetry={async () => {
+            const isConnected = await checkConnected();
+            if (isConnected) {
+              setisOnline(false);
+            }
+          }}
+          isRetrying={isLoading}
+        />
       </Container>
     </>
   );

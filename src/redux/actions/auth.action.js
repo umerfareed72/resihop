@@ -155,11 +155,11 @@ export const updateInfo =
         payload: null,
       });
       console.log(error?.response?.data);
-      // let status = error?.response?.data?.statusCode;
-      // // responseValidator(
-      // //   status,
-      // //   error?.response?.data?.message[0]?.messages[0]?.message,
-      // // );
+      let status = error?.response?.data?.statusCode;
+      responseValidator(
+        status,
+        error?.response?.data?.message[0]?.messages[0]?.message,
+      );
     }
   };
 export const LanguageInfo = (lang, callBack) => async dispatch => {

@@ -135,7 +135,6 @@ function PersonalDetails(props) {
           },
           error => {
             console.log('Failed to add details', error);
-            Alert.alert('Something went wrong!');
             setIsLoading(false);
           },
         ),
