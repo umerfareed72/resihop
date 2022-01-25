@@ -13,9 +13,11 @@ export const PaymentButtons = ({
   fontFamily,
   fontWeight,
   image,
+  disabled,
 }) => {
   return (
     <TouchableOpacity
+      disabled={disabled}
       onPress={onPress}
       style={[
         styles.btnContainer,

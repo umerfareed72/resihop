@@ -21,13 +21,16 @@ import styles from './style';
 import {appIcons, colors} from '../../../../utilities';
 import AddCard from './AddCard';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-
+import {createToken, useConfirmPayment} from '@stripe/stripe-react-native';
 const index = ({navigation}) => {
   const [cardScreen, setCardScreen] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [paymentSuccess, setpaymentSuccessonSuccess] = useState(false);
   const [paymentFailed, setpaymentSuccessonFailed] = useState(false);
+  const [cardHolderName, setCardHolderName] = useState('');
   const [addMoney, onAddMoney] = useState(false);
+  const [cardDetail, setcardDetail] = useState('');
+  const {loading} = useConfirmPayment();
   const modalRef = useRef(null);
 
   const onPressModalButton = () => {
@@ -43,6 +46,14 @@ const index = ({navigation}) => {
       navigation?.navigate('StartMatching', {modalName: 'pickUpInfo'});
     }
   };
+  const addPayment = async () => {
+    const token = await createToken({
+      name: cardHolderName,
+      address: 'Lahore',
+      type: 'Card',
+    });
+    console.log('Token', token);
+  };
   return (
     <>
       <CustomHeader
@@ -54,6 +65,7 @@ const index = ({navigation}) => {
         <View style={styles.contentContainer}>
           <View style={styles.header}>
             <TouchableOpacity
+              disabled
               onPress={() => {
                 setCardScreen(true);
               }}
@@ -117,9 +129,18 @@ const index = ({navigation}) => {
           />
           {cardScreen && (
             <AddCard
+              onChangeText={text => {
+                setCardHolderName(text);
+              }}
+              disabled={loading}
               btn={true}
-              onPressCard={() => {
-                setCardScreen(false);
+              onCardChange={details => {
+                setcardDetail(details);
+              }}
+              onPressCard={card => {
+                addPayment();
+
+                // setCardScreen(false);
               }}
               onPressWallet={() => {
                 setCardScreen(false);

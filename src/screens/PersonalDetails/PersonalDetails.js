@@ -57,7 +57,6 @@ const littleChips = [
 function PersonalDetails(props) {
   const dispatch = useDispatch(null);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
-  const [imagePicker, setImagePicker] = useState(false);
   const [codeId, setCodeId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState(user.Driver);
