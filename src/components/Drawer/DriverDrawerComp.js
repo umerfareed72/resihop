@@ -152,8 +152,7 @@ const DriverDrawerComponent = ({navigation}) => {
                 style={styles.profileImg}
                 source={{
                   uri:
-                    Userdata?.userdata?.user?.picture?.url ||
-                    Userdata?.userInfo?.picture?.url ||
+                    Userdata?.profile_info?.picture?.url ||
                     'https://unsplash.it/400/400?image=1',
                 }}
               />
@@ -164,10 +163,9 @@ const DriverDrawerComponent = ({navigation}) => {
               onPress={() => navigation.navigate('EditProfile')}
               style={styles.userNameContainer}>
               <Text style={styles.userName}>
-                {Userdata?.userInfo?.firstName?.toUpperCase() ||
-                  Userdata?.userdata?.user?.firstName?.toUpperCase()}{' '}
-                {Userdata?.userInfo?.lastName?.toUpperCase() ||
-                  Userdata?.userdata?.user?.lastName?.toUpperCase()}
+                {Userdata?.profile_info?.firstName?.toUpperCase() +
+                  ' ' +
+                  Userdata?.profile_info?.lastName?.toUpperCase()}
               </Text>
               <Icon
                 name={'right'}

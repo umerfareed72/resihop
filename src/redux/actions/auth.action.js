@@ -1,5 +1,5 @@
 import * as Types from '../types/auth.types';
-import {post, put} from '../../services';
+import {get, post, put} from '../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {responseValidator} from '../../utilities/helpers';
 import {AUTH_CONST, AUTH_PW_CONST} from '../../utilities/routes';
@@ -183,3 +183,27 @@ export const isVehcile = (data, callBack) => async dispatch => {
   });
   callBack();
 };
+
+export const getProfileInfo =
+  (userId, onSuccess, onFailure) => async dispatch => {
+    try {
+      const responseData = await get(`users/${userId}`, await header());
+      dispatch({
+        type: Types.Get_Profile_Success,
+        payload: responseData?.data,
+      });
+      onSuccess();
+    } catch (error) {
+      onFailure(error);
+      dispatch({
+        type: Types.Get_Profile_Failure,
+        payload: null,
+      });
+      console.log(error?.response?.data);
+      let status = error?.response?.data?.statusCode;
+      responseValidator(
+        status,
+        error?.response?.data?.message[0]?.messages[0]?.message,
+      );
+    }
+  };

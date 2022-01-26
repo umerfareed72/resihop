@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Container} from '../../components/Container';
 import _ from 'lodash/string';
@@ -161,6 +161,11 @@ function signIn(props) {
     );
   };
 
+  useEffect(() => {
+    setPhoneNum(Userdata?.profile_info?.mobile);
+    setCountryCode('+92');
+    setcca2('PK');
+  }, []);
   return (
     <>
       <CustomHeader

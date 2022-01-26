@@ -26,7 +26,8 @@ import {
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import {SwitchDrive} from '../../../redux/actions/auth.action';
+import {getProfileInfo, SwitchDrive} from '../../../redux/actions/auth.action';
+import {get} from '../../../services';
 
 //Data
 var TimeList = {
@@ -97,11 +98,12 @@ const PassengerHome = ({navigation}) => {
   const [seats, setSeats] = useState('');
   const [selectedCard, setSelectedCard] = useState([]);
   const auth = useSelector(state => state.auth);
-
   const myRidesData = useSelector(state => state.map.myRidesData);
+  const userId = useSelector(state => state.auth?.userdata?.user?.id);
 
   useEffect(() => {
     dispatch(MyRides());
+    getUserdata();
   }, [isFocused]);
 
   const selectTime = val => {
@@ -151,6 +153,20 @@ const PassengerHome = ({navigation}) => {
     navigation.navigate('RideStatus', {status: item.status});
   };
 
+  const getUserdata = async () => {
+    dispatch(
+      getProfileInfo(
+        userId,
+        () => {
+          console.log('Get Profile Info Success!');
+        },
+        res => {
+          console.log('Get Profile Info Error', res);
+        },
+      ),
+    );
+  };
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -177,15 +193,12 @@ const PassengerHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              if (
-                auth?.userInfo?.type == 'PASSENGER' ||
-                auth?.userdata?.user?.type === 'PASSENGER'
-              ) {
+              if (auth?.profile_info?.type == 'PASSENGER') {
                 dispatch(setOrigin(null));
                 dispatch(setMapDestination(null));
                 dispatch(SearchDrives(null));
                 dispatch(SearchRides(null));
-                if (auth?.userdata?.user?.vehicle) {
+                if (auth?.profile_info.vehicle) {
                   navigation?.replace('DriverDashboard');
                 } else {
                   const body = {

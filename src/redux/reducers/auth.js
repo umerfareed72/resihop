@@ -10,6 +10,7 @@ const initialState = {
   language: '',
   switching: false,
   is_vehicle: false,
+  profile_info: {},
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -72,6 +73,7 @@ export default (state = initialState, action = {}) => {
         language: '',
         switching: false,
         is_vehicle: false,
+        profile_info: null,
       };
     case Types.Forgot_Password_Success:
       return {
@@ -115,6 +117,16 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         userInfo: null,
+      };
+    case Types.Get_Profile_Success:
+      return {
+        ...state,
+        profile_info: payload,
+      };
+    case Types.Get_Profile_Failure:
+      return {
+        ...state,
+        profile_info: null,
       };
     case Types.Language_Success:
       return {

@@ -90,7 +90,7 @@ function index(props) {
       };
       dispatch(
         updateInfo(
-          auth?.userdata?.user?.id,
+          auth?.profile_info.id,
           requestBody,
           () => {
             setIsLoading(false);
@@ -170,37 +170,25 @@ function index(props) {
             setFieldValue,
           }) => {
             useEffect(() => {
-              setFieldValue(
-                'firstName',
-                auth?.userdata?.user?.firstName || auth?.userInfo?.firstName,
-              );
-              setFieldValue(
-                'lastName',
-                auth?.userdata?.user?.lastName || auth?.userInfo?.lastName,
-              );
+              setFieldValue('firstName', auth?.profile_info.firstName);
+              setFieldValue('lastName', auth?.profile_info.lastName);
               setPic({
-                uri:
-                  auth?.userdata?.user?.picture?.url ||
-                  auth?.userInfo?.picture?.url,
+                uri: auth?.profile_info.picture?.url,
               });
-              setPhoto(
-                auth?.userdata?.user?.picture || auth?.userInfo?.picture,
-              );
-              setFieldValue(
-                'email',
-                auth?.userdata?.user?.email || auth?.userInfo?.email,
-              );
+              setPhoto(auth?.profile_info.picture);
+              setFieldValue('email', auth?.profile_info.email);
+
               littleChips.map((item, index) => {
                 if (
                   item?.text.toLocaleLowerCase() ===
-                  (auth?.userdata?.user?.gender?.toLocaleLowerCase() ||
-                    auth?.userInfo?.gender?.toLocaleLowerCase())
+                  auth?.profile_info?.gender?.toLocaleLowerCase()
                 ) {
                   littleChips[index].isSelected = true;
                   return item;
                 }
               });
             }, []);
+
             return (
               <View>
                 {pic ? (
