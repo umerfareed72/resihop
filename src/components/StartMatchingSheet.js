@@ -23,12 +23,12 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
     <View style={styles.container}>
       <View style={styles.headingContainer}>
         <Text style={styles.walkDistaceTxt}>{I18n.t('walk_to_pickUp')}</Text>
-        <Text style={styles.distance}>300 M</Text>
+        <Text style={styles.distance}>500 M</Text>
       </View>
       <Slider
         style={styles.slider}
         minimumValue={0}
-        maximumValue={3000}
+        maximumValue={500}
         thumbImage={appIcons.sliderImage}
         minimumTrackTintColor={colors.green}
         maximumTrackTintColor={colors.g1}
@@ -36,7 +36,7 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
       />
       <View style={styles.startEndDistanceContainer}>
         <Text style={styles.intDistance}>{`${sliderValue} M`}</Text>
-        <Text style={styles.intDistance}>3000 M</Text>
+        <Text style={styles.intDistance}>500 M</Text>
       </View>
       <TouchableOpacity
         style={styles.btnWrapper}
