@@ -10,6 +10,7 @@ import {theme} from '../../theme/theme';
 import {colors} from '../../utilities';
 import {appIcons, drawerIcons} from '../../utilities/images';
 import I18n from '../../utilities/translations';
+
 function languageSelect(props) {
   const dispatch = useDispatch(null);
   const [language, setLanguage] = useState('');

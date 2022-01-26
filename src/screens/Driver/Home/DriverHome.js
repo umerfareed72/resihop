@@ -21,6 +21,8 @@ import {fonts} from '../../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MyDrives, setIDToUpdateDrive} from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
+import {getProfileInfo} from '../../../redux/actions/auth.action';
+import {useIsFocused} from '@react-navigation/core';
 
 //Data
 var TimeList = {
@@ -82,6 +84,7 @@ const DriverHome = ({navigation}) => {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   let dispatch = useDispatch();
+  const userId = useSelector(state => state.auth?.userdata?.user?.id);
 
   const myDrives = useSelector(state => state.map.myDrivesData);
   //States
@@ -90,10 +93,13 @@ const DriverHome = ({navigation}) => {
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
-
+  const isFocus = useIsFocused();
   useEffect(() => {
-    dispatch(MyDrives());
-  }, []);
+    if (isFocus) {
+      dispatch(MyDrives());
+      getUserdata();
+    }
+  }, [isFocus]);
 
   const selectTime = val => {
     settime(val);
@@ -149,7 +155,19 @@ const DriverHome = ({navigation}) => {
       id: item._id,
     });
   };
-
+  const getUserdata = async () => {
+    dispatch(
+      getProfileInfo(
+        userId,
+        () => {
+          console.log('Get Profile Info Success!');
+        },
+        res => {
+          console.log('Get Profile Info Error', res);
+        },
+      ),
+    );
+  };
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />

@@ -6,7 +6,16 @@ import {colors, size} from '../../../../../utilities';
 import {PaymentButtons, PaymentInput} from '../../../../../components';
 import I18n from '../../../../../utilities/translations';
 
-const AddCard = ({title, onPressCard, onPressWallet, btn}) => {
+const AddCard = ({
+  title,
+  onPressCard,
+  onPressWallet,
+  btn,
+  onCardChange,
+  onFocus,
+  disabled,
+  onChangeText,
+}) => {
   return (
     <View>
       {title && (
@@ -22,15 +31,12 @@ const AddCard = ({title, onPressCard, onPressWallet, btn}) => {
           postalCodeEnabled={false}
           cardStyle={styles.cardStyle}
           style={styles.payStyle}
-          onCardChange={cardDetails => {
-            console.log('cardDetails', cardDetails);
-          }}
-          onFocus={focusedField => {
-            console.log('focusField', focusedField);
-          }}
+          onCardChange={onCardChange}
+          onFocus={onFocus}
         />
       </View>
       <PaymentInput
+        onChangeText={onChangeText}
         placeholder={I18n.t('cardholder_name')}
         placeholderTextColor={colors.g1}
       />
@@ -41,6 +47,7 @@ const AddCard = ({title, onPressCard, onPressWallet, btn}) => {
         <View style={{paddingVertical: 30}}>
           <View style={{paddingVertical: 20}}>
             <PaymentButtons
+              disabled={disabled}
               onPress={onPressCard}
               bgColor={colors.green}
               title={I18n.t('add_card')}

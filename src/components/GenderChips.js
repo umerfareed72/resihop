@@ -10,27 +10,8 @@ const gender = {
   Other: 'Other',
 };
 
-const littleChips = [
-  {
-    key: 0,
-    text: gender.Male,
-    isSelected: true,
-  },
-  {
-    key: 1,
-    text: gender.Female,
-    isSelected: false,
-  },
-  {
-    key: 2,
-    text: gender.Other,
-    isSelected: false,
-  },
-];
-
-const GenderChips = ({onChipPress, horizontal = true}) => {
-  const [data, setData] = useState(littleChips);
-
+const GenderChips = ({onChipPress, horizontal = true, genderArray}) => {
+  const [data, setData] = useState(genderArray);
   return (
     <View style={styles.Con}>
       <FlatList

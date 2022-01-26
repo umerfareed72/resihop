@@ -151,34 +151,16 @@ function index(props) {
               {
                 text: 'OK',
                 onPress: () => {
-                  const requestBody = {
-                    identifier: mobile,
-                    password: '123456',
-                  };
-                  dispatch(
-                    userEmailLogin(requestBody, setIsLoading, res => {
-                      setIsLoading(false);
-                      props?.navigation?.replace('ApprovalStatus');
-                    }),
-                  );
+                  props?.navigation?.replace('ApprovalStatus');
                 },
               },
             ],
             {cancelable: false},
           );
         } else {
-          const requestBody = {
-            identifier: mobile,
-            password: '123456',
-          };
-          dispatch(
-            userEmailLogin(requestBody, setIsLoading, res => {
-              setIsLoading(false);
-              props?.navigation?.replace('ApprovalStatus', {
-                isRegister: true,
-              });
-            }),
-          );
+          props?.navigation?.replace('ApprovalStatus', {
+            isRegister: true,
+          });
         }
       }
     } catch (error) {
