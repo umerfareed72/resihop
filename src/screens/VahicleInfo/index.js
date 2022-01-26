@@ -1,5 +1,5 @@
 import {Formik} from 'formik';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -14,9 +14,14 @@ import {CustomHeader} from '../../components';
 import * as Yup from 'yup';
 import {fonts, theme} from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import {get, post} from '../../services';
 import {appIcons, colors} from '../../utilities';
 import I18n from '../../utilities/translations';
+import {useDispatch, useSelector} from 'react-redux';
+import Loader from '../../components/Loader/Loader';
+import {Alert} from 'react-native';
+import SigninViaBankID from '../../components/SigninViaBankID';
+import {userEmailLogin} from '../../redux/actions/auth.action';
 
 const vahicleFormFields = {
   licencePlate: '',
@@ -31,36 +36,148 @@ export const vahicleFormSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required'),
-  carCompany: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  modelName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+  // carCompany: Yup.string()
+  //   .min(2, 'Too Short!')
+  //   .max(50, 'Too Long!')
+  //   .required('Required'),
+  // modelName: Yup.string()
+  //   .min(2, 'Too Short!')
+  //   .max(50, 'Too Long!')
+  //   .required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
 });
 
 function index(props) {
+  const userid = useSelector(state => state.auth?.userdata?.user?._id);
+  const mobile = useSelector(state => state.auth?.userdata?.user?.mobile);
+  const switching = useSelector(state => state.auth?.switching);
+  const vehicle = useSelector(state => state.auth?.is_vehicle);
+  const [licencePlateNumber, setLicencePlateNumber] = useState('');
+  const [carMakerCompany, setCarMakerCompany] = useState('');
+  const [carModel, setcarModel] = useState('');
+  const [carColor, setcarColor] = useState('');
+  const [engineSize, setEngineSize] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'SEK 10', value: 'sek 10'},
-    {label: 'SEK 15', value: 'sek 15'},
-    {label: 'SEK 20', value: 'sek 20'},
-    {label: 'SEK 25', value: 'sek 25'},
+    {label: 'NOK 10', value: 10},
+    {label: 'NOK 15', value: 15},
+    {label: 'NOK 20', value: 20},
+    {label: 'NOK 25', value: 25},
+    {label: 'NOK 30', value: 30},
+    {label: 'NOK 35', value: 35},
+    {label: 'NOK 40', value: 40},
+    {label: 'NOK 45', value: 45},
+    {label: 'NOK 50', value: 50},
   ]);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
+  const [next, setNext] = React.useState(false);
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
   const modelName = React.useRef();
-  const vahicleColor = React.useRef();
-
+  const dispatch = useDispatch(null);
+  //Get Latest Car Detail
+  const getVahicleDetail = () => {
+    const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
+    setIsLoading(true);
+    var parseString = require('react-native-xml2js').parseString;
+    fetch(url, {
+      method: 'GET',
+    })
+      .then(response => response.text())
+      .then(responseData => {
+        setIsLoading(false);
+        try {
+          if (responseData.match('Out of credit')) {
+            alert(responseData);
+          } else {
+            const split = responseData.substring(17, 23);
+            if (split != 'failed') {
+              parseString(responseData, {trim: true}, function (err, result) {
+                if (result) {
+                  setIsLoading(false);
+                  const {CarMake, CarModel, Colour, ExtendedInformation} =
+                    JSON.parse(result?.Vehicle?.vehicleJson);
+                  if (ExtendedInformation) {
+                    delete Object?.assign(ExtendedInformation, {
+                      ['co2']: ExtendedInformation['co2-utslipp'],
+                    })['co2-utslipp'];
+                    delete Object?.assign(ExtendedInformation, {
+                      ['color']: ExtendedInformation['farge'],
+                    })['farge'];
+                    setEngineSize(ExtendedInformation?.co2);
+                  }
+                  setCarMakerCompany(CarMake?.CurrentTextValue);
+                  setcarModel(CarModel?.CurrentTextValue);
+                  setcarColor(ExtendedInformation?.color);
+                  setNext(true);
+                }
+              });
+            } else {
+              Alert.alert('No Record Found!');
+              setIsLoading(false);
+            }
+          }
+        } catch (err) {
+          setIsLoading(false);
+          console.log('Error:', err);
+        }
+      })
+      .catch(error => {
+        console.log('Error', error);
+      });
+  };
+  const addVehicelInfo = async () => {
+    setIsLoading(true);
+    const requestBody = {
+      user: userid,
+      color: carColor,
+      licencePlateNumber: licencePlateNumber,
+      vehicleModelName: carModel,
+      vehicleCompanyName: carMakerCompany,
+      CO2Emissions: engineSize,
+      presetCostPerPassenger: value,
+    };
+    try {
+      const response = await post(`vehicles`, requestBody);
+      if (response?.data) {
+        if (!switching) {
+          setIsLoading(false);
+          Alert.alert(
+            'Success',
+            'Vehicle Info Added Successfully',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  props?.navigation?.replace('ApprovalStatus');
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        } else {
+          props?.navigation?.replace('ApprovalStatus', {
+            isRegister: true,
+          });
+        }
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error?.response?.data);
+    }
+  };
+  useEffect(() => {
+    setValue(items[2].value);
+  }, []);
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
-        <CustomHeader backButton={true} navigation={props?.navigation} />
+        <CustomHeader
+          backButton={vehicle ? false : true}
+          navigation={props?.navigation}
+        />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Formik
             initialValues={vahicleFormFields}
@@ -101,7 +218,14 @@ function index(props) {
                       maxLength={8}
                       ref={licencePlate}
                       keyboardAppearance="light"
-                      onChangeText={handleChange('licencePlate')}
+                      onChangeText={val => {
+                        // handleChange('licencePlate')}
+                        if (val.length > 5) {
+                          // getVahicleDetail(val);
+                          setgetDetailsBtn(false);
+                          setLicencePlateNumber(val);
+                        }
+                      }}
                       inputContainerStyle={{width: '100%'}}
                       placeholder={I18n.t('license_plate')}
                       autoFocus={false}
@@ -117,8 +241,9 @@ function index(props) {
                       errorMessage={errors.licencePlate}
                     />
                     <Button
+                      disabled={getDetailsBtn}
                       title={I18n.t('get_details')}
-                      onPress={() => console.log('Pressed!')}
+                      onPress={() => getVahicleDetail()}
                       buttonStyle={[theme.Button.buttonStyle]}
                       titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                       disabledTitleStyle={theme.Button.disabledTitleStyle}
@@ -130,6 +255,8 @@ function index(props) {
                     />
                   </View>
                   <Input
+                    editable={false}
+                    value={carMakerCompany}
                     ref={carCompany}
                     keyboardAppearance="light"
                     onChangeText={handleChange('carCompany')}
@@ -147,6 +274,8 @@ function index(props) {
                     errorMessage={errors.carCompany}
                   />
                   <Input
+                    editable={false}
+                    value={carModel}
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
@@ -164,6 +293,8 @@ function index(props) {
                     errorMessage={errors.modelName}
                   />
                   <Input
+                    editable={false}
+                    value={carColor}
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
@@ -182,6 +313,8 @@ function index(props) {
                   />
 
                   <Input
+                    editable={false}
+                    value={engineSize}
                     ref={modelName}
                     keyboardAppearance="light"
                     onChangeText={handleChange('modelName')}
@@ -225,7 +358,16 @@ function index(props) {
                     {I18n.t('cost_detail')}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => props.navigation.navigate('ReviewDetails')}
+                    onPress={() =>
+                      props.navigation.navigate('ReviewDetails', {
+                        plateNumber: licencePlateNumber,
+                        PresetCost: value,
+                        CarMake: carMakerCompany,
+                        CarModel: carModel,
+                        Colour: carColor,
+                        EngineSize: engineSize,
+                      })
+                    }
                     activeOpacity={0.8}
                     style={[
                       styles.reviewBtn,
@@ -233,74 +375,52 @@ function index(props) {
                     ]}>
                     <Text>{I18n.t('review_details')}</Text>
                   </TouchableOpacity>
-                  <View style={{margin: 12}}>
-                    <Text style={theme.Text.h4Normal}>
-                      {I18n.t('by_clicking_bank_id_text')}
-                    </Text>
-                    <View style={styles.textCon}>
-                      <Text
-                        style={[theme.Text.h4Normal, {paddingHorizontal: 2}]}>
-                        {I18n.t('i_agree_to_res_ihop')}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          props.navigation.navigate('Terms');
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: 15,
-                            fontFamily: fonts.bold,
-                            textDecorationLine: 'underline',
-                            color: theme.colors.black,
-                          }}>
-                          {I18n.t('terms_and_condition_text')}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <TouchableOpacity
-                    activeOpacity={props.disabled ? 1 : 0.2}
-                    onPress={() => props.navigation.navigate('Pledge')}
-                    style={[
-                      props.disabled
-                        ? theme.Button.disabledStyle
-                        : theme.Button.buttonStyle,
-                      {
-                        justifyContent: 'space-between',
-                        width: '100%',
-                        flexDirection: 'row',
-                        marginTop: 10,
-                        backgroundColor: colors.green,
-                      },
-                    ]}>
-                    <View style={styles.bankIDBtnCon}>
-                      <View
-                        style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={[theme.Button.titleStyle]}>
-                          {I18n.t('sign_in_with_bank_id')}
-                        </Text>
-                        <Image
-                          source={appIcons.bank_id}
-                          style={{
-                            width: 50,
-                            height: 35,
-                            resizeMode: 'contain',
-                          }}
+                  {!switching ? (
+                    <SigninViaBankID
+                      disabled={value != null && next ? false : true}
+                      onBankIdPress={() => {
+                        addVehicelInfo();
+                      }}
+                      onPressTerms={() => {
+                        props.navigation.navigate('Terms');
+                      }}
+                    />
+                  ) : (
+                    <Button
+                      title={I18n.t('register')}
+                      disabled={value != null && next ? false : true}
+                      onPress={() => {
+                        addVehicelInfo();
+                      }}
+                      icon={
+                        <Icon
+                          name={'arrowright'}
+                          type={'antdesign'}
+                          style={{marginRight: 20}}
+                          color={theme.colors.white}
                         />
-                      </View>
-
-                      <Image
-                        style={{height: 14, width: 21}}
-                        source={appIcons.rightArrow}
-                      />
-                    </View>
-                  </TouchableOpacity>
+                      }
+                      iconPosition={'right'}
+                      buttonStyle={[
+                        theme.Button.buttonStyle,
+                        {justifyContent: 'space-between'},
+                      ]}
+                      titleStyle={[theme.Button.titleStyle, {paddingLeft: 20}]}
+                      disabledTitleStyle={theme.Button.disabledTitleStyle}
+                      containerStyle={{
+                        width: '90%',
+                        alignSelf: 'center',
+                        paddingVertical: 10,
+                      }}
+                    />
+                  )}
                 </KeyboardAvoidingView>
               </>
             )}
           </Formik>
         </ScrollView>
       </View>
+      {isLoading ? <Loader /> : null}
     </>
   );
 }
@@ -323,7 +443,7 @@ const styles = StyleSheet.create({
     height: 55,
     backgroundColor: 'white',
     alignSelf: 'center',
-    marginTop: '7%',
+    marginVertical: '5%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
@@ -347,6 +467,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderBottomColor: 'grey',
     borderRadius: 0,
+    paddingHorizontal: 0,
   },
   itemListStyle: {
     borderColor: 'white',

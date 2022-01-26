@@ -12,9 +12,10 @@ import {appImages, colors} from '../utilities';
 import CallIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/core';
+import I18n from '../utilities/translations';
 
 const DriveStatusCard = ({status, setModal, onPressCancel}) => {
-  const [seats, setSeats] = useState([1, 2, 3, 4]);
+  const [seats, setSeats] = useState([]);
 
   let navigation = useNavigation();
 
@@ -45,11 +46,11 @@ const DriveStatusCard = ({status, setModal, onPressCancel}) => {
     },
   ];
 
-  if (status === 'Waiting for Match') {
+  if (status === 'WAITING_FOR_MATCH') {
     return (
       <View style={styles.waitcontainer}>
         <View style={styles.heading}>
-          <Text style={styles.bookedTxt}>Booked Passenger(s)</Text>
+          <Text style={styles.bookedTxt}>{I18n.t('booked_passengers')}</Text>
           <View style={styles.seatContainer}>
             {seats.map(() => (
               <Image
@@ -73,13 +74,13 @@ const DriveStatusCard = ({status, setModal, onPressCancel}) => {
           <TouchableOpacity
             style={styles.btnContainer}
             onPress={() => navigation.navigate('UpdateDrive')}>
-            <Text style={styles.btnTxt}>Update</Text>
+            <Text style={styles.btnTxt}>{I18n.t('update')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btnContainer}>
-            <Text style={styles.btnTxt}>Copy</Text>
+            <Text style={styles.btnTxt}>{I18n.t('copy')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onPressCancel} style={styles.btnContainer}>
-            <Text style={styles.btnTxt}>Cancel</Text>
+            <Text style={styles.btnTxt}>{I18n.t('cancel')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -89,7 +90,7 @@ const DriveStatusCard = ({status, setModal, onPressCancel}) => {
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.bookedTxt}>Booked Passenger(s)</Text>
+        <Text style={styles.bookedTxt}>{I18n.t('booked_passengers')}</Text>
         <View style={styles.seatContainer}>
           {seats.map(() => (
             <Image
@@ -122,23 +123,20 @@ const DriveStatusCard = ({status, setModal, onPressCancel}) => {
           )}
         />
       </View>
-      <Text style={styles.warnTxt}>
-        (Calls are allowed after, when it is 1 hour remaining from the departure
-        time)
-      </Text>
+      <Text style={styles.warnTxt}>{I18n.t('calls_allowed_txt')}</Text>
       <View style={styles.btnWrapper}>
         <TouchableOpacity style={styles.btnContainer}>
-          <Text style={styles.btnTxt}>Copy</Text>
+          <Text style={styles.btnTxt}>{I18n.t('copy')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnContainer}>
-          <Text style={styles.btnTxt}>Cancel</Text>
+          <Text style={styles.btnTxt}>{I18n.t('cancel')}</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={styles.startTripContainer}
         onPress={() => setModal('offerReturnDrive')}>
         <Icon name="angle-double-right" size={30} color={colors.white} />
-        <Text style={styles.startTripTxt}>Start Drive</Text>
+        <Text style={styles.startTripTxt}>{I18n.t('start_drive')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -160,7 +158,7 @@ const PassengerInfoCard = ({item, onPressCard}) => {
         <Text style={{fontFamily: fonts.regular}}>{item.time}</Text>
         <TouchableOpacity style={styles.callNowContainer}>
           <CallIcon name="call" size={15} color={colors.white} />
-          <Text style={styles.callNowTxt}>Call Now</Text>
+          <Text style={styles.callNowTxt}>{I18n.t('call_now')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -336,7 +334,7 @@ const getStatusColo = status => {
   if (status === 'Partially Booked') {
     return colors.blue;
   }
-  if (status === 'Waiting for Match') {
+  if (status === 'WAITING_FOR_MATCH') {
     return colors.orange;
   }
 };

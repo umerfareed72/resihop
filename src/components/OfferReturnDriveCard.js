@@ -4,6 +4,7 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import {colors} from '../utilities';
 import {fonts} from '../theme';
 import {useNavigation} from '@react-navigation/core';
+import I18n from '../utilities/translations';
 
 const OfferReturnDriveCard = () => {
   let navigation = useNavigation();
@@ -13,7 +14,7 @@ const OfferReturnDriveCard = () => {
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.returnTxt}>Offer Return Drive</Text>
+        <Text style={styles.returnTxt}>{I18n.t('offer_return')}</Text>
         <ToggleSwitch
           isOn={toggleEnabled}
           onColor={colors.green}
@@ -27,7 +28,7 @@ const OfferReturnDriveCard = () => {
           }}
         />
       </View>
-      <Text style={styles.estimatedTxt}>Estimated Arrival 10 KM (20 Min)</Text>
+      <Text style={styles.estimatedTxt}>{I18n.t('estimated')}</Text>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
           123 abc apartment abc street abc...

@@ -37,7 +37,7 @@ const BookingDetails = () => {
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.timeDateContainer}>
-        <Text style={styles.dateTimeTxt}>12 June, 07:50</Text>
+        <Text style={styles.dateTimeTxt}>{I18n.t('date_time')}</Text>
 
         <View style={styles.seatsContainer}>
           <Image
@@ -45,7 +45,7 @@ const BookingDetails = () => {
             resizeMode="contain"
             style={styles.greenSeat}
           />
-          <Text style={styles.seatTxt}>2 Seat</Text>
+          <Text style={styles.seatTxt}>{I18n.t('seat_num')}</Text>
         </View>
       </View>
       <View style={styles.driverInfoContainer}>
@@ -56,7 +56,7 @@ const BookingDetails = () => {
             style={styles.driver}
           />
           <View>
-            <Text style={styles.driverName}>John Deo</Text>
+            <Text style={styles.driverName}>{I18n.t('john')}</Text>
             <View style={styles.ratingContainer}>
               <StarIcon name="star" size={17} color={colors.white} />
               <Text style={styles.ratingTxt}>4.5</Text>
@@ -91,26 +91,26 @@ const BookingDetails = () => {
             resizeMode="contain"
             style={styles.seatGreen}
           />
-          <Text style={styles.seatNum}>4 Seat Available</Text>
+          <Text style={styles.seatNum}>{I18n.t('4 Seat Available')}</Text>
         </View>
         <View style={styles.carDetailsTxt}>
-          <Text style={styles.carDetails}>Ford, Focus,</Text>
+          <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
           <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-            White, XT32TTU8
+            {I18n.t('car_detail')}
           </Text>
         </View>
       </View>
       <View style={styles.line} />
 
-      <Text style={styles.promoTxt}>Promo Code</Text>
+      <Text style={styles.promoTxt}>{I18n.t('promo_code')}</Text>
       <View style={styles.promoInputContainer}>
         <TextInput
-          placeholder="Apply Promo Code"
+          placeholder={I18n.t('apply_promo')}
           placeholderTextColor={colors.inputTxtGray}
           style={styles.promoInput}
         />
         <TouchableOpacity style={styles.btnContainer}>
-          <Text style={styles.btnTxt}>Apply</Text>
+          <Text style={styles.btnTxt}>{I18n.t('apply')}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.promoLine} />
@@ -119,19 +119,21 @@ const BookingDetails = () => {
           styles.bookingTitles,
           {marginTop: 20, marginBottom: 15, marginLeft: 21},
         ]}>
-        Booking Details
+        {I18n.t('booking_detail')}
       </Text>
       <View style={styles.titleContainer}>
-        <Text style={styles.bookingTitles}>Ride Booked</Text>
+        <Text style={styles.bookingTitles}>{I18n.t('ride_booked')}</Text>
         <Text style={styles.amount}>SEK 40</Text>
       </View>
       <View style={styles.titleContainer}>
-        <Text style={[styles.bookingTitles, {color: colors.g4}]}>Discount</Text>
+        <Text style={[styles.bookingTitles, {color: colors.g4}]}>
+          {I18n.t('discount')}
+        </Text>
         <Text style={[styles.amount, {color: colors.g4}]}>SEK 0</Text>
       </View>
       <View style={[styles.line, {marginTop: 0}]} />
       <View style={styles.totalContainer}>
-        <Text style={styles.bookingTitles}>Total Pay</Text>
+        <Text style={styles.bookingTitles}>{I18n.t('total_pay')}</Text>
         <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
           SEK 40
         </Text>
@@ -141,7 +143,7 @@ const BookingDetails = () => {
           navigation?.navigate('Payment');
         }}
         style={styles.confirmBtnContainer}>
-        <Text style={styles.confirmTxt}>Confirm and Pay</Text>
+        <Text style={styles.confirmTxt}>{I18n.t('confirm_and_pay')}</Text>
       </TouchableOpacity>
     </View>
   );

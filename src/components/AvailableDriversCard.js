@@ -11,7 +11,7 @@ import {appImages, colors, HP, size, family} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/core';
 import {fonts} from '../theme';
-
+import I18n from '../utilities/translations';
 const AvailableDrivers = ({
   modalName,
   setAvailableDrivers,
@@ -28,7 +28,7 @@ const AvailableDrivers = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.driversTxt}>Available Drivers</Text>
+      <Text style={styles.driversTxt}>{I18n.t('available_drivers')}</Text>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
           123 abc apartment abc street abc...
@@ -43,9 +43,9 @@ const AvailableDrivers = ({
       </View>
       {modalName !== 'availableDrivers' && (
         <View style={styles.timeDateContainer}>
-          <Text style={styles.dateTimeTxt}>12 June, 07:50</Text>
+          <Text style={styles.dateTimeTxt}>{I18n.t('date_time')}</Text>
           <View style={styles.matchingContainer}>
-            <Text style={styles.matchingTxt}>Matching Done</Text>
+            <Text style={styles.matchingTxt}>{I18n.t('matching_done')}</Text>
           </View>
           <View style={styles.seatsContainer}>
             <Image
@@ -53,7 +53,7 @@ const AvailableDrivers = ({
               resizeMode="contain"
               style={styles.greenSeat}
             />
-            <Text style={styles.seatTxt}>2 Seat</Text>
+            <Text style={styles.seatTxt}>{I18n.t('seat_num')}</Text>
           </View>
         </View>
       )}
@@ -66,7 +66,7 @@ const AvailableDrivers = ({
             style={styles.driver}
           />
           <View>
-            <Text style={styles.driverName}>John Deo</Text>
+            <Text style={styles.driverName}>{I18n.t('john')}</Text>
             <View style={styles.ratingContainer}>
               <StarIcon name="star" size={17} color={colors.white} />
               <Text style={styles.ratingTxt}>4.5</Text>
@@ -88,7 +88,7 @@ const AvailableDrivers = ({
               />
             </View>
 
-            <Text style={styles.dateStyle}>12 June, 08:00</Text>
+            <Text style={styles.dateStyle}>{I18n.t('date_time')}</Text>
           </View>
         ) : (
           <View>
@@ -110,20 +110,20 @@ const AvailableDrivers = ({
                 resizeMode="contain"
                 style={styles.seatGreen}
               />
-              <Text style={styles.seatNum}>4 Seat Available</Text>
+              <Text style={styles.seatNum}>{I18n.t('seat_available')}</Text>
             </View>
             <View style={styles.carDetailsTxt}>
-              <Text style={styles.carDetails}>Ford, Focus,</Text>
+              <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
               <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-                White, XT32TTU8
+                {I18n.t('car_detail')}
               </Text>
             </View>
           </View>
           <View style={styles.availableMain}>
             <View style={styles.availableBox}>
-              <Text style={styles.availableTxt}>Available</Text>
+              <Text style={styles.availableTxt}>{I18n.t('available')}</Text>
             </View>
-            <Text style={styles.date}>12 June 2020</Text>
+            <Text style={styles.date}>{I18n.t('dateInt')}</Text>
           </View>
           <View style={styles.btnMainContainer}>
             <TouchableOpacity
@@ -136,7 +136,7 @@ const AvailableDrivers = ({
               onPress={() => {
                 navigation.navigate('AvailableDrivers', {btnText: btnText});
               }}>
-              <Text style={styles.btnTxt}>Show All Drivers</Text>
+              <Text style={styles.btnTxt}>{I18n.t('show_all_drivers')}</Text>
             </TouchableOpacity>
           </View>
         </>
@@ -144,7 +144,7 @@ const AvailableDrivers = ({
 
       {modalName === 'availableDrivers' && (
         <TouchableOpacity style={styles.selectRouteButtom}>
-          <Text style={styles.routeText}>Select Route</Text>
+          <Text style={styles.routeText}>{I18n.t('select_route')}</Text>
         </TouchableOpacity>
       )}
     </View>

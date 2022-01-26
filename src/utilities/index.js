@@ -11,10 +11,15 @@ export {
 export {size, family} from './sizes';
 export {responseValidator} from './helpers/responseValidator';
 export * from './permissions';
-export {header} from './constants';
+export {header, GetToken} from './constants';
 export {
   registerAppWithFCM,
   requestPermission,
   Notification_Listner,
   LocalNotification,
 } from './helpers/NotificationHandler';
+export {
+  checkConnected,
+  OnlineStatusProvider,
+  useOnlineStatus,
+} from './helpers/index';

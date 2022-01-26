@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
-import {View, Image, StyleSheet} from 'react-native';
-import {app_logo} from '../../assets';
+import {View, Image, StyleSheet, Alert, Text} from 'react-native';
 import {
   appImages,
   colors,
+  HP,
   LocalNotification,
   Notification_Listner,
   registerAppWithFCM,
@@ -12,12 +12,16 @@ import {
 import I18n from '../../utilities/translations';
 import MyStatusBar from '../../components/Header/statusBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
+import {theme} from '../../theme';
+import {isVehcile} from '../../redux/actions/auth.action';
 
 function splash(props) {
   //Rdux States
   const dispatch = useDispatch();
+  const auth = useSelector(state => state.auth);
+  console.log('Auth---', auth?.userdata);
   //Component Did Mount
   useEffect(() => {
     handleNavigation();
@@ -46,21 +50,48 @@ function splash(props) {
     } else {
       I18n.locale = lang;
     }
-    setTimeout(() => {
-      // if (login?.userdata !== null) {
-      //   navigation.replace('App', {screen: 'Cart'});
-      // } else {
-      //   navigation.replace('Auth');
-      //   // navigation.replace('App', {screen: 'Cart'});
-      // }
-      props.navigation.replace('PassengerDashboard');
+    setTimeout(async () => {
+      const token = await AsyncStorage.getItem('usertoken');
+      if (token != null) {
+        if (auth?.userInfo?.details || auth?.userdata?.user?.details) {
+          if (
+            auth?.userInfo?.type === 'PASSENGER' ||
+            auth?.userdata?.user?.type === 'PASSENGER'
+          ) {
+            props?.navigation.replace('PassengerDashboard');
+          } else {
+            if (auth?.userdata?.user?.vehicle || auth?.userInfo?.vehicle) {
+              props?.navigation.replace('DriverDashboard');
+            } else {
+              dispatch(
+                isVehcile(true, () => {
+                  props?.navigation.replace('VehicleStack');
+                }),
+              );
+            }
+          }
+        } else {
+          props?.navigation.replace('UserDetailStack');
+        }
+      } else {
+        props?.navigation.replace('AuthStack');
+      }
     }, 2000);
   };
 
   return (
     <View style={styles.container}>
       <MyStatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
-      <Image source={appImages.app_logo} resizeMode={'contain'} />
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <Image
+          source={appImages.app_logo}
+          style={{width: 160, height: 160}}
+          resizeMode={'contain'}
+        />
+        <Text style={{color: 'green', fontSize: 25, marginTop: '-4%'}}>
+          RESI HOP
+        </Text>
+      </View>
     </View>
   );
 }

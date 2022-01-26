@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "934266920805-vd8o01uipina3926q0ba18615nathhtv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reactnative.resihop",
+            "certificate_hash": "cd9229e9a06832a947175bb2e1d986e8d169804c"
+          }
+        },
+        {
           "client_id": "934266920805-eboadk6vk9d9pe5g740dbq3s25b31ht1.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "934266920805-eboadk6vk9d9pe5g740dbq3s25b31ht1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "934266920805-vijcd4fpcujomff39c7bh1s4bub0tjik.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.resihop"
+              }
             }
           ]
         }

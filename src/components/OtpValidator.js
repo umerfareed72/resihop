@@ -1,35 +1,24 @@
 import React, {useState, useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  TextInput,
-  Keyboard,
-  ToastAndroid,
-} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, TextInput} from 'react-native';
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
-import CountryPicker, {Country} from 'react-native-country-picker-modal';
+import CountryPicker from 'react-native-country-picker-modal';
 import {theme} from '../theme';
-
-import reactotron from 'reactotron-react-native';
 import CountDownTimer from 'react-native-countdown-timer-hooks';
-import {useNavigation} from '@react-navigation/native';
 import I18n from '../utilities/translations';
 
 const OtpValidator = ({
   phoneNumber,
   chnagePhone,
-  selectedCountry,
   onCountrySelect,
   onSendCodePress,
   defaultCountryCode = 'PK',
   otpCodeArea,
+  setOtpCodeArea,
   enteredCode,
+  phoneError,
+  onEndEditing,
 }) => {
-  const navigation = useNavigation();
-  const [country, setCountry] = useState();
-  const [phoneNum, setPhoneNum] = useState('');
-  const [countDown, setCountDown] = useState(30);
+  const [countDown, setCountDown] = useState(60);
   const [countryModalOpen, setCountryModalOpen] = useState(false);
   const [otpArea, setOtpArea] = useState(false);
   const refTimer = useRef();
@@ -100,13 +89,14 @@ const OtpValidator = ({
         />
         <TextInput
           keyboardType={'phone-pad'}
-          style={{width: '50%', padding: 5}}
+          style={{width: '50%', padding: 5, color: 'black'}}
           ref={numRef}
           onChangeText={chnagePhone}
           value={phoneNumber}
+          maxLength={14}
         />
         <Button
-          title={I18n.t('send_code')}
+          title={timerEnd ? 'Resend Code' : 'Send Code'}
           onPress={onSendCodePress}
           disabled={otpCodeArea}
           buttonStyle={[theme.Button.buttonStyle]}
@@ -119,6 +109,8 @@ const OtpValidator = ({
         />
       </View>
       <Divider width={1} color={theme.colors.black} />
+      <View style={styles.phoneErrorContainer} />
+      {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
 
       {otpCodeArea && (
         <View style={styles.otpCon}>
@@ -133,16 +125,20 @@ const OtpValidator = ({
             autoCorrect={false}
             keyboardType="numeric"
             returnKeyType="next"
+            onEndEditing={onEndEditing}
           />
 
           <Text style={[theme.Text.h4Normal, {textAlign: 'center'}]}>
             {I18n.t('verify_your_code')}
           </Text>
-          <View style={{display: timerEnd ? 'none' : 'flex'}}>
+          <View>
             <CountDownTimer
               ref={refTimer}
               timestamp={countDown}
-              timerCallback={timerCallbackFunc}
+              timerCallback={timerFlag => {
+                setTimerEnd(timerFlag);
+                setOtpCodeArea(false);
+              }}
               containerStyle={{
                 height: 56,
                 width: '100%',
@@ -177,5 +173,16 @@ const styles = StyleSheet.create({
   },
   otpCon: {
     marginTop: 50,
+  },
+  phoneErrorContainer: {
+    width: '100%',
+    height: 1,
+    borderColor: '#80808090',
+    borderWidth: 0.5,
+  },
+  errorText: {
+    fontSize: 12,
+    color: 'red',
+    margin: 3,
   },
 });

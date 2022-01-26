@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -21,9 +21,18 @@ import {CustomHeader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
 import ArrowDown from 'react-native-vector-icons/MaterialIcons';
 import {fonts} from '../../../theme/theme';
+import I18n from '../../../utilities/translations';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setUpdateDrive,
+  setAvailableSeats,
+} from '../../../redux/actions/map.actions';
+import moment from 'moment';
 
 const UpdateDrive = () => {
   let navigation = useNavigation();
+  let dispatch = useDispatch();
+
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
 
@@ -33,6 +42,18 @@ const UpdateDrive = () => {
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+
+  const origin = useSelector(state => state.map.origin);
+  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
+  const availableSeats = useSelector(state => state.map.availableSeats);
+  const destinationMap = useSelector(state => state.map.destination);
+  const toUpdateDrive = useSelector(state => state.map.idToUpdateDrive);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setAvailableSeats(null));
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,7 +72,7 @@ const UpdateDrive = () => {
                   type: 'startLocation',
                 })
               }>
-              <Text style={styles.locationTxt}>Start Location</Text>
+              <Text style={styles.locationTxt}>{origin.description}</Text>
             </TouchableOpacity>
             <View style={styles.startDot} />
             <View>
@@ -62,7 +83,9 @@ const UpdateDrive = () => {
                     type: 'destination',
                   })
                 }>
-                <Text style={styles.locationTxt}>Destination</Text>
+                <Text style={styles.locationTxt}>
+                  {destinationMap.description}
+                </Text>
               </TouchableOpacity>
               <View style={styles.destSquare} />
             </View>
@@ -85,20 +108,30 @@ const UpdateDrive = () => {
             />
           </View>
         </View>
-        <Text style={styles.bookSeatsTxt}>Book Your Seats</Text>
+        <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
-            <Image
+            <TouchableOpacity
               key={seat}
-              source={appImages.seatBlue}
-              resizeMode="contain"
-              style={styles.seat}
-            />
+              onPress={() => dispatch(setAvailableSeats(seat))}>
+              <Image
+                source={
+                  seat <=
+                  (availableSeats !== null
+                    ? availableSeats
+                    : toUpdateDrive.availableSeats)
+                    ? appImages.seatGreen
+                    : appImages.seatBlue
+                }
+                resizeMode="contain"
+                style={styles.seat}
+              />
+            </TouchableOpacity>
           ))}
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt]}>Need to arrive no later than</Text>
-          <Text style={styles.selectTxt}>Select Date</Text>
+          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
+          <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
           <TextInput
@@ -114,7 +147,9 @@ const UpdateDrive = () => {
               styles.noLater,
               {justifyContent: 'center', marginRight: 11},
             ]}>
-            <Text style={styles.dateTxt}>{date !== '' ? date : 'Date'}</Text>
+            <Text style={styles.dateTxt}>
+              {date !== '' ? date : moment(toUpdateDrive.date).format('DD MMM')}
+            </Text>
           </TouchableOpacity>
           <Image
             source={appImages.calendar}
@@ -122,7 +157,7 @@ const UpdateDrive = () => {
             style={styles.calendarIcon}
           />
         </View>
-        <Text style={styles.presetTxt}>Preset cost for each passenger</Text>
+        <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
         <TouchableOpacity style={styles.presetCostContainer}>
           <Text style={{fontFamily: fonts.regular}}>SEK 20</Text>
           <ArrowDown
@@ -132,7 +167,7 @@ const UpdateDrive = () => {
           />
         </TouchableOpacity>
         <View style={styles.returnTripWrapper}>
-          <Text style={styles.returnTxt}>Return Trip</Text>
+          <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
           <ToggleSwitch
             isOn={toggleEnabled}
             onColor={colors.green}
@@ -154,7 +189,9 @@ const UpdateDrive = () => {
                         type: 'startLocation',
                       })
                     }>
-                    <Text style={styles.locationTxt}>Start Location</Text>
+                    <Text style={styles.locationTxt}>
+                      {I18n.t('start_location')}
+                    </Text>
                   </TouchableOpacity>
                   <View style={styles.startDot} />
                 </View>
@@ -166,7 +203,9 @@ const UpdateDrive = () => {
                         type: 'destination',
                       })
                     }>
-                    <Text style={styles.locationTxt}>Destination</Text>
+                    <Text style={styles.locationTxt}>
+                      {I18n.t('destination')}
+                    </Text>
                   </TouchableOpacity>
                   <View style={styles.destSquare} />
                 </View>
@@ -178,9 +217,11 @@ const UpdateDrive = () => {
               </View>
             </View>
             <View style={{marginLeft: 26}}>
-              <Text style={styles.returntimeTxt}>Departure Time (Return)</Text>
+              <Text style={styles.returntimeTxt}>
+                {I18n.t('departure_time')}
+              </Text>
               <Text style={styles.timeBracketTxt}>
-                (Add a time bracket when you want ride for return)
+                {I18n.t('departure_time_desc')}
               </Text>
             </View>
             <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
@@ -191,7 +232,7 @@ const UpdateDrive = () => {
                 onChangeText={setNoLaterTime}
                 style={styles.noLater}
               />
-              <Text style={{fontFamily: fonts.regular}}>To</Text>
+              <Text style={{fontFamily: fonts.regular}}>{I18n.t('to')}</Text>
               <TextInput
                 placeholder="XX:XX"
                 placeholderTextColor={colors.btnGray}
@@ -207,8 +248,28 @@ const UpdateDrive = () => {
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableOpacity style={styles.nextBtnContainer}>
-          <Text style={styles.nextTxt}>Update</Text>
+        <TouchableOpacity
+          style={styles.nextBtnContainer}
+          onPress={() =>
+            dispatch(
+              setUpdateDrive({
+                id: toUpdateDrive.id,
+                startLocation: [origin.location.lat, origin.location.lng],
+                destinationLocation: [
+                  destinationMap.location.lat,
+                  destinationMap.location.lng,
+                ],
+                date: dateTimeStamp,
+                availableSeats: availableSeats,
+                path: 0,
+                costPerSeat: 200.0,
+                interCity: false,
+                startDes: origin.description,
+                destDes: destinationMap.description,
+              }),
+            )
+          }>
+          <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

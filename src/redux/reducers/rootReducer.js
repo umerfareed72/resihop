@@ -1,10 +1,12 @@
 import {combineReducers} from 'redux';
 import auth from './auth';
+import map from './map';
 import * as Types from '../types/auth.types';
 
 const appReducer = combineReducers({
   /* your app’s top-level reducers */
   auth: auth,
+  map: map,
 });
 
 const rootReducer = (state, action) => {

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
 import _ from 'lodash/string';
-
+import {checkAndGrantPermission} from 'react-native-permissions';
 import {theme} from '../theme';
 import {Avatar, Icon, Text} from 'react-native-elements';
 
@@ -28,6 +28,7 @@ const UploadImage = ({getPicUri, show, close}) => {
         console.log(_err);
       });
   };
+
   return (
     <>
       <TouchableOpacity
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
-    marginVertical: 10,
+    marginTop: 10,
   },
   imgBtn: {
     borderColor: theme.colors.grey,

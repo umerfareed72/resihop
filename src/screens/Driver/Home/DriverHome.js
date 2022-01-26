@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,11 @@ import I18n from '../../../utilities/translations';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MyDrives, setIDToUpdateDrive} from '../../../redux/actions/map.actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {getProfileInfo} from '../../../redux/actions/auth.action';
+import {useIsFocused} from '@react-navigation/core';
+
 //Data
 var TimeList = {
   id: 1,
@@ -78,12 +83,23 @@ const seatsList = {
 const DriverHome = ({navigation}) => {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
+  let dispatch = useDispatch();
+  const userId = useSelector(state => state.auth?.userdata?.user?.id);
+
+  const myDrives = useSelector(state => state.map.myDrivesData);
   //States
   const [time, settime] = useState('');
   const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
+  const isFocus = useIsFocused();
+  useEffect(() => {
+    if (isFocus) {
+      dispatch(MyDrives());
+      getUserdata();
+    }
+  }, [isFocus]);
 
   const selectTime = val => {
     settime(val);
@@ -128,11 +144,30 @@ const DriverHome = ({navigation}) => {
       seats: [1, 2],
     },
   ];
-
   const onPress = item => {
-    navigation.navigate('DriveStatus', {status: item.status});
+    dispatch(setIDToUpdateDrive(item));
+    navigation.navigate('DriveStatus', {
+      status: item.status,
+      startLocation: item.startLocation,
+      destinationLocation: item.destinationLocation,
+      startDes: item.startDes,
+      destDes: item.destDes,
+      id: item._id,
+    });
   };
-
+  const getUserdata = async () => {
+    dispatch(
+      getProfileInfo(
+        userId,
+        () => {
+          console.log('Get Profile Info Success!');
+        },
+        res => {
+          console.log('Get Profile Info Error', res);
+        },
+      ),
+    );
+  };
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -245,7 +280,7 @@ const DriverHome = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        {ridesData.length === 0 ? (
+        {myDrives === null || myDrives?.length === 0 || myDrives ? (
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={{marginBottom: 10}}>
@@ -262,7 +297,7 @@ const DriverHome = ({navigation}) => {
           </ScrollView>
         ) : (
           <FlatList
-            data={ridesData}
+            data={myDrives}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (

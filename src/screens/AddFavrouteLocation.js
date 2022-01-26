@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
+import I18n from '../utilities/translations';
 
 const AddFavrouteLocation = ({addfavrouiteAddressRef}) => {
   const [name, setName] = useState('');
@@ -24,16 +25,16 @@ const AddFavrouteLocation = ({addfavrouiteAddressRef}) => {
           borderTopLeftRadius: 35,
         },
       }}>
-      <Text style={styles.addfavTxt}>Add to Favorite Locations List</Text>
+      <Text style={styles.addfavTxt}>{I18n.t('add_to_fav_location')}</Text>
       <View style={styles.btnWrapper}>
         <TouchableOpacity style={styles.favAddressBtn}>
-          <Text style={styles.favBtnTxt}>Home</Text>
+          <Text style={styles.favBtnTxt}>{I18n.t('home')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.favAddressBtn}>
-          <Text style={styles.favBtnTxt}>Office</Text>
+          <Text style={styles.favBtnTxt}>{I18n.t('office')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.favAddressBtn}>
-          <Text style={styles.favBtnTxt}>Other</Text>
+          <Text style={styles.favBtnTxt}>{I18n.t('other')}</Text>
         </TouchableOpacity>
       </View>
       <TextInput
@@ -44,7 +45,7 @@ const AddFavrouteLocation = ({addfavrouiteAddressRef}) => {
         style={styles.input}
       />
       <TouchableOpacity style={styles.saveBtn}>
-        <Text style={styles.saveTxt}>Save</Text>
+        <Text style={styles.saveTxt}>{I18n.t('save')}</Text>
       </TouchableOpacity>
     </RBSheet>
   );

@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		53763919AFE4445F9D1A852D /* BebasNeue Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DF3930175A4489CA33CDEE7 /* BebasNeue Bold.ttf */; };
+		5D168EF92773995E00E92090 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D168EF82773995E00E92090 /* GoogleService-Info.plist */; };
 		5D428A98274F8A45004D44A3 /* ProductSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D428A96274F8A45004D44A3 /* ProductSans-Regular.ttf */; };
 		5D428A9C274F8B18004D44A3 /* ProductSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D428A9A274F8B18004D44A3 /* ProductSans-Bold.ttf */; };
 		5EED09075BDB45A70549396C /* libPods-resihop-resihopTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AFB07C71AD63BD0F21FDF456 /* libPods-resihop-resihopTests.a */; };
@@ -49,6 +50,7 @@
 		3C83A1079ECB4ABCBA31A42C /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		43EE5865A7A8ED4A9352C326 /* Pods-resihop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-resihop.release.xcconfig"; path = "Target Support Files/Pods-resihop/Pods-resihop.release.xcconfig"; sourceTree = "<group>"; };
 		48151D394B2C3CB9A6A728C9 /* Pods-resihop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-resihop.debug.xcconfig"; path = "Target Support Files/Pods-resihop/Pods-resihop.debug.xcconfig"; sourceTree = "<group>"; };
+		5D168EF82773995E00E92090 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5D428A96274F8A45004D44A3 /* ProductSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProductSans-Regular.ttf"; path = "../src/assets/fonts/ProductSans-Regular.ttf"; sourceTree = "<group>"; };
 		5D428A9A274F8B18004D44A3 /* ProductSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "ProductSans-Bold.ttf"; path = "../src/assets/fonts/ProductSans-Bold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = resihop/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		13B07FAE1A68108700A75B9A /* resihop */ = {
 			isa = PBXGroup;
 			children = (
+				5D168EF82773995E00E92090 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -300,6 +303,7 @@
 				5D428A9C274F8B18004D44A3 /* ProductSans-Bold.ttf in Resources */,
 				E35734B516E445FBBAB482BB /* BuildFile in Resources */,
 				53763919AFE4445F9D1A852D /* BebasNeue Bold.ttf in Resources */,
+				5D168EF92773995E00E92090 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,8 +558,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = LG54W487SQ;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3S2XG8445C;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
@@ -610,13 +614,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.resihop;
+				PRODUCT_BUNDLE_IDENTIFIER = com.resihop;
 				PRODUCT_NAME = resihop;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -630,8 +634,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = LG54W487SQ;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3S2XG8445C;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -685,13 +689,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.resihop;
+				PRODUCT_BUNDLE_IDENTIFIER = com.resihop;
 				PRODUCT_NAME = resihop;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -731,7 +735,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -798,7 +802,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

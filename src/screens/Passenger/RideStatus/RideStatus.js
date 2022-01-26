@@ -5,6 +5,7 @@ import MapViewComponent from '../../../components/MapViewComponent';
 import {fonts} from '../../../theme';
 import RideStatusCards from '../../../components/RideStatusCards';
 import {useNavigation} from '@react-navigation/core';
+import I18n from '../../../utilities/translations';
 
 const RideStatus = ({route}) => {
   const {status} = route.params;
@@ -23,7 +24,7 @@ const RideStatus = ({route}) => {
             resizeMode="contain"
             style={styles.arrowBack}
           />
-          <Text style={styles.driver}>Ride</Text>
+          <Text style={styles.driver}>{I18n.t('ride')}</Text>
         </View>
       </TouchableOpacity>
       <RideStatusCards statusType={status} />

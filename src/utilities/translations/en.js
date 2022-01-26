@@ -22,6 +22,8 @@ export default {
   congratulation: 'Congratulations!',
   registered_driver: 'Your Driver Registration has \n been Approved',
   set_driver: 'Set your First Drive',
+  register: 'Register',
+
   //Passenger Home
   passenger_home: 'Passenger Home',
   switch_driver: 'Switch to Driver',
@@ -117,7 +119,7 @@ export default {
   logout: 'Log out',
   cancel: 'Cancel',
   logout_text: 'Are you sure you want to Logout?',
-  pledge_text_h1: 'ÅK IHOP Pledge',
+  pledge_text_h1: 'RES IHOP Pledge',
   pledge_agree: 'I Agree',
   blocked_list: 'Blocked Lists',
   language: 'Language',
@@ -239,4 +241,82 @@ export default {
 
   //Cost per seat
   cost_per_seat: 'Cost Per Seat',
+
+  //Favourite
+  select_from_fav_location: 'Select from your Favorite Locations',
+  add_to_fav_location: 'Add to Favorite Locations List',
+  home: 'Home',
+  office: 'Office',
+  other: 'Other',
+  save: 'Save',
+
+  //available Drivers
+  john: 'John Deo',
+  seat_available: '4 Seat Available',
+  ford: 'Ford, Focus,',
+  car_detail: 'White, XT32TTU8',
+  available: 'Available',
+  dateInt: '12 June 2020',
+
+  //booking details
+  date_time: '12 June, 07:50',
+  seat_num: '2 Seat',
+  promo_code: 'Promo Code',
+  apply_promo: 'Apply Promo Code',
+  ride_booked: 'Ride Booked',
+  discount: 'Discount',
+  total_pay: 'Total Pay',
+  confirm_and_pay: 'Confirm and Pay',
+  destination: 'Destination',
+  add_this_to_fav: 'Add this Location to Favorite Locations',
+
+  //available drivers card
+  matching_done: 'Matching Done',
+  show_all_drivers: 'Show All Drivers',
+  select_route: 'Select Route',
+
+  //available passenger Card
+  available_passenger: 'Available Passenger',
+  show_all_passenger: 'Show All Passenger',
+
+  //Drive Status Card
+  booked_passengers: 'Booked Passenger(s)',
+  update: 'Update',
+  copy: 'Copy',
+  cancel: 'Cancel',
+  calls_allowed_txt:
+    '(Calls are allowed after, when it is 1 hour remaining from the departure time)',
+  start_drive: 'Start Drive',
+  call_now: 'Call Now',
+
+  //Nearest Driver Card
+  min24: '24 min (15.6 km) | 6 Passenger',
+  finding: 'Finding Nearest Driver...',
+
+  //Offer Return Drive Card
+  offer_return: 'Offer Return Drive',
+  estimated: 'Estimated Arrival 10 KM (20 Min)',
+
+  //Pick up info card
+  walking: 'Walking 300 M (5 Min)',
+  call_driver: 'Please Call your Driver to coordinate pickup with your driver.',
+
+  //Return Book Sheet
+  want_return_trip: 'Do you want to book Return Trip?',
+
+  //Ride Status Card
+  destination10_km: 'Destination 10 KM (20 Min)',
+  confirmed: 'confirmed',
+  pickUp_info: 'Pickup Info',
+  start_trip: 'Start Trip',
+  rate_driver: 'Rate Driver',
+
+  //Start Matching sheet
+  walk_to_pickUp: 'Walk Distance to pick up Location',
+  start_matching: 'Start Matching',
+
+  ride: 'Ride',
+  address_placeholder: '123 abc apartment abc street abc...',
+
+  availableSeats: 'Available Seats',
 };

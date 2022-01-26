@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,17 @@ import {RideFilterModal, SortModal} from '../../../components';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import I18n from '../../../utilities/translations';
+import {
+  setOrigin,
+  setMapDestination,
+  SearchDrives,
+  SearchRides,
+  MyRides,
+} from '../../../redux/actions/map.actions';
+import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+import {getProfileInfo, SwitchDrive} from '../../../redux/actions/auth.action';
+import {get} from '../../../services';
 
 //Data
 var TimeList = {
@@ -74,6 +85,9 @@ const seatsList = {
   ],
 };
 const PassengerHome = ({navigation}) => {
+  let dispatch = useDispatch();
+  let isFocused = useIsFocused();
+
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   //States
@@ -83,6 +97,14 @@ const PassengerHome = ({navigation}) => {
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
   const [selectedCard, setSelectedCard] = useState([]);
+  const auth = useSelector(state => state.auth);
+  const myRidesData = useSelector(state => state.map.myRidesData);
+  const userId = useSelector(state => state.auth?.userdata?.user?.id);
+
+  useEffect(() => {
+    dispatch(MyRides());
+    getUserdata();
+  }, [isFocused]);
 
   const selectTime = val => {
     settime(val);
@@ -127,9 +149,22 @@ const PassengerHome = ({navigation}) => {
       seats: [1, 2],
     },
   ];
-
   const onPress = item => {
     navigation.navigate('RideStatus', {status: item.status});
+  };
+
+  const getUserdata = async () => {
+    dispatch(
+      getProfileInfo(
+        userId,
+        () => {
+          console.log('Get Profile Info Success!');
+        },
+        res => {
+          console.log('Get Profile Info Error', res);
+        },
+      ),
+    );
   };
 
   return (
@@ -158,7 +193,26 @@ const PassengerHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation?.navigate('ApprovalStatus');
+              if (auth?.profile_info?.type == 'PASSENGER') {
+                dispatch(setOrigin(null));
+                dispatch(setMapDestination(null));
+                dispatch(SearchDrives(null));
+                dispatch(SearchRides(null));
+                if (auth?.profile_info.vehicle) {
+                  navigation?.replace('DriverDashboard');
+                } else {
+                  const body = {
+                    switching: true,
+                  };
+                  dispatch(
+                    SwitchDrive(body, () => {
+                      navigation?.navigate('VehicleStack');
+                    }),
+                  );
+                }
+              } else {
+                navigation?.replace('DriverDashboard');
+              }
             }}
             style={styles.switchToDriverBtnContainer}>
             <Text
@@ -248,7 +302,7 @@ const PassengerHome = ({navigation}) => {
           </View>
         </View>
 
-        {ridesData.length === 0 ? (
+        {myRidesData === null || myRidesData.length === 0 ? (
           <>
             <Image
               source={appIcons.noUpcomingRide}
