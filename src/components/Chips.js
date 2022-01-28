@@ -3,31 +3,7 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import {Chip} from 'react-native-elements';
 import {fonts, theme} from '../theme';
 
-const user = {
-  Passenger: 'Passenger',
-  Driver: 'Driver',
-  Both: 'Driver/Passenger both',
-};
-
-const littleChips = [
-  {
-    key: 0,
-    text: user.Driver,
-    isSelected: true,
-  },
-  {
-    key: 1,
-    text: user.Passenger,
-    isSelected: false,
-  },
-  {
-    key: 2,
-    text: user.Both,
-    isSelected: false,
-  },
-];
-
-const Chips = ({onChipPress, horizontal = true}) => {
+const Chips = ({onChipPress, horizontal = true, littleChips}) => {
   const [data, setData] = useState(littleChips);
 
   return (

@@ -18,12 +18,13 @@ import {LogoutModal} from '../Modal/LogoutModal/LogoutModal';
 import I18n from '../../utilities/translations';
 import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
 import auth from '@react-native-firebase/auth';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../redux/actions/auth.action';
 import {Logout_Failure} from '../../redux/types/auth.types';
 
 const DrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
+  const Userdata = useSelector(state => state.auth);
   const dispatch = useDispatch(null);
   const list = [
     {
@@ -129,7 +130,6 @@ const DrawerComponent = ({navigation}) => {
       Alert.alert('Internet Error', 'Check your internet connection');
     }
   }
-
   return (
     <>
       <MyStatusBar
@@ -139,17 +139,26 @@ const DrawerComponent = ({navigation}) => {
       <SafeAreaView style={styles.mainContainer}>
         <View style={styles.userInfoContainer}>
           <View style={styles.infoContainer}>
-            <Image
-              resizeMode={'contain'}
-              style={styles.imgStyle}
-              source={appImages.app_logo}
-            />
+            <View style={styles.imgStyle}>
+              <Image
+                style={styles.profileImg}
+                source={{
+                  uri:
+                    Userdata?.profile_info?.picture?.url ||
+                    'https://unsplash.it/400/400?image=1',
+                }}
+              />
+            </View>
 
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => navigation.navigate('EditProfile')}
               style={styles.userNameContainer}>
-              <Text style={styles.userName}>Umar Fareed</Text>
+              <Text style={styles.userName}>
+                {Userdata?.profile_info?.firstName?.toUpperCase() +
+                  ' ' +
+                  Userdata?.profile_info?.lastName?.toUpperCase()}
+              </Text>
               <Icon
                 name={'right'}
                 color={colors.light_black}
@@ -229,6 +238,7 @@ const styles = StyleSheet.create({
     width: HP('9'),
     height: HP('9'),
     borderRadius: 100,
+    backgroundColor: 'gray',
   },
   userNameContainer: {
     flexDirection: 'row',
@@ -286,6 +296,11 @@ const styles = StyleSheet.create({
     fontSize: size.normal,
     color: colors.light_black,
     fontFamily: family.product_sans_regular,
+  },
+  profileImg: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 100,
   },
 });
 

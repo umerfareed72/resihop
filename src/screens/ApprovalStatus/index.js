@@ -6,36 +6,50 @@ import {appIcons, colors, family, size} from '../../utilities';
 import styles from './styles';
 import I18n from '../../utilities/translations';
 
-const index = ({navigation}) => {
+const index = ({navigation, route}) => {
   const [time, settime] = useState(false);
+
   useEffect(() => {
-    setTimeout(() => {
+    console.log('Inside TimeOut>>>', time);
+    const timout = setTimeout(() => {
       settime(true);
     }, 3000);
+    return () => {
+      clearImmediate(timout);
+    };
   }, []);
+  if (time) {
+    if (route?.params?.isRegister) {
+      navigation?.replace('DriverDashboard');
+    } else {
+      navigation?.replace('Pledge');
+    }
+  }
   return (
     <>
       <CustomHeader backButton={true} navigation={navigation} />
       <KeyboardAwareScrollView style={styles.container}>
         <View style={styles.contentContainer}>
-          {!time && (
-            <ApprovalCard
-              h1={I18n.t('waiting_approval')}
-              h2={I18n.t('lorem')}
-              btnText={I18n.t('switch_passenger')}
-              height={120}
-              width={111}
-              h4={I18n.t('approved_desc')}
-              image={appIcons.timer}
-              fontSize={size.normal}
-              textColor={colors.g3}
-              fontFamily={family.product_sans_regular}
-              onPress={() => {
-                navigation?.replace('PassengerHome');
-              }}
-            />
-          )}
-          {time && (
+          {/* {!time && ( */}
+          <ApprovalCard
+            h1={I18n.t('waiting_approval')}
+            h2={I18n.t('lorem')}
+            btnText={I18n.t('switch_passenger')}
+            height={120}
+            width={111}
+            h4={I18n.t('approved_desc')}
+            image={appIcons.timer}
+            fontSize={size.normal}
+            textColor={colors.g3}
+            fontFamily={family.product_sans_regular}
+            onPress={() => {
+              settime(false);
+              navigation?.replace('PassengerHome');
+            }}
+            switching={route?.params?.isRegister}
+          />
+          {/* )} */}
+          {/* {time && (
             <ApprovalCard
               h1={I18n.t('congratulation')}
               h2={I18n.t('registered_driver')}
@@ -51,7 +65,7 @@ const index = ({navigation}) => {
                 navigation?.replace('DriverDashboard');
               }}
             />
-          )}
+          )} */}
         </View>
       </KeyboardAwareScrollView>
     </>

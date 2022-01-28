@@ -1,8 +1,9 @@
 import * as Types from '../types/auth.types';
-import {post} from '../../services';
+import {get, post, put} from '../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {responseValidator} from '../../utilities/helpers';
 import {AUTH_CONST, AUTH_PW_CONST} from '../../utilities/routes';
+import {header} from '../../utilities';
 
 /////////////////////////////////////////  Login   ////////////////////////////
 
@@ -19,7 +20,6 @@ export const userEmailLogin =
         type: Types.Login_Success,
         payload: response?.data,
       });
-      console.log('Login Successfully', response.data);
       callBack(response.data);
     } catch (error) {
       setIsLoading(false);
@@ -139,9 +139,71 @@ export const resetPassword = (user, callBack) => async dispatch => {
     );
   }
 };
-export const updateInfo = user => async dispatch => {
+export const updateInfo =
+  (userId, user, onSuccess, onFailure) => async dispatch => {
+    try {
+      const responseData = await put(`users/${userId}`, user, await header());
+      dispatch({
+        type: Types.Info_Success,
+        payload: responseData?.data,
+      });
+      onSuccess();
+    } catch (error) {
+      onFailure(error);
+      dispatch({
+        type: Types.Info_Failure,
+        payload: null,
+      });
+      console.log(error?.response?.data);
+      let status = error?.response?.data?.statusCode;
+      responseValidator(
+        status,
+        error?.response?.data?.message[0]?.messages[0]?.message,
+      );
+    }
+  };
+export const LanguageInfo = (lang, callBack) => async dispatch => {
   dispatch({
-    type: Types.Info_Success,
-    payload: user,
+    type: Types.Language_Success,
+    payload: lang,
   });
+  callBack();
 };
+export const SwitchDrive = (data, callBack) => async dispatch => {
+  dispatch({
+    type: Types.Switch_Driver,
+    payload: data?.switching,
+  });
+  callBack();
+};
+export const isVehcile = (data, callBack) => async dispatch => {
+  dispatch({
+    type: Types.Is_Vehicle,
+    payload: data,
+  });
+  callBack();
+};
+
+export const getProfileInfo =
+  (userId, onSuccess, onFailure) => async dispatch => {
+    try {
+      const responseData = await get(`users/${userId}`, await header());
+      dispatch({
+        type: Types.Get_Profile_Success,
+        payload: responseData?.data,
+      });
+      onSuccess();
+    } catch (error) {
+      onFailure(error);
+      dispatch({
+        type: Types.Get_Profile_Failure,
+        payload: null,
+      });
+      console.log(error?.response?.data);
+      let status = error?.response?.data?.statusCode;
+      responseValidator(
+        status,
+        error?.response?.data?.message[0]?.messages[0]?.message,
+      );
+    }
+  };

@@ -77,7 +77,7 @@ function index(props) {
               </Text>
               <View style={{width: '35%'}}>
                 <Text style={theme.Text.h4Normal}>
-                  {props.route.params.PresetCost}
+                  {props.route.params.PresetCost} NOK
                 </Text>
               </View>
             </View>
@@ -88,8 +88,14 @@ function index(props) {
               }}>
               <Button
                 title={'OK'}
-                onPress={() => props.navigation.navigate('VahicleInformation')}
+                onPress={() => props?.navigation?.navigate('ApprovalStatus')}
                 buttonStyle={[theme.Button.buttonStyle]}
+                disabled={
+                  props.route.params?.PresetCost != null &&
+                  props.route.params?.CarMake != ''
+                    ? false
+                    : true
+                }
                 titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                 disabledTitleStyle={theme.Button.disabledTitleStyle}
                 containerStyle={{
@@ -99,7 +105,9 @@ function index(props) {
               />
               <Button
                 title={'Edit'}
-                onPress={() => props.navigation.navigate('VahicleInformation')}
+                onPress={() => {
+                  props.navigation.navigate('VahicleInformation');
+                }}
                 buttonStyle={[
                   theme.Button.buttonStyle,
                   {

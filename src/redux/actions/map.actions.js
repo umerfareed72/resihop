@@ -167,7 +167,6 @@ export const SearchDrives = data => async dispatch => {
 
 export const MyDrives = data => async dispatch => {
   let Token = await GetToken();
-
   try {
     const response = await fetch(`${baseURL}drives`, {
       method: 'GET',
@@ -187,7 +186,7 @@ export const MyDrives = data => async dispatch => {
     console.log(error);
     dispatch({
       type: Types.myDrives,
-      payload: responseJson,
+      payload: null,
     });
   }
 };

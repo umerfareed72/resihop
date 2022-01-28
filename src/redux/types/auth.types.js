@@ -17,9 +17,18 @@ module.exports = {
   //Sign Up
   Info_Success: 'Info_Success',
   Info_Failure: 'Info_Failure',
+  //Profile
+  Get_Profile_Success: 'Get_Profile_Success',
+  Get_Profile_Failure: 'Get_Profile_Failure',
   //Logout
   Logout_Success: 'Logout_Success',
   Logout_Failure: 'Logout_Failure',
+  // Language Info
+  Language_Success: 'Language_Success',
+  Language_Failure: 'Language_Failure',
+  Switch_Driver: 'Switch_Driver',
+  Is_Vehicle: 'Is_Vehicle',
+
   //Loader
   Set_loader: 'Set_Loader',
 };

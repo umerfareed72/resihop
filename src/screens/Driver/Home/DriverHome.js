@@ -21,7 +21,8 @@ import {fonts} from '../../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MyDrives, setIDToUpdateDrive} from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import {getProfileInfo} from '../../../redux/actions/auth.action';
+import {useIsFocused} from '@react-navigation/core';
 
 //Data
 var TimeList = {
@@ -83,20 +84,22 @@ const DriverHome = ({navigation}) => {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   let dispatch = useDispatch();
-  let isFocused = useIsFocused();
+  const userId = useSelector(state => state.auth?.userdata?.user?.id);
 
   const myDrives = useSelector(state => state.map.myDrivesData);
-
   //States
   const [time, settime] = useState('');
   const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
-
+  const isFocus = useIsFocused();
   useEffect(() => {
-    dispatch(MyDrives());
-  }, [isFocused]);
+    if (isFocus) {
+      dispatch(MyDrives());
+      getUserdata();
+    }
+  }, [isFocus]);
 
   const selectTime = val => {
     settime(val);
@@ -141,7 +144,6 @@ const DriverHome = ({navigation}) => {
       seats: [1, 2],
     },
   ];
-
   const onPress = item => {
     dispatch(setIDToUpdateDrive(item));
     navigation.navigate('DriveStatus', {
@@ -153,7 +155,19 @@ const DriverHome = ({navigation}) => {
       id: item._id,
     });
   };
-
+  const getUserdata = async () => {
+    dispatch(
+      getProfileInfo(
+        userId,
+        () => {
+          console.log('Get Profile Info Success!');
+        },
+        res => {
+          console.log('Get Profile Info Error', res);
+        },
+      ),
+    );
+  };
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -266,7 +280,7 @@ const DriverHome = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        {myDrives === null || myDrives?.length === 0 ? (
+        {myDrives === null || myDrives?.length === 0 || myDrives ? (
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={{marginBottom: 10}}>

@@ -26,6 +26,8 @@ import {
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
+import {getProfileInfo, SwitchDrive} from '../../../redux/actions/auth.action';
+import {get} from '../../../services';
 
 //Data
 var TimeList = {
@@ -95,13 +97,15 @@ const PassengerHome = ({navigation}) => {
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
   const [selectedCard, setSelectedCard] = useState([]);
-
+  const auth = useSelector(state => state.auth);
   const myRidesData = useSelector(state => state.map.myRidesData);
+  const userId = useSelector(state => state.auth?.userdata?.user?.id);
 
   console.log(myRidesData);
 
   useEffect(() => {
     dispatch(MyRides());
+    getUserdata();
   }, [isFocused]);
 
   const selectTime = val => {
@@ -147,9 +151,22 @@ const PassengerHome = ({navigation}) => {
       seats: [1, 2],
     },
   ];
-
   const onPress = item => {
     navigation.navigate('RideStatus', {status: item.status});
+  };
+
+  const getUserdata = async () => {
+    dispatch(
+      getProfileInfo(
+        userId,
+        () => {
+          console.log('Get Profile Info Success!');
+        },
+        res => {
+          console.log('Get Profile Info Error', res);
+        },
+      ),
+    );
   };
 
   return (
@@ -178,11 +195,26 @@ const PassengerHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              dispatch(setOrigin(null));
-              dispatch(setMapDestination(null));
-              dispatch(SearchDrives(null));
-              dispatch(SearchRides(null));
-              navigation?.navigate('ApprovalStatus');
+              if (auth?.profile_info?.type == 'PASSENGER') {
+                dispatch(setOrigin(null));
+                dispatch(setMapDestination(null));
+                dispatch(SearchDrives(null));
+                dispatch(SearchRides(null));
+                if (auth?.profile_info.vehicle) {
+                  navigation?.replace('DriverDashboard');
+                } else {
+                  const body = {
+                    switching: true,
+                  };
+                  dispatch(
+                    SwitchDrive(body, () => {
+                      navigation?.navigate('VehicleStack');
+                    }),
+                  );
+                }
+              } else {
+                navigation?.replace('DriverDashboard');
+              }
             }}
             style={styles.switchToDriverBtnContainer}>
             <Text

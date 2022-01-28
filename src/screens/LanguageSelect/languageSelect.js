@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
+import {useDispatch} from 'react-redux';
 import ChooseLanguage from '../../components/ChooseLanguage';
 import {Container} from '../../components/Container';
 import MyStatusBar from '../../components/Header/statusBar';
+import {LanguageInfo} from '../../redux/actions/auth.action';
 import {theme} from '../../theme/theme';
 import {colors} from '../../utilities';
 import {appIcons, drawerIcons} from '../../utilities/images';
 import I18n from '../../utilities/translations';
+
 function languageSelect(props) {
+  const dispatch = useDispatch(null);
   const [language, setLanguage] = useState('');
 
   return (
@@ -34,7 +38,11 @@ function languageSelect(props) {
               buttonStyle={theme.Button.buttonStyle}
               titleStyle={theme.Button.titleStyle}
               onPress={() => {
-                props.navigation.navigate('WalkThrough');
+                dispatch(
+                  LanguageInfo(language, () => {
+                    props.navigation.navigate('WalkThrough');
+                  }),
+                );
               }}
               disabled={language === ''}
               disabledStyle={theme.Button.disabledStyle}

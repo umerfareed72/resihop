@@ -1,13 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  Keyboard,
-  Alert,
-  Platform,
-} from 'react-native';
+import {View, StyleSheet, Text, Keyboard, Alert} from 'react-native';
 import {CustomHeader, NetInfoModal} from '../../components';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
@@ -15,7 +7,7 @@ import OtpValidator from '../../components/OtpValidator';
 import I18n from '../../utilities/translations';
 import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
-import {userEmailLogin} from '../../redux/actions/auth.action';
+import {SwitchDrive, userEmailLogin} from '../../redux/actions/auth.action';
 import Loader from '../../components/Loader/Loader';
 import {checkConnected} from '../../utilities';
 import {get} from '../../services';
@@ -62,6 +54,8 @@ function signIn(props) {
         const mobilePhone = `%2b${
           country ? country.callingCode : '47'
         }${phoneNum}`;
+        console.log(mobilePhone);
+
         const getUser = await get(`users?mobile=${mobilePhone}`);
         if (getUser?.data?.length > 0) {
           const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
@@ -130,12 +124,7 @@ function signIn(props) {
   const userLgoinApi = () => {
     let phone;
     setIsLoading(true);
-    if (phoneNum.charAt(0) == 0) {
-      let myPhone = parseInt(phoneNum, 10);
-      phone = `+${country ? country.callingCode : '47'}${myPhone}`;
-    } else {
-      phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-    }
+    phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
     const requestBody = {
       identifier: phone,
       password: '123456',
@@ -145,9 +134,24 @@ function signIn(props) {
         console.log('LOGIN API RESPONSE:', res.toString());
         setIsLoading(false);
         if (res?.user?.details) {
-          props.navigation.replace('PassengerDashboard');
+          if (res?.user?.type == 'DRIVER') {
+            if (res?.user?.vehicle) {
+              props.navigation.replace('DriverDashboard');
+            } else {
+              const body = {
+                switching: false,
+              };
+              dispatch(
+                SwitchDrive(body, () => {
+                  props.navigation.replace('VahicleStack');
+                }),
+              );
+            }
+          } else {
+            props.navigation.replace('PassengerDashboard');
+          }
         } else {
-          props.navigation.navigate('UserDetailStack');
+          props.navigation.replace('UserDetailStack');
         }
       }),
     );
@@ -165,7 +169,10 @@ function signIn(props) {
         </Text>
         <OtpValidator
           phoneNumber={phoneNum}
-          chnagePhone={val => setPhoneNum(val)}
+          chnagePhone={val => {
+            let s = val.replace(/^0+/, '');
+            setPhoneNum(s);
+          }}
           selectedCountry={country}
           onCountrySelect={onSelect}
           onSendCodePress={onSendCode}

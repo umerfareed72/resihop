@@ -8,17 +8,21 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {colors, family, HP, size, WP} from '../../utilities';
+import {checkConnected, colors, family, HP, size, WP} from '../../utilities';
 import {ListItem} from 'react-native-elements';
 import {Icon} from 'react-native-elements';
 import {appImages, drawerIcons} from '../../utilities/images';
 import MyStatusBar from '../Header/statusBar';
 import {LogoutModal} from '../Modal/LogoutModal/LogoutModal';
 import I18n from '../../utilities/translations';
+import {useDispatch, useSelector} from 'react-redux';
+import auth from '@react-native-firebase/auth';
+import {logout} from '../../redux/actions/auth.action';
 
 const DriverDrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
-
+  const Userdata = useSelector(state => state.auth);
+  const dispatch = useDispatch(null);
   const list = [
     {
       icon: drawerIcons.rides_history,
@@ -115,6 +119,24 @@ const DriverDrawerComponent = ({navigation}) => {
     },
   ];
 
+  async function Signout() {
+    modalRef?.current?.close();
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      auth()
+        .signOut()
+        .then(() => {
+          console.log('User signout---');
+          dispatch(logout());
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'AuthStack'}],
+          });
+        });
+    } else {
+      Alert.alert('Internet Error', 'Check your internet connection');
+    }
+  }
   return (
     <>
       <MyStatusBar
@@ -124,17 +146,27 @@ const DriverDrawerComponent = ({navigation}) => {
       <SafeAreaView style={styles.mainContainer}>
         <View style={styles.userInfoContainer}>
           <View style={styles.infoContainer}>
-            <Image
-              resizeMode={'contain'}
-              style={styles.imgStyle}
-              source={appImages.app_logo}
-            />
+            <View style={styles.imgStyle}>
+              <Image
+                resizeMode={'cover'}
+                style={styles.profileImg}
+                source={{
+                  uri:
+                    Userdata?.profile_info?.picture?.url ||
+                    'https://unsplash.it/400/400?image=1',
+                }}
+              />
+            </View>
 
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => navigation.navigate('EditProfile')}
               style={styles.userNameContainer}>
-              <Text style={styles.userName}>Umar Fareed</Text>
+              <Text style={styles.userName}>
+                {Userdata?.profile_info?.firstName?.toUpperCase() +
+                  ' ' +
+                  Userdata?.profile_info?.lastName?.toUpperCase()}
+              </Text>
               <Icon
                 name={'right'}
                 color={colors.light_black}
@@ -193,8 +225,7 @@ const DriverDrawerComponent = ({navigation}) => {
             h1={I18n.t('logout')}
             h2={I18n.t('logout_text')}
             onPress={() => {
-              modalRef?.current?.close();
-              navigation.replace('AuthStack');
+              Signout();
             }}
             btnText={I18n.t('yes')}
             btnText2={I18n.t('cancel')}
@@ -229,6 +260,7 @@ const styles = StyleSheet.create({
     width: HP('9'),
     height: HP('9'),
     borderRadius: 100,
+    backgroundColor: 'gray',
   },
   userNameContainer: {
     flexDirection: 'row',
@@ -296,6 +328,11 @@ const styles = StyleSheet.create({
     fontSize: size.normal,
     color: colors.light_black,
     fontFamily: family.product_sans_regular,
+  },
+  profileImg: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 100,
   },
 });
 
