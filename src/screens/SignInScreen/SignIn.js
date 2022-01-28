@@ -6,9 +6,9 @@ import {
   ToastAndroid,
   Keyboard,
   Alert,
+  Platform,
 } from 'react-native';
-import {CustomHeader, Header} from '../../components';
-import {Container} from '../../components/Container';
+import {CustomHeader, NetInfoModal} from '../../components';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
@@ -17,84 +17,125 @@ import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 import {userEmailLogin} from '../../redux/actions/auth.action';
 import Loader from '../../components/Loader/Loader';
-import {Login_Failure} from '../../redux/types/auth.types';
+import {checkConnected} from '../../utilities';
+import {get} from '../../services';
 
 function signIn(props) {
   const dispatch = useDispatch(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNum, setPhoneNum] = useState('');
   const [country, setCountry] = useState();
-
   const [confirm, setConfirm] = useState(null);
-  const [code, setCode] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [countryCode, setCountryCode] = useState('47');
   const [cca2, setcca2] = useState('NO');
   const [otpInput, setOtpInput] = useState(false);
-
+  const [isOnline, setisOnline] = useState(false);
   const onSelect = country => {
     setCountry(country);
     setcca2(country?.cca2);
     setCountryCode(country?.callingCode[0]);
   };
 
+  function validate() {
+    setPhoneError('');
+    if (phoneNum.length == 0) {
+      return setPhoneError('Please Enter Valid Phone Number');
+    }
+    if (isNaN(phoneNum)) {
+      return setPhoneError('Your Phone Number is not valid');
+    }
+    return true;
+  }
+
   const signInWithPhoneNumber = () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     signIn();
   };
 
   async function signIn() {
-    setIsLoading(true);
-    try {
-      const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-      const confirmation = await auth().signInWithPhoneNumber(phone);
-      if (confirmation) {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setIsLoading(true);
+      try {
+        const mobilePhone = `%2b${
+          country ? country.callingCode : '47'
+        }${phoneNum}`;
+        const getUser = await get(`users?mobile=${mobilePhone}`);
+        if (getUser?.data?.length > 0) {
+          const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+          const confirmation = await auth().signInWithPhoneNumber(phone);
+          if (confirmation) {
+            setIsLoading(false);
+            setConfirm(confirmation);
+            setOtpInput(true);
+          }
+        } else {
+          setIsLoading(false);
+
+          Alert.alert(
+            'Failed',
+            'User not exists',
+            [
+              {
+                text: 'ok',
+                onPress: () => console.log('OK'),
+              },
+            ],
+            {cancelable: false},
+          );
+        }
+      } catch (error) {
         setIsLoading(false);
-        setConfirm(confirmation);
-        setOtpInput(true);
+        alert(error);
       }
-    } catch (error) {
+    } else {
+      setisOnline(true);
       setIsLoading(false);
-      alert(error);
     }
   }
 
-  useEffect(() => {
-    if (code.length === 6) {
-      confirmCode();
-    }
-  }, [code]);
-
-  async function confirmCode() {
-    setIsLoading(true);
-    try {
-      await confirm.confirm(code).then(res => {
+  async function confirmCode(code) {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setisOnline(false);
+      setIsLoading(true);
+      try {
+        await confirm.confirm(code).then(res => {
+          setIsLoading(false);
+          console.log('Registered User Id:', res?.user?.uid);
+          setOtpInput(false);
+          setPhoneNum('');
+          userLgoinApi();
+        });
+      } catch (error) {
+        console.log('Error:-', error);
         setIsLoading(false);
-        console.log('Registered User Id:', res?.user?.uid);
-        setOtpInput(false);
-        setPhoneNum('');
-        userLgoinApi();
-      });
-    } catch (error) {
-      console.log('Error:-', error);
+        alert('Invalid code.');
+      }
+    } else {
+      setisOnline(true);
       setIsLoading(false);
-      alert('Invalid code.');
     }
   }
 
   const onSendCode = () => {
-    console.log('Send Code Button pressed');
     Keyboard.dismiss();
-    if (phoneNum === '') {
-      ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
-      return;
-    } else {
+    if (validate()) {
       signInWithPhoneNumber();
     }
   };
 
   const userLgoinApi = () => {
+    let phone;
     setIsLoading(true);
-    const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+    if (phoneNum.charAt(0) == 0) {
+      let myPhone = parseInt(phoneNum, 10);
+      phone = `+${country ? country.callingCode : '47'}${myPhone}`;
+    } else {
+      phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+    }
     const requestBody = {
       identifier: phone,
       password: '123456',
@@ -102,20 +143,15 @@ function signIn(props) {
     dispatch(
       userEmailLogin(requestBody, setIsLoading, res => {
         console.log('LOGIN API RESPONSE:', res.toString());
-        if (res.toString() === 'Error: Request failed with status code 400') {
-          setIsLoading(false);
-          Alert.alert('Error', 'Something went wrong');
+        setIsLoading(false);
+        if (res?.user?.details) {
+          props.navigation.replace('PassengerDashboard');
         } else {
-          setIsLoading(false);
-          Alert.alert('Success', 'User sucessfully logged in', [
-            {
-              text: 'OK',
-              onPress: () => props.navigation.navigate('UserDetailStack'),
-            },
-          ]);
+          props.navigation.navigate('UserDetailStack');
         }
       }),
     );
+    setIsLoading(false);
   };
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -135,10 +171,26 @@ function signIn(props) {
           onSendCodePress={onSendCode}
           defaultCountryCode={cca2}
           otpCodeArea={otpInput}
-          enteredCode={code => setCode(code)}
+          setOtpCodeArea={setOtpInput}
+          enteredCode={code => {
+            if (code.length === 6) {
+              confirmCode(code);
+            }
+          }}
+          phoneError={phoneError}
         />
       </View>
       {isLoading ? <Loader /> : null}
+      <NetInfoModal
+        show={isOnline}
+        onRetry={async () => {
+          const isConnected = await checkConnected();
+          if (isConnected) {
+            setisOnline(false);
+          }
+        }}
+        isRetrying={isLoading}
+      />
     </View>
   );
 }

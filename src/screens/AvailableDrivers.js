@@ -14,11 +14,13 @@ import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ReturnBookSheet from '../components/ReturnBookSheet';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import moment from 'moment';
+import {setBookRide} from '../redux/actions/map.actions';
 
 const AvailableDrivers = props => {
   let navigation = useNavigation();
+  let dispatch = useDispatch();
 
   const returnBookSheetRef = useRef(null);
 
@@ -110,6 +112,7 @@ const AvailableDrivers = props => {
             <TouchableOpacity
               style={styles.btnContainer}
               onPress={() => {
+                dispatch(setBookRide(item));
                 props?.route?.params?.btnText === 'Book Now'
                   ? returnBookSheetRef.current.open()
                   : navigation?.navigate('StartMatching', {

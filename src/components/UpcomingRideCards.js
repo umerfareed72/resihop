@@ -15,10 +15,12 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
 
   useEffect(() => {
     if (item.availableSeats) {
-      for (let i = 0; i < item.availableSeats; i++) {
+      for (let i = 0; i < item.availableSeats + item.bookedSeats; i++) {
         seats[i] = i;
       }
-    } else {
+    }
+
+    if (item.requiredSeats) {
       for (let i = 0; i < item.requiredSeats; i++) {
         seats[i] = i;
       }
@@ -61,7 +63,15 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
             {seats?.map(seat => (
               <Image
                 key={seat}
-                source={appImages.seatBlue}
+                source={
+                  item?.availableSeats
+                    ? item?.bookedSeats
+                      ? item.bookedSeats >= seat
+                        ? appImages.seatGreen
+                        : appImages.seatBlue
+                      : appImages.seatBlue
+                    : appImages.seatGreen
+                }
                 resizeMode="contain"
                 style={styles.green}
               />

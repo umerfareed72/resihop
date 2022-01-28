@@ -8,25 +8,24 @@ import {
   Alert,
 } from 'react-native';
 import {CustomHeader} from '../../components';
-import {Container} from '../../components/Container';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
 import I18n from '../../utilities/translations';
 import auth from '@react-native-firebase/auth';
-import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
 import Loader from '../../components/Loader/Loader';
 import {useDispatch} from 'react-redux';
 import {userEmailSignup} from '../../redux/actions/auth.action';
+import {checkConnected} from '../../utilities';
+import {get} from '../../services';
 
 function SignUp(props) {
   const dispatch = useDispatch(null);
   const [isLoading, setIsLoading] = useState(false);
   const [phoneNum, setPhoneNum] = useState('');
   const [country, setCountry] = useState();
-
+  const [phoneError, setPhoneError] = useState('');
   const [confirm, setConfirm] = useState(null);
-  const [code, setCode] = useState('');
   const [countryCode, setCountryCode] = useState('47');
   const [cca2, setcca2] = useState('NO');
   const [otpInput, setOtpInput] = useState(false);
@@ -37,25 +36,55 @@ function SignUp(props) {
     setCountryCode(country?.callingCode[0]);
   };
 
-  const signInWithPhoneNumber = () => {
-    CheckConnectivity().then(connected => {
-      if (connected) {
-        setIsLoading(true);
-        signIn();
-      } else {
-        alert('Check your internet connection');
-      }
-    });
+  function validate() {
+    setPhoneError('');
+    if (phoneNum.length == 0) {
+      return setPhoneError('Please Enter Valid Phone Number');
+    }
+    if (isNaN(phoneNum)) {
+      return setPhoneError('Your Phone Number is not valid');
+    }
+    return true;
+  }
+
+  const signInWithPhoneNumber = async () => {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setIsLoading(true);
+      signIn();
+    } else {
+      alert('Check your internet connection');
+    }
   };
 
   async function signIn() {
     try {
-      const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-      const confirmation = await auth().signInWithPhoneNumber(phone);
-      if (confirmation) {
+      const mobilePhone = `%2b${
+        country ? country.callingCode : '47'
+      }${phoneNum}`;
+      const getUser = await get(`users?mobile=${mobilePhone}`);
+      if (getUser?.data?.length == 0) {
+        const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+        const confirmation = await auth().signInWithPhoneNumber(phone);
+        if (confirmation) {
+          setIsLoading(false);
+          setConfirm(confirmation);
+          setOtpInput(true);
+        }
+      } else {
         setIsLoading(false);
-        setConfirm(confirmation);
-        setOtpInput(true);
+
+        Alert.alert(
+          'Failed',
+          'User Alredy Registered',
+          [
+            {
+              text: 'ok',
+              onPress: () => console.log('OK'),
+            },
+          ],
+          {cancelable: false},
+        );
       }
     } catch (error) {
       setIsLoading(false);
@@ -63,13 +92,7 @@ function SignUp(props) {
     }
   }
 
-  useEffect(() => {
-    if (code.length === 6) {
-      confirmCode();
-    }
-  }, [code]);
-
-  async function confirmCode() {
+  async function confirmCode(code) {
     setIsLoading(true);
     try {
       await confirm.confirm(code).then(res => {
@@ -87,31 +110,36 @@ function SignUp(props) {
   }
 
   const onSendCode = () => {
-    console.log('Send Code Button pressed');
     Keyboard.dismiss();
-    if (phoneNum === '') {
-      ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
-      return;
-    } else {
+    if (validate()) {
       signInWithPhoneNumber();
     }
   };
 
-  const userRegistrationApi = () => {
+  const userRegistrationApi = async () => {
     setIsLoading(true);
     const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
     const requestBody = {
       username: phone,
       email: `${phone}@resihop.com`,
       password: '123456',
+      mobile: phone,
     };
     dispatch(
       userEmailSignup(requestBody, setIsLoading, res => {
-        console.log('Registration Api Response:-', res);
         if (res) {
           setIsLoading(false);
-          Alert.alert('Success', 'User sucessfully registered');
-          props.navigation.navigate('UserDetailStack');
+          Alert.alert(
+            'Success',
+            'User Registered Successfully',
+            [
+              {
+                text: 'ok',
+                onPress: () => props.navigation.navigate('UserDetailStack'),
+              },
+            ],
+            {cancelable: false},
+          );
         }
       }),
     );
@@ -135,7 +163,13 @@ function SignUp(props) {
           onSendCodePress={onSendCode}
           defaultCountryCode={cca2}
           otpCodeArea={otpInput}
-          enteredCode={code => setCode(code)}
+          setOtpCodeArea={setOtpInput}
+          enteredCode={code => {
+            if (code.length === 6) {
+              confirmCode(code);
+            }
+          }}
+          phoneError={phoneError}
         />
       </View>
       {isLoading ? <Loader /> : null}

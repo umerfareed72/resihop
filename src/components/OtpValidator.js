@@ -13,9 +13,12 @@ const OtpValidator = ({
   onSendCodePress,
   defaultCountryCode = 'PK',
   otpCodeArea,
+  setOtpCodeArea,
   enteredCode,
+  phoneError,
+  onEndEditing,
 }) => {
-  const [countDown, setCountDown] = useState(30);
+  const [countDown, setCountDown] = useState(60);
   const [countryModalOpen, setCountryModalOpen] = useState(false);
   const [otpArea, setOtpArea] = useState(false);
   const refTimer = useRef();
@@ -90,10 +93,10 @@ const OtpValidator = ({
           ref={numRef}
           onChangeText={chnagePhone}
           value={phoneNumber}
-          maxLength={10}
+          maxLength={14}
         />
         <Button
-          title={I18n.t('send_code')}
+          title={timerEnd ? 'Resend Code' : 'Send Code'}
           onPress={onSendCodePress}
           disabled={otpCodeArea}
           buttonStyle={[theme.Button.buttonStyle]}
@@ -106,6 +109,8 @@ const OtpValidator = ({
         />
       </View>
       <Divider width={1} color={theme.colors.black} />
+      <View style={styles.phoneErrorContainer} />
+      {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
 
       {otpCodeArea && (
         <View style={styles.otpCon}>
@@ -120,17 +125,19 @@ const OtpValidator = ({
             autoCorrect={false}
             keyboardType="numeric"
             returnKeyType="next"
+            onEndEditing={onEndEditing}
           />
 
           <Text style={[theme.Text.h4Normal, {textAlign: 'center'}]}>
             {I18n.t('verify_your_code')}
           </Text>
-          <View style={{display: timerEnd ? 'none' : 'flex'}}>
+          <View>
             <CountDownTimer
               ref={refTimer}
               timestamp={countDown}
               timerCallback={timerFlag => {
                 setTimerEnd(timerFlag);
+                setOtpCodeArea(false);
               }}
               containerStyle={{
                 height: 56,
@@ -166,5 +173,16 @@ const styles = StyleSheet.create({
   },
   otpCon: {
     marginTop: 50,
+  },
+  phoneErrorContainer: {
+    width: '100%',
+    height: 1,
+    borderColor: '#80808090',
+    borderWidth: 0.5,
+  },
+  errorText: {
+    fontSize: 12,
+    color: 'red',
+    margin: 3,
   },
 });

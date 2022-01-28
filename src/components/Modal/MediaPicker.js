@@ -1,23 +1,17 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {BottomSheet, Button, Text} from 'react-native-elements';
-import {
-  Asset,
-  ImageLibraryOptions,
-  launchCamera,
-  launchImageLibrary,
-} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 import {theme} from '../../theme';
 
 const MediaPicker = ({show = false, onClosePress, onImageSelected}) => {
+  const options = {
+    mediaType: 'photo',
+    quality: 1,
+  };
   const onGalleryPressed = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 1,
-    };
-
     launchImageLibrary(options, response => {
       if (response.assets !== undefined) {
         return onImageSelected(response.assets[0]);
@@ -28,7 +22,7 @@ const MediaPicker = ({show = false, onClosePress, onImageSelected}) => {
   };
 
   const onCameraPressed = () => {
-    launchCamera(null, response => {
+    launchCamera(options, response => {
       if (response.assets !== undefined) {
         return onImageSelected(response.assets[0]);
       } else {

@@ -98,6 +98,8 @@ const PassengerHome = ({navigation}) => {
 
   const myRidesData = useSelector(state => state.map.myRidesData);
 
+  console.log(myRidesData);
+
   useEffect(() => {
     dispatch(MyRides());
   }, [isFocused]);

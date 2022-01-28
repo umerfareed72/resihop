@@ -23,6 +23,8 @@ const SelectRouteCard = ({setModal, setHeight}) => {
   const destinationMap = useSelector(state => state.map.destination);
   const searchRideResponse = useSelector(state => state.map.searchRideResponse);
 
+  console.log('Search Ride', searchRideResponse);
+
   useEffect(() => {
     let array = [];
 

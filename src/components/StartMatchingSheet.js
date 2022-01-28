@@ -16,13 +16,13 @@ import {useSelector} from 'react-redux';
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   const [sliderValue, setSliderValue] = useState(0);
 
-  useEffect(() => {
-    setHeight(Dimensions.get('screen').height - 200);
-  }, []);
-
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );
+
+  useEffect(() => {
+    setHeight(Dimensions.get('screen').height - 200);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -45,7 +45,9 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
       </View>
       <TouchableOpacity
         style={styles.btnWrapper}
-        disabled={searchDrivesResponse.length === 0}
+        disabled={
+          searchDrivesResponse === null || searchDrivesResponse.length === 0
+        }
         onPress={() => setModal('finding')}>
         <Text style={styles.btnTxt}>{I18n.t('start_matching')}</Text>
       </TouchableOpacity>

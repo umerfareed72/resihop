@@ -28,6 +28,10 @@ const AvailableDrivers = ({
     state => state.map.searchDriveResponse,
   );
 
+  const createRideResponse = useSelector(
+    state => state.map.createRideRequestResponse,
+  );
+
   useEffect(() => {
     setHeight(Dimensions.get('screen').height - 400);
   }, []);
@@ -36,22 +40,17 @@ const AvailableDrivers = ({
     <View style={styles.container}>
       <Text style={styles.driversTxt}>{I18n.t('available_drivers')}</Text>
       <View style={styles.addressContainer}>
-        <Text style={styles.addressTxt}>
-          {searchDrivesResponse && searchDrivesResponse[0]?.drive.startDes}
-        </Text>
+        <Text style={styles.addressTxt}>{createRideResponse?.startDes}</Text>
         <View style={styles.addressCircle} />
       </View>
       <View style={[styles.addressContainer, {marginTop: 21}]}>
-        <Text style={styles.addressTxt}>
-          {searchDrivesResponse && searchDrivesResponse[0]?.drive.destDes}
-        </Text>
+        <Text style={styles.addressTxt}>{createRideResponse?.destDes}</Text>
         <View style={styles.addressSquare} />
       </View>
       {modalName !== 'availableDrivers' && (
         <View style={styles.timeDateContainer}>
           <Text style={styles.dateTimeTxt}>
-            {searchDrivesResponse &&
-              moment(searchDrivesResponse[0]?.drive.date).format('DD MMM')}
+            {moment(createRideResponse?.tripDate).format('DD MMM')}
           </Text>
           <View style={styles.matchingContainer}>
             <Text style={styles.matchingTxt}>{I18n.t('matching_done')}</Text>
@@ -63,10 +62,7 @@ const AvailableDrivers = ({
               style={styles.greenSeat}
             />
             <Text style={styles.seatTxt}>
-              {`${
-                searchDrivesResponse &&
-                searchDrivesResponse[0]?.drive.availableSeats
-              } Seats`}
+              {`${createRideResponse?.requiredSeats} Seats`}
             </Text>
           </View>
         </View>

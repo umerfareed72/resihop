@@ -44,6 +44,12 @@ export const setBookRide = data => async dispatch => {
     payload: data,
   });
 };
+export const setTime = data => async dispatch => {
+  dispatch({
+    type: Types.time,
+    payload: data,
+  });
+};
 
 export const CreateDriveRequest = data => async dispatch => {
   let Token = await GetToken();
@@ -59,7 +65,7 @@ export const CreateDriveRequest = data => async dispatch => {
     });
 
     const responseJson = await response.json();
-    console.log(responseJson);
+    console.log('Create Drive Request', responseJson);
     dispatch({
       type: Types.createDriveRequest,
       payload: responseJson,
@@ -68,28 +74,32 @@ export const CreateDriveRequest = data => async dispatch => {
     console.log(error);
   }
 };
-export const CreateRideRequest = data => async dispatch => {
-  let Token = await GetToken();
+export const CreateRideRequest =
+  (body, setIsLoading, callback) => async dispatch => {
+    let Token = await GetToken();
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseURL}rides`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Token}`,
+        },
+        body: JSON.stringify(body),
+      });
 
-  try {
-    const response = await fetch(`${baseURL}/rides`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Token}`,
-      },
-      body: JSON.stringify(data),
-    });
-
-    const responseJson = await response.json();
-    dispatch({
-      type: Types.createRideRequest,
-      payload: responseJson,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+      const responseJson = await response.json();
+      setIsLoading(false);
+      callback(responseJson);
+      dispatch({
+        type: Types.createRideRequest,
+        payload: responseJson,
+      });
+    } catch (error) {
+      setIsLoading(false);
+      console.log('Create Ride', error);
+    }
+  };
 export const SearchRides = data => async dispatch => {
   let Token = await GetToken();
 
@@ -115,6 +125,7 @@ export const SearchRides = data => async dispatch => {
     );
 
     const responseJson = await response.json();
+    console.log('Search Rides', responseJson);
     dispatch({
       type: Types.searchRides,
       payload: responseJson,
@@ -144,7 +155,7 @@ export const SearchDrives = data => async dispatch => {
     });
 
     const responseJson = await response.json();
-    console.log(responseJson);
+    console.log('Search Drives', responseJson);
     dispatch({
       type: Types.searchDrives,
       payload: responseJson,
@@ -167,6 +178,7 @@ export const MyDrives = data => async dispatch => {
     });
 
     const responseJson = await response.json();
+    console.log('My Drives', responseJson);
     dispatch({
       type: Types.myDrives,
       payload: responseJson,
@@ -181,7 +193,6 @@ export const MyDrives = data => async dispatch => {
 };
 export const MyRides = data => async dispatch => {
   let Token = await GetToken();
-
   try {
     const response = await fetch(`${baseURL}rides`, {
       method: 'GET',
@@ -198,10 +209,6 @@ export const MyRides = data => async dispatch => {
     });
   } catch (error) {
     console.log(error);
-    dispatch({
-      type: Types.myRides,
-      payload: responseJson,
-    });
   }
 };
 

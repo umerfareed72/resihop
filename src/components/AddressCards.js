@@ -17,24 +17,61 @@ import {
   setOrigin,
   setMapDestination,
   setAvailableSeats,
+  setTime,
 } from '../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {fonts} from '../theme';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
   const calenderSheetRef = useRef(null);
+  const googleAutoComplete = useRef();
 
   const [destination, setDestination] = useState('');
   const [startLocation, setStartLocation] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [currentAddress, setCurrentAddress] = useState('');
 
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
+  const time = useSelector(state => state.map.time);
+  const origin = useSelector(state => state.map.origin);
+  const destinationMap = useSelector(state => state.map.destination);
+
+  const showTimePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = date => {
+    dispatch(setTime(moment(date).format('hh:mm a')));
+    hideTimePicker();
+  };
+
+  useEffect(() => {
+    if (modalName === 'startLocation') {
+      if (origin) {
+        googleAutoComplete.current?.setAddressText(origin.description);
+        setCurrentAddress(origin.description);
+      }
+    }
+
+    if (modalName === 'destination') {
+      if (destinationMap) {
+        googleAutoComplete.current?.setAddressText(destinationMap.description);
+        setCurrentAddress(destinationMap.description);
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -76,6 +113,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
             ) : (
               <>
                 <GooglePlacesAutocomplete
+                  ref={googleAutoComplete}
                   placeholder={I18n.t('address_placeholder')}
                   onPress={(data, details = null) => {
                     if (modalName === 'startLocation') {
@@ -122,6 +160,9 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                       fontFamily: fonts.regular,
                     },
                   }}
+                  textInputProps={{
+                    onChangeText: setCurrentAddress,
+                  }}
                 />
                 {/* <TextInput
                   placeholder={I18n.t('address_placeholder')}
@@ -156,9 +197,12 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
           </View>
           {modalName === 'startLocation' ? (
             <>
-              <Text style={styles.bookSeatsTxt}>
-                {mode === 'driver' ? ' Available Seats' : 'Book Your Seats'}
-              </Text>
+              <View style={styles.bookWrapper}>
+                <Text style={styles.bookSeatsTxt}>
+                  {mode === 'driver' ? ' Available Seats' : 'Book Your Seats'}
+                </Text>
+                <Text>{availableSeats}</Text>
+              </View>
               <View style={styles.seatsWrapper}>
                 {seats.map(seat => (
                   <TouchableOpacity
@@ -211,13 +255,11 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                 <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
               </View>
               <View style={styles.selectionInputWrapper}>
-                <TextInput
-                  placeholder="XX:XX"
-                  placeholderTextColor={colors.btnGray}
-                  value={noLaterTime}
-                  onChangeText={setNoLaterTime}
-                  style={styles.noLater}
-                />
+                <TouchableOpacity
+                  onPress={() => showTimePicker()}
+                  style={[styles.noLater, {justifyContent: 'center'}]}>
+                  <Text>{time ? time : `XX:XX`}</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     calenderSheetRef.current.open();
@@ -239,6 +281,12 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                     style={styles.calendarIcon}
                   />
                 </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="time"
+                  onConfirm={handleConfirm}
+                  onCancel={hideTimePicker}
+                />
               </View>
             </>
           )}
@@ -253,8 +301,22 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                     : modalName === 'returnTrip'
                     ? 20
                     : 25,
+                backgroundColor: handleBackgroundColor(
+                  currentAddress,
+                  availableSeats,
+                  time,
+                  dateTimeStamp,
+                  modalName,
+                ),
               },
             ]}
+            disabled={handleDisable(
+              currentAddress,
+              availableSeats,
+              time,
+              dateTimeStamp,
+              modalName,
+            )}
             onPress={() => navigation.goBack()}>
             <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
           </TouchableOpacity>
@@ -350,8 +412,8 @@ const styles = StyleSheet.create({
   bookSeatsTxt: {
     fontSize: 14,
     lineHeight: 24,
-    marginTop: 27,
-    marginLeft: 28,
+    //marginTop: 27,
+    //marginLeft: 28,
     fontFamily: family.product_sans_regular,
   },
   seat: {
@@ -366,7 +428,7 @@ const styles = StyleSheet.create({
   },
   nextBtnContainer: {
     height: 56,
-    backgroundColor: colors.green,
+    backgroundColor: colors.btnGray,
     justifyContent: 'center',
     alignItems: 'center',
     width: '80%',
@@ -442,6 +504,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontFamily: family.product_sans_regular,
   },
+  bookWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '70%',
+    alignSelf: 'flex-start',
+    marginTop: 20,
+    marginStart: 30,
+  },
 });
 
 export default AddressCards;
@@ -456,4 +527,43 @@ const getModalName = modalName => {
   }
 
   return I18n.t('destination');
+};
+
+const handleBackgroundColor = (
+  currentAddress,
+  availableSeats,
+  time,
+  dateTimeStamp,
+  modalName,
+) => {
+  if (modalName === 'startLocation' && (!currentAddress || !availableSeats)) {
+    return colors.btnGray;
+  }
+
+  if (
+    modalName === 'destination' &&
+    (!currentAddress || !time || !dateTimeStamp)
+  ) {
+    return colors.btnGray;
+  }
+
+  return colors.green;
+};
+
+const handleDisable = (
+  currentAddress,
+  availableSeats,
+  time,
+  dateTimeStamp,
+  modalName,
+) => {
+  if (modalName === 'startLocation' && currentAddress && availableSeats) {
+    return false;
+  }
+
+  if (modalName === 'destination' && currentAddress && time && dateTimeStamp) {
+    return false;
+  }
+
+  return true;
 };

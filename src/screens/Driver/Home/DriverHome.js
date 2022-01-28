@@ -21,6 +21,7 @@ import {fonts} from '../../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MyDrives, setIDToUpdateDrive} from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 
 //Data
 var TimeList = {
@@ -82,6 +83,7 @@ const DriverHome = ({navigation}) => {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   let dispatch = useDispatch();
+  let isFocused = useIsFocused();
 
   const myDrives = useSelector(state => state.map.myDrivesData);
 
@@ -94,7 +96,7 @@ const DriverHome = ({navigation}) => {
 
   useEffect(() => {
     dispatch(MyDrives());
-  }, []);
+  }, [isFocused]);
 
   const selectTime = val => {
     settime(val);

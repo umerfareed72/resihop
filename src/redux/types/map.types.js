@@ -12,4 +12,5 @@ module.exports = {
   myRides: 'MyRides',
   dateTimeStamp: 'TimeStamp',
   bookRide: 'BookRide',
+  time: 'Time',
 };

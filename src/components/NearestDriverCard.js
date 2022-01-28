@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,47 +10,57 @@ import {
 import {appIcons, appImages, colors, family, size, HP} from '../utilities';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
 
 const NearestDriverCard = ({setModal, setHeight, modalName}) => {
+  const createRideResponse = useSelector(
+    state => state.map.createRideRequestResponse,
+  );
+
+  const [requiredSeats, setRequiredSeats] = useState([]);
+
   useEffect(() => {
+    for (let i = 0; i < createRideResponse?.requiredSeats; i++) {
+      requiredSeats[i] = i;
+    }
+
     setHeight(Dimensions.get('screen').height - 240);
+
     const interval = setTimeout(() => {
       setModal('available');
     }, 2000);
+
     return () => {
       clearTimeout(interval);
     };
   }, []);
+
   return (
     <View style={styles.mainWrapper}>
       {modalName === 'selectRoute' && (
         <Text style={styles.topText}>{I18n.t('min24')}</Text>
       )}
       <View style={styles.addressContainer}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{createRideResponse?.startDes}</Text>
         <View style={styles.addressCircle} />
       </View>
       <View style={[styles.addressContainer, {marginTop: 21}]}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{createRideResponse?.destDes}</Text>
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.rideInfoContainer}>
-        <Text style={styles.date}>{I18n.t('date_time')}</Text>
+        <Text style={styles.date}>
+          {moment(createRideResponse?.tripDate).format('DD MMM')}
+        </Text>
         <View style={styles.imagesContainer}>
-          <Image
-            source={appImages.seatGreen}
-            resizeMode="contain"
-            style={styles.greenSeat}
-          />
-          <Image
-            source={appImages.seatGreen}
-            resizeMode="contain"
-            style={styles.greenSeat}
-          />
+          {requiredSeats.map(seat => (
+            <Image
+              source={appImages.seatGreen}
+              resizeMode="contain"
+              style={styles.greenSeat}
+            />
+          ))}
         </View>
       </View>
       {modalName !== 'selectRoute' && (
