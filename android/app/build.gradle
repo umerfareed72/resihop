@@ -144,6 +144,7 @@ android {
         versionCode 1
         versionName '1.0'
         multiDexEnabled true
+        manifestPlaceholders = [auth0Domain: 'dev-nr-jwnve.us.auth0.com', auth0Scheme: "${applicationId}"]
     }
     splits {
         abi {
