@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Linking} from 'react-native';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, StyleSheet, Image, NativeModules} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
 import {useDispatch} from 'react-redux';
 import ChooseLanguage from '../../components/ChooseLanguage';
@@ -19,22 +19,27 @@ function languageSelect(props) {
   const [language, setLanguage] = useState('');
   const openBankId = () => {
     // props.navigation.navigate('WalkThrough');
-    // /Anaxg0bS2P/k3Y1Bd7646+IOLJfen8zlA5Prf5cRW8=
+    // const auth0 = new Auth0({
+    //   domain: 'dev-49tni-0p.us.auth0.com',
+    //   clientId: 'QlxzmTcfQwLb9kAadow1OSAdyuakqgAF',
+    // });
+    // auth0.webAuth
+    //   .authorize({scope: 'openid email profile'})
+    //   .then(credentials => {
     axios
-      .get('https://resi-hop.criipto.id/.well-known/openid-configuration')
-      .then(res => {
-        // Linking.openURL(
-        //   'https://app.bankid.com/?autostarttoken=a4904c4c-3bb4-4e3f-8ac3-0e950e529e5f&redirect=https%3a%2f%2fdemo.bankid.com%2fnyademobanken%2fCavaClientRedirRecei ver.aspx%3forderRef%3dbedea56d-7b46-47b1-890b- f787c650bc93%26returnUrl%3d.%2fCavaClientAuth.aspx%26Environment%3dKundtest&redirect=https://resi-hop.onelogin.com/access/idp.',
-        // );
-        axios
-          .get(
-            'https://resi-hop.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:7149&acr_values=urn:grn:authn:se:bankid&redirect_uri=https://resi-hop.onelogin.com/access/idp.&scope=openid&state=etats',
-          )
-          .then(res => {
-            var parseString = require('react-native-xml2js').parseString;
-            console.log(res.data);
-          });
+      .get(
+        'https://resi-hop.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:7149&redirect_uri=https://resi-hop.onelogin.com/access/idp.&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=appswitch:android',
+      )
+      .then(respo => {
+        NativeModules.BankIDApp.BankIDApplication(
+          respo?.data?.launchLinks?.universalLink,
+        );
+      })
+      .catch(error => {
+        console.log('Token error', error);
       });
+    // })
+    // .catch(error => console.log(error));
   };
   return (
     <>
