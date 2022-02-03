@@ -6,3 +6,4 @@ export const GET_OFFERS = 'offers';
 export const GET_ABOUT_US = 'about-us';
 export const GET_NOTIFICATION_LIST = 'notification-lists';
 export const GET_PRIVACY_POLICY = 'privacy-policy';
+export const MY_CONTRIBUTION = 'my-contributions';
