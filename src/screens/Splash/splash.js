@@ -74,8 +74,7 @@ function splash(props) {
           props?.navigation.replace('UserDetailStack');
         }
       } else {
-        // props?.navigation.replace('AuthStack');
-        props?.navigation.replace('VehicleStack');
+        props?.navigation.replace('AuthStack');
       }
     }, 2000);
   };
