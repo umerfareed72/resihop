@@ -136,7 +136,6 @@ function PersonalDetails(props) {
         details: true,
         bankID: token,
       };
-      console.log(userId);
       dispatch(
         updateInfo(
           userId,

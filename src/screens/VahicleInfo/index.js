@@ -22,6 +22,7 @@ import Loader from '../../components/Loader/Loader';
 import {Alert} from 'react-native';
 import SigninViaBankID from '../../components/SigninViaBankID';
 import useAppState from '../../hooks/useAppState';
+import {header} from '../../utilities';
 const vahicleFormFields = {
   licencePlate: '',
   carCompany: '',
@@ -166,7 +167,7 @@ function index(props) {
       bankID: token,
     };
     try {
-      const response = await post(`vehicles`, requestBody);
+      const response = await post(`vehicles`, requestBody, await header());
       if (response?.data) {
         if (!switching) {
           setIsLoading(false);
