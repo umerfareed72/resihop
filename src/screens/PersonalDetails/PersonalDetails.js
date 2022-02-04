@@ -116,13 +116,11 @@ function PersonalDetails(props) {
       user = 'BOTH';
     }
     const {firstName, lastName, email} = inputData;
-    // Call Image Upload Function
-    imageUpload(pic, res => {
+    if (!pic) {
       const requestBody = {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        picture: res[0]?._id,
         isDriverAndPassenger:
           userType === 'Driver/Passenger both' ? true : false,
         gender: genderType,
@@ -138,6 +136,7 @@ function PersonalDetails(props) {
         details: true,
         bankID: token,
       };
+      console.log(userId);
       dispatch(
         updateInfo(
           userId,
@@ -175,7 +174,68 @@ function PersonalDetails(props) {
           },
         ),
       );
-    });
+    } else {
+      // Call Image Upload Function
+      imageUpload(pic, res => {
+        const requestBody = {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          picture: res[0]?._id,
+          isDriverAndPassenger:
+            userType === 'Driver/Passenger both' ? true : false,
+          gender: genderType,
+          referral:
+            codeId != ''
+              ? {
+                  _id: codeId,
+                }
+              : {
+                  _id: null,
+                },
+          type: user,
+          details: true,
+          bankID: token,
+        };
+        dispatch(
+          updateInfo(
+            userId,
+            requestBody,
+            () => {
+              setIsLoading(false);
+              Alert.alert(
+                'Success',
+                'Your personal details successfuly saved',
+                [
+                  {
+                    text: 'OK',
+                    onPress: () => {
+                      if (userType === 'Passenger') {
+                        props?.navigation?.navigate('Pledge');
+                      } else {
+                        const body = {
+                          switching: false,
+                        };
+                        dispatch(
+                          SwitchDrive(body, () => {
+                            props.navigation.navigate('VehcileStack');
+                          }),
+                        );
+                      }
+                    },
+                  },
+                ],
+                {cancelable: false},
+              );
+            },
+            error => {
+              console.log('Failed to add details', error);
+              setIsLoading(false);
+            },
+          ),
+        );
+      });
+    }
   };
   //Image Uploading
   const imageUpload = async (data, callBack) => {
