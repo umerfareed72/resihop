@@ -125,8 +125,14 @@ function SignUp(props) {
       password: '123456',
       mobile: phone,
     };
+    const CountryData = {
+      phone: phoneNum,
+      cca2: cca2,
+      code: countryCode,
+    };
+
     dispatch(
-      userEmailSignup(requestBody, setIsLoading, res => {
+      userEmailSignup(requestBody, CountryData, setIsLoading, res => {
         if (res) {
           setIsLoading(false);
           Alert.alert(

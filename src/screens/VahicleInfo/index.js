@@ -64,6 +64,7 @@ function index(props) {
     {label: 'NOK 50', value: 50},
   ]);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
+  const [bankdIdToken, setBankIdToken] = useState(null);
   const [next, setNext] = React.useState(false);
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
@@ -130,8 +131,8 @@ function index(props) {
         return response;
       });
       const token = result?.url.split('id_token=');
-      if (token[1]) {
-        addVehicelInfo(token[1]);
+      if (token) {
+        setBankIdToken(token[1]);
       } else {
         setIsLoading(false);
       }
@@ -153,8 +154,13 @@ function index(props) {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (bankdIdToken) {
+      addVehicelInfo();
+    }
+  }, [bankdIdToken]);
   //Add vehicle info
-  const addVehicelInfo = async token => {
+  const addVehicelInfo = async () => {
     setIsLoading(true);
     const requestBody = {
       user: userid,
@@ -164,7 +170,7 @@ function index(props) {
       vehicleCompanyName: carMakerCompany,
       CO2Emissions: engineSize,
       presetCostPerPassenger: value,
-      bankID: token,
+      bankID: bankdIdToken,
     };
     try {
       const response = await post(`vehicles`, requestBody, await header());
@@ -406,7 +412,8 @@ function index(props) {
                     <SigninViaBankID
                       disabled={value != null && next ? false : true}
                       onBankIdPress={() => {
-                        openBankId();
+                        // openBankId();
+                        addVehicelInfo();
                       }}
                       onPressTerms={() => {
                         props.navigation.navigate('Terms');
@@ -417,7 +424,7 @@ function index(props) {
                       title={I18n.t('register')}
                       disabled={value != null && next ? false : true}
                       onPress={() => {
-                        addVehicelInfo('');
+                        addVehicelInfo();
                       }}
                       icon={
                         <Icon

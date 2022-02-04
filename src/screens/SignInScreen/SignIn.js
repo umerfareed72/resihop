@@ -129,8 +129,13 @@ function signIn(props) {
       identifier: phone,
       password: '123456',
     };
+    const CountryData = {
+      phone: phoneNum,
+      cca2: cca2,
+      code: countryCode,
+    };
     dispatch(
-      userEmailLogin(requestBody, setIsLoading, res => {
+      userEmailLogin(requestBody, CountryData, setIsLoading, res => {
         console.log('LOGIN API RESPONSE:', res.toString());
         setIsLoading(false);
         if (res?.user?.details) {

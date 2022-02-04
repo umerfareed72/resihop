@@ -58,17 +58,12 @@ function splash(props) {
           ) {
             props?.navigation.replace('PassengerDashboard');
           } else {
-            if (
-              auth?.userdata?.user?.vehicle ||
-              auth?.userInfo?.vehicle ||
-              auth?.profile_data?.vehicle ||
-              auth?.profile_data?.vehicle
-            ) {
+            if (auth?.profile_info?.vehicle) {
               props?.navigation.replace('DriverDashboard');
             } else {
               dispatch(
                 isVehcile(true, () => {
-                  props?.navigation.replace('VehicleStack');
+                  props?.navigation.replace('UserDetailStack');
                 }),
               );
             }

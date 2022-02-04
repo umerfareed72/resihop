@@ -12,7 +12,7 @@ import {
 import {Input, Text, Button, Avatar, Icon} from 'react-native-elements';
 import {CustomHeader} from '../../components';
 import * as Yup from 'yup';
-import {appIcons, baseURL, colors} from '../../utilities';
+import {appIcons, baseURL, colors, GetToken, header} from '../../utilities';
 import {theme} from '../../theme';
 import UploadImage from '../../components/UploadImage';
 import GenderChips from '../../components/GenderChips';
@@ -118,7 +118,7 @@ function index(props) {
   };
 
   //Image Uploading
-  const imageUpload = (data, callBack) => {
+  const imageUpload = async (data, callBack) => {
     if (photo) {
       callBack(photo._id);
     } else {
@@ -130,7 +130,12 @@ function index(props) {
       });
       console.log(data);
       axios
-        .post(`${baseURL}upload/`, form)
+        .post(`${baseURL}upload`, form, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${await GetToken()}`,
+          },
+        })
         .then(res => {
           if (res.data) {
             callBack(res?.data[0]._id);
@@ -138,7 +143,7 @@ function index(props) {
         })
         .catch(error => {
           console.log('error', error?.response?.data);
-          Alert.alert('Failed to Upload Image');
+          Alert.alert('Error', 'Failed to Upload Image');
           setIsLoading(false);
         });
     }
@@ -193,7 +198,13 @@ function index(props) {
               <View>
                 {pic ? (
                   <View style={{alignSelf: 'center'}}>
-                    <Avatar source={{uri: pic.uri}} size={'xlarge'} rounded />
+                    <Avatar
+                      source={{
+                        uri: pic.uri || 'https://unsplash.it/400/400?image=1',
+                      }}
+                      size={'xlarge'}
+                      rounded
+                    />
                   </View>
                 ) : (
                   <View style={styles.profileImg}>

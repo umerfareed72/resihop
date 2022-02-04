@@ -54,14 +54,12 @@ function signIn(props) {
     if (isConnected) {
       setIsLoading(true);
       try {
-        const mobilePhone = `%2b${
-          country ? country.callingCode : '47'
-        }${phoneNum}`;
+        const mobilePhone = `%2b${countryCode ? countryCode : '47'}${phoneNum}`;
         console.log(mobilePhone);
 
         const getUser = await get(`users?mobile=${mobilePhone}`);
         if (getUser?.data?.length === 0) {
-          const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+          const phone = `+${countryCode ? countryCode : '47'}${phoneNum}`;
           const confirmation = await auth().signInWithPhoneNumber(phone);
           if (confirmation) {
             setIsLoading(false);
@@ -126,12 +124,16 @@ function signIn(props) {
     setIsLoading(true);
     let phone;
     setIsLoading(true);
-    phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+    phone = `+${countryCode ? countryCode : '47'}${phoneNum}`;
 
     const requestBody = {
       username: phone,
-      identifier: phone,
       mobile: phone,
+      country: {
+        phone: phoneNum,
+        cca2: cca2,
+        code: countryCode,
+      },
     };
     dispatch(
       updateInfo(
@@ -162,9 +164,10 @@ function signIn(props) {
   };
 
   useEffect(() => {
-    setPhoneNum(Userdata?.profile_info?.mobile);
-    setCountryCode('+92');
-    setcca2('PK');
+    setPhoneNum(Userdata?.profile_info?.country?.phone);
+    setCountryCode(Userdata?.profile_info?.country?.code);
+    setcca2(Userdata?.profile_info?.country?.cca2);
+    console.log(Userdata?.profile_info);
   }, []);
   return (
     <>
