@@ -60,7 +60,12 @@ function splash(props) {
           ) {
             props?.navigation.replace('PassengerDashboard');
           } else {
-            if (auth?.userdata?.user?.vehicle || auth?.userInfo?.vehicle) {
+            if (
+              auth?.userdata?.user?.vehicle ||
+              auth?.userInfo?.vehicle ||
+              auth?.profile_data?.vehicle ||
+              auth?.profile_data?.vehicle
+            ) {
               props?.navigation.replace('DriverDashboard');
             } else {
               dispatch(

@@ -6,6 +6,8 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Alert,
+  Linking,
+  Platform,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -16,16 +18,16 @@ import Chips from '../../components/Chips';
 import GenderChips from '../../components/GenderChips';
 import UploadImage from '../../components/UploadImage';
 import SigninViaBankID from '../../components/SigninViaBankID';
-import BankWebView from '../../components/BankWebView';
 import {CustomHeader, Header, IncorrectRefCode} from '../../components';
 import I18n from '../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import axios from 'axios';
 import {baseURL, colors} from '../../utilities';
-import {SwitchDrive, updateInfo} from '../../redux/actions/auth.action';
-import {responseValidator} from '../../utilities/helpers';
+import {GetToken} from '../../utilities/constants';
 
+import {SwitchDrive, updateInfo} from '../../redux/actions/auth.action';
+import useAppState from '../../hooks/useAppState';
 const user = {
   Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
   Driver: 'Driver', // 616e6a8c6fc87c0016b740e8
@@ -61,15 +63,49 @@ function PersonalDetails(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
-  const [bankView, setBankView] = useState(false);
   const [pic, setPic] = useState(undefined);
   const refFirstName = useRef();
   const refLastName = useRef();
   const refReferral = useRef();
   const refEmail = useRef();
   const refCodeSheet = useRef(null);
+  const bank_url = useRef();
+  const userDetail = useRef();
 
-  const userDetailsApi = inputData => {
+  const acr = 'urn:grn:authn:se:bankid:same-device';
+  const appState = useAppState(async () => {
+    if (acr === 'urn:grn:authn:se:bankid:same-device') {
+      const result = await fetch(bank_url?.current).then(response => {
+        return response;
+      });
+      const token = result?.url.split('id_token=');
+      if (token[1]) {
+        userDetailsApi(userDetail.current, token[1]);
+      } else {
+        setIsLoading(false);
+      }
+    } else {
+      setIsLoading(false);
+    }
+  });
+  const openBankId = async values => {
+    setIsLoading(true);
+    const result = await axios.get(
+      `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+        Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+      }`,
+    );
+    if (result?.data) {
+      console.log(result?.data);
+      bank_url.current = result?.data?.completeUrl;
+      userDetail.current = values;
+      Linking.openURL(result?.data?.launchLinks?.universalLink);
+    } else {
+      setIsLoading(false);
+    }
+  };
+  //Add Personal Details
+  const userDetailsApi = (inputData, token) => {
     setIsLoading(true);
     let user = '';
     if (userType === 'Driver') {
@@ -80,13 +116,11 @@ function PersonalDetails(props) {
       user = 'BOTH';
     }
     const {firstName, lastName, email} = inputData;
-    //Call Image Upload Function
-    imageUpload(pic, res => {
+    if (!pic) {
       const requestBody = {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        picture: res[0]?._id,
         isDriverAndPassenger:
           userType === 'Driver/Passenger both' ? true : false,
         gender: genderType,
@@ -100,6 +134,7 @@ function PersonalDetails(props) {
               },
         type: user,
         details: true,
+        bankID: token,
       };
       dispatch(
         updateInfo(
@@ -138,10 +173,71 @@ function PersonalDetails(props) {
           },
         ),
       );
-    });
+    } else {
+      // Call Image Upload Function
+      imageUpload(pic, res => {
+        const requestBody = {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          picture: res[0]?._id,
+          isDriverAndPassenger:
+            userType === 'Driver/Passenger both' ? true : false,
+          gender: genderType,
+          referral:
+            codeId != ''
+              ? {
+                  _id: codeId,
+                }
+              : {
+                  _id: null,
+                },
+          type: user,
+          details: true,
+          bankID: token,
+        };
+        dispatch(
+          updateInfo(
+            userId,
+            requestBody,
+            () => {
+              setIsLoading(false);
+              Alert.alert(
+                'Success',
+                'Your personal details successfuly saved',
+                [
+                  {
+                    text: 'OK',
+                    onPress: () => {
+                      if (userType === 'Passenger') {
+                        props?.navigation?.navigate('Pledge');
+                      } else {
+                        const body = {
+                          switching: false,
+                        };
+                        dispatch(
+                          SwitchDrive(body, () => {
+                            props.navigation.navigate('VehcileStack');
+                          }),
+                        );
+                      }
+                    },
+                  },
+                ],
+                {cancelable: false},
+              );
+            },
+            error => {
+              console.log('Failed to add details', error);
+              setIsLoading(false);
+            },
+          ),
+        );
+      });
+    }
   };
   //Image Uploading
-  const imageUpload = (data, callBack) => {
+  const imageUpload = async (data, callBack) => {
     var form = new FormData();
     form.append('files', {
       name: data?.fileName,
@@ -150,7 +246,12 @@ function PersonalDetails(props) {
     });
     console.log(data);
     axios
-      .post(`${baseURL}upload/`, form)
+      .post(`${baseURL}upload/`, form, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${await GetToken()}`,
+        },
+      })
       .then(res => {
         if (res.data) {
           callBack(res?.data);
@@ -158,7 +259,7 @@ function PersonalDetails(props) {
       })
       .catch(error => {
         console.log('error', error?.response?.data);
-        Alert.alert('Failed to Upload Image');
+        Alert.alert('Error', 'Failed to Upload Image');
         setIsLoading(false);
       });
   };
@@ -173,7 +274,11 @@ function PersonalDetails(props) {
             validationSchema={personalFormSchema}
             onSubmit={values => {
               Keyboard.dismiss();
-              userDetailsApi(values);
+              if (userType === 'Passenger') {
+                openBankId(values);
+              } else {
+                userDetailsApi(values, '');
+              }
             }}>
             {({
               handleChange,
@@ -335,7 +440,7 @@ function PersonalDetails(props) {
                     />
                     {userType === 'Passenger' ? (
                       <SigninViaBankID
-                        disabled={!pic || !isValid}
+                        disabled={!isValid}
                         onBankIdPress={handleSubmit}
                         onPressTerms={() => {
                           props.navigation.navigate('Terms');
@@ -345,7 +450,7 @@ function PersonalDetails(props) {
                       <Button
                         title={I18n.t('next')}
                         onPress={() => handleSubmit()}
-                        disabled={!pic || !isValid}
+                        disabled={!isValid}
                         icon={
                           <Icon
                             name={'arrowright'}
@@ -377,11 +482,6 @@ function PersonalDetails(props) {
             }}
           </Formik>
         </ScrollView>
-        {bankView ? (
-          <View style={styles.modalView}>
-            <BankWebView setBankView={setBankView} />
-          </View>
-        ) : null}
       </View>
       {isLoading ? <Loader /> : null}
       <IncorrectRefCode
