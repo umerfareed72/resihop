@@ -11,14 +11,13 @@ import {
   Platform,
 } from 'react-native';
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
-import {CustomHeader} from '../../components';
+import {CustomHeader, Loader} from '../../components';
 import * as Yup from 'yup';
 import {theme} from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {axios, get, post} from '../../services';
 import I18n from '../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
-import Loader from '../../components/Loader/Loader';
 import {Alert} from 'react-native';
 import SigninViaBankID from '../../components/SigninViaBankID';
 import useAppState from '../../hooks/useAppState';

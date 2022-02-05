@@ -4,11 +4,10 @@ import {CustomHeader} from '../../components/Header/CustomHeader';
 import styles from './style';
 import I18n from '../../utilities/translations';
 import {FlatList} from 'react-native-gesture-handler';
-import {PledgeCard, AgreeButton} from '../../components';
+import {PledgeCard, AgreeButton, Loader} from '../../components';
 import {colors} from '../../utilities';
 import {get} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
-import Loader from '../../components/Loader/Loader';
 import {useSelector} from 'react-redux';
 const index = ({navigation}) => {
   const [loading, setloading] = useState(false);

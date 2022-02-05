@@ -1,6 +1,8 @@
 export * from './Header/Header';
 export * from './Header/CustomHeader';
 export * from './Loading';
+export * from './Loader/Loader';
+
 //Titles
 export * from './Titles/PaymentHistory';
 export * from './Titles/CityRideList';

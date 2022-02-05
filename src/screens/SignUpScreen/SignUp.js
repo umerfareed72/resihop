@@ -7,13 +7,12 @@ import {
   ToastAndroid,
   Alert,
 } from 'react-native';
-import {CustomHeader} from '../../components';
+import {CustomHeader, Loader} from '../../components';
 import _ from 'lodash/string';
 import {theme} from '../../theme';
 import OtpValidator from '../../components/OtpValidator';
 import I18n from '../../utilities/translations';
 import auth from '@react-native-firebase/auth';
-import Loader from '../../components/Loader/Loader';
 import {useDispatch} from 'react-redux';
 import {userEmailSignup} from '../../redux/actions/auth.action';
 import {checkConnected} from '../../utilities';

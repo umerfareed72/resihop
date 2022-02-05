@@ -49,7 +49,7 @@ const AddCard = ({
             <PaymentButtons
               disabled={disabled}
               onPress={onPressCard}
-              bgColor={colors.green}
+              bgColor={disabled ? colors.btnGray : colors.green}
               title={I18n.t('add_card')}
               txtColor={colors.white}
             />
