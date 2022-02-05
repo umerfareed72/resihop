@@ -23,6 +23,8 @@ const SelectRouteCard = ({setModal, setHeight}) => {
   const destinationMap = useSelector(state => state.map.destination);
   const searchRideResponse = useSelector(state => state.map.searchRideResponse);
 
+  console.log('Search Ride', searchRideResponse);
+
   useEffect(() => {
     let array = [];
 
@@ -31,15 +33,15 @@ const SelectRouteCard = ({setModal, setHeight}) => {
       array[i] = i + 1;
     }
     setData(array);
-    // dispatch(
-    //   SearchRides({
-    //     startLocation: [origin.location.lat, origin.location.lng],
-    //     destinationLocation: [
-    //       destinationMap.location.lat,
-    //       destinationMap.location.lng,
-    //     ],
-    //   }),
-    // );
+    dispatch(
+      SearchRides({
+        startLocation: [origin.location.lat, origin.location.lng],
+        destinationLocation: [
+          destinationMap.location.lat,
+          destinationMap.location.lng,
+        ],
+      }),
+    );
   }, []);
 
   return (

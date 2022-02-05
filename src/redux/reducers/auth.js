@@ -11,6 +11,7 @@ const initialState = {
   switching: false,
   is_vehicle: false,
   profile_info: {},
+  country_info: {},
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -21,7 +22,8 @@ export default (state = initialState, action = {}) => {
         loading: false,
         success: true,
         failure: false,
-        userdata: payload,
+        userdata: payload?.login_data,
+        country_info: payload?.country_data,
       };
 
     case Types.Login_Failure:
@@ -30,7 +32,7 @@ export default (state = initialState, action = {}) => {
         loading: false,
         success: false,
         failure: true,
-        userdata: payload,
+        userdata: null,
       };
     case Types.Signup_Success:
       return {
@@ -38,7 +40,8 @@ export default (state = initialState, action = {}) => {
         loading: false,
         success: true,
         failure: false,
-        userdata: payload,
+        userdata: payload?.login_data,
+        country_info: payload?.country_data,
       };
 
     case Types.Signup_Failure:
@@ -47,7 +50,7 @@ export default (state = initialState, action = {}) => {
         loading: false,
         success: false,
         failure: true,
-        userdata: payload,
+        userdata: null,
       };
     case Types.Logout_Failure:
       return {
@@ -74,6 +77,7 @@ export default (state = initialState, action = {}) => {
         switching: false,
         is_vehicle: false,
         profile_info: null,
+        country_info: null,
       };
     case Types.Forgot_Password_Success:
       return {

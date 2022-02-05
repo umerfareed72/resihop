@@ -12,6 +12,8 @@ const initialState = {
   myRidesData: null,
   idToUpdateDrive: null,
   dateTimeStamp: null,
+  bookRide: null,
+  time: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -76,6 +78,16 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         dateTimeStamp: payload,
+      };
+    case Types.bookRide:
+      return {
+        ...state,
+        bookRide: payload,
+      };
+    case Types.time:
+      return {
+        ...state,
+        time: payload,
       };
     default:
       return state;

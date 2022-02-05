@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -18,10 +18,9 @@ import Chips from '../../components/Chips';
 import GenderChips from '../../components/GenderChips';
 import UploadImage from '../../components/UploadImage';
 import SigninViaBankID from '../../components/SigninViaBankID';
-import {CustomHeader, Header, IncorrectRefCode} from '../../components';
+import {CustomHeader, Header, IncorrectRefCode, Loader} from '../../components';
 import I18n from '../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
-import Loader from '../../components/Loader/Loader';
 import axios from 'axios';
 import {baseURL, colors} from '../../utilities';
 import {GetToken} from '../../utilities/constants';
@@ -59,18 +58,22 @@ const littleChips = [
 function PersonalDetails(props) {
   const dispatch = useDispatch(null);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
+  const country_data = useSelector(state => state.auth?.country_info);
+
   const [codeId, setCodeId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
   const [pic, setPic] = useState(undefined);
+  const [bankdIdToken, setBankIdToken] = useState(null);
+  const [userDetail, setUserDetail] = useState(null);
+
   const refFirstName = useRef();
   const refLastName = useRef();
   const refReferral = useRef();
   const refEmail = useRef();
   const refCodeSheet = useRef(null);
   const bank_url = useRef();
-  const userDetail = useRef();
 
   const acr = 'urn:grn:authn:se:bankid:same-device';
   const appState = useAppState(async () => {
@@ -79,8 +82,8 @@ function PersonalDetails(props) {
         return response;
       });
       const token = result?.url.split('id_token=');
-      if (token[1]) {
-        userDetailsApi(userDetail.current, token[1]);
+      if (token) {
+        setBankIdToken(token[1]);
       } else {
         setIsLoading(false);
       }
@@ -89,6 +92,7 @@ function PersonalDetails(props) {
     }
   });
   const openBankId = async values => {
+    setUserDetail(values);
     setIsLoading(true);
     const result = await axios.get(
       `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
@@ -98,14 +102,18 @@ function PersonalDetails(props) {
     if (result?.data) {
       console.log(result?.data);
       bank_url.current = result?.data?.completeUrl;
-      userDetail.current = values;
       Linking.openURL(result?.data?.launchLinks?.universalLink);
     } else {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (bankdIdToken) {
+      userDetailsApi(userDetail);
+    }
+  }, [bankdIdToken]);
   //Add Personal Details
-  const userDetailsApi = (inputData, token) => {
+  const userDetailsApi = inputData => {
     setIsLoading(true);
     let user = '';
     if (userType === 'Driver') {
@@ -134,14 +142,20 @@ function PersonalDetails(props) {
               },
         type: user,
         details: true,
-        bankID: token,
+        country: {
+          phone: country_data?.phone,
+          cca2: country_data?.cca2,
+          code: country_data?.code,
+        },
+        bankID: bankdIdToken,
       };
       dispatch(
         updateInfo(
           userId,
           requestBody,
-          () => {
+          res => {
             setIsLoading(false);
+            console.log(res);
             Alert.alert(
               'Success',
               'Your personal details successfuly saved',
@@ -194,6 +208,11 @@ function PersonalDetails(props) {
                 },
           type: user,
           details: true,
+          country: {
+            phone: country_data?.phone,
+            cca2: country_data?.cca2,
+            code: country_data?.code,
+          },
           bankID: token,
         };
         dispatch(
@@ -274,11 +293,11 @@ function PersonalDetails(props) {
             validationSchema={personalFormSchema}
             onSubmit={values => {
               Keyboard.dismiss();
-              if (userType === 'Passenger') {
-                openBankId(values);
-              } else {
-                userDetailsApi(values, '');
-              }
+              // if (userType === 'Passenger') {
+              //   openBankId(values);
+              // } else {
+              userDetailsApi(values);
+              // }
             }}>
             {({
               handleChange,

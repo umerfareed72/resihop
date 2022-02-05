@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
-import {CustomHeader} from '../../components';
-import Loader from '../../components/Loader/Loader';
+import {CustomHeader, Loader} from '../../components';
 import {theme} from '../../theme';
 import {colors} from '../../utilities';
 

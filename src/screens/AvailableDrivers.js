@@ -14,13 +14,21 @@ import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ReturnBookSheet from '../components/ReturnBookSheet';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
+import {useSelector, useDispatch} from 'react-redux';
+import moment from 'moment';
+import {setBookRide} from '../redux/actions/map.actions';
 
 const AvailableDrivers = props => {
   let navigation = useNavigation();
+  let dispatch = useDispatch();
 
   const returnBookSheetRef = useRef(null);
 
   const data = [1, 2, 3, 4, 5, 6, 7];
+
+  const searchDrivesResponse = useSelector(
+    state => state.map.searchDriveResponse,
+  );
 
   return (
     <View style={styles.container}>
@@ -31,7 +39,7 @@ const AvailableDrivers = props => {
       />
 
       <FlatList
-        data={data}
+        data={searchDrivesResponse}
         renderItem={({item}) => (
           <View key={item} style={styles.driversCard}>
             <View style={styles.driverInfoContainer}>
@@ -42,7 +50,10 @@ const AvailableDrivers = props => {
                   style={styles.driver}
                 />
                 <View>
-                  <Text style={styles.driverName}>{I18n.t('john')}</Text>
+                  <Text
+                    style={
+                      styles.driverName
+                    }>{`${item.drive.user.firstName} ${item.drive.user.lastName}`}</Text>
                   <View style={styles.ratingContainer}>
                     <StarIcon name="star" size={17} color={colors.white} />
                     <Text style={styles.ratingTxt}>4.5</Text>
@@ -58,7 +69,7 @@ const AvailableDrivers = props => {
                       top: 5,
                     },
                   ]}>
-                  SEK 20
+                  {`SEK ${item.drive.costPerSeat}`}
                 </Text>
                 <Image
                   source={appImages.car}
@@ -78,7 +89,10 @@ const AvailableDrivers = props => {
                   resizeMode="contain"
                   style={styles.seatGreen}
                 />
-                <Text style={styles.seatNum}>{I18n.t('seat_available')}</Text>
+                <Text
+                  style={
+                    styles.seatNum
+                  }>{`${item.drive.availableSeats} Seat Available`}</Text>
               </View>
               <View style={styles.carDetailsTxt}>
                 <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
@@ -89,13 +103,16 @@ const AvailableDrivers = props => {
             </View>
             <View style={styles.availableMain}>
               <View style={styles.availableBox}>
-                <Text style={styles.availableTxt}>{I18n.t('Available')}</Text>
+                <Text style={styles.availableTxt}>{I18n.t('available')}</Text>
               </View>
-              <Text style={styles.date}>{I18n.t('dateInt')}</Text>
+              <Text style={styles.date}>
+                {moment(item.drive.date).format('DD MMM YYYY')}
+              </Text>
             </View>
             <TouchableOpacity
               style={styles.btnContainer}
               onPress={() => {
+                dispatch(setBookRide(item));
                 props?.route?.params?.btnText === 'Book Now'
                   ? returnBookSheetRef.current.open()
                   : navigation?.navigate('StartMatching', {

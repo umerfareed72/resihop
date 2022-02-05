@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as Types from '../types/map.types';
-import {GetToken} from '../../utilities';
+import {GetToken, baseURL} from '../../utilities';
 
 export const setOrigin = data => async dispatch => {
   dispatch({
@@ -38,38 +38,24 @@ export const setDateTimeStamp = data => async dispatch => {
     payload: data,
   });
 };
+export const setBookRide = data => async dispatch => {
+  dispatch({
+    type: Types.bookRide,
+    payload: data,
+  });
+};
+export const setTime = data => async dispatch => {
+  dispatch({
+    type: Types.time,
+    payload: data,
+  });
+};
+
 export const CreateDriveRequest = data => async dispatch => {
   let Token = await GetToken();
 
   try {
-    const response = await fetch(
-      'https://resihop-server.herokuapp.com/drives',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Token}`,
-        },
-        body: JSON.stringify(data),
-      },
-    );
-
-    const responseJson = await response.json();
-    dispatch({
-      type: Types.createDriveRequest,
-      payload: responseJson,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-export const CreateRideRequest = data => async dispatch => {
-  let Token = await GetToken();
-
-  console.log('Data', data);
-
-  try {
-    const response = await fetch('https://resihop-server.herokuapp.com/rides', {
+    const response = await fetch(`${baseURL}drives`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -79,15 +65,41 @@ export const CreateRideRequest = data => async dispatch => {
     });
 
     const responseJson = await response.json();
-    console.log('Create Ride', responseJson);
+    console.log('Create Drive Request', responseJson);
     dispatch({
-      type: Types.createRideRequest,
+      type: Types.createDriveRequest,
       payload: responseJson,
     });
   } catch (error) {
     console.log(error);
   }
 };
+export const CreateRideRequest =
+  (body, setIsLoading, callback) => async dispatch => {
+    let Token = await GetToken();
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseURL}rides`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const responseJson = await response.json();
+      setIsLoading(false);
+      callback(responseJson);
+      dispatch({
+        type: Types.createRideRequest,
+        payload: responseJson,
+      });
+    } catch (error) {
+      setIsLoading(false);
+      console.log('Create Ride', error);
+    }
+  };
 export const SearchRides = data => async dispatch => {
   let Token = await GetToken();
 
@@ -101,7 +113,7 @@ export const SearchRides = data => async dispatch => {
 
   try {
     const response = await fetch(
-      'https://resihop-server.herokuapp.com/rides/search?startLocation.minLat_gte=3',
+      `${baseURL}rides/search?startLocation.minLat_gte=3`,
       {
         method: 'POST',
         headers: {
@@ -113,6 +125,7 @@ export const SearchRides = data => async dispatch => {
     );
 
     const responseJson = await response.json();
+    console.log('Search Rides', responseJson);
     dispatch({
       type: Types.searchRides,
       payload: responseJson,
@@ -132,19 +145,17 @@ export const SearchDrives = data => async dispatch => {
     return;
   }
   try {
-    const response = await fetch(
-      'https://resihop-server.herokuapp.com/drives/search?',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Token}`,
-        },
-        body: JSON.stringify(data),
+    const response = await fetch(`${baseURL}drives/search?`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Token}`,
       },
-    );
+      body: JSON.stringify(data),
+    });
 
     const responseJson = await response.json();
+    console.log('Search Drives', responseJson);
     dispatch({
       type: Types.searchDrives,
       payload: responseJson,
@@ -157,18 +168,16 @@ export const SearchDrives = data => async dispatch => {
 export const MyDrives = data => async dispatch => {
   let Token = await GetToken();
   try {
-    const response = await fetch(
-      'https://resihop-server.herokuapp.com/drives',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${Token}`,
-        },
+    const response = await fetch(`${baseURL}drives`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Token}`,
       },
-    );
+    });
 
     const responseJson = await response.json();
+    console.log('My Drives', responseJson);
     dispatch({
       type: Types.myDrives,
       payload: responseJson,
@@ -183,9 +192,8 @@ export const MyDrives = data => async dispatch => {
 };
 export const MyRides = data => async dispatch => {
   let Token = await GetToken();
-
   try {
-    const response = await fetch('https://resihop-server.herokuapp.com/rides', {
+    const response = await fetch(`${baseURL}rides`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -200,10 +208,6 @@ export const MyRides = data => async dispatch => {
     });
   } catch (error) {
     console.log(error);
-    dispatch({
-      type: Types.myRides,
-      payload: responseJson,
-    });
   }
 };
 
@@ -214,16 +218,12 @@ export const setUpdateDrive = data => async dispatch => {
   delete data['id'];
   try {
     axios
-      .put(
-        `https://resihop-server.herokuapp.com/drives/${id}`,
-        JSON.stringify(data),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Token}`,
-          },
+      .put(`${baseURL}drives/${id}`, JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Token}`,
         },
-      )
+      })
       .then(response => console.log(response));
   } catch (error) {
     console.log(error);
