@@ -10,9 +10,10 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
 import I18n from '../utilities/translations';
 import {GetFavLocations} from '../redux/actions/favLocation.actions';
+import {setOrigin, setMapDestination} from '../redux/actions/map.actions';
 import {useDispatch} from 'react-redux';
 
-const FavouriteLocations = ({favourteLocationRef}) => {
+const FavouriteLocations = ({favourteLocationRef, favPress}) => {
   let dispatch = useDispatch();
 
   const [locations, setLocations] = useState();
@@ -39,10 +40,36 @@ const FavouriteLocations = ({favourteLocationRef}) => {
   useEffect(() => {
     dispatch(
       GetFavLocations(setLoading, response => {
-        console.log(response);
+        setLocations(response);
       }),
     );
   }, []);
+
+  const handleSetStartFav = item => {
+    if (favPress === 'startLocation') {
+      dispatch(
+        setOrigin({
+          location: {
+            lat: item?.location?.latitude,
+            lng: item?.location?.longitude,
+          },
+          description: item?.location?.description,
+        }),
+      );
+    }
+
+    if (favPress === 'destination') {
+      dispatch(
+        setMapDestination({
+          location: {
+            lat: item?.location?.latitude,
+            lng: item?.location?.longitude,
+          },
+          description: item?.location?.description,
+        }),
+      );
+    }
+  };
 
   return (
     <RBSheet
@@ -61,25 +88,34 @@ const FavouriteLocations = ({favourteLocationRef}) => {
         <Text style={styles.selectTxt}>
           {I18n.t('select_from_fav_location')}
         </Text>
+
         <View style={styles.favAddressWrapper}>
-          {data.map(item => (
-            <View key={item.id}>
-              <TouchableOpacity style={styles.favTagBtnContainer}>
-                <Text style={styles.tagTxt}>{item.tag}</Text>
-              </TouchableOpacity>
-              <Text style={styles.address}>{item.address}</Text>
-              {item.id < data.length && <View style={styles.line} />}
-            </View>
-          ))}
+          {locations?.length > 0 ? (
+            locations.map(item => (
+              <View key={item.id}>
+                <TouchableOpacity
+                  style={styles.favTagBtnContainer}
+                  onPress={() => handleSetStartFav(item)}>
+                  <Text style={styles.tagTxt}>{item?.location?.name}</Text>
+                </TouchableOpacity>
+                <Text style={styles.address}>
+                  {item?.location?.description}
+                </Text>
+                {item.id < data.length && <View style={styles.line} />}
+              </View>
+            ))
+          ) : (
+            <Text style={styles.nofavLocation}>No Favourite Location</Text>
+          )}
         </View>
-        <TouchableOpacity
-          style={styles.cancelBtnContainer}
-          onPress={() => {
-            favourteLocationRef.current.close();
-          }}>
-          <Text style={styles.cancelTxt}>{I18n.t('cancel')}</Text>
-        </TouchableOpacity>
       </ScrollView>
+      <TouchableOpacity
+        style={styles.cancelBtnContainer}
+        onPress={() => {
+          favourteLocationRef.current.close();
+        }}>
+        <Text style={styles.cancelTxt}>{I18n.t('cancel')}</Text>
+      </TouchableOpacity>
     </RBSheet>
   );
 };
@@ -131,12 +167,18 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 33,
+    marginBottom: 33,
   },
   cancelTxt: {
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+  },
+  nofavLocation: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: colors.black,
+    textAlign: 'center',
   },
 });
 

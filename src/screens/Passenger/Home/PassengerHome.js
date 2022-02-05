@@ -152,7 +152,7 @@ const PassengerHome = ({navigation}) => {
     },
   ];
   const onPress = item => {
-    navigation.navigate('RideStatus', {status: item.status});
+    navigation.navigate('RideStatus', {item: item});
   };
 
   const getUserdata = async () => {

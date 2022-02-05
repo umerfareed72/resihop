@@ -42,7 +42,10 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
           <View style={styles.addressSquare} />
         </View>
         <View style={styles.dateWrapper}>
-          <Text style={styles.date}>{moment(item.date).format('DD-MMM')}</Text>
+          <Text style={styles.date}>
+            {moment(item.tripDate).format('DD-MMM')}{' '}
+            {moment(item.tripDate).format('hh:mm a')}
+          </Text>
           <View
             style={[
               styles.statusWrapper,
