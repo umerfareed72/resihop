@@ -13,9 +13,24 @@ import {colors, appImages} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
+import axios from 'axios';
+import {GetToken} from '../utilities/constants/index';
 
 const BookingDetails = () => {
   let navigation = useNavigation();
+
+  const createRideRequest = useSelector(
+    state => state.map.createRideRequestResponse,
+  );
+  const bookRide = useSelector(state => state.map.bookRide);
+
+  const handleToken = async () => {
+    console.log(await GetToken());
+  };
+
+  handleToken();
 
   return (
     <View style={styles.container}>
@@ -25,19 +40,17 @@ const BookingDetails = () => {
         title={I18n.t('booking_detail')}
       />
       <View style={styles.addressContainer}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{createRideRequest?.startDes}</Text>
         <View style={styles.addressCircle} />
       </View>
       <View style={[styles.addressContainer, {marginTop: 21}]}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{createRideRequest?.destDes}</Text>
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.timeDateContainer}>
-        <Text style={styles.dateTimeTxt}>{I18n.t('date_time')}</Text>
+        <Text style={styles.dateTimeTxt}>
+          {moment(createRideRequest?.tripDate).format('DD MMM')}
+        </Text>
 
         <View style={styles.seatsContainer}>
           <Image
@@ -45,7 +58,10 @@ const BookingDetails = () => {
             resizeMode="contain"
             style={styles.greenSeat}
           />
-          <Text style={styles.seatTxt}>{I18n.t('seat_num')}</Text>
+          <Text
+            style={
+              styles.seatTxt
+            }>{`${createRideRequest?.requiredSeats} Seat`}</Text>
         </View>
       </View>
       <View style={styles.driverInfoContainer}>
@@ -56,7 +72,10 @@ const BookingDetails = () => {
             style={styles.driver}
           />
           <View>
-            <Text style={styles.driverName}>{I18n.t('john')}</Text>
+            <Text
+              style={
+                styles.driverName
+              }>{`${bookRide.drive.user.firstName} ${bookRide.drive.user.lastName}`}</Text>
             <View style={styles.ratingContainer}>
               <StarIcon name="star" size={17} color={colors.white} />
               <Text style={styles.ratingTxt}>4.5</Text>
@@ -66,7 +85,7 @@ const BookingDetails = () => {
         <View>
           <Text
             style={{textAlign: 'center', fontFamily: fonts.bold, fontSize: 18}}>
-            SEK 20
+            {`SEK ${bookRide.drive.costPerSeat}`}
           </Text>
           <Text
             style={{
@@ -91,7 +110,10 @@ const BookingDetails = () => {
             resizeMode="contain"
             style={styles.seatGreen}
           />
-          <Text style={styles.seatNum}>{I18n.t('4 Seat Available')}</Text>
+          <Text
+            style={
+              styles.seatNum
+            }>{`${bookRide.drive.availableSeats} Seat Available`}</Text>
         </View>
         <View style={styles.carDetailsTxt}>
           <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
@@ -123,7 +145,7 @@ const BookingDetails = () => {
       </Text>
       <View style={styles.titleContainer}>
         <Text style={styles.bookingTitles}>{I18n.t('ride_booked')}</Text>
-        <Text style={styles.amount}>SEK 40</Text>
+        <Text style={styles.amount}>{`SEK ${bookRide.drive.costPerSeat}`}</Text>
       </View>
       <View style={styles.titleContainer}>
         <Text style={[styles.bookingTitles, {color: colors.g4}]}>
@@ -135,7 +157,7 @@ const BookingDetails = () => {
       <View style={styles.totalContainer}>
         <Text style={styles.bookingTitles}>{I18n.t('total_pay')}</Text>
         <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
-          SEK 40
+          {`SEK ${bookRide.drive.costPerSeat}`}
         </Text>
       </View>
       <TouchableOpacity

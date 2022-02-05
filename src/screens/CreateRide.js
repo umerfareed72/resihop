@@ -27,8 +27,11 @@ import {
   setMapDestination,
   CreateRideRequest,
   setDateTimeStamp,
+  setTime,
 } from '../redux/actions/map.actions';
 import moment from 'moment';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Loading from '../components/Loader/Loader';
 
 const CreateRide = () => {
   let navigation = useNavigation();
@@ -40,6 +43,7 @@ const CreateRide = () => {
   const destinationMap = useSelector(state => state.map.destination);
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
+  const time = useSelector(state => state.map.time);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
@@ -48,6 +52,8 @@ const CreateRide = () => {
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -55,8 +61,46 @@ const CreateRide = () => {
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
       dispatch(setDateTimeStamp(null));
+      dispatch(setTime(null));
     };
   }, []);
+
+  const showTimePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = date => {
+    dispatch(setTime(moment(date).format('hh:mm a')));
+    hideTimePicker();
+  };
+
+  const handleCreateRide = () => {
+    const body = {
+      startLocation: [origin.location.lat, origin.location.lng],
+      destinationLocation: [
+        destinationMap.location.lat,
+        destinationMap.location.lng,
+      ],
+      date: dateTimeStamp,
+      requiredSeats: availableSeats,
+      startDes: origin.description,
+      destDes: destinationMap.description,
+    };
+
+    dispatch(
+      CreateRideRequest(body, setIsLoading, response => {
+        console.log('Create Ride', response);
+      }),
+    );
+    navigation.navigate('StartMatching', {
+      modalName: 'startMatching',
+      dateTimeStamp: dateTimeStamp,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -163,13 +207,11 @@ const CreateRide = () => {
           <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
-          <TextInput
-            placeholder="XX:XX"
-            placeholderTextColor={colors.btnGray}
-            value={noLaterTime}
-            onChangeText={setNoLaterTime}
-            style={styles.noLater}
-          />
+          <TouchableOpacity
+            onPress={() => showTimePicker()}
+            style={[styles.noLater, {justifyContent: 'center'}]}>
+            <Text>{time ? time : `XX:XX`}</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
             style={[
@@ -186,6 +228,12 @@ const CreateRide = () => {
             source={appImages.calendar}
             resizeMode="contain"
             style={styles.calendarIcon}
+          />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="time"
+            onConfirm={handleConfirm}
+            onCancel={hideTimePicker}
           />
         </View>
         <View style={styles.returnTripWrapper}>
@@ -258,6 +306,7 @@ const CreateRide = () => {
           </>
         ) : null}
         <FavouriteLocations favourteLocationRef={favourteLocationRef} />
+        {isLoading ? <Loading /> : null}
       </ScrollView>
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}
@@ -270,25 +319,7 @@ const CreateRide = () => {
             availableSeats === null ||
             dateTimeStamp === null
           }
-          onPress={() => {
-            dispatch(
-              CreateRideRequest({
-                startLocation: [origin.location.lat, origin.location.lng],
-                destinationLocation: [
-                  destinationMap.location.lat,
-                  destinationMap.location.lng,
-                ],
-                date: dateTimeStamp,
-                requiredSeats: availableSeats,
-                startDes: origin.description,
-                destDes: destinationMap.description,
-              }),
-            );
-            navigation.navigate('StartMatching', {
-              modalName: 'startMatching',
-              dateTimeStamp: dateTimeStamp,
-            });
-          }}>
+          onPress={() => handleCreateRide()}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

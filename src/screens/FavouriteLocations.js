@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,15 @@ import {
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
 import I18n from '../utilities/translations';
+import {GetFavLocations} from '../redux/actions/favLocation.actions';
+import {useDispatch} from 'react-redux';
 
 const FavouriteLocations = ({favourteLocationRef}) => {
+  let dispatch = useDispatch();
+
+  const [locations, setLocations] = useState();
+  const [loading, setLoading] = useState(false);
+
   const data = [
     {
       id: 1,
@@ -28,6 +35,14 @@ const FavouriteLocations = ({favourteLocationRef}) => {
       address: '123 abc apartment abc street abc abc city, abc country',
     },
   ];
+
+  useEffect(() => {
+    dispatch(
+      GetFavLocations(setLoading, response => {
+        console.log(response);
+      }),
+    );
+  }, []);
 
   return (
     <RBSheet

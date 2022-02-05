@@ -12,6 +12,8 @@ import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/core';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
 const AvailableDrivers = ({
   modalName,
   setAvailableDrivers,
@@ -22,6 +24,14 @@ const AvailableDrivers = ({
 }) => {
   let navigation = useNavigation();
 
+  const searchDrivesResponse = useSelector(
+    state => state.map.searchDriveResponse,
+  );
+
+  const createRideResponse = useSelector(
+    state => state.map.createRideRequestResponse,
+  );
+
   useEffect(() => {
     setHeight(Dimensions.get('screen').height - 400);
   }, []);
@@ -30,20 +40,18 @@ const AvailableDrivers = ({
     <View style={styles.container}>
       <Text style={styles.driversTxt}>{I18n.t('available_drivers')}</Text>
       <View style={styles.addressContainer}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{createRideResponse?.startDes}</Text>
         <View style={styles.addressCircle} />
       </View>
       <View style={[styles.addressContainer, {marginTop: 21}]}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{createRideResponse?.destDes}</Text>
         <View style={styles.addressSquare} />
       </View>
       {modalName !== 'availableDrivers' && (
         <View style={styles.timeDateContainer}>
-          <Text style={styles.dateTimeTxt}>{I18n.t('date_time')}</Text>
+          <Text style={styles.dateTimeTxt}>
+            {moment(createRideResponse?.tripDate).format('DD MMM')}
+          </Text>
           <View style={styles.matchingContainer}>
             <Text style={styles.matchingTxt}>{I18n.t('matching_done')}</Text>
           </View>
@@ -53,7 +61,9 @@ const AvailableDrivers = ({
               resizeMode="contain"
               style={styles.greenSeat}
             />
-            <Text style={styles.seatTxt}>{I18n.t('seat_num')}</Text>
+            <Text style={styles.seatTxt}>
+              {`${createRideResponse?.requiredSeats} Seats`}
+            </Text>
           </View>
         </View>
       )}
@@ -66,7 +76,13 @@ const AvailableDrivers = ({
             style={styles.driver}
           />
           <View>
-            <Text style={styles.driverName}>{I18n.t('john')}</Text>
+            <Text style={styles.driverName}>{`${
+              searchDrivesResponse &&
+              searchDrivesResponse[0]?.drive.user.firstName
+            } ${
+              searchDrivesResponse &&
+              searchDrivesResponse[0]?.drive.user.lastName
+            }`}</Text>
             <View style={styles.ratingContainer}>
               <StarIcon name="star" size={17} color={colors.white} />
               <Text style={styles.ratingTxt}>4.5</Text>
@@ -92,7 +108,9 @@ const AvailableDrivers = ({
           </View>
         ) : (
           <View>
-            <Text style={styles.fair}>SEK 20</Text>
+            <Text style={styles.fair}>{`SEk ${
+              searchDrivesResponse && searchDrivesResponse[0]?.drive.costPerSeat
+            }`}</Text>
             <Image
               source={appImages.car}
               resizeMode="contain"
@@ -110,7 +128,10 @@ const AvailableDrivers = ({
                 resizeMode="contain"
                 style={styles.seatGreen}
               />
-              <Text style={styles.seatNum}>{I18n.t('seat_available')}</Text>
+              <Text style={styles.seatNum}>{`${
+                searchDrivesResponse &&
+                searchDrivesResponse[0]?.drive.availableSeats
+              } Seat Available`}</Text>
             </View>
             <View style={styles.carDetailsTxt}>
               <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
@@ -123,7 +144,13 @@ const AvailableDrivers = ({
             <View style={styles.availableBox}>
               <Text style={styles.availableTxt}>{I18n.t('available')}</Text>
             </View>
-            <Text style={styles.date}>{I18n.t('dateInt')}</Text>
+            <Text style={styles.date}>
+              {' '}
+              {searchDrivesResponse &&
+                moment(searchDrivesResponse[0]?.drive.date).format(
+                  'DD MMM YYYY',
+                )}
+            </Text>
           </View>
           <View style={styles.btnMainContainer}>
             <TouchableOpacity

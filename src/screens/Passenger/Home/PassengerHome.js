@@ -101,6 +101,8 @@ const PassengerHome = ({navigation}) => {
   const myRidesData = useSelector(state => state.map.myRidesData);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
 
+  console.log(myRidesData);
+
   useEffect(() => {
     dispatch(MyRides());
     getUserdata();
@@ -319,7 +321,7 @@ const PassengerHome = ({navigation}) => {
         ) : (
           <>
             <FlatList
-              data={ridesData}
+              data={myRidesData}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => (
