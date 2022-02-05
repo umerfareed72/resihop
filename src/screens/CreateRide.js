@@ -305,7 +305,7 @@ const CreateRide = () => {
           </>
         ) : null}
         <FavouriteLocations favourteLocationRef={favourteLocationRef} />
-        {isLoading ? <Loading /> : null}
+        {isLoading ? <Loader /> : null}
       </ScrollView>
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}
