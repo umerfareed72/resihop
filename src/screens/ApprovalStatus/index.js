@@ -49,7 +49,7 @@ const index = ({navigation, route}) => {
             switching={route?.params?.isRegister}
           />
           {/* )} */}
-          {/* {time && (
+          {time && (
             <ApprovalCard
               h1={I18n.t('congratulation')}
               h2={I18n.t('registered_driver')}
@@ -65,7 +65,7 @@ const index = ({navigation, route}) => {
                 navigation?.replace('DriverDashboard');
               }}
             />
-          )} */}
+          )}
         </View>
       </KeyboardAwareScrollView>
     </>

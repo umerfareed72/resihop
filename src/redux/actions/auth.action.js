@@ -8,7 +8,7 @@ import {header} from '../../utilities';
 /////////////////////////////////////////  Login   ////////////////////////////
 
 export const userEmailLogin =
-  (body, setIsLoading, callBack) => async dispatch => {
+  (body, mydata, setIsLoading, callBack) => async dispatch => {
     console.log('BODY', body);
     try {
       dispatch({type: Types.Set_loader, payload: true});
@@ -16,9 +16,13 @@ export const userEmailLogin =
       // if (response?.data?.user?.details) {
       AsyncStorage.setItem('usertoken', response.data.jwt);
       // }
+      const responseData = {
+        login_data: response?.data,
+        country_data: mydata,
+      };
       dispatch({
         type: Types.Login_Success,
-        payload: response?.data,
+        payload: responseData,
       });
       callBack(response.data);
     } catch (error) {
@@ -55,16 +59,21 @@ export const logout = callBack => async dispatch => {
 /////////////////////////////////////////  Registeration ////////////////////////////
 
 export const userEmailSignup =
-  (body, setIsLoading, callBack) => async dispatch => {
+  (body, mydata, setIsLoading, callBack) => async dispatch => {
     try {
       dispatch({type: Types.Set_loader, payload: true});
       await post(`${AUTH_CONST}register`, body)
         .then(response => {
           setIsLoading(false);
           AsyncStorage.setItem('usertoken', response?.data?.jwt);
+          const responseData = {
+            login_data: response?.data,
+            country_data: mydata,
+          };
+
           dispatch({
             type: Types.Signup_Success,
-            payload: response?.data,
+            payload: responseData,
           });
           callBack(response?.data);
         })
@@ -147,7 +156,7 @@ export const updateInfo =
         type: Types.Info_Success,
         payload: responseData?.data,
       });
-      onSuccess();
+      onSuccess(responseData?.data);
     } catch (error) {
       onFailure(error);
       dispatch({

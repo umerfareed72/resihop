@@ -3,7 +3,6 @@ import {View, Image, StyleSheet, Alert, Text} from 'react-native';
 import {
   appImages,
   colors,
-  HP,
   LocalNotification,
   Notification_Listner,
   registerAppWithFCM,
@@ -14,7 +13,6 @@ import MyStatusBar from '../../components/Header/statusBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
-import {theme} from '../../theme';
 import {isVehcile} from '../../redux/actions/auth.action';
 
 function splash(props) {
@@ -60,12 +58,12 @@ function splash(props) {
           ) {
             props?.navigation.replace('PassengerDashboard');
           } else {
-            if (auth?.userdata?.user?.vehicle || auth?.userInfo?.vehicle) {
+            if (auth?.profile_info?.vehicle) {
               props?.navigation.replace('DriverDashboard');
             } else {
               dispatch(
                 isVehcile(true, () => {
-                  props?.navigation.replace('VehicleStack');
+                  props?.navigation.replace('UserDetailStack');
                 }),
               );
             }

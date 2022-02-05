@@ -45,7 +45,7 @@ function walkThrough(props) {
       props.navigation.navigate('LandingUser');
     }
   };
-  const onViewRef = React.useRef(({viewableItems}: any) => {
+  const onViewRef = React.useRef(({viewableItems}) => {
     setActiveIndex(viewableItems[0].index);
   });
   const viewConfigRef = React.useRef({viewAreaCoveragePercentThreshold: 50});

@@ -17,7 +17,7 @@ import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from './FavouriteLocations';
-import {CustomHeader} from '../components';
+import {CustomHeader, Loader} from '../components';
 import CalendarSheet from './CalendarSheet';
 import I18n from '../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';

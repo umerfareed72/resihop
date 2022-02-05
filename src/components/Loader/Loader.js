@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Modal, ActivityIndicator, Text} from 'react-native';
 import {colors, family} from '../../utilities';
 
-const Loader = () => {
+export const Loader = () => {
   return (
     <>
       <Modal
@@ -28,8 +28,6 @@ const Loader = () => {
     </>
   );
 };
-
-export default Loader;
 
 const styles = StyleSheet.create({
   modalBackground: {

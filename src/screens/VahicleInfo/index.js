@@ -5,24 +5,23 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
-  Image,
+  Linking,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
-import {CustomHeader} from '../../components';
+import {CustomHeader, Loader} from '../../components';
 import * as Yup from 'yup';
-import {fonts, theme} from '../../theme';
+import {theme} from '../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {get, post} from '../../services';
-import {appIcons, colors} from '../../utilities';
+import {axios, get, post} from '../../services';
 import I18n from '../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
-import Loader from '../../components/Loader/Loader';
 import {Alert} from 'react-native';
 import SigninViaBankID from '../../components/SigninViaBankID';
-import {userEmailLogin} from '../../redux/actions/auth.action';
-
+import useAppState from '../../hooks/useAppState';
+import {header} from '../../utilities';
 const vahicleFormFields = {
   licencePlate: '',
   carCompany: '',
@@ -36,14 +35,6 @@ export const vahicleFormSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required'),
-  // carCompany: Yup.string()
-  //   .min(2, 'Too Short!')
-  //   .max(50, 'Too Long!')
-  //   .required('Required'),
-  // modelName: Yup.string()
-  //   .min(2, 'Too Short!')
-  //   .max(50, 'Too Long!')
-  //   .required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
 });
 
@@ -72,10 +63,13 @@ function index(props) {
     {label: 'NOK 50', value: 50},
   ]);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
+  const [bankdIdToken, setBankIdToken] = useState(null);
   const [next, setNext] = React.useState(false);
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
   const modelName = React.useRef();
+  const bank_url = React.useRef();
+
   const dispatch = useDispatch(null);
   //Get Latest Car Detail
   const getVahicleDetail = () => {
@@ -128,6 +122,43 @@ function index(props) {
         console.log('Error', error);
       });
   };
+
+  const acr = 'urn:grn:authn:se:bankid:same-device';
+  const appState = useAppState(async () => {
+    if (acr === 'urn:grn:authn:se:bankid:same-device') {
+      const result = await fetch(bank_url?.current).then(response => {
+        return response;
+      });
+      const token = result?.url.split('id_token=');
+      if (token) {
+        setBankIdToken(token[1]);
+      } else {
+        setIsLoading(false);
+      }
+    } else {
+      setIsLoading(false);
+    }
+  });
+  const openBankId = async () => {
+    setIsLoading(true);
+    const result = await axios.get(
+      `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+        Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+      }`,
+    );
+    if (result?.data) {
+      bank_url.current = result?.data?.completeUrl;
+      Linking.openURL(result?.data?.launchLinks?.universalLink);
+    } else {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (bankdIdToken) {
+      addVehicelInfo();
+    }
+  }, [bankdIdToken]);
+  //Add vehicle info
   const addVehicelInfo = async () => {
     setIsLoading(true);
     const requestBody = {
@@ -138,9 +169,10 @@ function index(props) {
       vehicleCompanyName: carMakerCompany,
       CO2Emissions: engineSize,
       presetCostPerPassenger: value,
+      bankID: bankdIdToken,
     };
     try {
-      const response = await post(`vehicles`, requestBody);
+      const response = await post(`vehicles`, requestBody, await header());
       if (response?.data) {
         if (!switching) {
           setIsLoading(false);
@@ -379,6 +411,7 @@ function index(props) {
                     <SigninViaBankID
                       disabled={value != null && next ? false : true}
                       onBankIdPress={() => {
+                        // openBankId();
                         addVehicelInfo();
                       }}
                       onPressTerms={() => {

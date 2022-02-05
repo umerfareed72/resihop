@@ -15,6 +15,7 @@ import {
   PaymentButtons,
   PaymentCard,
   PaymentHistory,
+  Loader,
 } from '../../../../components';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
@@ -22,6 +23,9 @@ import {appIcons, colors} from '../../../../utilities';
 import AddCard from './AddCard';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {createToken, useConfirmPayment} from '@stripe/stripe-react-native';
+import {useDispatch} from 'react-redux';
+import {add_stripe_card} from '../../../../redux/actions/payment.action';
+import {Alert} from 'react-native';
 const index = ({navigation}) => {
   const [cardScreen, setCardScreen] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
@@ -30,9 +34,9 @@ const index = ({navigation}) => {
   const [cardHolderName, setCardHolderName] = useState('');
   const [addMoney, onAddMoney] = useState(false);
   const [cardDetail, setcardDetail] = useState('');
-  const {loading} = useConfirmPayment();
+  const [Loading, setLoading] = useState(false);
   const modalRef = useRef(null);
-
+  const dispatch = useDispatch(null);
   const onPressModalButton = () => {
     if (addMoney) {
       setpaymentSuccessonFailed(true);
@@ -47,12 +51,31 @@ const index = ({navigation}) => {
     }
   };
   const addPayment = async () => {
-    const token = await createToken({
-      name: cardHolderName,
-      address: 'Lahore',
-      type: 'Card',
-    });
-    console.log('Token', token);
+    setLoading(true);
+    try {
+      const data = await createToken({
+        name: cardHolderName,
+        address: 'Lahore',
+        type: 'Card',
+      });
+
+      if (data?.token) {
+        const requestBody = {
+          tokenID: data?.token?.id,
+          name: cardHolderName,
+        };
+        dispatch(
+          add_stripe_card(requestBody, res => {
+            console.log(res);
+            Alert.alert('Success', 'Card Added Successfully');
+            setLoading(false);
+          }),
+        );
+      }
+    } catch (error) {
+      Alert.alert('Error', error?.response?.message);
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -132,7 +155,7 @@ const index = ({navigation}) => {
               onChangeText={text => {
                 setCardHolderName(text);
               }}
-              disabled={loading}
+              disabled={!Loading && cardHolderName ? false : true}
               btn={true}
               onCardChange={details => {
                 setcardDetail(details);
@@ -196,6 +219,7 @@ const index = ({navigation}) => {
         show={modalRef}
         h2={I18n.t('lorem')}
       />
+      {Loading ? <Loader /> : null}
     </>
   );
 };
