@@ -14,6 +14,9 @@ module.exports = {
   //Get Card
   Get_Card_Success: 'Get_Card_Success',
   Get_Card_Failure: 'Get_Card_Failure',
+  //Current Card
+  Current_Card_Success: 'Current_Card_Success',
+
   //Get Card
   Payment_Loader: 'Payment_Loader',
 };

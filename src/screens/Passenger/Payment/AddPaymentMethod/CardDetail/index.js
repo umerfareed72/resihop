@@ -12,11 +12,31 @@ import {
 } from '../../../../../components';
 import I18n from '../../../../../utilities/translations';
 import LinearGradient from 'react-native-linear-gradient';
+import {useDispatch, useSelector} from 'react-redux';
+import {checkBrand} from '../../../../../utilities/helpers/checkBrand';
+import {delete_stripe_card} from '../../../../../redux/actions/payment.action';
 
 const CardDetail = ({navigation}) => {
   const [show, setshow] = useState(false);
   const [selected, setSelected] = useState(false);
+  const payment = useSelector(state => state.payment);
+  const dispatch = useDispatch(null);
+  const confirmRemoveCard = () => {
+    const requestBody = {
+      card_id: payment?.current_card?.id,
+      cid: payment?.current_card?.customer,
+    };
+    dispatch(
+      delete_stripe_card(requestBody, res => {
+        console.log(res);
+        setSelected(true);
+        // navigation?.navigate('WithDrawPayment');
+        navigation?.navigate('Payment');
 
+        setshow(false);
+      }),
+    );
+  };
   return (
     <>
       <CustomHeader
@@ -30,10 +50,15 @@ const CardDetail = ({navigation}) => {
             colors={colors.gradientpaidCard}
             style={styles.content}>
             <View style={styles.imageContainer}>
-              <Image style={styles.imageStyle} source={appImages.visa} />
+              <Image
+                style={styles.imageStyle}
+                source={checkBrand(payment?.current_card?.brand)}
+              />
             </View>
-            <Text style={styles.textStyle}>{'Umer'}</Text>
-            <Text style={styles.textStyle}>****{1234}</Text>
+            <Text style={styles.textStyle}>{payment?.current_card?.name}</Text>
+            <Text style={styles.textStyle}>
+              ****{payment?.current_card?.last4}
+            </Text>
           </LinearGradient>
           <View style={styles.cardContainer}>
             <PaymentButtons
@@ -79,9 +104,7 @@ const CardDetail = ({navigation}) => {
           bgColor={colors.green}
           textColor={colors.white}
           onPressYes={() => {
-            setSelected(true);
-            navigation?.navigate('WithDrawPayment');
-            setshow(false);
+            confirmRemoveCard();
           }}
           onPressNo={() => {
             setSelected(false);

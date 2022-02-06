@@ -29,6 +29,8 @@ import {
   setDateTimeStamp,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Loading from '../../../components/Loader/Loader';
 
 const CreateDrive = () => {
   let navigation = useNavigation();
@@ -42,8 +44,6 @@ const CreateDrive = () => {
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
 
-  console.log(origin, destinationMap, availableSeats, dateTimeStamp);
-
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
@@ -51,6 +51,16 @@ const CreateDrive = () => {
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
+  const [favPress, setFavPress] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: '20', value: 20},
+    {label: '30', value: 30},
+    {label: '40', value: 40},
+  ]);
 
   useEffect(() => {
     return () => {
@@ -60,6 +70,31 @@ const CreateDrive = () => {
       dispatch(setDateTimeStamp(null));
     };
   }, []);
+
+  const handleCreateDrive = () => {
+    const body = {
+      startLocation: [origin.location.lat, origin.location.lng],
+      destinationLocation: [
+        destinationMap.location.lat,
+        destinationMap.location.lng,
+      ],
+      date: dateTimeStamp,
+      availableSeats: availableSeats,
+      path: 0,
+      costPerSeat: value,
+      interCity: false,
+      startDes: origin.description,
+      destDes: destinationMap.description,
+    };
+
+    dispatch(
+      CreateDriveRequest(body, setIsLoading, response => {
+        console.log('Create Drive', response);
+      }),
+    );
+
+    navigation.navigate('SelectRoute');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -199,14 +234,16 @@ const CreateDrive = () => {
           />
         </View>
         <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
-        <TouchableOpacity style={styles.presetCostContainer}>
-          <Text style={{fontFamily: fonts.regular}}>SEK 20</Text>
-          <ArrowDown
-            name="keyboard-arrow-down"
-            size={24}
-            color={colors.black}
-          />
-        </TouchableOpacity>
+        <DropDownPicker
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          style={{width: '90%', alignSelf: 'center'}}
+          dropDownContainerStyle={{width: '90%', alignSelf: 'center'}}
+        />
         <View style={styles.returnTripWrapper}>
           <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
           <ToggleSwitch
@@ -276,7 +313,11 @@ const CreateDrive = () => {
             </View>
           </>
         ) : null}
-        <FavouriteLocations favourteLocationRef={favourteLocationRef} />
+        <FavouriteLocations
+          favourteLocationRef={favourteLocationRef}
+          favPress={favPress}
+        />
+        {isLoading ? <Loading /> : null}
       </ScrollView>
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}
@@ -289,25 +330,7 @@ const CreateDrive = () => {
             availableSeats === null ||
             dateTimeStamp === null
           }
-          onPress={() => {
-            dispatch(
-              CreateDriveRequest({
-                startLocation: [origin.location.lat, origin.location.lng],
-                destinationLocation: [
-                  destinationMap.location.lat,
-                  destinationMap.location.lng,
-                ],
-                date: dateTimeStamp,
-                availableSeats: availableSeats,
-                path: 0,
-                costPerSeat: 200.0,
-                interCity: false,
-                startDes: origin.description,
-                destDes: destinationMap.description,
-              }),
-            );
-            navigation.navigate('SelectRoute');
-          }}>
+          onPress={() => handleCreateDrive()}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

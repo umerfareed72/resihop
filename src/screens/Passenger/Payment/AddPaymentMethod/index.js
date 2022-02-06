@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -19,13 +19,19 @@ import {
 } from '../../../../components';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
-import {appIcons, colors} from '../../../../utilities';
+import {appIcons, checkConnected, colors} from '../../../../utilities';
 import AddCard from './AddCard';
+import {useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {createToken, useConfirmPayment} from '@stripe/stripe-react-native';
-import {useDispatch} from 'react-redux';
-import {add_stripe_card} from '../../../../redux/actions/payment.action';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  add_stripe_card,
+  get_card_list,
+  save_current_card,
+} from '../../../../redux/actions/payment.action';
 import {Alert} from 'react-native';
+import {FlatList} from 'react-native';
 const index = ({navigation}) => {
   const [cardScreen, setCardScreen] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
@@ -36,7 +42,15 @@ const index = ({navigation}) => {
   const [cardDetail, setcardDetail] = useState('');
   const [Loading, setLoading] = useState(false);
   const modalRef = useRef(null);
+  const isFocus = useIsFocused();
+
+  //Redux State
+  const auth = useSelector(state => state.auth);
+  const payment = useSelector(state => state.payment);
+
   const dispatch = useDispatch(null);
+
+  //onpress
   const onPressModalButton = () => {
     if (addMoney) {
       setpaymentSuccessonFailed(true);
@@ -50,6 +64,25 @@ const index = ({navigation}) => {
       navigation?.navigate('StartMatching', {modalName: 'pickUpInfo'});
     }
   };
+
+  useEffect(() => {
+    if (isFocus) {
+      getCards();
+    }
+  }, [isFocus]);
+  //Card List
+  const getCards = async () => {
+    const check = await checkConnected();
+    if (check) {
+      dispatch(
+        get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
+          console.log(res);
+        }),
+      );
+    }
+  };
+
+  //Add Card
   const addPayment = async () => {
     setLoading(true);
     try {
@@ -66,8 +99,12 @@ const index = ({navigation}) => {
         };
         dispatch(
           add_stripe_card(requestBody, res => {
-            console.log(res);
-            Alert.alert('Success', 'Card Added Successfully');
+            Alert.alert(
+              'Success',
+              'Card Added Successfully',
+              [{text: 'Ok', onPress: () => getCards()}],
+              {cancelable: false},
+            );
             setLoading(false);
           }),
         );
@@ -131,16 +168,28 @@ const index = ({navigation}) => {
             title={I18n.t('wallet_balance')}
             add_Money={I18n.t('add_cards')}
           />
-
-          <BankCard
-            name={'John Doe'}
-            cardno={1234}
-            value={toggleCheckBox}
-            onPressCard={() => {
-              navigation?.navigate('CardDetail');
+          <FlatList
+            horizontal={true}
+            data={payment?.card_list}
+            renderItem={({item}) => {
+              return (
+                <BankCard
+                  name={item?.name}
+                  cardno={item?.last4}
+                  brand={item?.brand}
+                  value={toggleCheckBox}
+                  onPressCard={() => {
+                    dispatch(
+                      save_current_card(item, () => {
+                        navigation?.navigate('CardDetail');
+                      }),
+                    );
+                  }}
+                  onPress={setToggleCheckBox}
+                  boxType={'circle'}
+                />
+              );
             }}
-            onPress={setToggleCheckBox}
-            boxType={'circle'}
           />
 
           <PaymentHistory

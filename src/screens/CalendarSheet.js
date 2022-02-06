@@ -53,7 +53,7 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
   LocaleConfig.defaultLocale = 'en';
 
   const handleDayPress = date => {
-    dispatch(setDateTimeStamp(date.timestamp));
+    dispatch(setDateTimeStamp(moment(date.dateString).format('YYYY-MM-DD')));
     let markedObj = {};
     const selectedDate = moment(date.dateString).format('YYYY-MM-DD');
     markedObj[selectedDate] = {

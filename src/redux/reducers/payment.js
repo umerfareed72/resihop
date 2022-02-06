@@ -4,6 +4,8 @@ const initialState = {
   success: false,
   failure: false,
   payment_data: null,
+  card_list: [],
+  current_card: {},
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -25,6 +27,70 @@ export default (state = initialState, action = {}) => {
         failure: true,
         payment_data: null,
       };
+    case Types.Get_Card_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        card_list: payload,
+      };
+
+    case Types.Get_Card_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        card_list: null,
+      };
+    case Types.Edit_Card_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        // card_list: payload,
+      };
+
+    case Types.Edit_Card_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        // card_list: null,
+      };
+
+    case Types.Delete_Card_Success:
+      const filter = state.card_list?.filter(item => {
+        return item?.id != payload?.id;
+      });
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        card_list: [...filter],
+      };
+
+    case Types.Delete_Card_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        card_list: state.card_list,
+      };
+    case Types.Current_Card_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        current_card: payload,
+      };
+
     case Types.Payment_Loader:
       return {
         ...state,

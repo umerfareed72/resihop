@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import {appImages, colors} from '../utilities';
+import {appImages, colors, appIcons} from '../utilities';
 
 import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
@@ -25,6 +25,7 @@ import PickUpInfoCard from './PickUpInfoCard';
 import MapViewDirections from 'react-native-maps-directions';
 import {useSelector, useDispatch} from 'react-redux';
 import {setDistanceAndTime} from '../redux/actions/map.actions';
+import {fonts} from '../theme';
 
 const MapViewComponent = ({
   rideModals,
@@ -123,7 +124,7 @@ const MapViewComponent = ({
             destination={destination.description}
             apikey={'AIzaSyCDp-9R6VeL2G-8BpsHHxJSNkD5ZKyTZok'}
             strokeWidth={3}
-            strokeColor="black"
+            strokeColor={'#007BD2'}
             mode="DRIVING"
             timePrecision="now"
             precision="high"
@@ -161,6 +162,7 @@ const MapViewComponent = ({
               latitude: origin.location.lat,
               longitude: origin.location.lng,
             }}
+            icon={appIcons.startLocatin}
           />
         )}
 
@@ -193,8 +195,13 @@ const MapViewComponent = ({
                 coordinate={{
                   latitude: driver?.drive?.startLocation?.latitude,
                   longitude: driver?.drive?.startLocation?.longitude,
-                }}
-              />
+                }}>
+                <View style={styles.driverCard}>
+                  <Text style={styles.driverTxt}>{`${
+                    driver.drive.costPerSeat
+                  } SEK | ${parseInt(driver.distance * 111 * 1000)} M`}</Text>
+                </View>
+              </Marker>
             ))
           : null}
       </MapView>
@@ -261,6 +268,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 25,
     right: 16,
+  },
+  driverCard: {
+    padding: 10,
+    backgroundColor: colors.blue,
+    borderRadius: 30,
+  },
+  driverTxt: {
+    color: colors.white,
+    fontFamily: fonts.bold,
+    fontSize: 12,
   },
 });
 

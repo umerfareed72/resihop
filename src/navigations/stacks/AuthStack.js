@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import landingUser from '../../screens/landingUser';
-import walkThrough from '../../screens/walkThrough';
-import languageSelect from '../../screens/LanguageSelect/languageSelect';
-import SignIn from '../../screens/SignInScreen/SignIn';
-import SignUp from '../../screens/SignUpScreen/SignUp';
+import landingUser from '../../screens/WelcomeScreens/landingUser';
+import walkThrough from '../../screens/WelcomeScreens/walkThrough';
+import languageSelect from '../../screens/WelcomeScreens/LanguageSelect/languageSelect';
+import SignIn from '../../screens/Auth/SignInScreen/SignIn';
+import SignUp from '../../screens/Auth/SignUpScreen/SignUp';
 import UserDetailStack from './UserDetailStack';
 
 const Stack = createStackNavigator();

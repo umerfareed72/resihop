@@ -38,9 +38,10 @@ import CostPerSeat from '../../screens/CostPerSeat/CostPerSeat';
 import AvailablePassengerMap from '../../screens/AvailablePassengerMap/AvailablePassengerMap';
 import AvailablePassenger from '../../screens/AvailablePassengerList/AvailablePassengerList';
 import DRecurringRides from '../../screens/Driver/DRecurringRides';
-import ChangePhone from '../../screens/ChangePhone';
 import DRecurringRideDetail from '../../screens/Driver/DRecurringRideDetail';
-import EditProfile from '../../screens/EditProfile';
+
+import ChangePhone from '../../screens/Profile/ChangePhone';
+import EditProfile from '../../screens/Profile/EditProfile';
 
 const Stack = createStackNavigator();
 function DriverStack(props) {

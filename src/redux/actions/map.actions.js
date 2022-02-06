@@ -51,29 +51,34 @@ export const setTime = data => async dispatch => {
   });
 };
 
-export const CreateDriveRequest = data => async dispatch => {
-  let Token = await GetToken();
+export const CreateDriveRequest =
+  (body, setIsLoading, callback) => async dispatch => {
+    let Token = await GetToken();
 
-  try {
-    const response = await fetch(`${baseURL}drives`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Token}`,
-      },
-      body: JSON.stringify(data),
-    });
+    setIsLoading(true);
 
-    const responseJson = await response.json();
-    console.log('Create Drive Request', responseJson);
-    dispatch({
-      type: Types.createDriveRequest,
-      payload: responseJson,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+    try {
+      const response = await fetch(`${baseURL}drives`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const responseJson = await response.json();
+      setIsLoading(false);
+      callback(responseJson);
+      dispatch({
+        type: Types.createDriveRequest,
+        payload: responseJson,
+      });
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
 export const CreateRideRequest =
   (body, setIsLoading, callback) => async dispatch => {
     let Token = await GetToken();

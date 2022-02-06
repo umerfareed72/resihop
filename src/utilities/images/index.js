@@ -46,6 +46,8 @@ export const appIcons = {
   driver_brick_bg: require('../../assets/icons/png/driver/driver_brick_bg.png'),
   bank_id: require('../../assets/icons/png/bank_id.png'),
   edit_profile: require('../../assets/icons/png/editprofile.png'),
+  startLocatin: require('../../assets/icons/png/startLocation.png'),
+  destination: require('../../assets/icons/png/destination.png'),
   // /icons/png/Group9368.png
 };
 export const appImages = {

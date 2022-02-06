@@ -7,16 +7,16 @@ import {
   ToastAndroid,
   Alert,
 } from 'react-native';
-import {CustomHeader, Loader} from '../../components';
+import {CustomHeader, Loader} from '../../../components';
 import _ from 'lodash/string';
-import {theme} from '../../theme';
-import OtpValidator from '../../components/OtpValidator';
-import I18n from '../../utilities/translations';
+import {theme} from '../../../theme';
+import OtpValidator from '../../../components/OtpValidator';
+import I18n from '../../../utilities/translations';
 import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
-import {userEmailSignup} from '../../redux/actions/auth.action';
-import {checkConnected} from '../../utilities';
-import {get} from '../../services';
+import {userEmailSignup} from '../../../redux/actions/auth.action';
+import {checkConnected} from '../../../utilities';
+import {get} from '../../../services';
 
 function SignUp(props) {
   const dispatch = useDispatch(null);

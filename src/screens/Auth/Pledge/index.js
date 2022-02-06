@@ -1,13 +1,13 @@
 import React, {Component, useState, useEffect} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, View, Text} from 'react-native';
-import {CustomHeader} from '../../components/Header/CustomHeader';
+import {CustomHeader} from '../../../components/Header/CustomHeader';
 import styles from './style';
-import I18n from '../../utilities/translations';
+import I18n from '../../../utilities/translations';
 import {FlatList} from 'react-native-gesture-handler';
-import {PledgeCard, AgreeButton, Loader} from '../../components';
-import {colors} from '../../utilities';
-import {get} from '../../services';
-import {responseValidator} from '../../utilities/helpers';
+import {PledgeCard, AgreeButton, Loader} from '../../../components';
+import {colors} from '../../../utilities';
+import {get} from '../../../services';
+import {responseValidator} from '../../../utilities/helpers';
 import {useSelector} from 'react-redux';
 const index = ({navigation}) => {
   const [loading, setloading] = useState(false);
