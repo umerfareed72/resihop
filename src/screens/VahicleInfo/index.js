@@ -43,11 +43,11 @@ function index(props) {
   const mobile = useSelector(state => state.auth?.userdata?.user?.mobile);
   const switching = useSelector(state => state.auth?.switching);
   const vehicle = useSelector(state => state.auth?.is_vehicle);
-  const [licencePlateNumber, setLicencePlateNumber] = useState('');
-  const [carMakerCompany, setCarMakerCompany] = useState('');
-  const [carModel, setcarModel] = useState('');
-  const [carColor, setcarColor] = useState('');
-  const [engineSize, setEngineSize] = useState('');
+  const [licencePlateNumber, setLicencePlateNumber] = useState('sv1234');
+  const [carMakerCompany, setCarMakerCompany] = useState('Toyota');
+  const [carModel, setcarModel] = useState('2012');
+  const [carColor, setcarColor] = useState('black');
+  const [engineSize, setEngineSize] = useState('213');
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -74,6 +74,7 @@ function index(props) {
   //Get Latest Car Detail
   const getVahicleDetail = () => {
     const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
+    console.log(url);
     setIsLoading(true);
     var parseString = require('react-native-xml2js').parseString;
     fetch(url, {
@@ -83,6 +84,7 @@ function index(props) {
       .then(responseData => {
         setIsLoading(false);
         try {
+          console.log(responseData);
           if (responseData.match('Out of credit')) {
             alert(responseData);
           } else {
@@ -409,7 +411,7 @@ function index(props) {
                   </TouchableOpacity>
                   {!switching ? (
                     <SigninViaBankID
-                      disabled={value != null && next ? false : true}
+                      disabled={false}
                       onBankIdPress={() => {
                         // openBankId();
                         addVehicelInfo();
@@ -421,7 +423,7 @@ function index(props) {
                   ) : (
                     <Button
                       title={I18n.t('register')}
-                      disabled={value != null && next ? false : true}
+                      // disabled={value != null && next ? false : true}
                       onPress={() => {
                         addVehicelInfo();
                       }}
