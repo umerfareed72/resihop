@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {
   CustomHeader,
+  Loader,
   PaymentFilterModal,
   RideFilterModal,
   RideHistoryCard,
@@ -19,6 +20,9 @@ import {
 import {appIcons, appImages, colors} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
+import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {get_rides_history} from '../../../../redux/actions/rides.actions';
 //Data
 var TimeList = {
   id: 1,
@@ -84,7 +88,9 @@ const index = ({navigation}) => {
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
-
+  const isFocus = useIsFocused();
+  const rides = useSelector(state => state.rides);
+  const dispatch = useDispatch(null);
   const selectTime = val => {
     settime(val);
   };
@@ -108,6 +114,18 @@ const index = ({navigation}) => {
     setStatus('');
   };
 
+  useEffect(() => {
+    if (isFocus) {
+      getRides();
+    }
+  }, [isFocus]);
+  const getRides = async () => {
+    dispatch(
+      get_rides_history(res => {
+        console.log(res);
+      }),
+    );
+  };
   return (
     <>
       <CustomHeader
@@ -129,14 +147,18 @@ const index = ({navigation}) => {
         <View style={styles.contentContainer}>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={[1, 2, 3, 4, 5, 6, 7]}
-            renderItem={() => {
+            data={rides?.ride_history}
+            renderItem={({item}) => {
               return (
                 <RideHistoryCard
+                  dateTime={item?.createdAt}
                   profilePic={true}
+                  cost={'30'}
                   onPressCard={() => {
                     navigation?.navigate('RideDetail');
                   }}
+                  startLocation={item?.startDes}
+                  destination={item?.destDes}
                 />
               );
             }}
@@ -170,6 +192,7 @@ const index = ({navigation}) => {
         }}
       />
       <SortModal show={sortModalRef} />
+      {rides?.loading ? <Loader /> : null}
     </>
   );
 };
