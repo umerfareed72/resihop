@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {ApprovalCard, CustomHeader, PaymentButtons} from '../../components';
-import {appIcons, colors, family, size} from '../../utilities';
+import {ApprovalCard, CustomHeader, PaymentButtons} from '../../../components';
+import {appIcons, colors, family, size} from '../../../utilities';
 import styles from './styles';
-import I18n from '../../utilities/translations';
+import I18n from '../../../utilities/translations';
 
 const index = ({navigation, route}) => {
   const [time, settime] = useState(false);

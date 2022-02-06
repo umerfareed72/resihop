@@ -11,12 +11,12 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import {theme} from '../theme';
+import {theme} from '../../theme';
 import {Image, Button, Text, Icon} from 'react-native-elements';
 import {ExpandingDot} from 'react-native-animated-pagination-dots';
-import I18n from '../utilities/translations';
+import I18n from '../../utilities/translations';
 
-import {appIcons} from '../utilities/images';
+import {appIcons} from '../../utilities/images';
 
 const introData = [
   {

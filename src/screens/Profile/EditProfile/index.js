@@ -10,17 +10,17 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Input, Text, Button, Avatar, Icon} from 'react-native-elements';
-import {CustomHeader, Loader} from '../../components';
+import {CustomHeader, Loader} from '../../../components';
 import * as Yup from 'yup';
-import {appIcons, baseURL, colors, GetToken, header} from '../../utilities';
-import {theme} from '../../theme';
-import UploadImage from '../../components/UploadImage';
-import GenderChips from '../../components/GenderChips';
-import I18n from '../../utilities/translations';
+import {appIcons, baseURL, colors, GetToken, header} from '../../../utilities';
+import {theme} from '../../../theme';
+import UploadImage from '../../../components/UploadImage';
+import GenderChips from '../../../components/GenderChips';
+import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 import {Alert} from 'react-native';
-import {updateInfo} from '../../redux/actions/auth.action';
+import {updateInfo} from '../../../redux/actions/auth.action';
 
 const formFields = {
   firstName: '',

@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
-import {CustomHeader, Loader} from '../../components';
-import {theme} from '../../theme';
-import {colors} from '../../utilities';
+import {CustomHeader, Loader} from '../../../components';
+import {theme} from '../../../theme';
+import {colors} from '../../../utilities';
 
 function index(props) {
   const [info, setInfo] = useState([

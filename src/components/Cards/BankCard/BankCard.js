@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {family, size, appImages, colors} from '../../../utilities';
 import CheckBox from '@react-native-community/checkbox';
+import {checkBrand} from '../../../utilities/helpers/checkBrand';
 
 export const BankCard = ({
   onPress,
@@ -11,12 +12,14 @@ export const BankCard = ({
   name,
   cardno,
   onPressCard,
+  brand,
 }) => {
+  console.log(brand);
   return (
     <LinearGradient colors={colors.gradientpaidCard} style={styles.container}>
       <View style={styles.content}>
         <View style={styles.imageContainer}>
-          <Image style={styles.imageStyle} source={appImages.visa} />
+          <Image style={styles.imageStyle} source={checkBrand(brand)} />
           <CheckBox
             disabled={false}
             value={value}
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
     width: 140,
     height: 106,
     borderRadius: 16,
-    marginVertical: 20,
+    margin: 10,
   },
   content: {
     padding: 15,

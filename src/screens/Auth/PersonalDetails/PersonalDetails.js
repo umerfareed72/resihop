@@ -11,22 +11,27 @@ import {
 } from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {theme} from '../../theme';
+import {theme} from '../../../theme';
 import _ from 'lodash/string';
 import {Button, Icon, Input, Text} from 'react-native-elements';
-import Chips from '../../components/Chips';
-import GenderChips from '../../components/GenderChips';
-import UploadImage from '../../components/UploadImage';
-import SigninViaBankID from '../../components/SigninViaBankID';
-import {CustomHeader, Header, IncorrectRefCode, Loader} from '../../components';
-import I18n from '../../utilities/translations';
+import Chips from '../../../components/Chips';
+import GenderChips from '../../../components/GenderChips';
+import UploadImage from '../../../components/UploadImage';
+import SigninViaBankID from '../../../components/SigninViaBankID';
+import {
+  CustomHeader,
+  Header,
+  IncorrectRefCode,
+  Loader,
+} from '../../../components';
+import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
-import {baseURL, colors} from '../../utilities';
-import {GetToken} from '../../utilities/constants';
+import {baseURL, colors} from '../../../utilities';
+import {GetToken} from '../../../utilities/constants';
 
-import {SwitchDrive, updateInfo} from '../../redux/actions/auth.action';
-import useAppState from '../../hooks/useAppState';
+import {SwitchDrive, updateInfo} from '../../../redux/actions/auth.action';
+import useAppState from '../../../hooks/useAppState';
 const user = {
   Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
   Driver: 'Driver', // 616e6a8c6fc87c0016b740e8

@@ -2,14 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Text, View, StyleSheet, Image, NativeModules} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
 import {useDispatch} from 'react-redux';
-import ChooseLanguage from '../../components/ChooseLanguage';
-import {Container} from '../../components/Container';
-import MyStatusBar from '../../components/Header/statusBar';
-import {LanguageInfo} from '../../redux/actions/auth.action';
-import {theme} from '../../theme/theme';
-import {colors} from '../../utilities';
-import {appIcons, drawerIcons} from '../../utilities/images';
-import I18n from '../../utilities/translations';
+import ChooseLanguage from '../../../components/ChooseLanguage';
+import {Container} from '../../../components/Container';
+import MyStatusBar from '../../../components/Header/statusBar';
+import {LanguageInfo} from '../../../redux/actions/auth.action';
+import {theme} from '../../../theme/theme';
+import {colors} from '../../../utilities';
+import {appIcons, drawerIcons} from '../../../utilities/images';
+import I18n from '../../../utilities/translations';
 
 function languageSelect(props) {
   const dispatch = useDispatch(null);

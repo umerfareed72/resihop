@@ -86,7 +86,6 @@ const CreateRide = () => {
 
   const handleCreateRide = () => {
     const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
-
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [

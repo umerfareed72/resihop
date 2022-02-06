@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, Keyboard, Alert} from 'react-native';
-import {CustomHeader, NetInfoModal, Loader} from '../../components';
+import {CustomHeader, NetInfoModal, Loader} from '../../../components';
 import _ from 'lodash/string';
-import {theme} from '../../theme';
-import OtpValidator from '../../components/OtpValidator';
-import I18n from '../../utilities/translations';
+import {theme} from '../../../theme';
+import OtpValidator from '../../../components/OtpValidator';
+import I18n from '../../../utilities/translations';
 import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
-import {SwitchDrive, userEmailLogin} from '../../redux/actions/auth.action';
-import {checkConnected} from '../../utilities';
-import {get} from '../../services';
+import {SwitchDrive, userEmailLogin} from '../../../redux/actions/auth.action';
+import {checkConnected} from '../../../utilities';
+import {get} from '../../../services';
 
 function signIn(props) {
   const dispatch = useDispatch(null);

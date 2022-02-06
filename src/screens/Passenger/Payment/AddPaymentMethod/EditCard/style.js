@@ -9,5 +9,8 @@ export default StyleSheet.create({
   contentContainer: {
     paddingHorizontal: WP('5'),
   },
- 
+  infoStyle: {
+    color: colors.g1,
+    fontSize: size.xxsmall,
+  },
 });

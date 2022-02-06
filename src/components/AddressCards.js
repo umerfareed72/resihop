@@ -24,6 +24,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {fonts} from '../theme';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Loader} from './Loader/Loader';
 
 const AddressCards = ({
   modalName,
@@ -46,7 +47,7 @@ const AddressCards = ({
   const [currentAddress, setCurrentAddress] = useState('');
   const [normalTime, setnormalTime] = useState();
   const [favBtn, setFavBtn] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false);
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
   const time = useSelector(state => state.map.time);
@@ -112,6 +113,7 @@ const AddressCards = ({
   // };
 
   const handleAddFavLocation = item => {
+    setIsLoading(true);
     setFavBtn(item);
 
     const body = {
@@ -138,6 +140,7 @@ const AddressCards = ({
 
     dispatch(
       AddFavLocation(body, response => {
+        setIsLoading(false);
         alert('Location added as favourite');
       }),
     );
@@ -289,6 +292,7 @@ const AddressCards = ({
               )}>
               <Text style={styles.favLocationBtnTxt}>{I18n.t('office')}</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
               style={[
                 styles.favLocationBtn,
@@ -451,6 +455,7 @@ const AddressCards = ({
         </View>
       ) : null}
       <CalendarSheet calendarSheetRef={calenderSheetRef} />
+      {isLoading ? <Loader /> : null}
     </>
   );
 };
