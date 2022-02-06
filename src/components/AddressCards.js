@@ -44,6 +44,7 @@ const AddressCards = ({
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
+  const [normalTime, setnormalTime] = useState();
 
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
@@ -61,7 +62,8 @@ const AddressCards = ({
   };
 
   const handleConfirm = date => {
-    dispatch(setTime(moment(date).format('hh:mm a')));
+    dispatch(setTime(moment(date).format('HH:mm')));
+    setnormalTime(moment(date).format('hh:mm a'));
     hideTimePicker();
   };
 
@@ -350,7 +352,7 @@ const AddressCards = ({
                 <TouchableOpacity
                   onPress={() => showTimePicker()}
                   style={[styles.noLater, {justifyContent: 'center'}]}>
-                  <Text>{time ? time : `XX:XX`}</Text>
+                  <Text>{normalTime ? normalTime : `XX:XX`}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
