@@ -44,7 +44,15 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
         <Text style={styles.intDistance}>500 M</Text>
       </View>
       <TouchableOpacity
-        style={styles.btnWrapper}
+        style={[
+          styles.btnWrapper,
+          {
+            backgroundColor:
+              searchDrivesResponse === null || searchDrivesResponse.length === 0
+                ? colors.g1
+                : colors.green,
+          },
+        ]}
         disabled={
           searchDrivesResponse === null || searchDrivesResponse.length === 0
         }
