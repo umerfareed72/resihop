@@ -9,9 +9,53 @@ import {
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
 import I18n from '../utilities/translations';
+import {AddFavLocation} from '../redux/actions/favLocation.actions';
+import {useDispatch, useSelector} from 'react-redux';
 
-const AddFavrouteLocation = ({addfavrouiteAddressRef}) => {
-  const [name, setName] = useState('');
+const AddFavrouteLocation = ({
+  addfavrouiteAddressRef,
+  setfavName,
+  favName,
+  modalName,
+}) => {
+  let dispatch = useDispatch();
+
+  const origin = useSelector(state => state.map.origin);
+  const destinationMap = useSelector(state => state.map.destination);
+  const user = useSelector(state => state.auth.userdata);
+
+  const handleAddFavLocation = item => {
+    const body = {
+      type: 'LOCATION',
+      user: {
+        _id: user.user.id,
+      },
+      location: {
+        latitude:
+          modalName === 'startLocation'
+            ? origin.location.lat
+            : destinationMap.location.lat,
+        longitude:
+          modalName === 'startLocation'
+            ? origin.location.lng
+            : destinationMap.location.lng,
+        name: favName,
+        description:
+          modalName === 'startLocation'
+            ? origin.description
+            : destinationMap.description,
+      },
+    };
+
+    dispatch(
+      AddFavLocation(body, response => {
+        alert('Location added as favourite');
+      }),
+    );
+    addfavrouiteAddressRef.current.close();
+    setfavName('');
+  };
+
   return (
     <RBSheet
       ref={addfavrouiteAddressRef}
@@ -40,11 +84,13 @@ const AddFavrouteLocation = ({addfavrouiteAddressRef}) => {
       <TextInput
         placeholder="Add name (Optional)"
         placeholderTextColor={colors.btnGray}
-        value={name}
-        onChangeText={setName}
+        value={favName}
+        onChangeText={setfavName}
         style={styles.input}
       />
-      <TouchableOpacity style={styles.saveBtn}>
+      <TouchableOpacity
+        style={styles.saveBtn}
+        onPress={() => handleAddFavLocation()}>
         <Text style={styles.saveTxt}>{I18n.t('save')}</Text>
       </TouchableOpacity>
     </RBSheet>

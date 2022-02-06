@@ -19,12 +19,19 @@ import {
   setAvailableSeats,
   setTime,
 } from '../redux/actions/map.actions';
+import {AddFavLocation} from '../redux/actions/favLocation.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {fonts} from '../theme';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
+const AddressCards = ({
+  modalName,
+  addfavrouiteAddressRef,
+  onPress,
+  mode,
+  favName,
+}) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
   const calenderSheetRef = useRef(null);
@@ -43,6 +50,7 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
   const time = useSelector(state => state.map.time);
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
+  const user = useSelector(state => state.auth.userdata);
 
   const showTimePicker = () => {
     setDatePickerVisibility(true);
@@ -72,6 +80,60 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
       }
     }
   }, []);
+
+  // const handleAddLocation = item => {
+  //   const body = {
+  //     latitude:
+  //       modalName === 'startLocation'
+  //         ? origin.location.lat
+  //         : destinationMap.location.lat,
+  //     longitude:
+  //       modalName === 'startLocation'
+  //         ? origin.location.lng
+  //         : destinationMap.location.lng,
+  //     name: item ? item : favName,
+  //     description:
+  //       modalName === 'startLocation'
+  //         ? origin.description
+  //         : destinationMap.description,
+  //   };
+
+  //   dispatch(
+  //     AddLocation(body, response => {
+  //       console.log(response);
+  //     }),
+  //   );
+  // };
+
+  const handleAddFavLocation = item => {
+    const body = {
+      type: 'LOCATION',
+      user: {
+        _id: user.user.id,
+      },
+      location: {
+        latitude:
+          modalName === 'startLocation'
+            ? origin.location.lat
+            : destinationMap.location.lat,
+        longitude:
+          modalName === 'startLocation'
+            ? origin.location.lng
+            : destinationMap.location.lng,
+        name: item ? item : favName,
+        description:
+          modalName === 'startLocation'
+            ? origin.description
+            : destinationMap.description,
+      },
+    };
+
+    dispatch(
+      AddFavLocation(body, response => {
+        alert('Location added as favourite');
+      }),
+    );
+  };
 
   return (
     <>
@@ -183,14 +245,37 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
           </View>
           <Text style={styles.favLocation}> {I18n.t('add_this_to_fav')}</Text>
           <View style={styles.faveBtnWrapper}>
-            <TouchableOpacity style={styles.favLocationBtn}>
+            <TouchableOpacity
+              style={styles.favLocationBtn}
+              onPress={() => {
+                handleAddFavLocation('Home');
+              }}
+              disabled={handleLocationDisable(
+                modalName,
+                origin,
+                destinationMap,
+              )}>
               <Text style={styles.favLocationBtnTxt}>{I18n.t('home')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.favLocationBtn}>
+            <TouchableOpacity
+              style={styles.favLocationBtn}
+              onPress={() => {
+                handleAddFavLocation('Office');
+              }}
+              disabled={handleLocationDisable(
+                modalName,
+                origin,
+                destinationMap,
+              )}>
               <Text style={styles.favLocationBtnTxt}>{I18n.t('office')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.favLocationBtn}
+              disabled={handleLocationDisable(
+                modalName,
+                origin,
+                destinationMap,
+              )}
               onPress={() => addfavrouiteAddressRef.current.open()}>
               <Text style={styles.favLocationBtnTxt}>{I18n.t('other')}</Text>
             </TouchableOpacity>
@@ -201,7 +286,14 @@ const AddressCards = ({modalName, addfavrouiteAddressRef, onPress, mode}) => {
                 <Text style={styles.bookSeatsTxt}>
                   {mode === 'driver' ? ' Available Seats' : 'Book Your Seats'}
                 </Text>
-                <Text>{availableSeats}</Text>
+                <View
+                  style={{
+                    backgroundColor: colors.green,
+                    padding: 10,
+                    borderRadius: 20,
+                  }}>
+                  <Text style={{color: colors.white}}>{availableSeats}</Text>
+                </View>
               </View>
               <View style={styles.seatsWrapper}>
                 {seats.map(seat => (
@@ -508,7 +600,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '70%',
+    width: '75%',
     alignSelf: 'flex-start',
     marginTop: 20,
     marginStart: 30,
@@ -566,4 +658,16 @@ const handleDisable = (
   }
 
   return true;
+};
+
+const handleLocationDisable = (modalName, origin, destination) => {
+  if (modalName === 'startLocation' && !origin) {
+    return true;
+  }
+
+  if (modalName === 'destination' && !destination) {
+    return true;
+  }
+
+  return false;
 };

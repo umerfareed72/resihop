@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/core';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import {colors} from 'react-native-elements';
 import AddressCards from '../components/AddressCards';
@@ -9,6 +9,8 @@ import AddFavrouteLocation from './AddFavrouteLocation';
 const StartLocation = props => {
   let navigation = useNavigation();
   const addfavrouiteAddressRef = useRef(null);
+
+  const [favName, setfavName] = useState();
 
   const onPress = () => {
     navigation?.goBack();
@@ -21,8 +23,14 @@ const StartLocation = props => {
         modalName={props.route.params.modalName}
         addfavrouiteAddressRef={addfavrouiteAddressRef}
         onPress={onPress}
+        favName={favName}
       />
-      <AddFavrouteLocation addfavrouiteAddressRef={addfavrouiteAddressRef} />
+      <AddFavrouteLocation
+        addfavrouiteAddressRef={addfavrouiteAddressRef}
+        setfavName={setfavName}
+        favName={favName}
+        modalName={props.route.params.modalName}
+      />
     </View>
   );
 };

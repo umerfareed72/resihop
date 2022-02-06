@@ -31,6 +31,7 @@ import {
 } from '../redux/actions/map.actions';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Loading from '../components/Loader/Loader';
 
 const CreateRide = () => {
   let navigation = useNavigation();
@@ -47,6 +48,7 @@ const CreateRide = () => {
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
+  const [favPress, setFavPress] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
@@ -73,18 +75,20 @@ const CreateRide = () => {
   };
 
   const handleConfirm = date => {
-    dispatch(setTime(moment(date).format('hh:mm a')));
+    dispatch(setTime(moment(date).format('HH:mm')));
     hideTimePicker();
   };
 
   const handleCreateRide = () => {
+    const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [
         destinationMap.location.lat,
         destinationMap.location.lng,
       ],
-      date: dateTimeStamp,
+      date: stamp,
       requiredSeats: availableSeats,
       startDes: origin.description,
       destDes: destinationMap.description,
@@ -168,13 +172,19 @@ const CreateRide = () => {
               name="heart"
               size={30}
               color={colors.btnGray}
-              onPress={() => favourteLocationRef.current.open()}
+              onPress={() => {
+                setFavPress('startLocation');
+                favourteLocationRef.current.open();
+              }}
             />
 
             <Image source={appIcons.mobiledata} style={styles.locationSwitch} />
 
             <HeartIcon
-              onPress={() => favourteLocationRef.current.open()}
+              onPress={() => {
+                setFavPress('destination');
+                favourteLocationRef.current.open();
+              }}
               name="heart"
               size={30}
               color={colors.btnGray}
@@ -209,7 +219,9 @@ const CreateRide = () => {
           <TouchableOpacity
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text>{time ? time : `XX:XX`}</Text>
+            <Text style={styles.dateTxt}>
+              {time ? moment(time).format('hh:mm a') : `XX:XX`}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
@@ -304,8 +316,11 @@ const CreateRide = () => {
             </View>
           </>
         ) : null}
-        <FavouriteLocations favourteLocationRef={favourteLocationRef} />
-        {isLoading ? <Loader /> : null}
+        <FavouriteLocations
+          favourteLocationRef={favourteLocationRef}
+          favPress={favPress}
+        />
+        {isLoading ? <Loading /> : null}
       </ScrollView>
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}

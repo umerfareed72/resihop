@@ -33,11 +33,11 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{headerShown: false}}
           name="Splash"
           component={splash}
-        />
+        /> */}
         <Stack.Screen
           options={{headerShown: false}}
           name="PassengerDashboard"
@@ -49,7 +49,7 @@ function MainStackNavigator() {
           name="DriverDashboard"
           component={DriverNavigator}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{headerShown: false}}
           name="AuthStack"
           component={AuthStack}
@@ -63,7 +63,7 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="VehicleStack"
           component={VehcileStack}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
