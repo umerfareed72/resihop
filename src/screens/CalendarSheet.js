@@ -22,6 +22,7 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
       selectedColor: colors.green,
     };
     setMarkedDate(markedObj);
+    dispatch(setDateTimeStamp(selectedDate));
   }, []);
 
   LocaleConfig.locales['en'] = {

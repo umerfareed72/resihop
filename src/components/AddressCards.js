@@ -69,6 +69,9 @@ const AddressCards = ({
   };
 
   useEffect(() => {
+    setnormalTime(moment().format('hh:mm a'));
+    dispatch(setTime(moment().format('HH:MM')));
+
     if (modalName === 'startLocation') {
       if (origin) {
         googleAutoComplete.current?.setAddressText(origin.description);
@@ -376,7 +379,14 @@ const AddressCards = ({
                 <TouchableOpacity
                   onPress={() => showTimePicker()}
                   style={[styles.noLater, {justifyContent: 'center'}]}>
-                  <Text>{normalTime ? normalTime : `XX:XX`}</Text>
+                  <Text
+                    style={{
+                      fontFamily: family.product_sans_regular,
+                      fontSize: size.normal,
+                      color: colors.btnGray,
+                    }}>
+                    {normalTime ? normalTime : `XX:XX`}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {

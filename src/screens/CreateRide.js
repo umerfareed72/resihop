@@ -57,6 +57,9 @@ const CreateRide = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setnormalTime(moment().format('hh:mm a'));
+    dispatch(setTime(moment().format('HH:MM')));
+
     return () => {
       dispatch(setAvailableSeats(0));
       dispatch(setOrigin(null));
