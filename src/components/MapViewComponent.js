@@ -41,6 +41,7 @@ const MapViewComponent = ({
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [height, setHeight] = useState(0);
+  const [minDistance, setMinDistance] = useState();
 
   const origin = useSelector(state => state.map.origin);
   const destination = useSelector(state => state.map.destination);
@@ -69,6 +70,20 @@ const MapViewComponent = ({
       },
     );
   }, [origin, destination, searchRideResponse, searchDrivesResponse]);
+
+  useEffect(() => {
+    if (searchDrivesResponse && searchDrivesResponse?.length > 0) {
+      let min = parseInt(searchDrivesResponse[0].distance * 111 * 1000);
+
+      for (let i = 0; i < searchDrivesResponse.length; i++) {
+        if (parseInt(searchDrivesResponse[i].distance * 111 * 1000) < min) {
+          min = parseInt(searchDrivesResponse[i].distance * 111 * 1000);
+        }
+      }
+
+      setMinDistance(min);
+    }
+  }, [searchDrivesResponse]);
 
   const getLocation = async () => {
     let permission;
@@ -196,7 +211,16 @@ const MapViewComponent = ({
                   latitude: driver?.drive?.startLocation?.latitude,
                   longitude: driver?.drive?.startLocation?.longitude,
                 }}>
-                <View style={styles.driverCard}>
+                <View
+                  style={[
+                    styles.driverCard,
+                    {
+                      backgroundColor:
+                        parseInt(driver.distance * 111 * 1000) === minDistance
+                          ? colors.green
+                          : colors.blue,
+                    },
+                  ]}>
                   <Text style={styles.driverTxt}>{`${
                     driver.drive.costPerSeat
                   } SEK | ${parseInt(driver.distance * 111 * 1000)} M`}</Text>

@@ -11,6 +11,7 @@ import {colors} from '../utilities';
 import I18n from '../utilities/translations';
 import {AddFavLocation} from '../redux/actions/favLocation.actions';
 import {useDispatch, useSelector} from 'react-redux';
+import {Loader} from '../components';
 
 const AddFavrouteLocation = ({
   addfavrouiteAddressRef,
@@ -23,8 +24,9 @@ const AddFavrouteLocation = ({
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
   const user = useSelector(state => state.auth.userdata);
-
+  const [loading, setloading] = useState(false);
   const handleAddFavLocation = item => {
+    setloading(true);
     const body = {
       type: 'LOCATION',
       user: {
@@ -49,7 +51,7 @@ const AddFavrouteLocation = ({
 
     dispatch(
       AddFavLocation(body, response => {
-        alert('Location added as favourite');
+        setloading(false);
       }),
     );
     addfavrouiteAddressRef.current.close();
@@ -93,6 +95,7 @@ const AddFavrouteLocation = ({
         onPress={() => handleAddFavLocation()}>
         <Text style={styles.saveTxt}>{I18n.t('save')}</Text>
       </TouchableOpacity>
+      {loading ? <Loader /> : null}
     </RBSheet>
   );
 };

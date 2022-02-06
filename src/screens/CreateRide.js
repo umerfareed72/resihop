@@ -9,12 +9,12 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
-  Keyboard,
 } from 'react-native';
 import {colors, appIcons, appImages, family, size} from '../utilities';
 import {fonts} from '../theme';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
+import HeartFilled from 'react-native-vector-icons/Foundation';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from './FavouriteLocations';
 import {CustomHeader, Loader} from '../components';
@@ -28,10 +28,10 @@ import {
   CreateRideRequest,
   setDateTimeStamp,
   setTime,
+  SetDriversResponse,
 } from '../redux/actions/map.actions';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import Loading from '../components/Loader/Loader';
 
 const CreateRide = () => {
   let navigation = useNavigation();
@@ -49,7 +49,7 @@ const CreateRide = () => {
   const [destination, setDestination] = useState('');
   const [noLaterTime, setNoLaterTime] = useState('');
   const [favPress, setFavPress] = useState('');
-  const [date, setDate] = useState('');
+  const [normalTime, setnormalTime] = useState();
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
@@ -63,6 +63,7 @@ const CreateRide = () => {
       dispatch(setMapDestination(null));
       dispatch(setDateTimeStamp(null));
       dispatch(setTime(null));
+      dispatch(SetDriversResponse(null));
     };
   }, []);
 
@@ -76,6 +77,7 @@ const CreateRide = () => {
 
   const handleConfirm = date => {
     dispatch(setTime(moment(date).format('HH:mm')));
+    setnormalTime(moment(date).format('hh:mm a'));
     hideTimePicker();
   };
 
@@ -167,27 +169,48 @@ const CreateRide = () => {
           </View>
 
           <View style={styles.switchWrapper}>
-            <HeartIcon
-              name="heart"
-              size={30}
-              color={colors.btnGray}
-              onPress={() => {
-                setFavPress('startLocation');
-                favourteLocationRef.current.open();
-              }}
-            />
+            {favPress === 'startLocation' ? (
+              <HeartFilled
+                name="heart"
+                size={24}
+                color={'red'}
+                onPress={() => {
+                  favourteLocationRef.current.open();
+                }}
+              />
+            ) : (
+              <HeartIcon
+                name="heart"
+                size={30}
+                color={colors.btnGray}
+                onPress={() => {
+                  setFavPress('startLocation');
+                  favourteLocationRef.current.open();
+                }}
+              />
+            )}
 
             <Image source={appIcons.mobiledata} style={styles.locationSwitch} />
-
-            <HeartIcon
-              onPress={() => {
-                setFavPress('destination');
-                favourteLocationRef.current.open();
-              }}
-              name="heart"
-              size={30}
-              color={colors.btnGray}
-            />
+            {favPress === 'destination' ? (
+              <HeartFilled
+                name="heart"
+                size={24}
+                color={'red'}
+                onPress={() => {
+                  favourteLocationRef.current.open();
+                }}
+              />
+            ) : (
+              <HeartIcon
+                onPress={() => {
+                  setFavPress('destination');
+                  favourteLocationRef.current.open();
+                }}
+                name="heart"
+                size={30}
+                color={colors.btnGray}
+              />
+            )}
           </View>
         </View>
         <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
@@ -219,7 +242,7 @@ const CreateRide = () => {
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
             <Text style={styles.dateTxt}>
-              {time ? moment(time).format('hh:mm a') : `XX:XX`}
+              {normalTime ? normalTime : `XX:XX`}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -318,8 +341,9 @@ const CreateRide = () => {
         <FavouriteLocations
           favourteLocationRef={favourteLocationRef}
           favPress={favPress}
+          setFavPress={setFavPress}
         />
-        {isLoading ? <Loading /> : null}
+        {isLoading ? <Loader /> : null}
       </ScrollView>
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}

@@ -24,6 +24,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {fonts} from '../theme';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Loader} from './Loader/Loader';
 
 const AddressCards = ({
   modalName,
@@ -44,7 +45,9 @@ const AddressCards = ({
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
-
+  const [normalTime, setnormalTime] = useState();
+  const [favBtn, setFavBtn] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
   const time = useSelector(state => state.map.time);
@@ -61,7 +64,8 @@ const AddressCards = ({
   };
 
   const handleConfirm = date => {
-    dispatch(setTime(moment(date).format('hh:mm a')));
+    dispatch(setTime(moment(date).format('HH:mm')));
+    setnormalTime(moment(date).format('hh:mm a'));
     hideTimePicker();
   };
 
@@ -106,6 +110,9 @@ const AddressCards = ({
   // };
 
   const handleAddFavLocation = item => {
+    setIsLoading(true);
+    setFavBtn(item);
+
     const body = {
       type: 'LOCATION',
       user: {
@@ -130,6 +137,7 @@ const AddressCards = ({
 
     dispatch(
       AddFavLocation(body, response => {
+        setIsLoading(false);
         alert('Location added as favourite');
       }),
     );
@@ -246,7 +254,13 @@ const AddressCards = ({
           <Text style={styles.favLocation}> {I18n.t('add_this_to_fav')}</Text>
           <View style={styles.faveBtnWrapper}>
             <TouchableOpacity
-              style={styles.favLocationBtn}
+              style={[
+                styles.favLocationBtn,
+                {
+                  backgroundColor:
+                    favBtn === 'Home' ? colors.green : colors.btnGray,
+                },
+              ]}
               onPress={() => {
                 handleAddFavLocation('Home');
               }}
@@ -258,7 +272,13 @@ const AddressCards = ({
               <Text style={styles.favLocationBtnTxt}>{I18n.t('home')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.favLocationBtn}
+              style={[
+                styles.favLocationBtn,
+                {
+                  backgroundColor:
+                    favBtn === 'Office' ? colors.green : colors.btnGray,
+                },
+              ]}
               onPress={() => {
                 handleAddFavLocation('Office');
               }}
@@ -269,14 +289,24 @@ const AddressCards = ({
               )}>
               <Text style={styles.favLocationBtnTxt}>{I18n.t('office')}</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-              style={styles.favLocationBtn}
+              style={[
+                styles.favLocationBtn,
+                {
+                  backgroundColor:
+                    favBtn === 'Other' ? colors.green : colors.btnGray,
+                },
+              ]}
               disabled={handleLocationDisable(
                 modalName,
                 origin,
                 destinationMap,
               )}
-              onPress={() => addfavrouiteAddressRef.current.open()}>
+              onPress={() => {
+                addfavrouiteAddressRef.current.open();
+                setFavBtn('Other');
+              }}>
               <Text style={styles.favLocationBtnTxt}>{I18n.t('other')}</Text>
             </TouchableOpacity>
           </View>
@@ -350,7 +380,7 @@ const AddressCards = ({
                 <TouchableOpacity
                   onPress={() => showTimePicker()}
                   style={[styles.noLater, {justifyContent: 'center'}]}>
-                  <Text>{time ? time : `XX:XX`}</Text>
+                  <Text>{normalTime ? normalTime : `XX:XX`}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -415,6 +445,7 @@ const AddressCards = ({
         </View>
       ) : null}
       <CalendarSheet calendarSheetRef={calenderSheetRef} />
+      {isLoading ? <Loader /> : null}
     </>
   );
 };

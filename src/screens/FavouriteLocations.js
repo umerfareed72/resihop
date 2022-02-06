@@ -12,10 +12,10 @@ import I18n from '../utilities/translations';
 import {GetFavLocations} from '../redux/actions/favLocation.actions';
 import {setOrigin, setMapDestination} from '../redux/actions/map.actions';
 import {useDispatch} from 'react-redux';
-
-const FavouriteLocations = ({favourteLocationRef, favPress}) => {
+import {useIsFocused} from '@react-navigation/native';
+const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
   let dispatch = useDispatch();
-
+  const isFocus = useIsFocused();
   const [locations, setLocations] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -38,12 +38,14 @@ const FavouriteLocations = ({favourteLocationRef, favPress}) => {
   ];
 
   useEffect(() => {
-    dispatch(
-      GetFavLocations(setLoading, response => {
-        setLocations(response);
-      }),
-    );
-  }, []);
+    if (isFocus) {
+      dispatch(
+        GetFavLocations(setLoading, response => {
+          setLocations(response);
+        }),
+      );
+    }
+  }, [isFocus]);
 
   const handleSetStartFav = item => {
     if (favPress === 'startLocation') {
@@ -69,6 +71,8 @@ const FavouriteLocations = ({favourteLocationRef, favPress}) => {
         }),
       );
     }
+
+    favourteLocationRef.current.close();
   };
 
   return (
@@ -112,6 +116,7 @@ const FavouriteLocations = ({favourteLocationRef, favPress}) => {
       <TouchableOpacity
         style={styles.cancelBtnContainer}
         onPress={() => {
+          setFavPress('');
           favourteLocationRef.current.close();
         }}>
         <Text style={styles.cancelTxt}>{I18n.t('cancel')}</Text>
