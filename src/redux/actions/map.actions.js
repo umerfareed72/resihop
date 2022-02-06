@@ -50,6 +50,19 @@ export const setTime = data => async dispatch => {
     payload: data,
   });
 };
+export const SetDriversResponse = data => async dispatch => {
+  dispatch({
+    type: Types.searchDrives,
+    payload: data,
+  });
+};
+
+export const SetRidesResponse = data => async dispatch => {
+  dispatch({
+    type: Types.searchRides,
+    payload: data,
+  });
+};
 
 export const CreateDriveRequest =
   (body, setIsLoading, callback) => async dispatch => {
@@ -79,6 +92,7 @@ export const CreateDriveRequest =
       console.log(error);
     }
   };
+
 export const CreateRideRequest =
   (body, setIsLoading, callback) => async dispatch => {
     let Token = await GetToken();

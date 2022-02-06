@@ -13,7 +13,7 @@ import {GetFavLocations} from '../redux/actions/favLocation.actions';
 import {setOrigin, setMapDestination} from '../redux/actions/map.actions';
 import {useDispatch} from 'react-redux';
 
-const FavouriteLocations = ({favourteLocationRef, favPress}) => {
+const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
   let dispatch = useDispatch();
 
   const [locations, setLocations] = useState();
@@ -69,6 +69,8 @@ const FavouriteLocations = ({favourteLocationRef, favPress}) => {
         }),
       );
     }
+
+    favourteLocationRef.current.close();
   };
 
   return (
@@ -112,6 +114,7 @@ const FavouriteLocations = ({favourteLocationRef, favPress}) => {
       <TouchableOpacity
         style={styles.cancelBtnContainer}
         onPress={() => {
+          setFavPress('');
           favourteLocationRef.current.close();
         }}>
         <Text style={styles.cancelTxt}>{I18n.t('cancel')}</Text>
