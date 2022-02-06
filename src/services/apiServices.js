@@ -18,3 +18,9 @@ export const putData = axios.create({
   withCredentials: true,
   timeout: 5000,
 });
+
+export const deleteData = axios.create({
+  baseURL: baseURL,
+  method: 'DELETE',
+  timeout: 5000,
+});

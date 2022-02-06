@@ -11,17 +11,17 @@ import {
   Platform,
 } from 'react-native';
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
-import {CustomHeader, Loader} from '../../components';
+import {CustomHeader, Loader} from '../../../components';
 import * as Yup from 'yup';
-import {theme} from '../../theme';
+import {theme} from '../../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {axios, get, post} from '../../services';
-import I18n from '../../utilities/translations';
+import {axios, get, post} from '../../../services';
+import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import {Alert} from 'react-native';
-import SigninViaBankID from '../../components/SigninViaBankID';
-import useAppState from '../../hooks/useAppState';
-import {header} from '../../utilities';
+import SigninViaBankID from '../../../components/SigninViaBankID';
+import useAppState from '../../../hooks/useAppState';
+import {header} from '../../../utilities';
 const vahicleFormFields = {
   licencePlate: '',
   carCompany: '',
@@ -43,11 +43,11 @@ function index(props) {
   const mobile = useSelector(state => state.auth?.userdata?.user?.mobile);
   const switching = useSelector(state => state.auth?.switching);
   const vehicle = useSelector(state => state.auth?.is_vehicle);
-  const [licencePlateNumber, setLicencePlateNumber] = useState('sv1234');
-  const [carMakerCompany, setCarMakerCompany] = useState('Toyota');
-  const [carModel, setcarModel] = useState('2012');
-  const [carColor, setcarColor] = useState('black');
-  const [engineSize, setEngineSize] = useState('213');
+  const [licencePlateNumber, setLicencePlateNumber] = useState('');
+  const [carMakerCompany, setCarMakerCompany] = useState('');
+  const [carModel, setcarModel] = useState('');
+  const [carColor, setcarColor] = useState('');
+  const [engineSize, setEngineSize] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -74,7 +74,6 @@ function index(props) {
   //Get Latest Car Detail
   const getVahicleDetail = () => {
     const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
-    console.log(url);
     setIsLoading(true);
     var parseString = require('react-native-xml2js').parseString;
     fetch(url, {
@@ -84,7 +83,6 @@ function index(props) {
       .then(responseData => {
         setIsLoading(false);
         try {
-          console.log(responseData);
           if (responseData.match('Out of credit')) {
             alert(responseData);
           } else {
@@ -411,7 +409,7 @@ function index(props) {
                   </TouchableOpacity>
                   {!switching ? (
                     <SigninViaBankID
-                      disabled={false}
+                      disabled={value != null && next ? false : true}
                       onBankIdPress={() => {
                         // openBankId();
                         addVehicelInfo();
@@ -423,7 +421,7 @@ function index(props) {
                   ) : (
                     <Button
                       title={I18n.t('register')}
-                      // disabled={value != null && next ? false : true}
+                      disabled={value != null && next ? false : true}
                       onPress={() => {
                         addVehicelInfo();
                       }}

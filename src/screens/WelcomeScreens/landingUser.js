@@ -8,11 +8,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Button, Text} from 'react-native-elements';
-import {Container} from '../components/Container';
-import {theme} from '../theme';
+import {theme} from '../../theme';
 
-import {appIcons, colors} from '../utilities';
-import I18n from '../utilities/translations';
+import {appIcons, colors} from '../../utilities';
+import I18n from '../../utilities/translations';
 
 function landingUser({navigation}) {
   return (

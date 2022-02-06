@@ -36,12 +36,12 @@ import NotificationSettings from '../..//screens/NotificationSettings/Notificati
 import TransactionDetails from '../../screens/TransactionDetails/TransactionDetails';
 import NotificationTune from '../../screens/NotificationTune/NotificationTune';
 import RecurringRides from '../../screens/Passenger/RecurringRides';
-import EditProfile from '../../screens/EditProfile';
-import ChangePhone from '../../screens/ChangePhone';
 import RecurringRideDetail from '../../screens/Passenger/RecurringRideDetail';
 import RideStatus from '../../screens/Passenger/RideStatus/RideStatus';
 import PickUpInfo from '../../screens/Passenger/PickUpInfo/PickUpInfo';
 import VehcileStack from './VehcileStack';
+import ChangePhone from '../../screens/Profile/ChangePhone';
+import EditProfile from '../../screens/Profile/EditProfile';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {

@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {Container} from '../../components/Container';
+import {Container} from '../../../components/Container';
 import _ from 'lodash/string';
-import {theme} from '../../theme';
-import {CustomHeader, NetInfoModal} from '../../components';
-import OtpValidator from '../../components/OtpValidator';
-import I18n from '../../utilities/translations';
+import {theme} from '../../../theme';
+import {CustomHeader, NetInfoModal} from '../../../components';
+import OtpValidator from '../../../components/OtpValidator';
+import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
-import Loader from '../../components/Loader/Loader';
-import {checkConnected} from '../../utilities';
-import {get} from '../../services';
+import Loader from '../../../components/Loader/Loader';
+import {checkConnected} from '../../../utilities';
+import {get} from '../../../services';
 import {Keyboard} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {Alert} from 'react-native';
-import {updateInfo} from '../../redux/actions/auth.action';
+import {updateInfo} from '../../../redux/actions/auth.action';
 
 function signIn(props) {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,13 +1,11 @@
 import * as React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import UploadLicence from '../../screens/UploadLicence/UploadLicence';
-import Pledge from '../../screens/Pledge';
-import PermissionScreen from '../../screens/PermissionScreen';
-import VahicleInfo from '../../screens/VahicleInfo';
+import Pledge from '../../screens/Auth/Pledge';
+import VahicleInfo from '../../screens/Auth/VahicleInfo';
 import Terms from '../../screens/Passenger/Terms/Terms';
-import ReviewDetails from '../../screens/ReviewDetails';
-import ApprovalStatus from '../../screens/ApprovalStatus';
+import ReviewDetails from '../../screens/Auth/ReviewDetails';
+import ApprovalStatus from '../../screens/Auth/ApprovalStatus';
 
 const Stack = createStackNavigator();
 
