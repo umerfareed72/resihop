@@ -43,8 +43,12 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
         </View>
         <View style={styles.dateWrapper}>
           <Text style={styles.date}>
-            {moment(item.tripDate).format('DD-MMM')}{' '}
-            {moment(item.tripDate).format('hh:mm a')}
+            {item.tripDate
+              ? moment(item.tripDate).format('DD-MMM')
+              : moment(item.date).format('DD-MMM')}{' '}
+            {item.tripDate
+              ? moment(item.tripDate).format('hh:mm a')
+              : moment(item.date).format('hh:mm a')}
           </Text>
           <View
             style={[

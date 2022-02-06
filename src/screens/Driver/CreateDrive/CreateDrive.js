@@ -17,7 +17,6 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../FavouriteLocations';
 import {CustomHeader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
-import ArrowDown from 'react-native-vector-icons/MaterialIcons';
 import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
@@ -27,10 +26,13 @@ import {
   setMapDestination,
   CreateDriveRequest,
   setDateTimeStamp,
+  setTime,
+  SetRidesResponse,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Loading from '../../../components/Loader/Loader';
+import {Loader} from '../../../components/Loader/Loader';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const CreateDrive = () => {
   let navigation = useNavigation();
@@ -43,6 +45,7 @@ const CreateDrive = () => {
   const destinationMap = useSelector(state => state.map.destination);
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
+  const time = useSelector(state => state.map.time);
 
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
@@ -53,6 +56,8 @@ const CreateDrive = () => {
   const [screen, setScreen] = useState(false);
   const [favPress, setFavPress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [normalTime, setnormalTime] = useState();
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -68,17 +73,20 @@ const CreateDrive = () => {
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
       dispatch(setDateTimeStamp(null));
+      dispatch(SetRidesResponse(null));
     };
   }, []);
 
   const handleCreateDrive = () => {
+    const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [
         destinationMap.location.lat,
         destinationMap.location.lng,
       ],
-      date: dateTimeStamp,
+      date: stamp,
       availableSeats: availableSeats,
       path: 0,
       costPerSeat: value,
@@ -94,6 +102,20 @@ const CreateDrive = () => {
     );
 
     navigation.navigate('SelectRoute');
+  };
+
+  const showTimePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = date => {
+    dispatch(setTime(moment(date).format('HH:mm')));
+    setnormalTime(moment(date).format('hh:mm a'));
+    hideTimePicker();
   };
 
   return (
@@ -208,13 +230,13 @@ const CreateDrive = () => {
           </Text>
         </View>
         <View style={styles.selectionInputWrapper}>
-          <TextInput
-            placeholder="XX:XX"
-            placeholderTextColor={colors.btnGray}
-            value={noLaterTime}
-            onChangeText={setNoLaterTime}
-            style={styles.noLater}
-          />
+          <TouchableOpacity
+            onPress={() => showTimePicker()}
+            style={[styles.noLater, {justifyContent: 'center'}]}>
+            <Text style={styles.dateTxt}>
+              {normalTime ? normalTime : `XX:XX`}
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
             style={[
@@ -231,6 +253,12 @@ const CreateDrive = () => {
             source={appImages.calendar}
             resizeMode="contain"
             style={styles.calendarIcon}
+          />
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="time"
+            onConfirm={handleConfirm}
+            onCancel={hideTimePicker}
           />
         </View>
         <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
@@ -317,7 +345,7 @@ const CreateDrive = () => {
           favourteLocationRef={favourteLocationRef}
           favPress={favPress}
         />
-        {isLoading ? <Loading /> : null}
+        {isLoading ? <Loader /> : null}
       </ScrollView>
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}

@@ -21,8 +21,6 @@ const index = ({navigation, route}) => {
   if (time) {
     if (route?.params?.isRegister) {
       navigation?.replace('DriverDashboard');
-    } else {
-      navigation?.replace('Pledge');
     }
   }
   return (
@@ -30,25 +28,25 @@ const index = ({navigation, route}) => {
       <CustomHeader backButton={true} navigation={navigation} />
       <KeyboardAwareScrollView style={styles.container}>
         <View style={styles.contentContainer}>
-          {/* {!time && ( */}
-          <ApprovalCard
-            h1={I18n.t('waiting_approval')}
-            h2={I18n.t('lorem')}
-            btnText={I18n.t('switch_passenger')}
-            height={120}
-            width={111}
-            h4={I18n.t('approved_desc')}
-            image={appIcons.timer}
-            fontSize={size.normal}
-            textColor={colors.g3}
-            fontFamily={family.product_sans_regular}
-            onPress={() => {
-              settime(false);
-              navigation?.replace('PassengerHome');
-            }}
-            switching={route?.params?.isRegister}
-          />
-          {/* )} */}
+          {!time && (
+            <ApprovalCard
+              h1={I18n.t('waiting_approval')}
+              h2={I18n.t('lorem')}
+              btnText={I18n.t('switch_passenger')}
+              height={120}
+              width={111}
+              h4={I18n.t('approved_desc')}
+              image={appIcons.timer}
+              fontSize={size.normal}
+              textColor={colors.g3}
+              fontFamily={family.product_sans_regular}
+              onPress={() => {
+                settime(false);
+                navigation?.replace('PassengerHome');
+              }}
+              switching={route?.params?.isRegister}
+            />
+          )}
           {time && (
             <ApprovalCard
               h1={I18n.t('congratulation')}
@@ -62,8 +60,9 @@ const index = ({navigation, route}) => {
               fontFamily={family.product_sans_bold}
               image={appIcons.tickBg}
               onPress={() => {
-                navigation?.replace('DriverDashboard');
+                navigation?.replace('Pledge');
               }}
+              switching={true}
             />
           )}
         </View>
