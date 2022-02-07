@@ -2,12 +2,12 @@ export const appIcons = {
   backArrow: require('../../assets/icons/png/backArrow.png'),
   rightArrow: require('../../assets/icons/png/rightArrow.png'),
   downArrow: require('../../assets/icons/png/downArrow.png'),
-
   upArrow: require('../../assets/icons/png/upArrow.png'),
   timer: require('../../assets/icons/png/timer.png'),
-
+  microphone: require('../../assets/icons/png/microphone.png'),
+  phone: require('../../assets/icons/png/phone.png'),
+  speaker: require('../../assets/icons/png/speaker.png'),
   wrongData: require('../../assets/icons/png/wrongData.png'),
-
   sliderImage: require('../../assets/icons/png/sliderImage.png'),
   filter: require('../../assets/icons/png/filter.png'),
   plus: require('../../assets/icons/png/plus.png'),

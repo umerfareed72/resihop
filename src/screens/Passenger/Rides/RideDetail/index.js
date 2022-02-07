@@ -84,7 +84,6 @@ const index = ({navigation, route}) => {
   const updateData = ({id}) => {
     setData(
       data.map(item => {
-        console.log('id in update DAta is  ', id);
         if (item?.id === id) {
           return {
             ...item,
@@ -102,7 +101,6 @@ const index = ({navigation, route}) => {
 
   //component here
   const ItemView = ({data}) => {
-    console.log('data value in item view is   ', data);
     return (
       <>
         <View style={styles.itemView}>
@@ -172,7 +170,7 @@ const index = ({navigation, route}) => {
               profilePic={true}
               cost={'30'}
               onPressCard={() => {
-                console.log(route?.params?.ride_detail);
+                // console.log(route?.params?.ride_detail);
               }}
               no_of_seats={route?.params?.ride_detail?.requiredSeats}
               startLocation={route?.params?.ride_detail?.startDes}
@@ -191,6 +189,9 @@ const index = ({navigation, route}) => {
               txtColor={colors.white}
               fontFamily={family.product_sans_bold}
               image={appIcons.call}
+              onPress={() => {
+                navigation?.navigate('CallNow');
+              }}
             />
           </View>
           <View style={[styles.contentContainer]}>

@@ -1,6 +1,7 @@
 PODS:
   - A0Auth0 (2.13.0):
     - React
+  - AgoraRtcEngine_iOS (3.5.2)
   - boost (1.76.0)
   - BVLinearGradient (2.5.6):
     - React
@@ -361,6 +362,9 @@ PODS:
   - React-jsinspector (0.66.3)
   - React-logger (0.66.3):
     - glog
+  - react-native-agora (3.5.2):
+    - AgoraRtcEngine_iOS (= 3.5.2)
+    - React
   - react-native-geolocation-service (5.3.0-beta.3):
     - React
   - react-native-google-maps (0.29.4):
@@ -571,6 +575,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-agora (from `../node_modules/react-native-agora`)
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
@@ -612,6 +617,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AgoraRtcEngine_iOS
     - CocoaAsyncSocket
     - Firebase
     - FirebaseAuth
@@ -682,6 +688,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-agora:
+    :path: "../node_modules/react-native-agora"
   react-native-geolocation-service:
     :path: "../node_modules/react-native-geolocation-service"
   react-native-google-maps:
@@ -761,6 +769,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   A0Auth0: 964f704797b63e15ca7233be0e23650144ebb863
+  AgoraRtcEngine_iOS: 3d13806d67e401298558c9a6fb09340a4299afa2
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -805,6 +814,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 433a691aee158533a6a6ee9c86cb4a1684fa2853
   React-jsinspector: d9c8eb0b53f0da206fed56612b289fec84991157
   React-logger: e522e76fa3e9ec3e7d7115b49485cc065cf4ae06
+  react-native-agora: 1f40c29ef13de4ccf00ddbfda1316f87c0c2b135
   react-native-geolocation-service: 32e50a2e4e4518b51b829fdfe137562a672d95d2
   react-native-google-maps: 34517207071d54f3bc23c68752bbec0217bfc79e
   react-native-image-picker: 869530859570f2af86ae57bc48886a5e2367a825

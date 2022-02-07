@@ -122,7 +122,7 @@ const index = ({navigation}) => {
   const getRides = async () => {
     dispatch(
       get_rides_history(res => {
-        console.log(res);
+        // console.log(res);
       }),
     );
   };
