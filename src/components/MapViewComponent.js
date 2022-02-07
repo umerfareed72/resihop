@@ -72,6 +72,10 @@ const MapViewComponent = ({
   }, [origin, destination, searchRideResponse, searchDrivesResponse]);
 
   useEffect(() => {
+    if (searchDrivesResponse === null || searchDrivesResponse?.length === 0) {
+      alert('No Driver Found');
+    }
+
     if (searchDrivesResponse && searchDrivesResponse?.length > 0) {
       let min = parseInt(searchDrivesResponse[0].distance * 111 * 1000);
 
@@ -275,6 +279,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blueLocation,
     borderWidth: 2,
     borderColor: colors.white,
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
+    shadowOpacity: 20,
+    shadowColor: colors.blueLocation,
+    shadowRadius: 20,
   },
   driverMarker: {
     height: 28,
