@@ -26,7 +26,7 @@ import {
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {Divider, Icon} from 'react-native-elements';
-const index = ({navigation}) => {
+const index = ({navigation, route}) => {
   //useState here
   const [data, setData] = useState([
     {
@@ -167,7 +167,17 @@ const index = ({navigation}) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.contentContainer}>
-            <RideHistoryCard onPressCard={() => {}} />
+            <RideHistoryCard
+              dateTime={route?.params?.ride_detail?.createdAt}
+              profilePic={true}
+              cost={'30'}
+              onPressCard={() => {
+                console.log(route?.params?.ride_detail);
+              }}
+              no_of_seats={route?.params?.ride_detail?.requiredSeats}
+              startLocation={route?.params?.ride_detail?.startDes}
+              destination={route?.params?.ride_detail?.destDes}
+            />
           </View>
           <View style={styles.separator} />
           <View style={styles.contentContainer}>

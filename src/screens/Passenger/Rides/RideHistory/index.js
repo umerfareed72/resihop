@@ -155,8 +155,9 @@ const index = ({navigation}) => {
                   profilePic={true}
                   cost={'30'}
                   onPressCard={() => {
-                    navigation?.navigate('RideDetail');
+                    navigation?.navigate('RideDetail', {ride_detail: item});
                   }}
+                  no_of_seats={item?.requiredSeats}
                   startLocation={item?.startDes}
                   destination={item?.destDes}
                 />
