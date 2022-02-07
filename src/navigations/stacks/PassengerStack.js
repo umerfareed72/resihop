@@ -42,6 +42,7 @@ import PickUpInfo from '../../screens/Passenger/PickUpInfo/PickUpInfo';
 import VehcileStack from './VehcileStack';
 import ChangePhone from '../../screens/Profile/ChangePhone';
 import EditProfile from '../../screens/Profile/EditProfile';
+import CallNow from '../../screens/CallNow';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -112,6 +113,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="NotificationList"
         component={NotificationList}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="CallNow"
+        component={CallNow}
       />
       <Stack.Screen
         options={{headerShown: false}}

@@ -15,6 +15,7 @@ export const RideHistoryCard = ({
   cost,
   startLocation,
   destination,
+  no_of_seats,
 }) => {
   return (
     <View style={styles.container}>
@@ -61,7 +62,7 @@ export const RideHistoryCard = ({
                 <View>
                   <FlatList
                     horizontal={true}
-                    data={[1, 2]}
+                    data={new Array(no_of_seats)}
                     renderItem={() => {
                       return (
                         <Image

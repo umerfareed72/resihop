@@ -122,7 +122,7 @@ const index = ({navigation}) => {
   const getRides = async () => {
     dispatch(
       get_rides_history(res => {
-        console.log(res);
+        // console.log(res);
       }),
     );
   };
@@ -155,8 +155,9 @@ const index = ({navigation}) => {
                   profilePic={true}
                   cost={'30'}
                   onPressCard={() => {
-                    navigation?.navigate('RideDetail');
+                    navigation?.navigate('RideDetail', {ride_detail: item});
                   }}
+                  no_of_seats={item?.requiredSeats}
                   startLocation={item?.startDes}
                   destination={item?.destDes}
                 />

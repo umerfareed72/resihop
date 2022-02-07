@@ -26,7 +26,7 @@ import {
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {Divider, Icon} from 'react-native-elements';
-const index = ({navigation}) => {
+const index = ({navigation, route}) => {
   //useState here
   const [data, setData] = useState([
     {
@@ -84,7 +84,6 @@ const index = ({navigation}) => {
   const updateData = ({id}) => {
     setData(
       data.map(item => {
-        console.log('id in update DAta is  ', id);
         if (item?.id === id) {
           return {
             ...item,
@@ -102,7 +101,6 @@ const index = ({navigation}) => {
 
   //component here
   const ItemView = ({data}) => {
-    console.log('data value in item view is   ', data);
     return (
       <>
         <View style={styles.itemView}>
@@ -167,7 +165,17 @@ const index = ({navigation}) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.contentContainer}>
-            <RideHistoryCard onPressCard={() => {}} />
+            <RideHistoryCard
+              dateTime={route?.params?.ride_detail?.createdAt}
+              profilePic={true}
+              cost={'30'}
+              onPressCard={() => {
+                // console.log(route?.params?.ride_detail);
+              }}
+              no_of_seats={route?.params?.ride_detail?.requiredSeats}
+              startLocation={route?.params?.ride_detail?.startDes}
+              destination={route?.params?.ride_detail?.destDes}
+            />
           </View>
           <View style={styles.separator} />
           <View style={styles.contentContainer}>
@@ -181,6 +189,9 @@ const index = ({navigation}) => {
               txtColor={colors.white}
               fontFamily={family.product_sans_bold}
               image={appIcons.call}
+              onPress={() => {
+                navigation?.navigate('CallNow');
+              }}
             />
           </View>
           <View style={[styles.contentContainer]}>
