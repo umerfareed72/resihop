@@ -7,7 +7,6 @@ import React, {
   useCallback,
 } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, Image} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {CustomHeader} from '../../components/Header/CustomHeader';
 import styles from './styles';
 import RtcEngine from 'react-native-agora';
