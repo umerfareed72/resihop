@@ -63,6 +63,7 @@ const index = ({navigation}) => {
       null,
       0,
     );
+    console.log(join);
   };
   // Turn the microphone on or off.
   const _switchMicrophone = () => {
@@ -133,7 +134,9 @@ const index = ({navigation}) => {
                   <Image style={styles.icon25} source={appIcons.microphone} />
                 </TouchableOpacity>
               )}
-              <TouchableOpacity onPress={_leaveChannel}>
+              <TouchableOpacity
+                style={styles.btnContainer}
+                onPress={_leaveChannel}>
                 <Image style={styles.icon45} source={appIcons.phone} />
               </TouchableOpacity>
             </View>
