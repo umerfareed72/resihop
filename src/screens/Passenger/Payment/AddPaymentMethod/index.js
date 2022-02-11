@@ -97,6 +97,7 @@ const index = ({navigation}) => {
           tokenID: data?.token?.id,
           name: cardHolderName,
         };
+        console.log(requestBody);
         dispatch(
           add_stripe_card(requestBody, res => {
             Alert.alert(

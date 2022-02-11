@@ -101,8 +101,6 @@ const PassengerHome = ({navigation}) => {
   const myRidesData = useSelector(state => state.map.myRidesData);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
 
-  console.log(myRidesData);
-
   useEffect(() => {
     dispatch(MyRides());
     getUserdata();

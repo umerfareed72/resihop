@@ -29,3 +29,20 @@ export const get_rides_history = callBack => async dispatch => {
     });
   }
 };
+
+///////////////////////////////////////// Select Rides History ////////////////////////////
+
+export const select_ride_history = (data, callBack) => async dispatch => {
+  try {
+    dispatch({
+      type: Types.Select_Ride_Success,
+      payload: data,
+    });
+    callBack();
+  } catch (error) {
+    dispatch({
+      type: Types.Select_Ride_Failure,
+      payload: null,
+    });
+  }
+};

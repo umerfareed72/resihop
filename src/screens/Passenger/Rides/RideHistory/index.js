@@ -22,7 +22,10 @@ import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {get_rides_history} from '../../../../redux/actions/rides.actions';
+import {
+  get_rides_history,
+  select_ride_history,
+} from '../../../../redux/actions/rides.actions';
 //Data
 var TimeList = {
   id: 1,
@@ -155,7 +158,11 @@ const index = ({navigation}) => {
                   profilePic={true}
                   cost={'30'}
                   onPressCard={() => {
-                    navigation?.navigate('RideDetail', {ride_detail: item});
+                    dispatch(
+                      select_ride_history(item, () => {
+                        navigation?.navigate('RideDetail');
+                      }),
+                    );
                   }}
                   no_of_seats={item?.requiredSeats}
                   startLocation={item?.startDes}

@@ -4,7 +4,7 @@ import map from './map';
 import favLocation from './favLocation';
 import payment from './payment';
 import rides from './rides';
-
+import app_reducer from './app_reducer';
 import * as Types from '../types/auth.types';
 
 const appReducer = combineReducers({
@@ -14,6 +14,7 @@ const appReducer = combineReducers({
   favLocation: favLocation,
   payment: payment,
   rides: rides,
+  app_reducer: app_reducer,
 });
 
 const rootReducer = (state, action) => {

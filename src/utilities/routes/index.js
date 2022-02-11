@@ -9,3 +9,4 @@ export const GET_PRIVACY_POLICY = 'privacy-policy';
 export const MY_CONTRIBUTION = 'my-contributions';
 export const PAYMENT_CONST = 'cards';
 export const RIDES_CONST = 'rides';
+export const AGORA_CONST = 'agora';

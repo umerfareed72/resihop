@@ -26,7 +26,14 @@ import {
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {Divider, Icon} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
+import {create_agoral_channel} from '../../../../redux/actions/app.action';
 const index = ({navigation, route}) => {
+  //Redux States
+  const dispatch = useDispatch(null);
+  const auth = useSelector(state => state.auth);
+  const rides = useSelector(state => state.rides);
+
   //useState here
   const [data, setData] = useState([
     {
@@ -98,7 +105,19 @@ const index = ({navigation, route}) => {
       }),
     );
   };
-
+  const createAgoraChannel = () => {
+    const requestBody = {
+      channel: rides?.selected_ride_history?._id,
+      role: 'audience',
+      tokentype: 'uid',
+      uid: JSON.parse(auth?.profile_info?.country?.phone),
+    };
+    dispatch(
+      create_agoral_channel(requestBody, res => {
+        navigation?.navigate('CallNow');
+      }),
+    );
+  };
   //component here
   const ItemView = ({data}) => {
     return (
@@ -166,15 +185,15 @@ const index = ({navigation, route}) => {
         <View style={styles.container}>
           <View style={styles.contentContainer}>
             <RideHistoryCard
-              dateTime={route?.params?.ride_detail?.createdAt}
+              dateTime={rides?.selected_ride_history?.createdAt}
               profilePic={true}
               cost={'30'}
               onPressCard={() => {
                 // console.log(route?.params?.ride_detail);
               }}
-              no_of_seats={route?.params?.ride_detail?.requiredSeats}
-              startLocation={route?.params?.ride_detail?.startDes}
-              destination={route?.params?.ride_detail?.destDes}
+              no_of_seats={rides?.selected_ride_history?.requiredSeats}
+              startLocation={rides?.selected_ride_history?.startDes}
+              destination={rides?.selected_ride_history?.destDes}
             />
           </View>
           <View style={styles.separator} />
@@ -190,7 +209,7 @@ const index = ({navigation, route}) => {
               fontFamily={family.product_sans_bold}
               image={appIcons.call}
               onPress={() => {
-                navigation?.navigate('CallNow');
+                createAgoraChannel();
               }}
             />
           </View>
