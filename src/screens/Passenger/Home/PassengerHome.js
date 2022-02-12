@@ -101,8 +101,6 @@ const PassengerHome = ({navigation}) => {
   const myRidesData = useSelector(state => state.map.myRidesData);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
 
-  console.log(myRidesData);
-
   useEffect(() => {
     dispatch(MyRides());
     getUserdata();
@@ -131,26 +129,6 @@ const PassengerHome = ({navigation}) => {
     setStatus('');
   };
 
-  const ridesData = [
-    {
-      id: 1,
-      date: '12 June, 08:00',
-      status: 'Confirmed',
-      seats: [1],
-    },
-    {
-      id: 2,
-      date: '12 June, 08:00',
-      status: 'Matching Done',
-      seats: [1, 2],
-    },
-    {
-      id: 3,
-      date: '12 June, 08:00',
-      status: 'Waiting for Match',
-      seats: [1, 2],
-    },
-  ];
   const onPress = item => {
     navigation.navigate('RideStatus', {item: item});
   };

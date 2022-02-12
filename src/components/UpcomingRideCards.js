@@ -3,6 +3,8 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {appImages, colors} from '../utilities';
 import {fonts} from '../theme/theme';
 import moment from 'moment';
+import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 
 const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
   const CardSelect = id => {
@@ -12,20 +14,29 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
   };
 
   const [seats, setSeats] = useState([]);
+  const myRidesData = useSelector(state => state.map.myRidesData);
 
   useEffect(() => {
     if (item.availableSeats) {
+      let availableSeats = [];
       for (let i = 0; i < item.availableSeats + item.bookedSeats; i++) {
-        seats[i] = i;
+        availableSeats[i] = i;
       }
+      setSeats(availableSeats);
     }
 
     if (item.requiredSeats) {
+      let requiredSeats = [];
       for (let i = 0; i < item.requiredSeats; i++) {
-        seats[i] = i;
+        requiredSeats[i] = i;
       }
+      setSeats(requiredSeats);
     }
-  }, []);
+  }, [myRidesData]);
+
+  if (item.status === 'NO_MATCH' || item.status === 'CANCELLED') {
+    return <></>;
+  }
 
   return (
     <View>
@@ -216,10 +227,10 @@ const styles = StyleSheet.create({
 });
 
 const getStatusColor = status => {
-  if (status === 'Confirmed' || status === 'Fully Booked') {
+  if (status === 'CONFIRMED' || status === 'FULLY_BOOKED') {
     return colors.green;
   }
-  if (status === 'Matching Done' || status === 'Partially Booked') {
+  if (status === 'MATCHING_DONE' || status === 'Partially Booked') {
     return colors.blue;
   }
   if (status === 'WAITING_FOR_MATCH') {

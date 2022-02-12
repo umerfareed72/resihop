@@ -19,7 +19,14 @@ import I18n from '../../../utilities/translations';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {MyDrives, setIDToUpdateDrive} from '../../../redux/actions/map.actions';
+import {
+  MyDrives,
+  setIDToUpdateDrive,
+  setOrigin,
+  setMapDestination,
+  SearchDrives,
+  SearchRides,
+} from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProfileInfo} from '../../../redux/actions/auth.action';
 import {useIsFocused} from '@react-navigation/core';
@@ -192,6 +199,10 @@ const DriverHome = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
+              dispatch(setOrigin(null));
+              dispatch(setMapDestination(null));
+              dispatch(SearchDrives(null));
+              dispatch(SearchRides(null));
               navigation?.replace('PassengerDashboard');
             }}
             style={styles.switchToDriverBtnContainer}>
@@ -265,7 +276,7 @@ const DriverHome = ({navigation}) => {
         {/* upcoming Rides */}
 
         <View style={styles.upcomingRidesMainContainer}>
-          <Text style={styles.upcomingTxt}>{I18n.t('upcoming_rides')} </Text>
+          <Text style={styles.upcomingTxt}>{I18n.t('upcomingDrives')} </Text>
           <View style={styles.ellipsesContainer}>
             <TouchableOpacity
               onPress={() => {

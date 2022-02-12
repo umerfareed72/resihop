@@ -15,7 +15,6 @@ import {fonts} from '../theme';
 import I18n from '../utilities/translations';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
-import axios from 'axios';
 import {GetToken} from '../utilities/constants/index';
 
 const BookingDetails = () => {
@@ -25,10 +24,6 @@ const BookingDetails = () => {
     state => state.map.createRideRequestResponse,
   );
   const bookRide = useSelector(state => state.map.bookRide);
-
-  const handleToken = async () => {
-    console.log(await GetToken());
-  };
 
   handleToken();
 
@@ -49,7 +44,7 @@ const BookingDetails = () => {
       </View>
       <View style={styles.timeDateContainer}>
         <Text style={styles.dateTimeTxt}>
-          {moment(createRideRequest?.tripDate).format('DD MMM')}
+          {moment(createRideRequest?.tripDate).format('DD MMM, HH:mm')}
         </Text>
 
         <View style={styles.seatsContainer}>
@@ -94,7 +89,7 @@ const BookingDetails = () => {
               color: colors.txtGray,
               fontFamily: fonts.regular,
             }}>
-            (SEK 20/Trip)
+            {`(SEK ${bookRide.drive.costPerSeat}/Trip)`}
           </Text>
           <Image
             source={appImages.car}
@@ -116,9 +111,11 @@ const BookingDetails = () => {
             }>{`${bookRide.drive.availableSeats} Seat Available`}</Text>
         </View>
         <View style={styles.carDetailsTxt}>
-          <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
+          <Text style={styles.carDetails}>
+            {bookRide?.drive?.user.vehicle.vehicleCompanyName}
+          </Text>
           <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-            {I18n.t('car_detail')}
+            {`,${bookRide?.drive?.user?.vehicle?.color},${bookRide?.drive?.user?.vehicle?.licencePlateNumber}`}
           </Text>
         </View>
       </View>

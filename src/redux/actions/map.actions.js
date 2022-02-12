@@ -14,6 +14,18 @@ export const setMapDestination = data => async dispatch => {
     payload: data,
   });
 };
+export const setReturnOrigin = data => async dispatch => {
+  dispatch({
+    type: Types.returnOrigin,
+    payload: data,
+  });
+};
+export const setReturnMapDestination = data => async dispatch => {
+  dispatch({
+    type: Types.returnDestination,
+    payload: data,
+  });
+};
 export const setAvailableSeats = data => async dispatch => {
   dispatch({
     type: Types.availableSeats,
@@ -50,6 +62,12 @@ export const setTime = data => async dispatch => {
     payload: data,
   });
 };
+export const setReturnFirstTime = data => async dispatch => {
+  dispatch({
+    type: Types.returnFirstTime,
+    payload: data,
+  });
+};
 export const SetDriversResponse = data => async dispatch => {
   dispatch({
     type: Types.searchDrives,
@@ -60,6 +78,19 @@ export const SetDriversResponse = data => async dispatch => {
 export const SetRidesResponse = data => async dispatch => {
   dispatch({
     type: Types.searchRides,
+    payload: data,
+  });
+};
+export const SetNearestDriver = data => async dispatch => {
+  dispatch({
+    type: Types.nearest,
+    payload: data,
+  });
+};
+
+export const setMapSegment = data => async dispatch => {
+  dispatch({
+    type: Types.mapSegment,
     payload: data,
   });
 };
@@ -246,5 +277,49 @@ export const setUpdateDrive = data => async dispatch => {
       .then(response => console.log(response));
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const setUpdateRide =
+  (body, id, setIsLoading, callback) => async dispatch => {
+    let Token = await GetToken();
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseURL}rides/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const responseJson = await response.json();
+      setIsLoading(false);
+      callback(responseJson);
+    } catch (error) {
+      setIsLoading(false);
+      console.log('Update Ride', error);
+    }
+  };
+
+export const CancelRide = (id, setIsLoading, callback) => async dispatch => {
+  let Token = await GetToken();
+  setIsLoading(true);
+  try {
+    const response = await fetch(`${baseURL}rides/cancel/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Token}`,
+      },
+    });
+
+    const responseJson = await response.json();
+    setIsLoading(false);
+    callback(responseJson);
+  } catch (error) {
+    setIsLoading(false);
+    console.log('Update Ride', error);
   }
 };

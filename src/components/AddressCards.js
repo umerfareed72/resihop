@@ -18,6 +18,10 @@ import {
   setMapDestination,
   setAvailableSeats,
   setTime,
+  setReturnOrigin,
+  setReturnMapDestination,
+  setMapSegment,
+  setReturnFirstTime,
 } from '../redux/actions/map.actions';
 import {AddFavLocation} from '../redux/actions/favLocation.actions';
 import {useDispatch, useSelector} from 'react-redux';
@@ -38,22 +42,32 @@ const AddressCards = ({
   const calenderSheetRef = useRef(null);
   const googleAutoComplete = useRef();
 
-  const [destination, setDestination] = useState('');
-  const [startLocation, setStartLocation] = useState('');
+  const startReturnGoogleAutoComplete = useRef(null);
+  const destinationReturnGoogleAutoComplete = useRef(null);
+
   const [noLaterTime, setNoLaterTime] = useState('');
-  const [date, setDate] = useState('');
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
-  const [normalTime, setnormalTime] = useState();
   const [favBtn, setFavBtn] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const [currentReturnStart, setCurrentReturnStart] = useState('');
+  const [currentReturnDestination, setCurrentReturnDestination] = useState('');
+  const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
+  const [secondReturnTimePicker, setSecondReturnTimePicker] = useState(false);
+
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
   const time = useSelector(state => state.map.time);
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
+  const returnOrigin = useSelector(state => state.map.returnOrigin);
+  const returnDestinationMap = useSelector(
+    state => state.map.returnDestination,
+  );
   const user = useSelector(state => state.auth.userdata);
+  const returnFirstTime = useSelector(state => state.map.returnFirstTime);
 
   const showTimePicker = () => {
     setDatePickerVisibility(true);
@@ -65,14 +79,36 @@ const AddressCards = ({
 
   const handleConfirm = date => {
     dispatch(setTime(moment(date).format('HH:mm')));
-    setnormalTime(moment(date).format('hh:mm a'));
     hideTimePicker();
   };
 
-  useEffect(() => {
-    setnormalTime(moment().format('hh:mm a'));
-    dispatch(setTime(moment().format('HH:MM')));
+  const showFirstReturnTimePicker = () => {
+    setFirstReturnTimePicker(true);
+  };
+  const showSecondReturnTimePicker = () => {
+    setSecondReturnTimePicker(true);
+  };
 
+  const hideFirstReturnTimePicker = () => {
+    setFirstReturnTimePicker(false);
+  };
+
+  const hideSecondReturnTimePicker = () => {
+    setSecondReturnTimePicker(false);
+  };
+
+  const handleConfirmFirstReturnTime = date => {
+    dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
+    hideFirstReturnTimePicker();
+  };
+
+  const handleConfirmSecondReturnTime = date => {
+    // dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
+    // hideFirstReturnTimePicker();
+  };
+
+  useEffect(() => {
+    dispatch(setTime(moment().format('HH:mm')));
     if (modalName === 'startLocation') {
       if (origin) {
         googleAutoComplete.current?.setAddressText(origin.description);
@@ -86,6 +122,26 @@ const AddressCards = ({
         setCurrentAddress(destinationMap.description);
       }
     }
+
+    if (modalName === 'returnTrip') {
+      if (returnOrigin) {
+        startReturnGoogleAutoComplete.current?.setAddressText(
+          returnOrigin.description,
+        );
+        setCurrentReturnStart(returnOrigin.description);
+      }
+
+      if (returnDestinationMap) {
+        destinationReturnGoogleAutoComplete.current?.setAddressText(
+          returnDestinationMap.description,
+        );
+        setCurrentReturnDestination(returnDestinationMap.description);
+      }
+    }
+
+    return () => {
+      dispatch(setMapSegment(null));
+    };
   }, []);
 
   // const handleAddLocation = item => {
@@ -162,22 +218,90 @@ const AddressCards = ({
               <View style={styles.locationMainWrapper}>
                 <View>
                   <View style={{marginBottom: 20}}>
-                    <TextInput
-                      placeholder={I18n.t('start_location')}
-                      placeholderTextColor={colors.inputTxtGray}
-                      value={startLocation}
-                      onChangeText={setStartLocation}
-                      style={styles.txtInput}
+                    <GooglePlacesAutocomplete
+                      ref={startReturnGoogleAutoComplete}
+                      placeholder={I18n.t('address_placeholder')}
+                      onPress={(data, details = null) => {
+                        dispatch(
+                          setReturnOrigin({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+                      }}
+                      query={{
+                        key: 'AIzaSyBGAcF8ef7sdugk0h9us-J12pidnXqgmmQ',
+                        language: 'en',
+                      }}
+                      debounce={400}
+                      fetchDetails={true}
+                      nearbyPlacesAPI="GooglePlacesSearch"
+                      enablePoweredByContainer={false}
+                      returnKeyType={'search'}
+                      minLength={2}
+                      styles={{
+                        container: {
+                          flex: 0,
+                          width: 326,
+                        },
+                        textInput: {
+                          height: 44,
+                          borderWidth: 1,
+                          borderColor: colors.greyBorder,
+                          borderRadius: 10,
+                          paddingLeft: 45,
+                          fontSize: 13,
+                          color: colors.inputTxtGray,
+                          fontFamily: fonts.regular,
+                        },
+                      }}
+                      textInputProps={{
+                        onChangeText: setCurrentReturnStart,
+                      }}
                     />
                     <View style={styles.startDot} />
                   </View>
                   <View>
-                    <TextInput
-                      placeholder={I18n.t('destination')}
-                      placeholderTextColor={colors.inputTxtGray}
-                      value={destination}
-                      onChangeText={setDestination}
-                      style={styles.txtInput}
+                    <GooglePlacesAutocomplete
+                      ref={destinationReturnGoogleAutoComplete}
+                      placeholder={I18n.t('address_placeholder')}
+                      onPress={(data, details = null) => {
+                        dispatch(
+                          setReturnMapDestination({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+                      }}
+                      query={{
+                        key: 'AIzaSyBGAcF8ef7sdugk0h9us-J12pidnXqgmmQ',
+                        language: 'en',
+                      }}
+                      debounce={400}
+                      fetchDetails={true}
+                      nearbyPlacesAPI="GooglePlacesSearch"
+                      enablePoweredByContainer={false}
+                      returnKeyType={'search'}
+                      minLength={2}
+                      styles={{
+                        container: {
+                          flex: 0,
+                          width: 326,
+                        },
+                        textInput: {
+                          height: 44,
+                          borderWidth: 1,
+                          borderColor: colors.greyBorder,
+                          borderRadius: 10,
+                          paddingLeft: 45,
+                          fontSize: 13,
+                          color: colors.inputTxtGray,
+                          fontFamily: fonts.regular,
+                        },
+                      }}
+                      textInputProps={{
+                        onChangeText: setCurrentReturnDestination,
+                      }}
                     />
                     <View style={styles.destSquare} />
                   </View>
@@ -196,11 +320,25 @@ const AddressCards = ({
                           description: data.description,
                         }),
                       );
+
+                      dispatch(
+                        setReturnMapDestination({
+                          location: details.geometry.location,
+                          description: data.description,
+                        }),
+                      );
                     }
 
                     if (modalName === 'destination') {
                       dispatch(
                         setMapDestination({
+                          location: details.geometry.location,
+                          description: data.description,
+                        }),
+                      );
+
+                      dispatch(
+                        setReturnOrigin({
                           location: details.geometry.location,
                           description: data.description,
                         }),
@@ -237,13 +375,6 @@ const AddressCards = ({
                     onChangeText: setCurrentAddress,
                   }}
                 />
-                {/* <TextInput
-                  placeholder={I18n.t('address_placeholder')}
-                  placeholderTextColor={colors.inputTxtGray}
-                  value={startLocation}
-                  onChangeText={setStartLocation}
-                  style={styles.txtInput}
-                /> */}
                 <View
                   style={
                     modalName === 'startLocation'
@@ -354,27 +485,37 @@ const AddressCards = ({
                 </Text>
               </View>
               <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
-                <TextInput
-                  placeholder="XX:XX"
-                  placeholderTextColor={colors.btnGray}
-                  value={noLaterTime}
-                  onChangeText={setNoLaterTime}
-                  style={styles.noLater}
-                />
+                <TouchableOpacity
+                  onPress={() => showFirstReturnTimePicker()}
+                  style={[styles.noLater, {justifyContent: 'center'}]}>
+                  <Text style={styles.dateTxt}>
+                    {returnFirstTime ? returnFirstTime : `XX:XX`}
+                  </Text>
+                </TouchableOpacity>
                 <Text>{I18n.t('to')}</Text>
-                <TextInput
-                  placeholder="XX:XX"
-                  placeholderTextColor={colors.btnGray}
-                  value={noLaterTime}
-                  onChangeText={setNoLaterTime}
-                  style={styles.noLater}
+                <TouchableOpacity
+                  onPress={() => showSecondReturnTimePicker()}
+                  style={[styles.noLater, {justifyContent: 'center'}]}>
+                  <Text style={styles.dateTxt}>{`XX:XX`}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={firstReturnTimePicker}
+                  mode="time"
+                  onConfirm={handleConfirmFirstReturnTime}
+                  onCancel={hideFirstReturnTimePicker}
+                />
+                <DateTimePickerModal
+                  isVisible={secondReturnTimePicker}
+                  mode="time"
+                  onConfirm={handleConfirmSecondReturnTime}
+                  onCancel={hideSecondReturnTimePicker}
                 />
               </View>
             </>
           ) : (
             <>
               <View style={styles.selectWrapper}>
-                <Text style={[styles.selectTxt, {marginRight: 23}]}>
+                <Text style={[styles.selectTxt]}>
                   {I18n.t('need_to_arrive')}
                 </Text>
                 <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
@@ -389,7 +530,7 @@ const AddressCards = ({
                       fontSize: size.normal,
                       color: colors.btnGray,
                     }}>
-                    {normalTime ? normalTime : `XX:XX`}
+                    {time ? time : `XX:XX`}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -448,6 +589,9 @@ const AddressCards = ({
               time,
               dateTimeStamp,
               modalName,
+              currentReturnStart,
+              currentReturnDestination,
+              returnFirstTime,
             )}
             onPress={() => navigation.goBack()}>
             <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
@@ -585,6 +729,9 @@ const styles = StyleSheet.create({
   },
   selectWrapper: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '70%',
     marginTop: 26,
     marginLeft: 20,
   },
@@ -646,6 +793,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginStart: 30,
   },
+  dateTxt: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.g1,
+    fontFamily: fonts.regular,
+  },
 });
 
 export default AddressCards;
@@ -668,6 +821,9 @@ const handleBackgroundColor = (
   time,
   dateTimeStamp,
   modalName,
+  currentReturnStart,
+  currentReturnDestination,
+  returnFirstTime,
 ) => {
   if (modalName === 'startLocation' && (!currentAddress || !availableSeats)) {
     return colors.btnGray;
@@ -676,6 +832,13 @@ const handleBackgroundColor = (
   if (
     modalName === 'destination' &&
     (!currentAddress || !time || !dateTimeStamp)
+  ) {
+    return colors.btnGray;
+  }
+
+  if (
+    modalName === 'returnTrip' &&
+    (!currentReturnStart || !currentReturnDestination || !returnFirstTime)
   ) {
     return colors.btnGray;
   }
@@ -689,6 +852,9 @@ const handleDisable = (
   time,
   dateTimeStamp,
   modalName,
+  currentReturnStart,
+  currentReturnDestination,
+  returnFirstTime,
 ) => {
   if (modalName === 'startLocation' && currentAddress && availableSeats) {
     return false;
@@ -698,6 +864,14 @@ const handleDisable = (
     return false;
   }
 
+  if (
+    modalName === 'returnTrip' &&
+    currentReturnStart &&
+    currentReturnDestination &&
+    returnFirstTime
+  ) {
+    return false;
+  }
   return true;
 };
 
@@ -707,6 +881,10 @@ const handleLocationDisable = (modalName, origin, destination) => {
   }
 
   if (modalName === 'destination' && !destination) {
+    return true;
+  }
+
+  if (modalName === 'returnTrip') {
     return true;
   }
 

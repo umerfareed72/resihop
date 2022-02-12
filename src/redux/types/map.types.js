@@ -13,4 +13,9 @@ module.exports = {
   dateTimeStamp: 'TimeStamp',
   bookRide: 'BookRide',
   time: 'Time',
+  nearest: 'NearestDriver',
+  returnOrigin: 'ReturnOrigon',
+  returnDestination: 'ReturnDestination',
+  returnFirstTime: 'ReturnFirstTime',
+  mapSegment: 'MapSegment',
 };

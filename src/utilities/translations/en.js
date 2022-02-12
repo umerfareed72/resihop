@@ -153,7 +153,7 @@ export default {
   start_location: 'Start Location',
   destination: 'Destination',
   book_seat: 'Book Your Seats',
-  need_to_arrive: 'Need to arrive no later than',
+  need_to_arrive: 'Departure Time',
   select_date: 'Select Date',
   return_trip: 'Return Trip',
   departure_time: 'Departure Time (Return)',
@@ -170,6 +170,7 @@ export default {
   notif_disturb_off: 'Do not Disturb Period',
   from: 'From',
   to: 'To',
+  upcomingDrives: 'My Upcoming Drives',
 
   //Notification Tune
   notif_tune: 'Notifications Tune',

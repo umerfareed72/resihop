@@ -14,6 +14,11 @@ const initialState = {
   dateTimeStamp: null,
   bookRide: null,
   time: null,
+  nearestDriver: null,
+  returnOrigin: null,
+  returnDestination: null,
+  returnFirstTime: null,
+  mapSegment: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -88,6 +93,31 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         time: payload,
+      };
+    case Types.nearest:
+      return {
+        ...state,
+        nearestDriver: payload,
+      };
+    case Types.returnOrigin:
+      return {
+        ...state,
+        returnOrigin: payload,
+      };
+    case Types.returnDestination:
+      return {
+        ...state,
+        returnDestination: payload,
+      };
+    case Types.returnFirstTime:
+      return {
+        ...state,
+        returnFirstTime: payload,
+      };
+    case Types.mapSegment:
+      return {
+        ...state,
+        mapSegment: payload,
       };
     default:
       return state;
