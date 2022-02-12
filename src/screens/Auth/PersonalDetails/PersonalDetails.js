@@ -23,11 +23,12 @@ import {
   Header,
   IncorrectRefCode,
   Loader,
+  NetInfoModal,
 } from '../../../components';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
-import {baseURL, colors} from '../../../utilities';
+import {baseURL, checkConnected, colors} from '../../../utilities';
 import {GetToken} from '../../../utilities/constants';
 
 import {SwitchDrive, updateInfo} from '../../../redux/actions/auth.action';
@@ -72,15 +73,15 @@ function PersonalDetails(props) {
   const [pic, setPic] = useState(undefined);
   const [bankdIdToken, setBankIdToken] = useState(null);
   const [userDetail, setUserDetail] = useState(null);
-
+  const [isOnline, setisOnline] = useState(false);
   const refFirstName = useRef();
   const refLastName = useRef();
   const refReferral = useRef();
   const refEmail = useRef();
   const refCodeSheet = useRef(null);
   const bank_url = useRef();
-
   const acr = 'urn:grn:authn:se:bankid:same-device';
+
   const appState = useAppState(async () => {
     if (acr === 'urn:grn:authn:se:bankid:same-device') {
       const result = await fetch(bank_url?.current).then(response => {
@@ -112,94 +113,30 @@ function PersonalDetails(props) {
       setIsLoading(false);
     }
   };
-  useEffect(() => {
-    if (bankdIdToken) {
-      userDetailsApi(userDetail);
-    }
-  }, [bankdIdToken]);
+  // useEffect(() => {
+  //   if (bankdIdToken) {
+  //     userDetailsApi(userDetail);
+  //   }
+  // }, [bankdIdToken]);
   //Add Personal Details
-  const userDetailsApi = inputData => {
-    setIsLoading(true);
-    let user = '';
-    if (userType === 'Driver') {
-      user = 'DRIVER';
-    } else if (userType === 'Passenger') {
-      user = 'PASSENGER';
-    } else {
-      user = 'BOTH';
-    }
-    const {firstName, lastName, email} = inputData;
-    if (!pic) {
-      const requestBody = {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        isDriverAndPassenger:
-          userType === 'Driver/Passenger both' ? true : false,
-        gender: genderType,
-        referral:
-          codeId != ''
-            ? {
-                _id: codeId,
-              }
-            : {
-                _id: null,
-              },
-        type: user,
-        details: true,
-        country: {
-          phone: country_data?.phone,
-          cca2: country_data?.cca2,
-          code: country_data?.code,
-        },
-        bankID: bankdIdToken,
-      };
-      dispatch(
-        updateInfo(
-          userId,
-          requestBody,
-          res => {
-            setIsLoading(false);
-            console.log(res);
-            Alert.alert(
-              'Success',
-              'Your personal details successfuly saved',
-              [
-                {
-                  text: 'OK',
-                  onPress: () => {
-                    if (userType === 'Passenger') {
-                      props?.navigation?.navigate('Pledge');
-                    } else {
-                      const body = {
-                        switching: false,
-                      };
-                      dispatch(
-                        SwitchDrive(body, () => {
-                          props.navigation.navigate('VehcileStack');
-                        }),
-                      );
-                    }
-                  },
-                },
-              ],
-              {cancelable: false},
-            );
-          },
-          error => {
-            console.log('Failed to add details', error);
-            setIsLoading(false);
-          },
-        ),
-      );
-    } else {
-      // Call Image Upload Function
-      imageUpload(pic, res => {
+  const userDetailsApi = async inputData => {
+    const isConnected = await checkConnected();
+    if (isConnected) {
+      setIsLoading(true);
+      let user = '';
+      if (userType === 'Driver') {
+        user = 'DRIVER';
+      } else if (userType === 'Passenger') {
+        user = 'PASSENGER';
+      } else {
+        user = 'BOTH';
+      }
+      const {firstName, lastName, email} = inputData;
+      if (!pic) {
         const requestBody = {
           firstName: firstName,
           lastName: lastName,
           email: email,
-          picture: res[0]?._id,
           isDriverAndPassenger:
             userType === 'Driver/Passenger both' ? true : false,
           gender: genderType,
@@ -218,14 +155,15 @@ function PersonalDetails(props) {
             cca2: country_data?.cca2,
             code: country_data?.code,
           },
-          bankID: token,
+          bankID: bankdIdToken,
         };
         dispatch(
           updateInfo(
             userId,
             requestBody,
-            () => {
+            res => {
               setIsLoading(false);
+              console.log(res);
               Alert.alert(
                 'Success',
                 'Your personal details successfuly saved',
@@ -257,7 +195,82 @@ function PersonalDetails(props) {
             },
           ),
         );
-      });
+      } else {
+        const mb = pic.fileSize / 1000000;
+        if (mb > 2) {
+          alert('File size should not be more than 20MB');
+          setIsLoading(false);
+        } else {
+          // Call Image Upload Function
+          imageUpload(pic, res => {
+            const requestBody = {
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              picture: res[0]?._id,
+              isDriverAndPassenger:
+                userType === 'Driver/Passenger both' ? true : false,
+              gender: genderType,
+              referral:
+                codeId != ''
+                  ? {
+                      _id: codeId,
+                    }
+                  : {
+                      _id: null,
+                    },
+              type: user,
+              details: true,
+              country: {
+                phone: country_data?.phone,
+                cca2: country_data?.cca2,
+                code: country_data?.code,
+              },
+              bankID: token,
+            };
+            dispatch(
+              updateInfo(
+                userId,
+                requestBody,
+                () => {
+                  setIsLoading(false);
+                  Alert.alert(
+                    'Success',
+                    'Your personal details successfuly saved',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          if (userType === 'Passenger') {
+                            props?.navigation?.navigate('Pledge');
+                          } else {
+                            const body = {
+                              switching: false,
+                            };
+                            dispatch(
+                              SwitchDrive(body, () => {
+                                props.navigation.navigate('VehcileStack');
+                              }),
+                            );
+                          }
+                        },
+                      },
+                    ],
+                    {cancelable: false},
+                  );
+                },
+                error => {
+                  console.log('Failed to add details', error);
+                  setIsLoading(false);
+                },
+              ),
+            );
+          });
+        }
+      }
+    } else {
+      setisOnline(true);
+      setIsLoading(false);
     }
   };
   //Image Uploading
@@ -290,7 +303,7 @@ function PersonalDetails(props) {
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
-        <CustomHeader backButton={true} navigation={props?.navigation} />
+        <CustomHeader backButton={false} navigation={props?.navigation} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Formik
             initialValues={personalFormFields}
@@ -513,6 +526,16 @@ function PersonalDetails(props) {
         onPress={() => {
           refCodeSheet.current.close();
         }}
+      />
+      <NetInfoModal
+        show={isOnline}
+        onRetry={async () => {
+          const isConnected = await checkConnected();
+          if (isConnected) {
+            setisOnline(false);
+          }
+        }}
+        isRetrying={isLoading}
       />
     </>
   );

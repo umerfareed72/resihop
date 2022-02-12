@@ -32,7 +32,7 @@ const index = ({navigation, route}) => {
   //Redux States
   const dispatch = useDispatch(null);
   const auth = useSelector(state => state.auth);
-  const rides = useSelector(state => state.rides);
+  const rides = useSelector(state => state.map);
 
   //useState here
   const [data, setData] = useState([

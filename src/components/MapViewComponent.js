@@ -49,7 +49,7 @@ const MapViewComponent = ({
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );
-
+  console.log(searchDrivesResponse);
   const mapRef = useRef();
 
   useEffect(() => {

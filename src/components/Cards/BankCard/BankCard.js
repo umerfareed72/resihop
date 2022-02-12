@@ -14,7 +14,6 @@ export const BankCard = ({
   onPressCard,
   brand,
 }) => {
-  console.log(brand);
   return (
     <LinearGradient colors={colors.gradientpaidCard} style={styles.container}>
       <View style={styles.content}>

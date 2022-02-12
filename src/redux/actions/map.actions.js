@@ -1,7 +1,10 @@
 import axios from 'axios';
 import * as Types from '../types/map.types';
 import {GetToken, baseURL} from '../../utilities';
-
+import {get} from '../../services';
+import {responseValidator} from '../../utilities/helpers';
+import {RIDES_CONST} from '../../utilities/routes';
+import {header} from '../../utilities';
 export const setOrigin = data => async dispatch => {
   dispatch({
     type: Types.origin,
@@ -246,5 +249,67 @@ export const setUpdateDrive = data => async dispatch => {
       .then(response => console.log(response));
   } catch (error) {
     console.log(error);
+  }
+};
+//My Ride Sort Order
+export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
+  console.log(data);
+  let Token = await GetToken();
+  try {
+    const response = await fetch(`${baseURL}${route}?_sort=${data}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Token}`,
+      },
+    });
+
+    const responseJson = await response.json();
+    callBack(responseJson);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+///////////////////////////////////////// Get Rides History ////////////////////////////
+
+export const get_rides_history = callBack => async dispatch => {
+  try {
+    dispatch({type: Types.Rides_Loader, payload: true});
+    const response = await get(`${RIDES_CONST}`, await header());
+    // if (response?.data?.user?.details) {
+    dispatch({
+      type: Types.Get_Rides_Success,
+      payload: response.data,
+    });
+    callBack(response.data);
+  } catch (error) {
+    console.log('Unable to add card', error);
+    let status = error?.response?.data?.statusCode;
+    responseValidator(
+      status,
+      error?.response?.data?.message[0]?.messages[0]?.message,
+    );
+    dispatch({
+      type: Types.Get_Rides_Failure,
+      payload: null,
+    });
+  }
+};
+
+///////////////////////////////////////// Select Rides History ////////////////////////////
+
+export const select_ride_history = (data, callBack) => async dispatch => {
+  try {
+    dispatch({
+      type: Types.Select_Ride_Success,
+      payload: data,
+    });
+    callBack();
+  } catch (error) {
+    dispatch({
+      type: Types.Select_Ride_Failure,
+      payload: null,
+    });
   }
 };

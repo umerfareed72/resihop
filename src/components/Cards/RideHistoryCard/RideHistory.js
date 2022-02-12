@@ -31,13 +31,12 @@ export const RideHistoryCard = ({
           </View>
           <View style={{paddingVertical: 10}}>
             <View style={styles.row2}>
-              <View style={styles.alignRow}>
+              <View style={[styles.alignRow, {width: '60%'}]}>
                 <View
                   style={{
                     flexDirection: 'row',
                     marginBottom: 10,
                     alignItems: 'center',
-                    justifyContent: 'space-evenly',
                   }}>
                   <View style={styles.circleStyle} />
 
@@ -51,7 +50,11 @@ export const RideHistoryCard = ({
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <View style={styles.rectangleStyle} />
-                  <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
+                  <Text
+                    style={{
+                      color: colors.g4,
+                      fontSize: size.xxsmall,
+                    }}>
                     {destination}
                   </Text>
                 </View>
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   alignRow: {
-    alignItems: 'center',
+    // alignItems: 'center',
     // flexDirection: 'row',
   },
   rightIcon: {
