@@ -5,6 +5,9 @@ export const Constants = {
   windowWidth: Dimensions.get('window').width,
   windowHeight: Dimensions.get('window').height,
 };
+export const publishableKey =
+  'pk_test_51HHZGDJdTAy1qfYOFzlK3i3oPJDG3d4D1LgXHDsivAXq9hr3CCK20CP4pLUMymj8KiKsQezvdWp6reLvCkYm3hVt007hOHMr1A';
+export const appId = 'd7b355e2e491452a9a984bec7b87b43f';
 
 export let authHeader = {
   'Content-Type': 'application/json',

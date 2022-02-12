@@ -10,19 +10,19 @@ const index = ({navigation, route}) => {
   const [time, settime] = useState(false);
 
   useEffect(() => {
-    console.log('Inside TimeOut>>>', time);
+    //   console.log('Inside TimeOut>>>', time);
     const timout = setTimeout(() => {
       settime(true);
     }, 3000);
-    return () => {
-      clearImmediate(timout);
-    };
+    //   return () => {
+    //     clearImmediate(timout);
+    //   };
   }, []);
-  if (time) {
-    if (route?.params?.isRegister) {
-      navigation?.replace('DriverDashboard');
-    }
-  }
+  // if (time) {
+  //   if (route?.params?.isRegister) {
+  //     navigation?.replace('DriverDashboard');
+  //   }
+  // }
   return (
     <>
       <CustomHeader backButton={true} navigation={navigation} />
@@ -60,7 +60,11 @@ const index = ({navigation, route}) => {
               fontFamily={family.product_sans_bold}
               image={appIcons.tickBg}
               onPress={() => {
-                navigation?.replace('Pledge');
+                if (route?.params?.isRegister) {
+                  navigation?.replace('DriverDashboard');
+                } else {
+                  navigation?.replace('Pledge');
+                }
               }}
               switching={true}
             />

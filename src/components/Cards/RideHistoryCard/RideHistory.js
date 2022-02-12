@@ -4,25 +4,34 @@ import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
+import moment from 'moment';
 
 export const RideHistoryCard = ({
   cancelled,
   driver,
   profilePic,
   onPressCard,
+  dateTime,
+  cost,
+  startLocation,
+  destination,
+  no_of_seats,
 }) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={onPressCard}>
           <View style={styles.cardContainer}>
-            <Text style={styles.h1}>Mon, 12 June, 08:00</Text>
+            <Text style={styles.h1}>
+              {moment(dateTime).format('ddd, DD MMMM,').toString()} {''}
+              {moment(dateTime).format('HH:MM').toString()}
+            </Text>
             {cancelled && <Text style={styles.specialText}>cancelled</Text>}
-            <Text style={styles.h2}>SEK 20</Text>
+            <Text style={styles.h2}>SEK {cost}</Text>
           </View>
           <View style={{paddingVertical: 10}}>
             <View style={styles.row2}>
-              <View style={styles.alignRow}>
+              <View style={[styles.alignRow, {width: '60%'}]}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -30,14 +39,23 @@ export const RideHistoryCard = ({
                     alignItems: 'center',
                   }}>
                   <View style={styles.circleStyle} />
-                  <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-                    123 abc apartment abc street abc...
+
+                  <Text
+                    style={{
+                      color: colors.g4,
+                      fontSize: size.xxsmall,
+                    }}>
+                    {startLocation}
                   </Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <View style={styles.rectangleStyle} />
-                  <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-                    123 abc apartment abc street abc...
+                  <Text
+                    style={{
+                      color: colors.g4,
+                      fontSize: size.xxsmall,
+                    }}>
+                    {destination}
                   </Text>
                 </View>
               </View>
@@ -47,7 +65,7 @@ export const RideHistoryCard = ({
                 <View>
                   <FlatList
                     horizontal={true}
-                    data={[1, 2]}
+                    data={new Array(no_of_seats)}
                     renderItem={() => {
                       return (
                         <Image
@@ -124,14 +142,14 @@ const styles = StyleSheet.create({
     width: 12,
     borderRadius: 12,
     backgroundColor: colors.green,
-    marginRight: 15,
+    marginRight: 10,
   },
   rectangleStyle: {
     height: 12,
     width: 12,
     borderRadius: 4,
     backgroundColor: colors.blue,
-    marginRight: 15,
+    marginRight: 10,
   },
   cardContainer: {
     flexDirection: 'row',
@@ -153,7 +171,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   alignRow: {
-    alignItems: 'center',
+    // alignItems: 'center',
     // flexDirection: 'row',
   },
   rightIcon: {

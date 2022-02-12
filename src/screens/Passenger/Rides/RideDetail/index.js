@@ -26,7 +26,14 @@ import {
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {Divider, Icon} from 'react-native-elements';
-const index = ({navigation}) => {
+import {useDispatch, useSelector} from 'react-redux';
+import {create_agoral_channel} from '../../../../redux/actions/app.action';
+const index = ({navigation, route}) => {
+  //Redux States
+  const dispatch = useDispatch(null);
+  const auth = useSelector(state => state.auth);
+  const rides = useSelector(state => state.map);
+
   //useState here
   const [data, setData] = useState([
     {
@@ -84,7 +91,6 @@ const index = ({navigation}) => {
   const updateData = ({id}) => {
     setData(
       data.map(item => {
-        console.log('id in update DAta is  ', id);
         if (item?.id === id) {
           return {
             ...item,
@@ -99,10 +105,21 @@ const index = ({navigation}) => {
       }),
     );
   };
-
+  const createAgoraChannel = () => {
+    const requestBody = {
+      channel: rides?.selected_ride_history?._id,
+      role: 'audience',
+      tokentype: 'uid',
+      uid: JSON.parse(auth?.profile_info?.country?.phone),
+    };
+    dispatch(
+      create_agoral_channel(requestBody, res => {
+        navigation?.navigate('CallNow');
+      }),
+    );
+  };
   //component here
   const ItemView = ({data}) => {
-    console.log('data value in item view is   ', data);
     return (
       <>
         <View style={styles.itemView}>
@@ -167,7 +184,17 @@ const index = ({navigation}) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.contentContainer}>
-            <RideHistoryCard onPressCard={() => {}} />
+            <RideHistoryCard
+              dateTime={rides?.selected_ride_history?.createdAt}
+              profilePic={true}
+              cost={'30'}
+              onPressCard={() => {
+                // console.log(route?.params?.ride_detail);
+              }}
+              no_of_seats={rides?.selected_ride_history?.requiredSeats}
+              startLocation={rides?.selected_ride_history?.startDes}
+              destination={rides?.selected_ride_history?.destDes}
+            />
           </View>
           <View style={styles.separator} />
           <View style={styles.contentContainer}>
@@ -181,6 +208,9 @@ const index = ({navigation}) => {
               txtColor={colors.white}
               fontFamily={family.product_sans_bold}
               image={appIcons.call}
+              onPress={() => {
+                createAgoraChannel();
+              }}
             />
           </View>
           <View style={[styles.contentContainer]}>

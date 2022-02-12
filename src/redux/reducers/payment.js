@@ -6,6 +6,7 @@ const initialState = {
   payment_data: null,
   card_list: [],
   current_card: {},
+  checkout: null,
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -89,6 +90,22 @@ export default (state = initialState, action = {}) => {
         success: true,
         failure: false,
         current_card: payload,
+      };
+    case Types.Checkout_Card_Success:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        checkout: null,
+      };
+    case Types.Checkout_Card_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        checkout: payload,
       };
 
     case Types.Payment_Loader:

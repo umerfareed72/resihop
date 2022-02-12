@@ -1,7 +1,7 @@
 import * as Types from '../types/payment.types';
 import {get, post, put, remove} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
-import {PAYMENT_CONST} from '../../utilities/routes';
+import {CARD_CONST, PAYMENT_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
 
 /////////////////////////////////////////  Add Card   ////////////////////////////
@@ -9,7 +9,7 @@ import {header} from '../../utilities';
 export const add_stripe_card = (body, callBack) => async dispatch => {
   try {
     dispatch({type: Types.Payment_Loader, payload: true});
-    const response = await post(`${PAYMENT_CONST}`, body, await header());
+    const response = await post(`${CARD_CONST}`, body, await header());
     // if (response?.data?.user?.details) {
     dispatch({
       type: Types.Add_Card_Success,
@@ -19,10 +19,7 @@ export const add_stripe_card = (body, callBack) => async dispatch => {
   } catch (error) {
     console.log('Unable to add card', error);
     let status = error?.response?.data?.statusCode;
-    responseValidator(
-      status,
-      error?.response?.data?.message[0]?.messages[0]?.message,
-    );
+    responseValidator(status, error?.response?.data?.message);
     dispatch({
       type: Types.Add_Card_Failure,
       payload: null,
@@ -35,7 +32,7 @@ export const add_stripe_card = (body, callBack) => async dispatch => {
 export const get_card_list = (cid, callBack) => async dispatch => {
   try {
     // dispatch({type: Types.Payment_Loader, payload: true});
-    const response = await get(`${PAYMENT_CONST}/${cid}`, await header());
+    const response = await get(`${CARD_CONST}/${cid}`, await header());
     // if (response?.data?.user?.details) {
     dispatch({
       type: Types.Get_Card_Success,
@@ -45,10 +42,7 @@ export const get_card_list = (cid, callBack) => async dispatch => {
   } catch (error) {
     console.log('Unable to add card', error);
     let status = error?.response?.data?.statusCode;
-    responseValidator(
-      status,
-      error?.response?.data?.message[0]?.messages[0]?.message,
-    );
+    responseValidator(status, error?.response?.data?.message);
     dispatch({
       type: Types.Get_Card_Failure,
       payload: null,
@@ -61,7 +55,7 @@ export const get_card_list = (cid, callBack) => async dispatch => {
 export const edit_stripe_card = (cid, data, callBack) => async dispatch => {
   try {
     dispatch({type: Types.Payment_Loader, payload: true});
-    const response = await put(`${PAYMENT_CONST}/${cid}`, data, await header());
+    const response = await put(`${CARD_CONST}/${cid}`, data, await header());
     // if (response?.data?.user?.details) {
     dispatch({
       type: Types.Edit_Card_Success,
@@ -71,10 +65,7 @@ export const edit_stripe_card = (cid, data, callBack) => async dispatch => {
   } catch (error) {
     console.log('Unable to add card', error);
     let status = error?.response?.data?.statusCode;
-    responseValidator(
-      status,
-      error?.response?.data?.message[0]?.messages[0]?.message,
-    );
+    responseValidator(status, error?.response?.data?.message);
     dispatch({
       type: Types.Edit_Card_Failure,
       payload: null,
@@ -101,7 +92,7 @@ export const delete_stripe_card = (data, callBack) => async dispatch => {
   try {
     dispatch({type: Types.Payment_Loader, payload: true});
     const response = await remove(
-      `${PAYMENT_CONST}/${data?.card_id}/${data?.cid}`,
+      `${CARD_CONST}/${data?.card_id}/${data?.cid}`,
       await header(),
     );
     // if (response?.data?.user?.details) {
@@ -113,12 +104,35 @@ export const delete_stripe_card = (data, callBack) => async dispatch => {
   } catch (error) {
     console.log('Unable to add card', error);
     let status = error?.response?.data?.statusCode;
-    responseValidator(
-      status,
-      error?.response?.data?.message[0]?.messages[0]?.message,
-    );
+    responseValidator(status, error?.response?.data?.message);
     dispatch({
       type: Types.Delete_Card_Failure,
+      payload: null,
+    });
+  }
+};
+
+//Checkout Card
+export const checkout_current_card = (data, callBack) => async dispatch => {
+  try {
+    dispatch({type: Types.Payment_Loader, payload: true});
+    const response = await post(
+      `${PAYMENT_CONST}/authorize`,
+      data,
+      await header(),
+    );
+    // if (response?.data?.user?.details) {
+    dispatch({
+      type: Types.Checkout_Card_Success,
+      payload: response.data,
+    });
+    callBack(response.data);
+  } catch (error) {
+    console.log('Unable to add card', error);
+    let status = error?.response?.data?.statusCode;
+    responseValidator(status, error?.response?.data?.message);
+    dispatch({
+      type: Types.Checkout_Card_Failure,
       payload: null,
     });
   }

@@ -32,6 +32,7 @@
     "native-base": "^3.2.2",
     "react": "17.0.2",
     "react-native": "0.66.3",
+    "react-native-agora": "^3.5.2",
     "react-native-animated-pagination-dots": "^0.1.72",
     "react-native-auth0": "^2.13.0",
     "react-native-calendars": "^1.1269.0",

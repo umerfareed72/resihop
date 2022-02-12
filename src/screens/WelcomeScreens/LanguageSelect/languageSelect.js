@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet, Image, NativeModules} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
 import {useDispatch} from 'react-redux';
@@ -14,6 +14,7 @@ import I18n from '../../../utilities/translations';
 function languageSelect(props) {
   const dispatch = useDispatch(null);
   const [language, setLanguage] = useState('');
+
   return (
     <>
       <MyStatusBar backgroundColor={colors.white} barStyle={'dark-content'} />

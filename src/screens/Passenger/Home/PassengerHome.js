@@ -23,11 +23,12 @@ import {
   SearchDrives,
   SearchRides,
   MyRides,
+  MyRidesSortOrder,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {getProfileInfo, SwitchDrive} from '../../../redux/actions/auth.action';
-import {get} from '../../../services';
+import mapTypes from '../../../redux/types/map.types';
 
 //Data
 var TimeList = {
@@ -147,10 +148,20 @@ const PassengerHome = ({navigation}) => {
     );
   };
 
+  const getRidesByOrder = item => {
+    dispatch(
+      MyRidesSortOrder('rides', item?.value, res => {
+        dispatch({
+          type: mapTypes.myRides,
+          payload: res,
+        });
+      }),
+    );
+  };
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
-
       <SafeAreaView style={styles.container}>
         {/* Top Header */}
         <View style={styles.passengerHeader}>
@@ -310,14 +321,13 @@ const PassengerHome = ({navigation}) => {
                   setSelectedCard={setSelectedCard}
                 />
               )}
-              ListFooterComponent={() => (
-                <TouchableOpacity
-                  style={styles.createRideBtnContainer}
-                  onPress={() => navigation.navigate('CreateRide')}>
-                  <Text style={styles.btnTxt}>{I18n.t('first_ride')}</Text>
-                </TouchableOpacity>
-              )}
+              inverted
             />
+            <TouchableOpacity
+              style={styles.createRideBtnContainer}
+              onPress={() => navigation.navigate('CreateRide')}>
+              <Text style={styles.btnTxt}>{I18n.t('first_ride')}</Text>
+            </TouchableOpacity>
           </>
         )}
       </SafeAreaView>
@@ -344,7 +354,7 @@ const PassengerHome = ({navigation}) => {
           sortModalRef.current.close();
         }}
       />
-      <SortModal show={sortModalRef} />
+      <SortModal show={sortModalRef} onPress={getRidesByOrder} />
     </>
   );
 };
@@ -455,7 +465,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.dropShadow,
     shadowOpacity: 1,
     alignSelf: 'center',
-    marginTop: 30,
+    marginVertical: 30,
   },
   btnTxt: {
     fontSize: 16,

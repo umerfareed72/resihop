@@ -16,6 +16,9 @@ module.exports = {
   Get_Card_Failure: 'Get_Card_Failure',
   //Current Card
   Current_Card_Success: 'Current_Card_Success',
+  //Checkout Card
+  Checkout_Card_Success: 'Checkout_Card_Success',
+  Checkout_Card_Failure: 'Checkout_Card_Failure',
 
   //Get Card
   Payment_Loader: 'Payment_Loader',

@@ -163,7 +163,6 @@ export const updateInfo =
         type: Types.Info_Failure,
         payload: null,
       });
-      console.log(error?.response?.data);
       let status = error?.response?.data?.statusCode;
       responseValidator(
         status,

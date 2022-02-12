@@ -70,7 +70,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   btnImage: {
-    tintColor: colors.blue,
+    tintColor: colors.white,
     height: 11,
     width: 11,
     marginRight: 5,

@@ -52,6 +52,7 @@ const AddFavrouteLocation = ({
     dispatch(
       AddFavLocation(body, response => {
         setloading(false);
+        alert('Location added as favourite');
       }),
     );
     addfavrouiteAddressRef.current.close();
