@@ -92,15 +92,19 @@ const index = ({navigation}) => {
   const selectRideStatus = val => {
     setStatus(val);
   };
+
   const selectRideType = val => {
     setRideType(val);
   };
+
   const selectSeats = val => {
     setSeats(val);
   };
+
   const selectdDate = val => {
     setdate(val);
   };
+
   const resetFilter = () => {
     settime('');
     setdate('');
@@ -114,6 +118,7 @@ const index = ({navigation}) => {
       getRides();
     }
   }, [isFocus]);
+
   const getRides = async () => {
     dispatch(
       get_rides_history(res => {
@@ -121,6 +126,7 @@ const index = ({navigation}) => {
       }),
     );
   };
+
   const getRidesByOrder = item => {
     dispatch(
       MyRidesSortOrder('rides', item?.value, res => {
