@@ -1,31 +1,31 @@
-import * as Types from '../types/rides.types';
+import * as Types from '../types/app.types';
 const initialState = {
   loading: false,
   success: false,
   failure: false,
-  ride_history: [],
+  agora_info: null,
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
   switch (type) {
-    case Types.Get_Rides_Success:
+    case Types.Create_Agora_Channel_Success:
       return {
         ...state,
         loading: false,
         success: true,
         failure: false,
-        ride_history: payload,
+        agora_info: payload,
       };
 
-    case Types.Get_Rides_Failure:
+    case Types.Create_Agora_Channel_Failure:
       return {
         ...state,
         loading: false,
         success: false,
         failure: true,
-        ride_history: payload,
+        agora_info: null,
       };
-    case Types.Rides_Loader:
+    case Types.app_Loader:
       return {
         ...state,
         loading: payload,

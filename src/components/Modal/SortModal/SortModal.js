@@ -25,35 +25,39 @@ export const SortModal = ({show, onPress}) => {
     {
       id: 1,
       title: I18n.t('sort_by_date_as'),
-      onPress: () => {
-        show?.current?.close();
-      },
+      value: 'tripDate:asc',
     },
     {
       id: 2,
       title: I18n.t('sort_by_date_ds'),
-      onPress: () => {
-        show?.current?.close();
-      },
+      value: 'tripDate:desc',
     },
     {
       id: 3,
       title: I18n.t('sort_by_date_ao'),
-      onPress: () => {
-        show?.current?.close();
-      },
+      value: 'destDes:asc',
     },
     {
       id: 4,
       title: I18n.t('sort_by_date_oa'),
-      onPress: () => {
-        show?.current?.close();
-      },
+      value: 'destDes:desc',
     },
   ];
+
+  //Onpress Sort Order Item
+  const onItemPress = item => {
+    console.log(item);
+    onPress(item);
+    show?.current?.close();
+  };
+
   const renderItems = ({item}) => {
     return (
-      <TouchableOpacity style={styles.itemContainer} onPress={item?.onPress}>
+      <TouchableOpacity
+        style={styles.itemContainer}
+        onPress={() => {
+          onItemPress(item);
+        }}>
         <Text style={styles.itemText}>{item?.title}</Text>
       </TouchableOpacity>
     );

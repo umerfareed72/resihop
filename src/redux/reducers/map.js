@@ -14,6 +14,8 @@ const initialState = {
   dateTimeStamp: null,
   bookRide: null,
   time: null,
+  ride_history: [],
+  selected_ride_history: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -89,6 +91,41 @@ export default (state = initialState, action = {}) => {
         ...state,
         time: payload,
       };
+    case Types.Get_Rides_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        ride_history: payload,
+      };
+
+    case Types.Get_Rides_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        ride_history: payload,
+      };
+    case Types.Select_Ride_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        selected_ride_history: payload,
+      };
+
+    case Types.Select_Ride_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        selected_ride_history: null,
+      };
+
     default:
       return state;
   }

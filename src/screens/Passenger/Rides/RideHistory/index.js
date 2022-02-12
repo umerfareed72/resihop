@@ -1,28 +1,23 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-  ImageStore,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
 import {
   CustomHeader,
   Loader,
-  PaymentFilterModal,
   RideFilterModal,
   RideHistoryCard,
   SortModal,
-  TransHistoryCard,
 } from '../../../../components';
 import {appIcons, appImages, colors} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {get_rides_history} from '../../../../redux/actions/rides.actions';
+import {
+  get_rides_history,
+  MyRidesSortOrder,
+  select_ride_history,
+} from '../../../../redux/actions/map.actions';
+import mapTypes from '../../../../redux/types/map.types';
 //Data
 var TimeList = {
   id: 1,
@@ -89,7 +84,7 @@ const index = ({navigation}) => {
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
   const isFocus = useIsFocused();
-  const rides = useSelector(state => state.rides);
+  const rides = useSelector(state => state.map);
   const dispatch = useDispatch(null);
   const selectTime = val => {
     settime(val);
@@ -97,15 +92,19 @@ const index = ({navigation}) => {
   const selectRideStatus = val => {
     setStatus(val);
   };
+
   const selectRideType = val => {
     setRideType(val);
   };
+
   const selectSeats = val => {
     setSeats(val);
   };
+
   const selectdDate = val => {
     setdate(val);
   };
+
   const resetFilter = () => {
     settime('');
     setdate('');
@@ -119,10 +118,22 @@ const index = ({navigation}) => {
       getRides();
     }
   }, [isFocus]);
+
   const getRides = async () => {
     dispatch(
       get_rides_history(res => {
         // console.log(res);
+      }),
+    );
+  };
+
+  const getRidesByOrder = item => {
+    dispatch(
+      MyRidesSortOrder('rides', item?.value, res => {
+        dispatch({
+          type: mapTypes.Get_Rides_Success,
+          payload: res,
+        });
       }),
     );
   };
@@ -155,7 +166,11 @@ const index = ({navigation}) => {
                   profilePic={true}
                   cost={'30'}
                   onPressCard={() => {
-                    navigation?.navigate('RideDetail', {ride_detail: item});
+                    dispatch(
+                      select_ride_history(item, () => {
+                        navigation?.navigate('RideDetail');
+                      }),
+                    );
                   }}
                   no_of_seats={item?.requiredSeats}
                   startLocation={item?.startDes}
@@ -192,7 +207,7 @@ const index = ({navigation}) => {
           sortModalRef.current.close();
         }}
       />
-      <SortModal show={sortModalRef} />
+      <SortModal show={sortModalRef} onPress={getRidesByOrder} />
       {rides?.loading ? <Loader /> : null}
     </>
   );

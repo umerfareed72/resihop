@@ -7,13 +7,13 @@ import React, {
   useCallback,
 } from 'react';
 import {SafeAreaView, Text, StyleSheet, View, Image} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {CustomHeader} from '../../components/Header/CustomHeader';
 import styles from './styles';
 import RtcEngine from 'react-native-agora';
 import {requestCameraAndAudioPermission} from '../../utilities/helpers/permissions';
-import {appIcons, colors} from '../../utilities';
+import {appIcons, appId, colors} from '../../utilities';
 import {TouchableOpacity} from 'react-native';
+import {useSelector} from 'react-redux';
 
 const index = ({navigation}) => {
   const [channelName, setChannelName] = useState('');
@@ -21,10 +21,10 @@ const index = ({navigation}) => {
   const [joinsucceed, setJoinSucceed] = useState(false);
   const [peerIds, setPeerIds] = useState([]);
   const rtcEngine = useRef(null);
-
+  const app_reducer = useSelector(state => state.app_reducer);
   //Init Agora
   const initAgora = useCallback(async () => {
-    rtcEngine.current = await RtcEngine.create(process.env.appId);
+    rtcEngine.current = await RtcEngine.create(appId);
     await rtcEngine.current.enableAudio();
     await rtcEngine.current.setEnableSpeakerphone(true);
     await rtcEngine.current.muteLocalAudioStream(false);
@@ -59,10 +59,10 @@ const index = ({navigation}) => {
   }, []);
   const _joinChannel = async () => {
     const join = await rtcEngine.current?.joinChannel(
-      process.env.agora_token,
-      'resihop',
+      app_reducer?.agora_info?.agora_token,
+      app_reducer?.agora_info?.agora_data?.channel,
       null,
-      0,
+      app_reducer?.agora_info?.agora_data?.uid,
     );
   };
   // Turn the microphone on or off.
@@ -134,7 +134,9 @@ const index = ({navigation}) => {
                   <Image style={styles.icon25} source={appIcons.microphone} />
                 </TouchableOpacity>
               )}
-              <TouchableOpacity onPress={_leaveChannel}>
+              <TouchableOpacity
+                style={styles.btnContainer}
+                onPress={_leaveChannel}>
                 <Image style={styles.icon45} source={appIcons.phone} />
               </TouchableOpacity>
             </View>

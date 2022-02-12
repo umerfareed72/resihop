@@ -38,5 +38,15 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   icon25: {height: 25, width: 25, resizeMode: 'contain'},
-  icon45: {height: 45, width: 45, resizeMode: 'contain'},
+  icon45: {
+    height: 25,
+    width: 25,
+    resizeMode: 'contain',
+    tintColor: colors.white,
+  },
+  btnContainer: {
+    backgroundColor: 'red',
+    borderRadius: 50,
+    padding: 10,
+  },
 });

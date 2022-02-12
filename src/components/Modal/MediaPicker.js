@@ -9,7 +9,7 @@ import {theme} from '../../theme';
 const MediaPicker = ({show = false, onClosePress, onImageSelected}) => {
   const options = {
     mediaType: 'photo',
-    quality: 1,
+    compressImageQuality: 0.8,
   };
   const onGalleryPressed = () => {
     launchImageLibrary(options, response => {

@@ -23,10 +23,15 @@ import {appIcons, checkConnected, colors} from '../../../../utilities';
 import AddCard from './AddCard';
 import {useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {createToken, useConfirmPayment} from '@stripe/stripe-react-native';
+import {
+  createToken,
+  useConfirmPayment,
+  confirmPayment,
+} from '@stripe/stripe-react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   add_stripe_card,
+  checkout_current_card,
   get_card_list,
   save_current_card,
 } from '../../../../redux/actions/payment.action';
@@ -52,17 +57,10 @@ const index = ({navigation}) => {
 
   //onpress
   const onPressModalButton = () => {
-    if (addMoney) {
-      setpaymentSuccessonFailed(true);
-      onAddMoney(false);
-      setpaymentSuccessonSuccess(false);
-    } else {
-      modalRef?.current?.close();
-      onAddMoney(false);
-      setpaymentSuccessonFailed(false);
-      setpaymentSuccessonSuccess(false);
-      navigation?.navigate('StartMatching', {modalName: 'pickUpInfo'});
-    }
+    modalRef?.current?.close();
+    setpaymentSuccessonFailed(false);
+    setpaymentSuccessonSuccess(false);
+    // navigation?.navigate('StartMatching', {modalName: 'pickUpInfo'});
   };
 
   useEffect(() => {
@@ -76,7 +74,7 @@ const index = ({navigation}) => {
     if (check) {
       dispatch(
         get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
-          console.log(res);
+          console.log('Cards');
         }),
       );
     }
@@ -88,7 +86,6 @@ const index = ({navigation}) => {
     try {
       const data = await createToken({
         name: cardHolderName,
-        address: 'Lahore',
         type: 'Card',
       });
 
@@ -97,15 +94,24 @@ const index = ({navigation}) => {
           tokenID: data?.token?.id,
           name: cardHolderName,
         };
+        console.log(requestBody);
         dispatch(
           add_stripe_card(requestBody, res => {
             Alert.alert(
               'Success',
               'Card Added Successfully',
-              [{text: 'Ok', onPress: () => getCards()}],
+              [
+                {
+                  text: 'Ok',
+                  onPress: () => {
+                    setLoading(false);
+                    setCardScreen(!cardScreen);
+                    getCards();
+                  },
+                },
+              ],
               {cancelable: false},
             );
-            setLoading(false);
           }),
         );
       }
@@ -114,6 +120,49 @@ const index = ({navigation}) => {
       setLoading(false);
     }
   };
+  //Select Card
+  const selectCard = item => {
+    setcardDetail(item);
+    setToggleCheckBox(item?.id);
+  };
+
+  //Pay from Card
+  const payFromCard = () => {
+    const requestBody = {
+      customerID: cardDetail?.customer,
+      cardID: cardDetail?.id,
+      rideID: '6204bd91cd0fab4617d2ccf6',
+      driverUserID: '6204b89ccd0fab4617d2ccf5',
+    };
+    dispatch(
+      checkout_current_card(requestBody, res => {
+        Alert.alert(
+          'Confirmation!',
+          'Do you want to pay?',
+          [
+            {text: 'Yes', onPress: () => confirm_payment(res)},
+            {text: 'No', onPress: () => console.log('Cancelled')},
+          ],
+          {cancelable: false},
+        );
+      }),
+    );
+  };
+  const confirm_payment = async data => {
+    const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
+      type: 'Card',
+      setupFutureUsage: 'OffSession',
+    });
+    if (paymentIntent) {
+      modalRef.current.open();
+      setpaymentSuccessonSuccess(true);
+    }
+    if (error) {
+      modalRef.current.open();
+      setpaymentSuccessonFailed(true);
+    }
+  };
+
   return (
     <>
       <CustomHeader
@@ -125,23 +174,19 @@ const index = ({navigation}) => {
         <View style={styles.contentContainer}>
           <View style={styles.header}>
             <TouchableOpacity
-              disabled
               onPress={() => {
-                setCardScreen(true);
+                setCardScreen(!cardScreen);
               }}
               style={[
                 styles.btnContainer,
-                {backgroundColor: cardScreen ? colors.green : colors.white},
+                {backgroundColor: colors.green, flexDirection: 'row'},
               ]}>
-              <Text
-                style={[
-                  styles.btnText,
-                  {color: cardScreen ? colors.white : colors.black},
-                ]}>
+              <Image source={appIcons.plus} style={styles.btnImage} />
+              <Text style={[styles.btnText, {color: colors.white}]}>
                 {I18n.t('add_card')}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setCardScreen(false);
               }}
@@ -156,9 +201,9 @@ const index = ({navigation}) => {
                 ]}>
                 {I18n.t('credit_card')}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
-          <PaymentCard
+          {/* <PaymentCard
             onPressAddMoney={() => {
               modalRef?.current?.open();
               onAddMoney(true);
@@ -167,9 +212,9 @@ const index = ({navigation}) => {
             }}
             title={I18n.t('wallet_balance')}
             add_Money={I18n.t('add_cards')}
-          />
+          /> */}
           <FlatList
-            horizontal={true}
+            numColumns={2}
             data={payment?.card_list}
             renderItem={({item}) => {
               return (
@@ -177,7 +222,7 @@ const index = ({navigation}) => {
                   name={item?.name}
                   cardno={item?.last4}
                   brand={item?.brand}
-                  value={toggleCheckBox}
+                  value={item?.id == toggleCheckBox ? true : false}
                   onPressCard={() => {
                     dispatch(
                       save_current_card(item, () => {
@@ -185,11 +230,14 @@ const index = ({navigation}) => {
                       }),
                     );
                   }}
-                  onPress={setToggleCheckBox}
+                  onPress={() => {
+                    selectCard(item);
+                  }}
                   boxType={'circle'}
                 />
               );
             }}
+            keyExtractor={(item, index) => index.toString()}
           />
 
           <PaymentHistory
@@ -206,12 +254,9 @@ const index = ({navigation}) => {
               }}
               disabled={!Loading && cardHolderName ? false : true}
               btn={true}
-              onCardChange={details => {
-                setcardDetail(details);
-              }}
+              onCardChange={details => {}}
               onPressCard={card => {
                 addPayment();
-
                 // setCardScreen(false);
               }}
               onPressWallet={() => {
@@ -224,15 +269,16 @@ const index = ({navigation}) => {
             <View style={{paddingVertical: 30}}>
               <View style={{paddingVertical: 20}}>
                 <PaymentButtons
+                  disabled={cardDetail ? false : true}
                   onPress={() => {
-                    setCardScreen(true);
+                    payFromCard();
                   }}
-                  bgColor={colors.g1}
+                  bgColor={cardDetail ? colors.green : colors.g1}
                   title={I18n.t('pay_with_card')}
                   txtColor={colors.white}
                 />
               </View>
-              <PaymentButtons
+              {/* <PaymentButtons
                 onPress={() => {
                   modalRef.current.open();
                   setpaymentSuccessonSuccess(true);
@@ -242,7 +288,7 @@ const index = ({navigation}) => {
                 bgColor={colors.g1}
                 title={I18n.t('pay_with_wallet')}
                 txtColor={colors.white}
-              />
+              /> */}
             </View>
           )}
         </View>
@@ -266,9 +312,12 @@ const index = ({navigation}) => {
             : ''
         }
         show={modalRef}
-        h2={I18n.t('lorem')}
+        h2={
+          (paymentSuccess && 'Funds transfered successfully') ||
+          (paymentFailed && 'Funds transfered failed')
+        }
       />
-      {Loading ? <Loader /> : null}
+      {payment?.loading ? <Loader /> : null}
     </>
   );
 };

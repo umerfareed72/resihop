@@ -55,12 +55,12 @@ const AddCard = ({
             />
           </View>
 
-          <PaymentButtons
+          {/* <PaymentButtons
             onPress={onPressWallet}
             bgColor={colors.g1}
             title={I18n.t('pay_from_wallet')}
             txtColor={colors.white}
-          />
+          /> */}
         </View>
       )}
     </View>

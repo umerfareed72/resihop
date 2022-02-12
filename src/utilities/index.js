@@ -11,7 +11,13 @@ export {
 export {size, family} from './sizes';
 export {responseValidator} from './helpers/responseValidator';
 export * from './permissions';
-export {header, GetToken} from './constants';
+export {
+  header,
+  GetToken,
+  publishableKey,
+  agora_token,
+  appId,
+} from './constants';
 export {
   registerAppWithFCM,
   requestPermission,

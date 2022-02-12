@@ -79,41 +79,47 @@ function index(props) {
 
     const {firstName, lastName, email} = inputData;
     //Call Image Upload Function
-    imageUpload(pic, res => {
-      const requestBody = {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        picture: res,
-        gender: genderType,
-      };
-      dispatch(
-        updateInfo(
-          auth?.profile_info.id,
-          requestBody,
-          () => {
-            setIsLoading(false);
-            Alert.alert(
-              'Success',
-              'Your Profile Updated Successfully!',
-              [
-                {
-                  text: 'OK',
-                  onPress: () => {
-                    console.log('Updated');
+    const mb = pic.fileSize / 1000000;
+    if (mb > 2) {
+      alert('File size should not be more than 20MB');
+      setIsLoading(false);
+    } else {
+      imageUpload(pic, res => {
+        const requestBody = {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          picture: res,
+          gender: genderType,
+        };
+        dispatch(
+          updateInfo(
+            auth?.profile_info.id,
+            requestBody,
+            () => {
+              setIsLoading(false);
+              Alert.alert(
+                'Success',
+                'Your Profile Updated Successfully!',
+                [
+                  {
+                    text: 'OK',
+                    onPress: () => {
+                      console.log('Updated');
+                    },
                   },
-                },
-              ],
-              {cancelable: false},
-            );
-          },
-          error => {
-            console.log('Failed to update data', error);
-            setIsLoading(false);
-          },
-        ),
-      );
-    });
+                ],
+                {cancelable: false},
+              );
+            },
+            error => {
+              console.log('Failed to update data', error);
+              setIsLoading(false);
+            },
+          ),
+        );
+      });
+    }
   };
 
   //Image Uploading

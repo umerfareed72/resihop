@@ -64,8 +64,8 @@ const BookingDetails = () => {
             }>{`${createRideRequest?.requiredSeats} Seat`}</Text>
         </View>
       </View>
-      <View style={styles.driverInfoContainer}>
-        <View style={styles.driverInfo}>
+      <View style={styles?.driverInfoContainer}>
+        <View style={styles?.driverInfo}>
           <Image
             source={appImages.driver}
             resizeMode="cover"
@@ -75,7 +75,7 @@ const BookingDetails = () => {
             <Text
               style={
                 styles.driverName
-              }>{`${bookRide.drive.user.firstName} ${bookRide.drive.user.lastName}`}</Text>
+              }>{`${bookRide?.drive?.user?.firstName} ${bookRide?.drive?.user?.lastName}`}</Text>
             <View style={styles.ratingContainer}>
               <StarIcon name="star" size={17} color={colors.white} />
               <Text style={styles.ratingTxt}>4.5</Text>
@@ -85,7 +85,7 @@ const BookingDetails = () => {
         <View>
           <Text
             style={{textAlign: 'center', fontFamily: fonts.bold, fontSize: 18}}>
-            {`SEK ${bookRide.drive.costPerSeat}`}
+            {`SEK ${bookRide?.drive?.costPerSeat}`}
           </Text>
           <Text
             style={{
@@ -113,7 +113,7 @@ const BookingDetails = () => {
           <Text
             style={
               styles.seatNum
-            }>{`${bookRide.drive.availableSeats} Seat Available`}</Text>
+            }>{`${bookRide?.drive?.availableSeats} Seat Available`}</Text>
         </View>
         <View style={styles.carDetailsTxt}>
           <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
@@ -145,7 +145,8 @@ const BookingDetails = () => {
       </Text>
       <View style={styles.titleContainer}>
         <Text style={styles.bookingTitles}>{I18n.t('ride_booked')}</Text>
-        <Text style={styles.amount}>{`SEK ${bookRide.drive.costPerSeat}`}</Text>
+        <Text
+          style={styles.amount}>{`SEK ${bookRide?.drive?.costPerSeat}`}</Text>
       </View>
       <View style={styles.titleContainer}>
         <Text style={[styles.bookingTitles, {color: colors.g4}]}>
@@ -157,7 +158,7 @@ const BookingDetails = () => {
       <View style={styles.totalContainer}>
         <Text style={styles.bookingTitles}>{I18n.t('total_pay')}</Text>
         <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
-          {`SEK ${bookRide.drive.costPerSeat}`}
+          {`SEK ${bookRide?.drive?.costPerSeat}`}
         </Text>
       </View>
       <TouchableOpacity
