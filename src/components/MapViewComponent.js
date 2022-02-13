@@ -84,19 +84,17 @@ const MapViewComponent = ({
   useEffect(() => {
     if (searchDrivesResponse && searchDrivesResponse?.length > 0) {
       let min = parseInt(searchDrivesResponse[0].distance * 111 * 1000);
-
-      if (searchDrivesResponse.length === 1) {
-        dispatch(SetNearestDriver(searchDrivesResponse[0]));
-      }
+      let nearest = searchDrivesResponse[0];
 
       for (let i = 0; i < searchDrivesResponse.length; i++) {
         if (parseInt(searchDrivesResponse[i].distance * 111 * 1000) < min) {
           min = parseInt(searchDrivesResponse[i].distance * 111 * 1000);
-          dispatch(SetNearestDriver(searchDrivesResponse[i]));
+          nearest = searchDrivesResponse[i];
         }
       }
 
       setMinDistance(min);
+      dispatch(SetNearestDriver(nearest));
     }
   }, [searchDrivesResponse]);
 

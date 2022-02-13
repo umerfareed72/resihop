@@ -35,6 +35,7 @@ import {
   get_card_list,
   save_current_card,
 } from '../../../../redux/actions/payment.action';
+import {BookRide} from '../../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
 import {FlatList} from 'react-native';
 const index = ({navigation}) => {
@@ -46,12 +47,17 @@ const index = ({navigation}) => {
   const [addMoney, onAddMoney] = useState(false);
   const [cardDetail, setcardDetail] = useState('');
   const [Loading, setLoading] = useState(false);
+  const [bookLoading, setBookLoading] = useState(false);
   const modalRef = useRef(null);
   const isFocus = useIsFocused();
 
   //Redux State
   const auth = useSelector(state => state.auth);
   const payment = useSelector(state => state.payment);
+  const bookRide = useSelector(state => state.map.bookRide);
+  const createRideRequest = useSelector(
+    state => state.map.createRideRequestResponse,
+  );
 
   const dispatch = useDispatch(null);
 
@@ -74,7 +80,7 @@ const index = ({navigation}) => {
     if (check) {
       dispatch(
         get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
-          console.log('Cards');
+          console.log('Cards', res);
         }),
       );
     }
@@ -131,8 +137,8 @@ const index = ({navigation}) => {
     const requestBody = {
       customerID: cardDetail?.customer,
       cardID: cardDetail?.id,
-      rideID: '6204bd91cd0fab4617d2ccf6',
-      driverUserID: '6204b89ccd0fab4617d2ccf5',
+      rideID: '6204bd91cd0fab4617d2ccf6', //createRideRequest?._id ,
+      driverUserID: '6204b89ccd0fab4617d2ccf5', //bookRide.drive._id
     };
     dispatch(
       checkout_current_card(requestBody, res => {
@@ -149,6 +155,7 @@ const index = ({navigation}) => {
     );
   };
   const confirm_payment = async data => {
+    console.log('Res', data);
     const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
       type: 'Card',
       setupFutureUsage: 'OffSession',
@@ -158,9 +165,22 @@ const index = ({navigation}) => {
       setpaymentSuccessonSuccess(true);
     }
     if (error) {
+      console.log(error);
       modalRef.current.open();
       setpaymentSuccessonFailed(true);
     }
+  };
+
+  const handleBookRide = () => {
+    const body = {
+      ride: createRideRequest._id,
+    };
+
+    dispatch(
+      BookRide(body, bookRide.drive._id, setBookLoading, response => {
+        console.log(response.data);
+      }),
+    );
   };
 
   return (
@@ -252,7 +272,7 @@ const index = ({navigation}) => {
               onChangeText={text => {
                 setCardHolderName(text);
               }}
-              disabled={!Loading && cardHolderName ? false : true}
+              //disabled={!Loading && cardHolderName ? false : true}
               btn={true}
               onCardChange={details => {}}
               onPressCard={card => {
@@ -274,7 +294,7 @@ const index = ({navigation}) => {
                     payFromCard();
                   }}
                   bgColor={cardDetail ? colors.green : colors.g1}
-                  title={I18n.t('pay_with_card')}
+                  title={`SEK ${bookRide?.drive?.costPerSeat} Pay From Card`}
                   txtColor={colors.white}
                 />
               </View>
@@ -302,6 +322,7 @@ const index = ({navigation}) => {
         onFailed={paymentFailed}
         onPress={() => {
           onPressModalButton();
+          handleBookRide();
         }}
         icon={paymentSuccess ? appIcons.tickBg : appIcons.cancel}
         h1={
@@ -318,6 +339,7 @@ const index = ({navigation}) => {
         }
       />
       {payment?.loading ? <Loader /> : null}
+      {bookLoading && <Loader />}
     </>
   );
 };

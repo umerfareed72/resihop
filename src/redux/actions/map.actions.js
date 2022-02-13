@@ -1,10 +1,11 @@
 import axios from 'axios';
 import * as Types from '../types/map.types';
 import {GetToken, baseURL} from '../../utilities';
-import {get} from '../../services';
+import {get, put} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
 import {RIDES_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
+
 export const setOrigin = data => async dispatch => {
   dispatch({
     type: Types.origin,
@@ -390,3 +391,29 @@ export const select_ride_history = (data, callBack) => async dispatch => {
     });
   }
 };
+
+export const BookRide =
+  (body, id, setBookLoading, callback) => async dispatch => {
+    let Token = await GetToken();
+    console.log({body, id});
+    setBookLoading(true);
+    try {
+      const response = await put(`drives/book/${id}`, body, await header());
+      console.log(response);
+      // const response = await fetch(`${baseURL}/drives/book/${id}`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${Token}`,
+      //   },
+      //   body: JSON.stringify(body),
+      // });
+
+      // const responseJson = await response.json();
+      // setBookLoading(false);
+      // callback(responseJson);
+    } catch (error) {
+      setBookLoading(false);
+      console.log('Book Ride', error.response.data);
+    }
+  };

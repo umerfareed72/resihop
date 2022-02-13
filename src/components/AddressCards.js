@@ -556,6 +556,8 @@ const AddressCards = ({
                 </TouchableOpacity>
                 <DateTimePickerModal
                   isVisible={isDatePickerVisible}
+                  is24Hour={true}
+                  locale="en_GB"
                   mode="time"
                   onConfirm={handleConfirm}
                   onCancel={hideTimePicker}

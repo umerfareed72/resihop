@@ -15,7 +15,6 @@ import {fonts} from '../theme';
 import I18n from '../utilities/translations';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
-import {GetToken} from '../utilities/constants/index';
 
 const BookingDetails = () => {
   let navigation = useNavigation();
@@ -24,8 +23,6 @@ const BookingDetails = () => {
     state => state.map.createRideRequestResponse,
   );
   const bookRide = useSelector(state => state.map.bookRide);
-
-  handleToken();
 
   return (
     <View style={styles.container}>

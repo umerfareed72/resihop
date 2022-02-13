@@ -84,7 +84,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
                 source={
                   item?.availableSeats
                     ? item?.bookedSeats
-                      ? item.bookedSeats >= seat
+                      ? item.bookedSeats > seat
                         ? appImages.seatGreen
                         : appImages.seatBlue
                       : appImages.seatBlue
