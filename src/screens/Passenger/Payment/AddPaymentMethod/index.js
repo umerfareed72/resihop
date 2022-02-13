@@ -23,11 +23,7 @@ import {appIcons, checkConnected, colors} from '../../../../utilities';
 import AddCard from './AddCard';
 import {useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {
-  createToken,
-  useConfirmPayment,
-  confirmPayment,
-} from '@stripe/stripe-react-native';
+import {createToken, confirmPayment} from '@stripe/stripe-react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   add_stripe_card,
@@ -38,6 +34,7 @@ import {
 import {BookRide} from '../../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
 import {FlatList} from 'react-native';
+import BlankField from '../../../../components/BlankField';
 const index = ({navigation}) => {
   const [cardScreen, setCardScreen] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
@@ -58,9 +55,7 @@ const index = ({navigation}) => {
   const createRideRequest = useSelector(
     state => state.map.createRideRequestResponse,
   );
-
   const dispatch = useDispatch(null);
-
   //onpress
   const onPressModalButton = () => {
     if (paymentSuccess) {
@@ -238,32 +233,38 @@ const index = ({navigation}) => {
             title={I18n.t('wallet_balance')}
             add_Money={I18n.t('add_cards')}
           /> */}
-          <FlatList
-            numColumns={2}
-            data={payment?.card_list}
-            renderItem={({item}) => {
-              return (
-                <BankCard
-                  name={item?.name}
-                  cardno={item?.last4}
-                  brand={item?.brand}
-                  value={item?.id == toggleCheckBox ? true : false}
-                  onPressCard={() => {
-                    dispatch(
-                      save_current_card(item, () => {
-                        navigation?.navigate('CardDetail');
-                      }),
-                    );
-                  }}
-                  onPress={() => {
-                    selectCard(item);
-                  }}
-                  boxType={'circle'}
-                />
-              );
-            }}
-            keyExtractor={(item, index) => index.toString()}
-          />
+          {payment?.card_list != '' ? (
+            <FlatList
+              numColumns={2}
+              data={payment?.card_list}
+              renderItem={({item}) => {
+                return (
+                  <BankCard
+                    name={item?.name}
+                    cardno={item?.last4}
+                    brand={item?.brand}
+                    value={item?.id == toggleCheckBox ? true : false}
+                    onPressCard={() => {
+                      dispatch(
+                        save_current_card(item, () => {
+                          navigation?.navigate('CardDetail');
+                        }),
+                      );
+                    }}
+                    onPress={() => {
+                      selectCard(item);
+                    }}
+                    boxType={'circle'}
+                  />
+                );
+              }}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          ) : (
+            <View style={{paddingVertical: 20}}>
+              <BlankField title={'No Card Available'} />
+            </View>
+          )}
 
           <PaymentHistory
             onPress={() => {
@@ -290,7 +291,7 @@ const index = ({navigation}) => {
               title={I18n.t('add_card')}
             />
           )}
-          {!cardScreen && bookRide?.drive?.costPerSeat ? (
+          {bookRide?.drive?.costPerSeat ? (
             <View style={{paddingVertical: 30}}>
               <View style={{paddingVertical: 20}}>
                 <PaymentButtons
