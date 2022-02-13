@@ -321,7 +321,6 @@ const PassengerHome = ({navigation}) => {
                   setSelectedCard={setSelectedCard}
                 />
               )}
-              inverted
             />
             <TouchableOpacity
               style={styles.createRideBtnContainer}

@@ -63,10 +63,16 @@ const index = ({navigation}) => {
 
   //onpress
   const onPressModalButton = () => {
-    modalRef?.current?.close();
-    setpaymentSuccessonFailed(false);
-    setpaymentSuccessonSuccess(false);
-    // navigation?.navigate('StartMatching', {modalName: 'pickUpInfo'});
+    if (paymentSuccess) {
+      handleBookRide();
+      modalRef?.current?.close();
+      setpaymentSuccessonFailed(false);
+      setpaymentSuccessonSuccess(false);
+    } else {
+      modalRef?.current?.close();
+      setpaymentSuccessonFailed(false);
+      setpaymentSuccessonSuccess(false);
+    }
   };
 
   useEffect(() => {
@@ -137,12 +143,11 @@ const index = ({navigation}) => {
     const requestBody = {
       customerID: cardDetail?.customer,
       cardID: cardDetail?.id,
-      rideID: '6204bd91cd0fab4617d2ccf6', //createRideRequest?._id ,
-      driverUserID: '6204b89ccd0fab4617d2ccf5', //bookRide.drive._id
+      rideID: createRideRequest?._id,
+      driverUserID: bookRide.drive._id,
     };
     dispatch(
       checkout_current_card(requestBody, res => {
-        console.log(res);
         Alert.alert(
           'Confirmation!',
           'Do you want to pay?',
@@ -176,7 +181,6 @@ const index = ({navigation}) => {
     const body = {
       ride: createRideRequest._id,
     };
-
     dispatch(
       BookRide(body, bookRide.drive._id, setBookLoading, response => {
         console.log(response.data);
@@ -286,7 +290,7 @@ const index = ({navigation}) => {
               title={I18n.t('add_card')}
             />
           )}
-          {!cardScreen && (
+          {!cardScreen && bookRide?.drive?.costPerSeat ? (
             <View style={{paddingVertical: 30}}>
               <View style={{paddingVertical: 20}}>
                 <PaymentButtons
@@ -311,6 +315,8 @@ const index = ({navigation}) => {
                 txtColor={colors.white}
               /> */}
             </View>
+          ) : (
+            false
           )}
         </View>
       </KeyboardAwareScrollView>
@@ -323,7 +329,6 @@ const index = ({navigation}) => {
         onFailed={paymentFailed}
         onPress={() => {
           onPressModalButton();
-          handleBookRide();
         }}
         icon={paymentSuccess ? appIcons.tickBg : appIcons.cancel}
         h1={

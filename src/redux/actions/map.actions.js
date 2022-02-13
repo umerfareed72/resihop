@@ -330,7 +330,6 @@ export const CancelRide = (id, setIsLoading, callback) => async dispatch => {
 
 //My Ride Sort Order
 export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
-  console.log(data);
   let Token = await GetToken();
   try {
     const response = await fetch(`${baseURL}${route}?_sort=${data}`, {
@@ -342,7 +341,6 @@ export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
     });
 
     const responseJson = await response.json();
-    setIsLoading(false);
     callBack(responseJson);
   } catch (error) {
     console.log(error);

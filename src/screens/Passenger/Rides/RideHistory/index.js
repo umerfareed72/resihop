@@ -18,6 +18,7 @@ import {
   select_ride_history,
 } from '../../../../redux/actions/map.actions';
 import mapTypes from '../../../../redux/types/map.types';
+import BlankField from '../../../../components/BlankField';
 //Data
 var TimeList = {
   id: 1,
@@ -154,36 +155,42 @@ const index = ({navigation}) => {
         }}
         btnImage={appIcons.mobiledata}
       />
-      <View style={styles.container}>
-        <View style={styles.contentContainer}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={rides?.ride_history}
-            renderItem={({item}) => {
-              return (
-                <RideHistoryCard
-                  dateTime={item?.createdAt}
-                  profilePic={true}
-                  cost={'30'}
-                  onPressCard={() => {
-                    dispatch(
-                      select_ride_history(item, () => {
-                        navigation?.navigate('RideDetail');
-                      }),
-                    );
-                  }}
-                  no_of_seats={item?.requiredSeats}
-                  startLocation={item?.startDes}
-                  destination={item?.destDes}
-                />
-              );
-            }}
-            ItemSeparatorComponent={() => {
-              return <View style={styles.separator} />;
-            }}
-          />
+      {rides?.ride_history ? (
+        <View style={styles.container}>
+          <View style={styles.contentContainer}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={rides?.ride_history}
+              renderItem={({item}) => {
+                return (
+                  <RideHistoryCard
+                    dateTime={item?.createdAt}
+                    profilePic={true}
+                    cost={'30'}
+                    onPressCard={() => {
+                      dispatch(
+                        select_ride_history(item, () => {
+                          navigation?.navigate('RideDetail');
+                        }),
+                      );
+                    }}
+                    no_of_seats={item?.requiredSeats}
+                    startLocation={item?.startDes}
+                    destination={item?.destDes}
+                  />
+                );
+              }}
+              ItemSeparatorComponent={() => {
+                return <View style={styles.separator} />;
+              }}
+            />
+          </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.container}>
+          <BlankField title={'No Ride History Available'} />
+        </View>
+      )}
       <RideFilterModal
         time={TimeList}
         seats={seatsList}

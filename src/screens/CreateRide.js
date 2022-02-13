@@ -431,7 +431,9 @@ const CreateRide = () => {
           }
           onPress={() => {
             handleCreateRide();
-            handleCreateReturnRide();
+            if (toggleEnabled) {
+              handleCreateReturnRide();
+            }
           }}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
