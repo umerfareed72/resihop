@@ -86,7 +86,7 @@ const BookingDetails = () => {
               color: colors.txtGray,
               fontFamily: fonts.regular,
             }}>
-            {`(SEK ${bookRide.drive.costPerSeat}/Trip)`}
+            {`(SEK ${bookRide?.drive?.costPerSeat}/Trip)`}
           </Text>
           <Image
             source={appImages.car}

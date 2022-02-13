@@ -373,6 +373,8 @@ const AddressCards = ({
                   }}
                   textInputProps={{
                     onChangeText: setCurrentAddress,
+                    autoCorrect: false,
+                    autoCapitalize: false,
                   }}
                 />
                 <View
@@ -456,7 +458,9 @@ const AddressCards = ({
                     padding: 10,
                     borderRadius: 20,
                   }}>
-                  <Text style={{color: colors.white}}>{availableSeats}</Text>
+                  <Text style={{color: colors.white}}>
+                    {!availableSeats ? 0 : availableSeats}
+                  </Text>
                 </View>
               </View>
               <View style={styles.seatsWrapper}>

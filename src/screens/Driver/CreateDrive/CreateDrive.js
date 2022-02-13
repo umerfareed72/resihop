@@ -233,9 +233,7 @@ const CreateDrive = () => {
           <TouchableOpacity
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>
-              {normalTime ? normalTime : `XX:XX`}
-            </Text>
+            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
@@ -256,6 +254,8 @@ const CreateDrive = () => {
           />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
+            is24Hour={true}
+            locale="en_GB"
             mode="time"
             onConfirm={handleConfirm}
             onCancel={hideTimePicker}
