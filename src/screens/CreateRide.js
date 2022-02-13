@@ -67,7 +67,7 @@ const CreateRide = () => {
   useEffect(() => {
     dispatch(setTime(moment().format('HH:mm')));
     return () => {
-      dispatch(setAvailableSeats(0));
+      dispatch(setAvailableSeats(null));
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
       dispatch(setDateTimeStamp(null));
@@ -317,6 +317,8 @@ const CreateRide = () => {
           />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
+            is24Hour={true}
+            locale="en_GB"
             mode="time"
             onConfirm={handleConfirm}
             onCancel={hideTimePicker}
@@ -399,11 +401,15 @@ const CreateRide = () => {
               <DateTimePickerModal
                 isVisible={firstReturnTimePicker}
                 mode="time"
+                is24Hour={true}
+                locale="en_GB"
                 onConfirm={handleConfirmFirstReturnTime}
                 onCancel={hideFirstReturnTimePicker}
               />
               <DateTimePickerModal
                 isVisible={secondReturnTimePicker}
+                is24Hour={true}
+                locale="en_GB"
                 mode="time"
                 onConfirm={handleConfirmSecondReturnTime}
                 onCancel={hideSecondReturnTimePicker}
@@ -422,22 +428,74 @@ const CreateRide = () => {
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
-          style={styles.nextBtnContainer}
-          disabled={
-            origin === null ||
-            destinationMap === null ||
-            availableSeats === null ||
-            dateTimeStamp === null
-          }
+          style={[
+            styles.nextBtnContainer,
+            {
+              backgroundColor: handleColor(
+                origin,
+                destinationMap,
+                availableSeats,
+                dateTimeStamp,
+                time,
+              ),
+            },
+          ]}
+          disabled={handleDisable(
+            origin,
+            destinationMap,
+            availableSeats,
+            dateTimeStamp,
+            time,
+          )}
           onPress={() => {
             handleCreateRide();
-            handleCreateReturnRide();
+            if (toggleEnabled) {
+              handleCreateReturnRide();
+            }
           }}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
+};
+
+const handleDisable = (
+  origin,
+  destinationMap,
+  availableSeats,
+  dateTimeStamp,
+  time,
+) => {
+  if (
+    !origin ||
+    !dateTimeStamp ||
+    !availableSeats ||
+    !destinationMap ||
+    !time
+  ) {
+    return true;
+  }
+  return false;
+};
+
+const handleColor = (
+  origin,
+  destinationMap,
+  availableSeats,
+  dateTimeStamp,
+  time,
+) => {
+  if (
+    !origin ||
+    !dateTimeStamp ||
+    !availableSeats ||
+    !destinationMap ||
+    !time
+  ) {
+    return colors.btnGray;
+  }
+  return colors.green;
 };
 
 const styles = StyleSheet.create({

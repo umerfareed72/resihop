@@ -230,7 +230,7 @@ const getStatusColor = status => {
   if (status === 'CONFIRMED' || status === 'FULLY_BOOKED') {
     return colors.green;
   }
-  if (status === 'MATCHING_DONE' || status === 'Partially Booked') {
+  if (status === 'MATCHING_DONE' || status === 'PARTIALLY_BOOKED') {
     return colors.blue;
   }
   if (status === 'WAITING_FOR_MATCH') {
