@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {CancelRide} from '../redux/actions/map.actions';
 import {Loader} from '../components';
+import {Alert} from 'react-native';
 
 const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
   let navigation = useNavigation();
@@ -46,7 +47,14 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
   const handleCancelRide = () => {
     dispatch(
       CancelRide(ride._id, setIsLoading, response => {
-        console.log('Cancel Ride', response);
+        Alert.alert('Success', 'Ride Cancelled Successfully', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              navigation?.navigate('PassengerHome');
+            },
+          },
+        ]);
       }),
     );
   };
@@ -88,11 +96,35 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btnContainer}
-            onPress={() => handleCancelRide()}>
+            onPress={() => setShowModal(true)}>
             <Text style={styles.btnTxt}>{I18n.t('cancel')}</Text>
           </TouchableOpacity>
         </View>
         {isLoading && <Loader />}
+        {showModal && (
+          <DeleteCardModal
+            image={appIcons.cancel}
+            onPressHide={() => {
+              setShowModal(false);
+            }}
+            selected={selected}
+            h1={I18n.t('ride_delete_h1')}
+            h2={I18n.t('ride_delete_h2')}
+            btn1Text={I18n.t('yes')}
+            btn2Text={I18n.t('no')}
+            show={showModal}
+            bgColor={colors.green}
+            textColor={colors.white}
+            onPressYes={() => {
+              handleCancelRide();
+              setShowModal(false);
+            }}
+            onPressNo={() => {
+              setSelected(false);
+              setShowModal(false);
+            }}
+          />
+        )}
       </View>
     );
   }

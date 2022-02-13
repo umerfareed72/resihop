@@ -137,3 +137,11 @@ export const checkout_current_card = (data, callBack) => async dispatch => {
     });
   }
 };
+//Save Catd
+export const move_from_drawer = (data, callBack) => async dispatch => {
+  dispatch({
+    type: Types.Move_From_Drawer,
+    payload: data,
+  });
+  callBack();
+};

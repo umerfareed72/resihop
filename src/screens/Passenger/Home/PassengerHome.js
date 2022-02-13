@@ -103,8 +103,10 @@ const PassengerHome = ({navigation}) => {
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
 
   useEffect(() => {
-    dispatch(MyRides());
-    getUserdata();
+    if (isFocused) {
+      dispatch(MyRides());
+      getUserdata();
+    }
   }, [isFocused]);
 
   const selectTime = val => {
@@ -321,7 +323,6 @@ const PassengerHome = ({navigation}) => {
                   setSelectedCard={setSelectedCard}
                 />
               )}
-              inverted
             />
             <TouchableOpacity
               style={styles.createRideBtnContainer}

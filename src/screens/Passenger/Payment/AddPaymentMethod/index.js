@@ -23,22 +23,20 @@ import {appIcons, checkConnected, colors} from '../../../../utilities';
 import AddCard from './AddCard';
 import {useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {
-  createToken,
-  useConfirmPayment,
-  confirmPayment,
-} from '@stripe/stripe-react-native';
+import {createToken, confirmPayment} from '@stripe/stripe-react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   add_stripe_card,
   checkout_current_card,
   get_card_list,
+  move_from_drawer,
   save_current_card,
 } from '../../../../redux/actions/payment.action';
 import {BookRide} from '../../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
 import {FlatList} from 'react-native';
-const index = ({navigation}) => {
+import BlankField from '../../../../components/BlankField';
+const index = ({navigation, route}) => {
   const [cardScreen, setCardScreen] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [paymentSuccess, setpaymentSuccessonSuccess] = useState(false);
@@ -58,17 +56,20 @@ const index = ({navigation}) => {
   const createRideRequest = useSelector(
     state => state.map.createRideRequestResponse,
   );
-
   const dispatch = useDispatch(null);
-
   //onpress
   const onPressModalButton = () => {
-    modalRef?.current?.close();
-    setpaymentSuccessonFailed(false);
-    setpaymentSuccessonSuccess(false);
-    // navigation?.navigate('StartMatching', {modalName: 'pickUpInfo'});
+    if (paymentSuccess) {
+      handleBookRide();
+      modalRef?.current?.close();
+      setpaymentSuccessonFailed(false);
+      setpaymentSuccessonSuccess(false);
+    } else {
+      modalRef?.current?.close();
+      setpaymentSuccessonFailed(false);
+      setpaymentSuccessonSuccess(false);
+    }
   };
-
   useEffect(() => {
     if (isFocus) {
       getCards();
@@ -100,7 +101,6 @@ const index = ({navigation}) => {
           tokenID: data?.token?.id,
           name: cardHolderName,
         };
-        console.log(requestBody);
         dispatch(
           add_stripe_card(requestBody, res => {
             Alert.alert(
@@ -137,8 +137,8 @@ const index = ({navigation}) => {
     const requestBody = {
       customerID: cardDetail?.customer,
       cardID: cardDetail?.id,
-      rideID: '6204bd91cd0fab4617d2ccf6', //createRideRequest?._id ,
-      driverUserID: '6204b89ccd0fab4617d2ccf5', //bookRide.drive._id
+      rideID: createRideRequest?._id,
+      driverUserID: bookRide.drive._id,
     };
     dispatch(
       checkout_current_card(requestBody, res => {
@@ -155,7 +155,7 @@ const index = ({navigation}) => {
     );
   };
   const confirm_payment = async data => {
-    console.log('Res', data);
+    // console.log('Res', data);
     const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
       type: 'Card',
       setupFutureUsage: 'OffSession',
@@ -175,14 +175,17 @@ const index = ({navigation}) => {
     const body = {
       ride: createRideRequest._id,
     };
-
     dispatch(
       BookRide(body, bookRide.drive._id, setBookLoading, response => {
-        console.log(response.data);
+        navigation?.replace('PassengerHome');
       }),
     );
   };
-
+  useEffect(() => {
+    if (!isFocus) {
+      dispatch(move_from_drawer(false, () => {}));
+    }
+  }, [!isFocus]);
   return (
     <>
       <CustomHeader
@@ -233,32 +236,38 @@ const index = ({navigation}) => {
             title={I18n.t('wallet_balance')}
             add_Money={I18n.t('add_cards')}
           /> */}
-          <FlatList
-            numColumns={2}
-            data={payment?.card_list}
-            renderItem={({item}) => {
-              return (
-                <BankCard
-                  name={item?.name}
-                  cardno={item?.last4}
-                  brand={item?.brand}
-                  value={item?.id == toggleCheckBox ? true : false}
-                  onPressCard={() => {
-                    dispatch(
-                      save_current_card(item, () => {
-                        navigation?.navigate('CardDetail');
-                      }),
-                    );
-                  }}
-                  onPress={() => {
-                    selectCard(item);
-                  }}
-                  boxType={'circle'}
-                />
-              );
-            }}
-            keyExtractor={(item, index) => index.toString()}
-          />
+          {payment?.card_list != '' ? (
+            <FlatList
+              numColumns={2}
+              data={payment?.card_list}
+              renderItem={({item}) => {
+                return (
+                  <BankCard
+                    name={item?.name}
+                    cardno={item?.last4}
+                    brand={item?.brand}
+                    value={item?.id == toggleCheckBox ? true : false}
+                    onPressCard={() => {
+                      dispatch(
+                        save_current_card(item, () => {
+                          navigation?.navigate('CardDetail');
+                        }),
+                      );
+                    }}
+                    onPress={() => {
+                      selectCard(item);
+                    }}
+                    boxType={'circle'}
+                  />
+                );
+              }}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          ) : (
+            <View style={{paddingVertical: 20}}>
+              <BlankField title={'No Card Available'} />
+            </View>
+          )}
 
           <PaymentHistory
             onPress={() => {
@@ -285,7 +294,7 @@ const index = ({navigation}) => {
               title={I18n.t('add_card')}
             />
           )}
-          {!cardScreen && (
+          {!payment?.move && payment?.card_list != '' ? (
             <View style={{paddingVertical: 30}}>
               <View style={{paddingVertical: 20}}>
                 <PaymentButtons
@@ -310,6 +319,8 @@ const index = ({navigation}) => {
                 txtColor={colors.white}
               /> */}
             </View>
+          ) : (
+            false
           )}
         </View>
       </KeyboardAwareScrollView>
@@ -322,7 +333,6 @@ const index = ({navigation}) => {
         onFailed={paymentFailed}
         onPress={() => {
           onPressModalButton();
-          handleBookRide();
         }}
         icon={paymentSuccess ? appIcons.tickBg : appIcons.cancel}
         h1={

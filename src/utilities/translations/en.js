@@ -318,6 +318,9 @@ export default {
 
   ride: 'Ride',
   address_placeholder: '123 abc apartment abc street abc...',
-
   availableSeats: 'Available Seats',
+
+  //
+  ride_delete_h2: 'Are you sure you want to Cancel this ride?',
+  ride_delete_h1: 'Cancel',
 };

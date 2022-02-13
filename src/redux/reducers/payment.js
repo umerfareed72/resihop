@@ -7,6 +7,7 @@ const initialState = {
   card_list: [],
   current_card: {},
   checkout: null,
+  move: false,
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -108,6 +109,11 @@ export default (state = initialState, action = {}) => {
         checkout: payload,
       };
 
+    case Types.Move_From_Drawer:
+      return {
+        ...state,
+        move: payload,
+      };
     case Types.Payment_Loader:
       return {
         ...state,
