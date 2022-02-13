@@ -9,7 +9,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import Geolocation from 'react-native-geolocation-service';
+import Geolocation, {
+  getCurrentPosition,
+} from 'react-native-geolocation-service';
 import {appImages, colors, appIcons} from '../utilities';
 
 import StartMatchingSheet from './StartMatchingSheet';
@@ -24,7 +26,10 @@ import PickUpInfoCard from './PickUpInfoCard';
 
 import MapViewDirections from 'react-native-maps-directions';
 import {useSelector, useDispatch} from 'react-redux';
-import {setDistanceAndTime} from '../redux/actions/map.actions';
+import {
+  setDistanceAndTime,
+  SetNearestDriver,
+} from '../redux/actions/map.actions';
 import {fonts} from '../theme';
 
 const MapViewComponent = ({
@@ -49,7 +54,12 @@ const MapViewComponent = ({
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );
-  console.log(searchDrivesResponse);
+  const mapSegment = useSelector(state => state.map.mapSegment);
+  const returnOrigin = useSelector(state => state.map.returnOrigin);
+  const returnDestinationMap = useSelector(
+    state => state.map.returnDestination,
+  );
+
   const mapRef = useRef();
 
   useEffect(() => {
@@ -69,23 +79,22 @@ const MapViewComponent = ({
         },
       },
     );
-  }, [origin, destination, searchRideResponse, searchDrivesResponse]);
+  }, [origin, destination]);
 
   useEffect(() => {
-    if (searchDrivesResponse === null || searchDrivesResponse?.length === 0) {
-      alert('No Driver Found');
-    }
-
     if (searchDrivesResponse && searchDrivesResponse?.length > 0) {
       let min = parseInt(searchDrivesResponse[0].distance * 111 * 1000);
+      let nearest = searchDrivesResponse[0];
 
       for (let i = 0; i < searchDrivesResponse.length; i++) {
         if (parseInt(searchDrivesResponse[i].distance * 111 * 1000) < min) {
           min = parseInt(searchDrivesResponse[i].distance * 111 * 1000);
+          nearest = searchDrivesResponse[i];
         }
       }
 
       setMinDistance(min);
+      dispatch(SetNearestDriver(nearest));
     }
   }, [searchDrivesResponse]);
 
@@ -116,6 +125,116 @@ const MapViewComponent = ({
       console.log(error);
     }
   };
+
+  const GoToCurrentLocation = () => {
+    mapRef.current.animateToRegion({
+      latitude: latitude,
+      longitude: longitude,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+
+      duration: 2,
+    });
+  };
+
+  const zoomToDriver = item => {
+    mapRef.current.animateToRegion({
+      latitude: item.drive.startLocation.latitude,
+      longitude: item.drive.startLocation.longitude,
+      latitudeDelta: 0.0001,
+      longitudeDelta: 0.0001,
+
+      duration: 2,
+    });
+  };
+
+  if (mapSegment === 'returnTrip') {
+    return (
+      <>
+        <MapView
+          ref={mapRef}
+          provider={PROVIDER_GOOGLE}
+          region={{
+            latitude: origin !== null ? origin.location.lat : latitude,
+            longitude: origin !== null ? origin.location.lng : longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
+          //onRegionChange={regionChanged}
+          zoomEnabled={true}
+          style={
+            style
+              ? style
+              : height
+              ? {height: height, ...StyleSheet.absoluteFillObject}
+              : {...StyleSheet.absoluteFillObject}
+          }>
+          <Marker
+            identifier="currentPosition"
+            coordinate={{
+              latitude: latitude,
+              longitude: longitude,
+            }}>
+            <View style={styles.currenLocation} />
+          </Marker>
+
+          {returnOrigin && returnDestinationMap && (
+            <MapViewDirections
+              origin={returnOrigin.description}
+              destination={returnDestinationMap.description}
+              apikey={'AIzaSyCDp-9R6VeL2G-8BpsHHxJSNkD5ZKyTZok'}
+              strokeWidth={3}
+              strokeColor={'#007BD2'}
+              mode="DRIVING"
+              timePrecision="now"
+              precision="high"
+              onReady={result => {
+                mapRef.current.fitToCoordinates(result.coordinates, {
+                  edgePadding: {
+                    right: 70,
+                    bottom: 70,
+                    left: 70,
+                    top: 70,
+                  },
+                });
+              }}
+            />
+          )}
+
+          {returnOrigin?.location && (
+            <Marker
+              identifier="location"
+              coordinate={{
+                latitude: returnOrigin.location.lat,
+                longitude: returnOrigin.location.lng,
+              }}
+              icon={appIcons.startLocatin}
+            />
+          )}
+
+          {returnDestinationMap?.location && (
+            <Marker
+              identifier="destination"
+              coordinate={{
+                latitude: returnDestinationMap.location.lat,
+                longitude: returnDestinationMap.location.lng,
+              }}
+            />
+          )}
+        </MapView>
+        <TouchableOpacity
+          style={styles.currentLocationWrapper}
+          activeOpacity={0.8}
+          onPress={() => GoToCurrentLocation()}>
+          <Image
+            source={appImages.currentLocation}
+            resizeMode="contain"
+            style={styles.currentLocation}
+          />
+        </TouchableOpacity>
+      </>
+    );
+  }
 
   return (
     <>
@@ -214,7 +333,8 @@ const MapViewComponent = ({
                 coordinate={{
                   latitude: driver?.drive?.startLocation?.latitude,
                   longitude: driver?.drive?.startLocation?.longitude,
-                }}>
+                }}
+                onPress={() => zoomToDriver(driver)}>
                 <View
                   style={[
                     styles.driverCard,
@@ -227,21 +347,24 @@ const MapViewComponent = ({
                   ]}>
                   <Text style={styles.driverTxt}>{`${
                     driver.drive.costPerSeat
-                  } SEK | ${parseInt(driver.distance * 111 * 1000)} M`}</Text>
+                  } NOk | ${parseInt(driver.distance * 111 * 1000)} M`}</Text>
                 </View>
               </Marker>
             ))
           : null}
       </MapView>
-      <View style={styles.currentLocationWrapper}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => getLocation()}>
-          <Image
-            source={appImages.currentLocation}
-            resizeMode="contain"
-            style={styles.currentLocation}
-          />
-        </TouchableOpacity>
-      </View>
+
+      <TouchableOpacity
+        style={styles.currentLocationWrapper}
+        activeOpacity={0.8}
+        onPress={() => GoToCurrentLocation()}>
+        <Image
+          source={appImages.currentLocation}
+          resizeMode="contain"
+          style={styles.currentLocation}
+        />
+      </TouchableOpacity>
+
       {rideModals === 'startMatching' ? (
         <StartMatchingSheet setModal={setModal} setHeight={setHeight} />
       ) : rideModals === 'finding' ? (

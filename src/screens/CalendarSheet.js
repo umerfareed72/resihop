@@ -9,7 +9,7 @@ import I18n from '../utilities/translations';
 import {setDateTimeStamp} from '../redux/actions/map.actions';
 import {useDispatch} from 'react-redux';
 
-const CalendarSheet = ({calendarSheetRef, setDate}) => {
+const CalendarSheet = ({calendarSheetRef, setDate, setModalVisible}) => {
   let dispatch = useDispatch();
 
   const [markedDate, setMarkedDate] = useState();
@@ -103,7 +103,12 @@ const CalendarSheet = ({calendarSheetRef, setDate}) => {
       />
       <TouchableOpacity
         style={styles.okBtn}
-        onPress={() => calendarSheetRef.current.close()}>
+        onPress={() => {
+          calendarSheetRef.current.close();
+          setTimeout(() => {
+            setModalVisible?.(true);
+          }, 200);
+        }}>
         <Text style={styles.okTxt}>{I18n.t('ok')}</Text>
       </TouchableOpacity>
     </RBSheet>

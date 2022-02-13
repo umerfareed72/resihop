@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {colors, appIcons} from '../../../utilities';
 import MapViewComponent from '../../../components/MapViewComponent';
@@ -6,19 +6,32 @@ import {fonts} from '../../../theme';
 import RideStatusCards from '../../../components/RideStatusCards';
 import {useNavigation} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   setOrigin,
   setMapDestination,
   SearchDrives,
+  CreateRideRequest,
+  setDateTimeStamp,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
+import {CopyRideModal, Loader} from '../../../components';
+import CalendarSheet from '../../CalendarSheet';
 
 const RideStatus = ({route}) => {
   const {item} = route.params;
 
+  const calendarSheetRef = useRef(null);
+
   let dispatch = useDispatch();
   let navigation = useNavigation();
+
+  const origin = useSelector(state => state.map.origin);
+  const destinationMap = useSelector(state => state.map.destination);
+  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -37,20 +50,48 @@ const RideStatus = ({route}) => {
       }),
     );
 
-    dispatch(
-      SearchDrives({
-        startLocation: [item?.startLat, item?.startLng],
-        destinationLocation: [item?.destinationLat, item?.destinationLng],
-        time: moment(item.tripDate).valueOf(),
-        seats: item.requiredSeats,
-      }),
-    );
+    if (!item.status === 'WAITING_FOR_MATCH') {
+      dispatch(
+        SearchDrives({
+          startLocation: [item?.startLat, item?.startLng],
+          destinationLocation: [item?.destinationLat, item?.destinationLng],
+          time: moment(item.tripDate).valueOf(),
+          seats: item.requiredSeats,
+        }),
+      );
+    }
 
     return () => {
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
+      dispatch(SearchDrives(null));
+      dispatch(setDateTimeStamp(null));
     };
   }, []);
+
+  const handleCopyRide = () => {
+    setModalVisible(false);
+    const stamp = moment(
+      `${dateTimeStamp}T${moment(item.tripDate).format('HH:mm')}`,
+    ).valueOf();
+    const body = {
+      startLocation: [origin.location.lat, origin.location.lng],
+      destinationLocation: [
+        destinationMap.location.lat,
+        destinationMap.location.lng,
+      ],
+      date: stamp,
+      requiredSeats: item.requiredSeats,
+      startDes: origin.description,
+      destDes: destinationMap.description,
+    };
+
+    dispatch(
+      CreateRideRequest(body, setIsLoading, response => {
+        console.log('Create Ride', response);
+      }),
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -67,7 +108,20 @@ const RideStatus = ({route}) => {
           <Text style={styles.driver}>{I18n.t('ride')}</Text>
         </View>
       </TouchableOpacity>
-      <RideStatusCards statusType={item.status} />
+      <RideStatusCards
+        statusType={item.status}
+        ride={item}
+        calendarSheetRef={calendarSheetRef}
+      />
+      <CalendarSheet
+        calendarSheetRef={calendarSheetRef}
+        setModalVisible={setModalVisible}
+      />
+      <CopyRideModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleCopyRide={handleCopyRide}
+      />
     </View>
   );
 };

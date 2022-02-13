@@ -53,3 +53,4 @@ export * from './Modal/WarningModal/WarningModal';
 export * from './Modal/CalenderYear/CalendarYear';
 export * from './Modal/IncorrectRefferalCode/IncorrectRefCode';
 export * from './Modal/NetInfoModal';
+export * from './Modal/CopyRideModal/CopyRideModal';

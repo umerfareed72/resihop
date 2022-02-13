@@ -29,6 +29,10 @@ import {
   setDateTimeStamp,
   setTime,
   SetDriversResponse,
+  setReturnFirstTime,
+  setMapSegment,
+  setReturnOrigin,
+  setReturnMapDestination,
 } from '../redux/actions/map.actions';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -44,22 +48,24 @@ const CreateRide = () => {
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
   const time = useSelector(state => state.map.time);
+  const returnFirstTime = useSelector(state => state.map.returnFirstTime);
 
-  const [startLocation, setStartLocation] = useState('');
-  const [destination, setDestination] = useState('');
-  const [noLaterTime, setNoLaterTime] = useState('');
+  const returnOrigin = useSelector(state => state.map.returnOrigin);
+  const returnDestinationMap = useSelector(
+    state => state.map.returnDestination,
+  );
+
   const [favPress, setFavPress] = useState('');
-  const [normalTime, setnormalTime] = useState();
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
+  const [secondReturnTimePicker, setSecondReturnTimePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setnormalTime(moment().format('hh:mm a'));
-    dispatch(setTime(moment().format('HH:MM')));
-
+    dispatch(setTime(moment().format('HH:mm')));
     return () => {
       dispatch(setAvailableSeats(0));
       dispatch(setOrigin(null));
@@ -67,6 +73,9 @@ const CreateRide = () => {
       dispatch(setDateTimeStamp(null));
       dispatch(setTime(null));
       dispatch(SetDriversResponse(null));
+      dispatch(setReturnOrigin(null));
+      dispatch(setReturnMapDestination(null));
+      dispatch(setReturnFirstTime(null));
     };
   }, []);
 
@@ -80,8 +89,32 @@ const CreateRide = () => {
 
   const handleConfirm = date => {
     dispatch(setTime(moment(date).format('HH:mm')));
-    setnormalTime(moment(date).format('hh:mm a'));
     hideTimePicker();
+  };
+
+  const showFirstReturnTimePicker = () => {
+    setFirstReturnTimePicker(true);
+  };
+  const showSecondReturnTimePicker = () => {
+    setSecondReturnTimePicker(true);
+  };
+
+  const hideFirstReturnTimePicker = () => {
+    setFirstReturnTimePicker(false);
+  };
+
+  const hideSecondReturnTimePicker = () => {
+    setSecondReturnTimePicker(false);
+  };
+
+  const handleConfirmFirstReturnTime = date => {
+    dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
+    hideFirstReturnTimePicker();
+  };
+
+  const handleConfirmSecondReturnTime = date => {
+    // dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
+    // hideFirstReturnTimePicker();
   };
 
   const handleCreateRide = () => {
@@ -105,8 +138,29 @@ const CreateRide = () => {
     );
     navigation.navigate('StartMatching', {
       modalName: 'startMatching',
-      dateTimeStamp: dateTimeStamp,
+      dateTimeStamp: stamp,
     });
+  };
+
+  const handleCreateReturnRide = () => {
+    const stamp = moment(`${dateTimeStamp}T${returnFirstTime}`).valueOf();
+    const body = {
+      startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
+      destinationLocation: [
+        returnDestinationMap.location.lat,
+        returnDestinationMap.location.lng,
+      ],
+      date: stamp,
+      requiredSeats: availableSeats,
+      startDes: returnOrigin.description,
+      destDes: returnDestinationMap.description,
+    };
+
+    dispatch(
+      CreateRideRequest(body, setIsLoading, response => {
+        console.log('Return Create Ride', response);
+      }),
+    );
   };
 
   return (
@@ -235,18 +289,14 @@ const CreateRide = () => {
           ))}
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt, {marginRight: 23}]}>
-            {I18n.t('need_to_arrive')}
-          </Text>
+          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
           <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
           <TouchableOpacity
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>
-              {normalTime ? normalTime : `XX:XX`}
-            </Text>
+            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
@@ -287,26 +337,36 @@ const CreateRide = () => {
           <>
             <View style={styles.locationMainWrapper}>
               <View>
-                <View style={{marginBottom: 20}}>
-                  <TextInput
-                    placeholder={I18n.t('start_location')}
-                    placeholderTextColor={colors.inputTxtGray}
-                    value={startLocation}
-                    onChangeText={setStartLocation}
-                    style={styles.txtInput}
-                  />
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(setMapSegment('returnTrip'));
+                    navigation.navigate('StartLocation', {
+                      modalName: 'returnTrip',
+                    });
+                  }}
+                  style={[styles.txtInput, {marginBottom: 20}]}>
+                  <Text style={styles.startTxt}>
+                    {returnOrigin
+                      ? returnOrigin.description
+                      : I18n.t('start_location')}
+                  </Text>
                   <View style={styles.startDot} />
-                </View>
-                <View>
-                  <TextInput
-                    placeholder={I18n.t('destination')}
-                    placeholderTextColor={colors.inputTxtGray}
-                    value={destination}
-                    onChangeText={setDestination}
-                    style={styles.txtInput}
-                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(setMapSegment('returnTrip'));
+                    navigation.navigate('StartLocation', {
+                      modalName: 'returnTrip',
+                    });
+                  }}
+                  style={styles.txtInput}>
+                  <Text style={styles.startTxt}>
+                    {returnDestinationMap
+                      ? returnDestinationMap.description
+                      : I18n.t('destination')}
+                  </Text>
                   <View style={styles.destSquare} />
-                </View>
+                </TouchableOpacity>
               </View>
               <View style={styles.switchWrapper}>
                 <HeartIcon name="heart" size={30} color={colors.btnGray} />
@@ -323,20 +383,30 @@ const CreateRide = () => {
               </Text>
             </View>
             <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
-              <TextInput
-                placeholder="XX:XX"
-                placeholderTextColor={colors.btnGray}
-                value={noLaterTime}
-                onChangeText={setNoLaterTime}
-                style={styles.noLater}
-              />
+              <TouchableOpacity
+                onPress={() => showFirstReturnTimePicker()}
+                style={[styles.noLater, {justifyContent: 'center'}]}>
+                <Text style={styles.dateTxt}>
+                  {returnFirstTime ? returnFirstTime : `XX:XX`}
+                </Text>
+              </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
-              <TextInput
-                placeholder="XX:XX"
-                placeholderTextColor={colors.btnGray}
-                value={noLaterTime}
-                onChangeText={setNoLaterTime}
-                style={styles.noLater}
+              <TouchableOpacity
+                onPress={() => showSecondReturnTimePicker()}
+                style={[styles.noLater, {justifyContent: 'center'}]}>
+                <Text style={styles.dateTxt}>{`XX:XX`}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={firstReturnTimePicker}
+                mode="time"
+                onConfirm={handleConfirmFirstReturnTime}
+                onCancel={hideFirstReturnTimePicker}
+              />
+              <DateTimePickerModal
+                isVisible={secondReturnTimePicker}
+                mode="time"
+                onConfirm={handleConfirmSecondReturnTime}
+                onCancel={hideSecondReturnTimePicker}
               />
             </View>
           </>
@@ -355,11 +425,14 @@ const CreateRide = () => {
           style={styles.nextBtnContainer}
           disabled={
             origin === null ||
-            destination === null ||
+            destinationMap === null ||
             availableSeats === null ||
             dateTimeStamp === null
           }
-          onPress={() => handleCreateRide()}>
+          onPress={() => {
+            handleCreateRide();
+            handleCreateReturnRide();
+          }}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -475,6 +548,9 @@ const styles = StyleSheet.create({
   },
   selectWrapper: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '70%',
     marginTop: 26,
     marginLeft: 20,
   },
