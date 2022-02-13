@@ -35,7 +35,7 @@ import {BookRide} from '../../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
 import {FlatList} from 'react-native';
 import BlankField from '../../../../components/BlankField';
-const index = ({navigation}) => {
+const index = ({navigation, route}) => {
   const [cardScreen, setCardScreen] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [paymentSuccess, setpaymentSuccessonSuccess] = useState(false);
@@ -69,7 +69,6 @@ const index = ({navigation}) => {
       setpaymentSuccessonSuccess(false);
     }
   };
-
   useEffect(() => {
     if (isFocus) {
       getCards();
@@ -101,7 +100,6 @@ const index = ({navigation}) => {
           tokenID: data?.token?.id,
           name: cardHolderName,
         };
-        console.log(requestBody);
         dispatch(
           add_stripe_card(requestBody, res => {
             Alert.alert(
@@ -156,7 +154,7 @@ const index = ({navigation}) => {
     );
   };
   const confirm_payment = async data => {
-    console.log('Res', data);
+    // console.log('Res', data);
     const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
       type: 'Card',
       setupFutureUsage: 'OffSession',
@@ -178,7 +176,7 @@ const index = ({navigation}) => {
     };
     dispatch(
       BookRide(body, bookRide.drive._id, setBookLoading, response => {
-        console.log(response.data);
+        navigation?.replace('PassengerHome');
       }),
     );
   };
@@ -291,7 +289,7 @@ const index = ({navigation}) => {
               title={I18n.t('add_card')}
             />
           )}
-          {bookRide?.drive?.costPerSeat ? (
+          {bookRide?.drive?.costPerSeat && payment?.card_list != '' ? (
             <View style={{paddingVertical: 30}}>
               <View style={{paddingVertical: 20}}>
                 <PaymentButtons

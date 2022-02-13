@@ -392,24 +392,11 @@ export const select_ride_history = (data, callBack) => async dispatch => {
 
 export const BookRide =
   (body, id, setBookLoading, callback) => async dispatch => {
-    let Token = await GetToken();
-    console.log({body, id});
     setBookLoading(true);
     try {
       const response = await put(`drives/book/${id}`, body, await header());
-      console.log(response);
-      // const response = await fetch(`${baseURL}/drives/book/${id}`, {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${Token}`,
-      //   },
-      //   body: JSON.stringify(body),
-      // });
-
-      // const responseJson = await response.json();
-      // setBookLoading(false);
-      // callback(responseJson);
+      setBookLoading(false);
+      callback(response.data);
     } catch (error) {
       setBookLoading(false);
       console.log('Book Ride', error.response.data);
