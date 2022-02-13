@@ -50,8 +50,6 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Resihop Camera Open</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>The purpose for accessing the microphone, such as for a call or interactive live streaming.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Resihop Location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -60,6 +58,8 @@
 	<string>Location usage</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>I want to know where your here.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The purpose for accessing the microphone, such as for a call or interactive live streaming.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Resihop gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>

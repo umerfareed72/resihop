@@ -29,6 +29,7 @@ import {
   add_stripe_card,
   checkout_current_card,
   get_card_list,
+  move_from_drawer,
   save_current_card,
 } from '../../../../redux/actions/payment.action';
 import {BookRide} from '../../../../redux/actions/map.actions';
@@ -180,7 +181,11 @@ const index = ({navigation, route}) => {
       }),
     );
   };
-
+  useEffect(() => {
+    if (!isFocus) {
+      dispatch(move_from_drawer(false, () => {}));
+    }
+  }, [!isFocus]);
   return (
     <>
       <CustomHeader
@@ -289,7 +294,7 @@ const index = ({navigation, route}) => {
               title={I18n.t('add_card')}
             />
           )}
-          {bookRide?.drive?.costPerSeat && payment?.card_list != '' ? (
+          {!payment?.move && payment?.card_list != '' ? (
             <View style={{paddingVertical: 30}}>
               <View style={{paddingVertical: 20}}>
                 <PaymentButtons

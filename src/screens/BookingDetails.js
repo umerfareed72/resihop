@@ -15,6 +15,7 @@ import {fonts} from '../theme';
 import I18n from '../utilities/translations';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
+import {ScrollView} from 'react-native';
 
 const BookingDetails = () => {
   let navigation = useNavigation();
@@ -31,137 +32,148 @@ const BookingDetails = () => {
         navigation={navigation}
         title={I18n.t('booking_detail')}
       />
-      <View style={styles.addressContainer}>
-        <Text style={styles.addressTxt}>{createRideRequest?.startDes}</Text>
-        <View style={styles.addressCircle} />
-      </View>
-      <View style={[styles.addressContainer, {marginTop: 21}]}>
-        <Text style={styles.addressTxt}>{createRideRequest?.destDes}</Text>
-        <View style={styles.addressSquare} />
-      </View>
-      <View style={styles.timeDateContainer}>
-        <Text style={styles.dateTimeTxt}>
-          {moment(createRideRequest?.tripDate).format('DD MMM, HH:mm')}
-        </Text>
-
-        <View style={styles.seatsContainer}>
-          <Image
-            source={appImages.seatGreen}
-            resizeMode="contain"
-            style={styles.greenSeat}
-          />
-          <Text
-            style={
-              styles.seatTxt
-            }>{`${createRideRequest?.requiredSeats} Seat`}</Text>
+      <ScrollView>
+        <View style={styles.addressContainer}>
+          <Text style={styles.addressTxt}>{createRideRequest?.startDes}</Text>
+          <View style={styles.addressCircle} />
         </View>
-      </View>
-      <View style={styles?.driverInfoContainer}>
-        <View style={styles?.driverInfo}>
-          <Image
-            source={appImages.driver}
-            resizeMode="cover"
-            style={styles.driver}
-          />
-          <View>
+        <View style={[styles.addressContainer, {marginTop: 21}]}>
+          <Text style={styles.addressTxt}>{createRideRequest?.destDes}</Text>
+          <View style={styles.addressSquare} />
+        </View>
+        <View style={styles.timeDateContainer}>
+          <Text style={styles.dateTimeTxt}>
+            {moment(createRideRequest?.tripDate).format('DD MMM, HH:mm')}
+          </Text>
+
+          <View style={styles.seatsContainer}>
+            <Image
+              source={appImages.seatGreen}
+              resizeMode="contain"
+              style={styles.greenSeat}
+            />
             <Text
               style={
-                styles.driverName
-              }>{`${bookRide?.drive?.user?.firstName} ${bookRide?.drive?.user?.lastName}`}</Text>
-            <View style={styles.ratingContainer}>
-              <StarIcon name="star" size={17} color={colors.white} />
-              <Text style={styles.ratingTxt}>4.5</Text>
-            </View>
+                styles.seatTxt
+              }>{`${createRideRequest?.requiredSeats} Seat`}</Text>
           </View>
         </View>
-        <View>
+        <View style={styles?.driverInfoContainer}>
+          <View style={styles?.driverInfo}>
+            <Image
+              source={appImages.driver}
+              resizeMode="cover"
+              style={styles.driver}
+            />
+            <View>
+              <Text
+                style={
+                  styles.driverName
+                }>{`${bookRide?.drive?.user?.firstName} ${bookRide?.drive?.user?.lastName}`}</Text>
+              <View style={styles.ratingContainer}>
+                <StarIcon name="star" size={17} color={colors.white} />
+                <Text style={styles.ratingTxt}>4.5</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontFamily: fonts.bold,
+                fontSize: 18,
+              }}>
+              {`SEK ${bookRide?.drive?.costPerSeat}`}
+            </Text>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 12,
+                color: colors.txtGray,
+                fontFamily: fonts.regular,
+              }}>
+              {`(SEK ${bookRide?.drive?.costPerSeat}/Trip)`}
+            </Text>
+            <Image
+              source={appImages.car}
+              resizeMode="contain"
+              style={{
+                height: 26,
+                width: 64,
+                marginTop: 5,
+                alignSelf: 'flex-end',
+              }}
+            />
+          </View>
+        </View>
+        <View style={styles.rideDetailsContainer}>
+          <View style={styles.seatDetails}>
+            <Image
+              source={appImages.seatGreen}
+              resizeMode="contain"
+              style={styles.seatGreen}
+            />
+            <Text
+              style={
+                styles.seatNum
+              }>{`${bookRide?.drive?.availableSeats} Seat Available`}</Text>
+          </View>
+          <View style={styles.carDetailsTxt}>
+            <Text style={styles.carDetails}>
+              {bookRide?.drive?.user.vehicle.vehicleCompanyName}
+            </Text>
+            <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
+              {`,${bookRide?.drive?.user?.vehicle?.color},${bookRide?.drive?.user?.vehicle?.licencePlateNumber}`}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.line} />
+
+        <Text style={styles.promoTxt}>{I18n.t('promo_code')}</Text>
+        <View style={styles.promoInputContainer}>
+          <TextInput
+            placeholder={I18n.t('apply_promo')}
+            placeholderTextColor={colors.inputTxtGray}
+            style={styles.promoInput}
+          />
+          <TouchableOpacity style={styles.btnContainer}>
+            <Text style={styles.btnTxt}>{I18n.t('apply')}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.promoLine} />
+        <Text
+          style={[
+            styles.bookingTitles,
+            {marginTop: 20, marginBottom: 15, marginLeft: 21},
+          ]}>
+          {I18n.t('booking_detail')}
+        </Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.bookingTitles}>{I18n.t('ride_booked')}</Text>
           <Text
-            style={{textAlign: 'center', fontFamily: fonts.bold, fontSize: 18}}>
+            style={styles.amount}>{`SEK ${bookRide?.drive?.costPerSeat}`}</Text>
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={[styles.bookingTitles, {color: colors.g4}]}>
+            {I18n.t('discount')}
+          </Text>
+          <Text style={[styles.amount, {color: colors.g4}]}>SEK 0</Text>
+        </View>
+        <View style={[styles.line, {marginTop: 0}]} />
+        <View style={styles.totalContainer}>
+          <Text style={styles.bookingTitles}>{I18n.t('total_pay')}</Text>
+          <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
             {`SEK ${bookRide?.drive?.costPerSeat}`}
           </Text>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 12,
-              color: colors.txtGray,
-              fontFamily: fonts.regular,
-            }}>
-            {`(SEK ${bookRide?.drive?.costPerSeat}/Trip)`}
-          </Text>
-          <Image
-            source={appImages.car}
-            resizeMode="contain"
-            style={{height: 26, width: 64, marginTop: 5, alignSelf: 'flex-end'}}
-          />
         </View>
-      </View>
-      <View style={styles.rideDetailsContainer}>
-        <View style={styles.seatDetails}>
-          <Image
-            source={appImages.seatGreen}
-            resizeMode="contain"
-            style={styles.seatGreen}
-          />
-          <Text
-            style={
-              styles.seatNum
-            }>{`${bookRide?.drive?.availableSeats} Seat Available`}</Text>
-        </View>
-        <View style={styles.carDetailsTxt}>
-          <Text style={styles.carDetails}>
-            {bookRide?.drive?.user.vehicle.vehicleCompanyName}
-          </Text>
-          <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-            {`,${bookRide?.drive?.user?.vehicle?.color},${bookRide?.drive?.user?.vehicle?.licencePlateNumber}`}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.line} />
-
-      <Text style={styles.promoTxt}>{I18n.t('promo_code')}</Text>
-      <View style={styles.promoInputContainer}>
-        <TextInput
-          placeholder={I18n.t('apply_promo')}
-          placeholderTextColor={colors.inputTxtGray}
-          style={styles.promoInput}
-        />
-        <TouchableOpacity style={styles.btnContainer}>
-          <Text style={styles.btnTxt}>{I18n.t('apply')}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation?.navigate('Payment');
+          }}
+          style={styles.confirmBtnContainer}>
+          <Text style={styles.confirmTxt}>{I18n.t('confirm_and_pay')}</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.promoLine} />
-      <Text
-        style={[
-          styles.bookingTitles,
-          {marginTop: 20, marginBottom: 15, marginLeft: 21},
-        ]}>
-        {I18n.t('booking_detail')}
-      </Text>
-      <View style={styles.titleContainer}>
-        <Text style={styles.bookingTitles}>{I18n.t('ride_booked')}</Text>
-        <Text
-          style={styles.amount}>{`SEK ${bookRide?.drive?.costPerSeat}`}</Text>
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={[styles.bookingTitles, {color: colors.g4}]}>
-          {I18n.t('discount')}
-        </Text>
-        <Text style={[styles.amount, {color: colors.g4}]}>SEK 0</Text>
-      </View>
-      <View style={[styles.line, {marginTop: 0}]} />
-      <View style={styles.totalContainer}>
-        <Text style={styles.bookingTitles}>{I18n.t('total_pay')}</Text>
-        <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
-          {`SEK ${bookRide?.drive?.costPerSeat}`}
-        </Text>
-      </View>
-      <TouchableOpacity
-        onPress={() => {
-          navigation?.navigate('Payment');
-        }}
-        style={styles.confirmBtnContainer}>
-        <Text style={styles.confirmTxt}>{I18n.t('confirm_and_pay')}</Text>
-      </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
@@ -406,7 +418,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     borderRadius: 15,
-    marginTop: 15,
+    marginVertical: 15,
   },
   confirmTxt: {
     fontSize: 16,
