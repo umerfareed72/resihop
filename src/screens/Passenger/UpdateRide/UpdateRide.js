@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,23 +14,79 @@ import {colors, appIcons, appImages} from '../../../utilities';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../FavouriteLocations';
-import {CustomHeader} from '../../../components';
+import {CustomHeader, Loader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
 import {useNavigation} from '@react-navigation/core';
 import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  setAvailableSeats,
+  setTime,
+  setUpdateRide,
+} from '../../../redux/actions/map.actions';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import moment from 'moment';
 
-const UpdateRide = () => {
+const UpdateRide = ({route}) => {
   let navigation = useNavigation();
+  let dispatch = useDispatch();
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
 
-  const [startLocation, setStartLocation] = useState('');
-  const [destination, setDestination] = useState('');
+  const origin = useSelector(state => state.map.origin);
+  const destinationMap = useSelector(state => state.map.destination);
+  const time = useSelector(state => state.map.time);
+  const availableSeats = useSelector(state => state.map.availableSeats);
+  const {ride} = route.params;
+
   const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    dispatch(setAvailableSeats(ride.requiredSeats));
+  }, []);
+
+  const showTimePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = date => {
+    dispatch(setTime(moment(date).format('HH:mm')));
+    hideTimePicker();
+  };
+
+  console.log(time);
+
+  const handleUpDateRide = () => {
+    const date = moment(ride.tripDate).format('YYYY-MM-DD');
+    const body = {
+      startLocation: [origin.location.lat, origin.location.lng],
+      destinationLocation: [
+        destinationMap.location.lat,
+        destinationMap.location.lng,
+      ],
+      date: moment(`${date}T${time}`).valueOf(),
+      requiredSeats: availableSeats,
+      startDes: origin.description,
+      destDes: destinationMap.description,
+    };
+
+    dispatch(
+      setUpdateRide(body, ride._id, setIsLoading, response => {
+        console.log(response);
+        alert('Ride Updated Successfully');
+      }),
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,7 +106,9 @@ const UpdateRide = () => {
                     modalName: 'startLocation',
                   })
                 }>
-                <Text style={styles.startTxt}>{I18n.t('start_location')}</Text>
+                <Text style={styles.startTxt}>
+                  {origin ? origin.description : I18n.t('start_location')}
+                </Text>
               </TouchableOpacity>
               <View style={styles.startDot} />
             </View>
@@ -62,7 +120,11 @@ const UpdateRide = () => {
                     modalName: 'destination',
                   })
                 }>
-                <Text style={styles.startTxt}>{I18n.t('destination')}</Text>
+                <Text style={styles.startTxt}>
+                  {destinationMap
+                    ? destinationMap.description
+                    : I18n.t('destination')}
+                </Text>
               </TouchableOpacity>
               <View style={styles.destSquare} />
             </View>
@@ -88,27 +150,38 @@ const UpdateRide = () => {
         <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
-            <Image
+            <TouchableOpacity
               key={seat}
-              source={appImages.seatBlue}
-              resizeMode="contain"
-              style={styles.seat}
-            />
+              onPress={() => dispatch(setAvailableSeats(seat))}>
+              <Image
+                source={
+                  seat <= availableSeats
+                    ? appImages.seatGreen
+                    : appImages.seatBlue
+                }
+                resizeMode="contain"
+                style={styles.seat}
+              />
+            </TouchableOpacity>
           ))}
         </View>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="time"
+          onConfirm={handleConfirm}
+          onCancel={hideTimePicker}
+        />
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
             {I18n.t('need_to_arrive')}
           </Text>
         </View>
         <View style={styles.selectionInputWrapper}>
-          <TextInput
-            placeholder="XX:XX"
-            placeholderTextColor={colors.btnGray}
-            value={noLaterTime}
-            onChangeText={setNoLaterTime}
-            style={styles.noLater}
-          />
+          <TouchableOpacity
+            onPress={() => showTimePicker()}
+            style={[styles.noLater, {justifyContent: 'center'}]}>
+            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.returnTripWrapper}>
           <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
@@ -186,11 +259,14 @@ const UpdateRide = () => {
           </>
         ) : null}
         <FavouriteLocations favourteLocationRef={favourteLocationRef} />
+        {isLoading ? <Loader /> : null}
       </ScrollView>
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableOpacity style={styles.nextBtnContainer}>
+        <TouchableOpacity
+          style={styles.nextBtnContainer}
+          onPress={() => handleUpDateRide()}>
           <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

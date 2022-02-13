@@ -1,10 +1,11 @@
 import axios from 'axios';
 import * as Types from '../types/map.types';
 import {GetToken, baseURL} from '../../utilities';
-import {get} from '../../services';
+import {get, put} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
 import {RIDES_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
+
 export const setOrigin = data => async dispatch => {
   dispatch({
     type: Types.origin,
@@ -14,6 +15,18 @@ export const setOrigin = data => async dispatch => {
 export const setMapDestination = data => async dispatch => {
   dispatch({
     type: Types.destination,
+    payload: data,
+  });
+};
+export const setReturnOrigin = data => async dispatch => {
+  dispatch({
+    type: Types.returnOrigin,
+    payload: data,
+  });
+};
+export const setReturnMapDestination = data => async dispatch => {
+  dispatch({
+    type: Types.returnDestination,
     payload: data,
   });
 };
@@ -53,6 +66,12 @@ export const setTime = data => async dispatch => {
     payload: data,
   });
 };
+export const setReturnFirstTime = data => async dispatch => {
+  dispatch({
+    type: Types.returnFirstTime,
+    payload: data,
+  });
+};
 export const SetDriversResponse = data => async dispatch => {
   dispatch({
     type: Types.searchDrives,
@@ -63,6 +82,19 @@ export const SetDriversResponse = data => async dispatch => {
 export const SetRidesResponse = data => async dispatch => {
   dispatch({
     type: Types.searchRides,
+    payload: data,
+  });
+};
+export const SetNearestDriver = data => async dispatch => {
+  dispatch({
+    type: Types.nearest,
+    payload: data,
+  });
+};
+
+export const setMapSegment = data => async dispatch => {
+  dispatch({
+    type: Types.mapSegment,
     payload: data,
   });
 };
@@ -251,6 +283,51 @@ export const setUpdateDrive = data => async dispatch => {
     console.log(error);
   }
 };
+
+export const setUpdateRide =
+  (body, id, setIsLoading, callback) => async dispatch => {
+    let Token = await GetToken();
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseURL}rides/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const responseJson = await response.json();
+      setIsLoading(false);
+      callback(responseJson);
+    } catch (error) {
+      setIsLoading(false);
+      console.log('Update Ride', error);
+    }
+  };
+
+export const CancelRide = (id, setIsLoading, callback) => async dispatch => {
+  let Token = await GetToken();
+  setIsLoading(true);
+  try {
+    const response = await fetch(`${baseURL}rides/cancel/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Token}`,
+      },
+    });
+
+    const responseJson = await response.json();
+    setIsLoading(false);
+    callback(responseJson);
+  } catch (error) {
+    setIsLoading(false);
+    console.log('Update Ride', error);
+  }
+};
+
 //My Ride Sort Order
 export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
   console.log(data);
@@ -265,6 +342,7 @@ export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
     });
 
     const responseJson = await response.json();
+    setIsLoading(false);
     callBack(responseJson);
   } catch (error) {
     console.log(error);
@@ -313,3 +391,29 @@ export const select_ride_history = (data, callBack) => async dispatch => {
     });
   }
 };
+
+export const BookRide =
+  (body, id, setBookLoading, callback) => async dispatch => {
+    let Token = await GetToken();
+    console.log({body, id});
+    setBookLoading(true);
+    try {
+      const response = await put(`drives/book/${id}`, body, await header());
+      console.log(response);
+      // const response = await fetch(`${baseURL}/drives/book/${id}`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${Token}`,
+      //   },
+      //   body: JSON.stringify(body),
+      // });
+
+      // const responseJson = await response.json();
+      // setBookLoading(false);
+      // callback(responseJson);
+    } catch (error) {
+      setBookLoading(false);
+      console.log('Book Ride', error.response.data);
+    }
+  };

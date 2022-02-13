@@ -51,11 +51,12 @@ const NearestDriverCard = ({setModal, setHeight, modalName}) => {
       </View>
       <View style={styles.rideInfoContainer}>
         <Text style={styles.date}>
-          {moment(createRideResponse?.tripDate).format('DD MMM')}
+          {moment(createRideResponse?.tripDate).format('DD MMM, HH:mm')}
         </Text>
         <View style={styles.imagesContainer}>
           {requiredSeats.map(seat => (
             <Image
+              key={seat}
               source={appImages.seatGreen}
               resizeMode="contain"
               style={styles.greenSeat}

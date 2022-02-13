@@ -32,6 +32,8 @@ const AvailableDrivers = ({
     state => state.map.createRideRequestResponse,
   );
 
+  const nearestDriver = useSelector(state => state.map.nearestDriver);
+
   useEffect(() => {
     setHeight(Dimensions.get('screen').height - 400);
   }, []);
@@ -50,7 +52,7 @@ const AvailableDrivers = ({
       {modalName !== 'availableDrivers' && (
         <View style={styles.timeDateContainer}>
           <Text style={styles.dateTimeTxt}>
-            {moment(createRideResponse?.tripDate).format('DD MMM')}
+            {moment(createRideResponse?.tripDate).format('DD MMM, HH:mm')}
           </Text>
           <View style={styles.matchingContainer}>
             <Text style={styles.matchingTxt}>{I18n.t('matching_done')}</Text>
@@ -76,13 +78,10 @@ const AvailableDrivers = ({
             style={styles.driver}
           />
           <View>
-            <Text style={styles.driverName}>{`${
-              searchDrivesResponse &&
-              searchDrivesResponse[0]?.drive.user.firstName
-            } ${
-              searchDrivesResponse &&
-              searchDrivesResponse[0]?.drive.user.lastName
-            }`}</Text>
+            <Text
+              style={
+                styles.driverName
+              }>{`${nearestDriver?.drive.user.firstName} ${nearestDriver?.drive.user.lastName}`}</Text>
             <View style={styles.ratingContainer}>
               <StarIcon name="star" size={17} color={colors.white} />
               <Text style={styles.ratingTxt}>4.5</Text>
@@ -108,9 +107,10 @@ const AvailableDrivers = ({
           </View>
         ) : (
           <View>
-            <Text style={styles.fair}>{`SEk ${
-              searchDrivesResponse && searchDrivesResponse[0]?.drive.costPerSeat
-            }`}</Text>
+            <Text
+              style={
+                styles.fair
+              }>{`SEk ${nearestDriver?.drive.costPerSeat}`}</Text>
             <Image
               source={appImages.car}
               resizeMode="contain"
@@ -128,15 +128,17 @@ const AvailableDrivers = ({
                 resizeMode="contain"
                 style={styles.seatGreen}
               />
-              <Text style={styles.seatNum}>{`${
-                searchDrivesResponse &&
-                searchDrivesResponse[0]?.drive.availableSeats
-              } Seat Available`}</Text>
+              <Text
+                style={
+                  styles.seatNum
+                }>{`${nearestDriver?.drive.availableSeats} Seat Available`}</Text>
             </View>
             <View style={styles.carDetailsTxt}>
-              <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
+              <Text style={styles.carDetails}>
+                {nearestDriver?.drive?.user.vehicle.vehicleCompanyName}
+              </Text>
               <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-                {I18n.t('car_detail')}
+                {`,${nearestDriver?.drive?.user?.vehicle?.color},${nearestDriver?.drive?.user?.vehicle?.licencePlateNumber}`}
               </Text>
             </View>
           </View>
@@ -146,10 +148,7 @@ const AvailableDrivers = ({
             </View>
             <Text style={styles.date}>
               {' '}
-              {searchDrivesResponse &&
-                moment(searchDrivesResponse[0]?.drive.date).format(
-                  'DD MMM YYYY',
-                )}
+              {moment(nearestDriver?.drive.date).format('DD MMM YYYY')}
             </Text>
           </View>
           <View style={styles.btnMainContainer}>

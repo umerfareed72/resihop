@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../theme/theme';
 import {appIcons, appImages, colors} from '../utilities';
@@ -14,16 +14,88 @@ import {DeleteCardModal} from './Modal/DeleteCard/DeleteCardModal';
 import I18n from '../utilities/translations';
 import {AddWalletModal} from '.';
 import {drawerIcons} from '../utilities/images';
+import {useDispatch, useSelector} from 'react-redux';
+import moment from 'moment';
+import {CancelRide} from '../redux/actions/map.actions';
+import {Loader} from '../components';
 
-const RideStatusCards = ({statusType}) => {
+const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
   let navigation = useNavigation();
+  let dispatch = useDispatch();
+
+  const nearestDriver = useSelector(state => state.map.nearestDriver);
 
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [currentRide, setCurrentRide] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState(false);
   const [rating, setRating] = useState(0);
+  const [seats, setSeats] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const walletRef = useRef(null);
+
+  useEffect(() => {
+    if (ride?.requiredSeats) {
+      for (let i = 0; i < ride.requiredSeats; i++) {
+        seats[i] = i;
+      }
+    }
+  }, []);
+
+  const handleCancelRide = () => {
+    dispatch(
+      CancelRide(ride._id, setIsLoading, response => {
+        console.log('Cancel Ride', response);
+      }),
+    );
+  };
+
+  if (statusType === 'WAITING_FOR_MATCH') {
+    return (
+      <View style={styles.waitcontainer}>
+        <View style={styles.heading}>
+          <Text style={styles.bookedTxt}>{I18n.t('booked_passengers')}</Text>
+          <View style={styles.seatContainer}>
+            {seats.map(() => (
+              <Image
+                source={appImages.seatGreen}
+                resizeMode="contain"
+                style={styles.seat}
+              />
+            ))}
+          </View>
+        </View>
+        <View
+          style={[
+            styles.statusContainer,
+            {borderColor: getStatusColor(statusType)},
+          ]}>
+          <Text style={[styles.statusTxt, {color: getStatusColor(statusType)}]}>
+            {statusType}
+          </Text>
+        </View>
+        <View style={[styles.btnWrapper, {width: '90%'}]}>
+          <TouchableOpacity
+            style={styles.btnContainer}
+            onPress={() => navigation.navigate('UpdateRide', {ride: ride})}>
+            <Text style={styles.btnTxt}>{I18n.t('update')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btnContainer}
+            onPress={() => calendarSheetRef.current.open()}>
+            <Text style={styles.btnTxt}>{I18n.t('copy')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btnContainer}
+            onPress={() => handleCancelRide()}>
+            <Text style={styles.btnTxt}>{I18n.t('cancel')}</Text>
+          </TouchableOpacity>
+        </View>
+        {isLoading && <Loader />}
+      </View>
+    );
+  }
 
   if (currentRide) {
     return (
@@ -50,34 +122,32 @@ const RideStatusCards = ({statusType}) => {
       <View style={styles.container}>
         <View style={styles.addressContainer}>
           <Text style={styles.addressTxt}>
-            123 abc apartment abc street abc...
+            {nearestDriver?.drive?.startDes}
           </Text>
           <View style={styles.addressCircle} />
         </View>
         <View style={[styles.addressContainer, {marginTop: 21}]}>
-          <Text style={styles.addressTxt}>
-            123 abc apartment abc street abc...
-          </Text>
+          <Text style={styles.addressTxt}>{nearestDriver?.drive?.destDes}</Text>
           <View style={styles.addressSquare} />
         </View>
         <View style={styles.dateTimeContainer}>
-          <Text style={styles.dateTimeTxt}>{I18n.t('date_time')}</Text>
-          {statusType === 'Confirmed' && (
+          <Text style={styles.dateTimeTxt}>
+            {moment(ride.tripDate).format('DD MMM, hh:mm a')}
+          </Text>
+          {statusType === 'CONFIRMED' && (
             <View style={styles.confirmedWrapper}>
               <Text style={styles.confirmedTxt}>{I18n.t('confirmed')}</Text>
             </View>
           )}
           <View style={styles.seats}>
-            <Image
-              source={appImages.seatGreen}
-              resizeMode="contain"
-              style={styles.greenSeat}
-            />
-            <Image
-              source={appImages.seatGreen}
-              resizeMode="contain"
-              style={styles.greenSeat}
-            />
+            {seats.map(seat => (
+              <Image
+                key={seat}
+                source={appImages.seatGreen}
+                resizeMode="contain"
+                style={styles.greenSeat}
+              />
+            ))}
           </View>
         </View>
         <View style={styles.driverInfoContainer}>
@@ -89,7 +159,10 @@ const RideStatusCards = ({statusType}) => {
             />
             <View style={{width: '80%'}}>
               <View style={styles.nameRating}>
-                <Text style={styles.driverName}>{I18n.t('john')}</Text>
+                <Text
+                  style={
+                    styles.driverName
+                  }>{`${nearestDriver?.drive.user.firstName} ${nearestDriver?.drive.user.lastName}`}</Text>
                 <View style={styles.ratingContainer}>
                   <StarIcon name="star" size={17} color={colors.white} />
                   <Text style={styles.ratingTxt}>4.5</Text>
@@ -107,18 +180,23 @@ const RideStatusCards = ({statusType}) => {
                   justifyContent: 'space-between',
                   marginTop: 10,
                 }}>
-                <Text style={styles.fair}>SEK 20</Text>
+                <Text
+                  style={
+                    styles.fair
+                  }>{`SEK ${nearestDriver?.drive.costPerSeat}`}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
+                  <Text style={styles.carDetails}>
+                    {nearestDriver?.drive?.user.vehicle.vehicleCompanyName}
+                  </Text>
                   <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-                    {I18n.t('car_detail')}
+                    {`, ${nearestDriver?.drive?.user?.vehicle?.color}, ${nearestDriver?.drive?.user?.vehicle?.licencePlateNumber}`}
                   </Text>
                 </View>
               </View>
             </View>
           </View>
         </View>
-        {statusType === 'Confirmed' || statusType === 'Matching Done' ? (
+        {statusType === 'Confirmed' || statusType === 'MATCHING_DONE' ? (
           <>
             <View style={styles.borderBtnMainContainer}>
               <TouchableOpacity
@@ -551,4 +629,70 @@ const styles = StyleSheet.create({
     marginHorizontal: 22,
     marginTop: 30,
   },
+  waitcontainer: {
+    height: 217,
+    width: '100%',
+    backgroundColor: colors.white,
+    position: 'absolute',
+    bottom: 0,
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+  },
+  heading: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+    width: '90%',
+    alignSelf: 'center',
+  },
+  bookedTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 20,
+    lineHeight: 26,
+    color: colors.txtBlack,
+  },
+  seatContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  seat: {
+    height: 25,
+    width: 18,
+    marginLeft: 9,
+  },
+  statusContainer: {
+    borderTopWidth: 1.5,
+    borderBottomWidth: 1.5,
+    height: 23,
+    justifyContent: 'center',
+    marginHorizontal: 25,
+    alignSelf: 'flex-start',
+    marginTop: 18,
+  },
+  btnWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 30,
+    width: '60%',
+    alignSelf: 'center',
+  },
+  statusTxt: {
+    fontFamily: fonts.bebasBold,
+    fontSize: 16,
+    lineHeight: 16,
+  },
 });
+
+const getStatusColor = status => {
+  if (status === 'Fully Booked') {
+    return colors.green;
+  }
+  if (status === 'MATCHING_DONE') {
+    return colors.blue;
+  }
+  if (status === 'WAITING_FOR_MATCH') {
+    return colors.orange;
+  }
+};

@@ -13,6 +13,11 @@ module.exports = {
   dateTimeStamp: 'TimeStamp',
   bookRide: 'BookRide',
   time: 'Time',
+  nearest: 'NearestDriver',
+  returnOrigin: 'ReturnOrigon',
+  returnDestination: 'ReturnDestination',
+  returnFirstTime: 'ReturnFirstTime',
+  mapSegment: 'MapSegment',
   //Get Rides
   Get_Rides_Success: 'Get_Rides_Success',
   Get_Rides_Failure: 'Get_Rides_Failure',

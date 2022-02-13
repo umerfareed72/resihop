@@ -95,9 +95,11 @@ const AvailableDrivers = props => {
                   }>{`${item.drive.availableSeats} Seat Available`}</Text>
               </View>
               <View style={styles.carDetailsTxt}>
-                <Text style={styles.carDetails}>{I18n.t('ford')}</Text>
+                <Text style={styles.carDetails}>
+                  {item?.drive?.user.vehicle.vehicleCompanyName}
+                </Text>
                 <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-                  {I18n.t('car_detail')}
+                  {`,${item?.drive?.user?.vehicle?.color},${item?.drive?.user?.vehicle?.licencePlateNumber}`}
                 </Text>
               </View>
             </View>
