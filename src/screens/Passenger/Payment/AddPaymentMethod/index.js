@@ -136,6 +136,7 @@ const index = ({navigation}) => {
     };
     dispatch(
       checkout_current_card(requestBody, res => {
+        console.log(res);
         Alert.alert(
           'Confirmation!',
           'Do you want to pay?',
@@ -158,6 +159,7 @@ const index = ({navigation}) => {
       setpaymentSuccessonSuccess(true);
     }
     if (error) {
+      console.log(error);
       modalRef.current.open();
       setpaymentSuccessonFailed(true);
     }
