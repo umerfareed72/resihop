@@ -364,6 +364,16 @@ const MapViewComponent = ({
           style={styles.currentLocation}
         />
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.currentLocationWrapper2}
+        activeOpacity={0.8}
+        onPress={() => GoToCurrentLocation()}>
+        <Image
+          source={appImages.currentLocation}
+          resizeMode="contain"
+          style={styles.currentLocation}
+        />
+      </TouchableOpacity>
 
       {rideModals === 'startMatching' ? (
         <StartMatchingSheet setModal={setModal} setHeight={setHeight} />
@@ -423,6 +433,11 @@ const styles = StyleSheet.create({
     width: 42,
   },
   currentLocationWrapper: {
+    position: 'absolute',
+    top: 50,
+    right: 16,
+  },
+  currentLocationWrapper2: {
     position: 'absolute',
     bottom: 25,
     right: 16,

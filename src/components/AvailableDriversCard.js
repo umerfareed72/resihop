@@ -12,8 +12,10 @@ import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/core';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
+import {setBookRide} from '../redux/actions/map.actions';
+
 const AvailableDrivers = ({
   modalName,
   setAvailableDrivers,
@@ -23,10 +25,7 @@ const AvailableDrivers = ({
   btnText,
 }) => {
   let navigation = useNavigation();
-
-  const searchDrivesResponse = useSelector(
-    state => state.map.searchDriveResponse,
-  );
+  let dispatch = useDispatch();
 
   const createRideResponse = useSelector(
     state => state.map.createRideRequestResponse,
@@ -154,7 +153,10 @@ const AvailableDrivers = ({
           <View style={styles.btnMainContainer}>
             <TouchableOpacity
               style={styles.btnContainer}
-              onPress={() => navigation.navigate('PickUpInfo')}>
+              onPress={() => {
+                dispatch(setBookRide(nearestDriver));
+                navigation.navigate('BookingDetails');
+              }}>
               <Text style={styles.btnTxt}>{title}</Text>
             </TouchableOpacity>
             <TouchableOpacity
