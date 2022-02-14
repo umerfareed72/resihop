@@ -153,11 +153,11 @@ function index(props) {
       setIsLoading(false);
     }
   };
-  useEffect(() => {
-    if (bankdIdToken) {
-      addVehicelInfo();
-    }
-  }, [bankdIdToken]);
+  // useEffect(() => {
+  //   if (bankdIdToken) {
+  //     addVehicelInfo();
+  //   }
+  // }, [bankdIdToken]);
   //Add vehicle info
   const addVehicelInfo = async () => {
     setIsLoading(true);

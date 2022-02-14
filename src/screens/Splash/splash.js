@@ -87,7 +87,7 @@ function splash(props) {
           resizeMode={'contain'}
         />
         <Text style={{color: 'green', fontSize: 25, marginTop: '-4%'}}>
-          RESI HOP
+          RES IHOP
         </Text>
       </View>
     </View>

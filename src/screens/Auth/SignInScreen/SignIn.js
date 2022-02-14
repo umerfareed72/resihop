@@ -97,7 +97,7 @@ function signIn(props) {
       try {
         await confirm.confirm(code).then(res => {
           setIsLoading(false);
-          console.log('Registered User Id:', res?.user?.uid);
+          console.log('Login User Id:', res?.user?.uid);
           setOtpInput(false);
           setPhoneNum('');
           userLgoinApi();

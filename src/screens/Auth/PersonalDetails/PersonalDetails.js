@@ -18,6 +18,7 @@ import Chips from '../../../components/Chips';
 import GenderChips from '../../../components/GenderChips';
 import UploadImage from '../../../components/UploadImage';
 import SigninViaBankID from '../../../components/SigninViaBankID';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {
   CustomHeader,
   Header,
@@ -304,7 +305,7 @@ function PersonalDetails(props) {
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
         <CustomHeader backButton={false} navigation={props?.navigation} />
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <Formik
             initialValues={personalFormFields}
             isInitialValid={false}
@@ -518,7 +519,7 @@ function PersonalDetails(props) {
               );
             }}
           </Formik>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </View>
       {isLoading ? <Loader /> : null}
       <IncorrectRefCode
