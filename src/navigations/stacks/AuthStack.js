@@ -6,6 +6,7 @@ import languageSelect from '../../screens/WelcomeScreens/LanguageSelect/language
 import SignIn from '../../screens/Auth/SignInScreen/SignIn';
 import SignUp from '../../screens/Auth/SignUpScreen/SignUp';
 import UserDetailStack from './UserDetailStack';
+import VehcileStack from './VehcileStack';
 
 const Stack = createStackNavigator();
 function AuthStack(props) {
@@ -38,7 +39,11 @@ function AuthStack(props) {
         name="SignUpScreen"
         component={SignUp}
       />
-
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="VehicleStack"
+        component={VehcileStack}
+      />
       <Stack.Screen
         options={{headerShown: false}}
         name="UserDetailStack"

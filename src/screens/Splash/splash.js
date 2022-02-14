@@ -63,7 +63,7 @@ function splash(props) {
             } else {
               dispatch(
                 isVehcile(true, () => {
-                  props?.navigation.replace('UserDetailStack');
+                  props?.navigation.replace('VehicleStack');
                 }),
               );
             }

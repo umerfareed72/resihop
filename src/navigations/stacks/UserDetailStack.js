@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import PersonalDetails from '../../screens/Auth/PersonalDetails/PersonalDetails';
 import Pledge from '../../screens/Auth/Pledge';
 import Terms from '../../screens/Passenger/Terms/Terms';
-
+import {useSelector} from 'react-redux';
 import VehcileStack from './VehcileStack';
 
 const Stack = createStackNavigator();

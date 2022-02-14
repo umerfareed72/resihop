@@ -114,6 +114,7 @@ function PersonalDetails(props) {
       setIsLoading(false);
     }
   };
+
   // useEffect(() => {
   //   if (bankdIdToken) {
   //     userDetailsApi(userDetail);
