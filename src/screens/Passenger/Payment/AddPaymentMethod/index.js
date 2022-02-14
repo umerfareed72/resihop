@@ -1,12 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-  Dimensions,
-} from 'react-native';
+import {Text, TouchableOpacity, View, Image, Dimensions} from 'react-native';
 import {
   AddWalletModal,
   BankCard,
@@ -133,15 +126,17 @@ const index = ({navigation, route}) => {
   };
 
   //Pay from Card
-  const payFromCard = () => {
+  const payFromCard = async () => {
     const requestBody = {
       customerID: cardDetail?.customer,
       cardID: cardDetail?.id,
       rideID: createRideRequest?._id,
       driverUserID: bookRide.drive._id,
     };
+
     dispatch(
       checkout_current_card(requestBody, res => {
+        console.log('Checkout', res, requestBody);
         Alert.alert(
           'Confirmation!',
           'Do you want to pay?',
@@ -155,10 +150,20 @@ const index = ({navigation, route}) => {
     );
   };
   const confirm_payment = async data => {
-    // console.log('Res', data);
     const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
       type: 'Card',
       setupFutureUsage: 'OffSession',
+      billingDetails: {
+        name: cardDetail?.name,
+        addressCity: cardDetail?.addressCity,
+        addressCountry: cardDetail?.addressCountry,
+        addressLine1: cardDetail?.addressLine1,
+        addressLine2: cardDetail?.addressLine2,
+        addressPostalCode: cardDetail?.addressPostalCode,
+        addressState: cardDetail?.addressState,
+        email: cardDetail?.email,
+      },
+      paymentMethodId: cardDetail?.id,
     });
     if (paymentIntent) {
       modalRef.current.open();
@@ -181,11 +186,6 @@ const index = ({navigation, route}) => {
       }),
     );
   };
-  useEffect(() => {
-    if (!isFocus) {
-      dispatch(move_from_drawer(false, () => {}));
-    }
-  }, [!isFocus]);
   return (
     <>
       <CustomHeader
@@ -283,7 +283,10 @@ const index = ({navigation, route}) => {
               }}
               //disabled={!Loading && cardHolderName ? false : true}
               btn={true}
-              onCardChange={details => {}}
+              onCardChange={details => {
+                console.log('Card Added', details);
+                setcardDetail(details);
+              }}
               onPressCard={card => {
                 addPayment();
                 // setCardScreen(false);

@@ -64,6 +64,7 @@ function SignUp(props) {
       const getUser = await get(`users?mobile=${mobilePhone}`);
       if (getUser?.data?.length == 0) {
         const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+        console.log(phone);
         const confirmation = await auth().signInWithPhoneNumber(phone);
         if (confirmation) {
           setIsLoading(false);
@@ -87,6 +88,7 @@ function SignUp(props) {
       }
     } catch (error) {
       setIsLoading(false);
+      console.log(error);
       alert(error);
     }
   }

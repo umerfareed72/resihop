@@ -20,7 +20,6 @@ import CheckConnectivity from '../../utilities/CheckInternet/CheckInternet';
 import auth from '@react-native-firebase/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../redux/actions/auth.action';
-import {move_from_drawer} from '../../redux/actions/payment.action';
 
 const DrawerComponent = ({navigation}) => {
   const modalRef = useRef(null);
@@ -39,13 +38,9 @@ const DrawerComponent = ({navigation}) => {
       icon: drawerIcons.my_payment_methods,
       label: 'My Payment Methods',
       onPress: () => {
-        dispatch(
-          move_from_drawer(true, () => {
-            navigation.push('Payment', {
-              routeName: 'Payment',
-            });
-          }),
-        );
+        navigation.push('Payment', {
+          routeName: 'Payment',
+        });
 
         navigation.closeDrawer();
       },

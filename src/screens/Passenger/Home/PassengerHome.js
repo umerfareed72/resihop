@@ -29,6 +29,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {getProfileInfo, SwitchDrive} from '../../../redux/actions/auth.action';
 import mapTypes from '../../../redux/types/map.types';
+import {move_from_drawer} from '../../../redux/actions/payment.action';
 
 //Data
 var TimeList = {
@@ -106,6 +107,7 @@ const PassengerHome = ({navigation}) => {
     if (isFocused) {
       dispatch(MyRides());
       getUserdata();
+      dispatch(move_from_drawer(true, () => {}));
     }
   }, [isFocused]);
 
