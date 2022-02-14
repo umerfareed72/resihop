@@ -13,13 +13,14 @@ import {colors, appImages} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {ScrollView} from 'react-native';
+import {move_from_drawer} from '../redux/actions/payment.action';
 
 const BookingDetails = () => {
   let navigation = useNavigation();
-
+  const dispatch = useDispatch(null);
   const createRideRequest = useSelector(
     state => state.map.createRideRequestResponse,
   );
@@ -168,7 +169,11 @@ const BookingDetails = () => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            navigation?.navigate('Payment');
+            dispatch(
+              move_from_drawer(false, () => {
+                navigation?.navigate('Payment');
+              }),
+            );
           }}
           style={styles.confirmBtnContainer}>
           <Text style={styles.confirmTxt}>{I18n.t('confirm_and_pay')}</Text>

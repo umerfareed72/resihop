@@ -135,7 +135,6 @@ function signIn(props) {
     };
     dispatch(
       userEmailLogin(requestBody, CountryData, setIsLoading, res => {
-        console.log('LOGIN API RESPONSE:', res.toString());
         setIsLoading(false);
         if (res?.user?.details) {
           if (res?.user?.type == 'DRIVER') {
