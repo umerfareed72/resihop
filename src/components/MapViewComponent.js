@@ -182,7 +182,7 @@ const MapViewComponent = ({
             <MapViewDirections
               origin={returnOrigin.description}
               destination={returnDestinationMap.description}
-              apikey={'AIzaSyBJIS-db487vhfySNWbG_iicYTyXO_xPTs'}
+              apikey={'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA'}
               strokeWidth={3}
               strokeColor={'#007BD2'}
               mode="DRIVING"
@@ -260,7 +260,7 @@ const MapViewComponent = ({
           <MapViewDirections
             origin={origin.description}
             destination={destination.description}
-            apikey={'AIzaSyCDp-9R6VeL2G-8BpsHHxJSNkD5ZKyTZok'}
+            apikey={'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA'}
             strokeWidth={3}
             strokeColor={'#007BD2'}
             mode="DRIVING"
