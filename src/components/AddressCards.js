@@ -230,7 +230,7 @@ const AddressCards = ({
                         );
                       }}
                       query={{
-                        key: 'AIzaSyBGAcF8ef7sdugk0h9us-J12pidnXqgmmQ',
+                        key: 'AIzaSyAizgST2GEQ-BpafkLZ-Z8Bt_P8UWvDDHw',
                         language: 'en',
                       }}
                       debounce={400}
@@ -274,7 +274,7 @@ const AddressCards = ({
                         );
                       }}
                       query={{
-                        key: 'AIzaSyBGAcF8ef7sdugk0h9us-J12pidnXqgmmQ',
+                        key: 'AIzaSyAizgST2GEQ-BpafkLZ-Z8Bt_P8UWvDDHw',
                         language: 'en',
                       }}
                       debounce={400}
@@ -346,7 +346,7 @@ const AddressCards = ({
                     }
                   }}
                   query={{
-                    key: 'AIzaSyBGAcF8ef7sdugk0h9us-J12pidnXqgmmQ',
+                    key: 'AIzaSyAizgST2GEQ-BpafkLZ-Z8Bt_P8UWvDDHw',
                     language: 'en',
                   }}
                   debounce={400}
@@ -355,6 +355,7 @@ const AddressCards = ({
                   enablePoweredByContainer={false}
                   returnKeyType={'search'}
                   minLength={2}
+                  onFail={err => console.log(err)}
                   styles={{
                     container: {
                       flex: 0,
