@@ -23,6 +23,7 @@ function signIn(props) {
   const [cca2, setcca2] = useState('NO');
   const [otpInput, setOtpInput] = useState(false);
   const [isOnline, setisOnline] = useState(false);
+  const [otpCode, setotpCode] = useState('');
   const onSelect = country => {
     setCountry(country);
     setcca2(country?.cca2);
@@ -185,7 +186,11 @@ function signIn(props) {
           enteredCode={code => {
             if (code.length === 6) {
               confirmCode(code);
+              setotpCode(code);
             }
+          }}
+          onSubmitCode={() => {
+            confirmCode(otpCode);
           }}
           phoneError={phoneError}
         />
