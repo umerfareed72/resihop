@@ -28,6 +28,7 @@ function SignUp(props) {
   const [countryCode, setCountryCode] = useState('47');
   const [cca2, setcca2] = useState('NO');
   const [otpInput, setOtpInput] = useState(false);
+  const [otpCode, setotpCode] = useState('');
 
   const onSelect = country => {
     setCountry(country);
@@ -177,7 +178,11 @@ function SignUp(props) {
           enteredCode={code => {
             if (code.length === 6) {
               confirmCode(code);
+              setotpCode(code);
             }
+          }}
+          onSubmitCode={() => {
+            confirmCode(otpCode);
           }}
           phoneError={phoneError}
         />
