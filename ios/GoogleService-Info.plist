@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>934266920805-vijcd4fpcujomff39c7bh1s4bub0tjik.apps.googleusercontent.com</string>
+	<string>1067990161909-k7hp41lt5rm4dvlfae6t9ns1kg342rn2.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.934266920805-vijcd4fpcujomff39c7bh1s4bub0tjik</string>
+	<string>com.googleusercontent.apps.1067990161909-k7hp41lt5rm4dvlfae6t9ns1kg342rn2</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>934266920805-62caeq5lisan2karccbjfr5afm5qpp5f.apps.googleusercontent.com</string>
+	<string>1067990161909-ljt06ujemq85tj054dtf306vmnkqmfqu.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyA79vOCXVSK3b5sY5jdt4DkjvvSdnxYvmE</string>
+	<string>AIzaSyDX_iCbIQet4fm5EmAVTY9maR8C9IjnELQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>934266920805</string>
+	<string>1067990161909</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.resihop</string>
+	<string>com.resihop</string>
 	<key>PROJECT_ID</key>
-	<string>reshiop-mobile-app</string>
+	<string>res-ihop-app</string>
 	<key>STORAGE_BUCKET</key>
-	<string>reshiop-mobile-app.appspot.com</string>
+	<string>res-ihop-app.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:934266920805:ios:23962fbe36302801a8cb8c</string>
+	<string>1:1067990161909:ios:596588129e359b66d268bc</string>
 </dict>
 </plist>

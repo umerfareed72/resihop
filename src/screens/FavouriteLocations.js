@@ -117,7 +117,7 @@ const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
         style={styles.cancelBtnContainer}
         onPress={() => {
           setFavPress('');
-          favourteLocationRef.current.close();
+          favourteLocationRef?.current?.close();
         }}>
         <Text style={styles.cancelTxt}>{I18n.t('cancel')}</Text>
       </TouchableOpacity>
