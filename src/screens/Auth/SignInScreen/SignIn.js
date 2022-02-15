@@ -146,7 +146,7 @@ function signIn(props) {
               };
               dispatch(
                 SwitchDrive(body, () => {
-                  props.navigation.replace('VahicleStack');
+                  props.navigation.replace('VehicleStack');
                 }),
               );
             }

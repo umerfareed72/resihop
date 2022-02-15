@@ -22,6 +22,7 @@ import {Alert} from 'react-native';
 import SigninViaBankID from '../../../components/SigninViaBankID';
 import useAppState from '../../../hooks/useAppState';
 import {header} from '../../../utilities';
+import xml2js from 'react-native-xml2js';
 const vahicleFormFields = {
   licencePlate: '',
   carCompany: '',
@@ -68,9 +69,9 @@ function index(props) {
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
   const modelName = React.useRef();
-  const bank_url = React.useRef();
+  // const bank_url = React.useRef();
 
-  const dispatch = useDispatch(null);
+  // const dispatch = useDispatch(null);
 
   // const acr = 'urn:grn:authn:se:bankid:same-device';
   // const appState = useAppState(async () => {
@@ -88,20 +89,20 @@ function index(props) {
   //     setIsLoading(false);
   //   }
   // });
-  const openBankId = async () => {
-    setIsLoading(true);
-    const result = await axios.get(
-      `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
-        Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
-      }`,
-    );
-    if (result?.data) {
-      bank_url.current = result?.data?.completeUrl;
-      Linking.openURL(result?.data?.launchLinks?.universalLink);
-    } else {
-      setIsLoading(false);
-    }
-  };
+  // const openBankId = async () => {
+  //   setIsLoading(true);
+  //   const result = await axios.get(
+  //     `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+  //       Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+  //     }`,
+  //   );
+  //   if (result?.data) {
+  //     bank_url.current = result?.data?.completeUrl;
+  //     Linking.openURL(result?.data?.launchLinks?.universalLink);
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   // useEffect(() => {
   //   if (bankdIdToken) {
@@ -110,12 +111,10 @@ function index(props) {
   // }, [bankdIdToken]);
   //Get Latest Car Detail
   const getVahicleDetail = () => {
-    const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
-    setIsLoading(true);
-    var parseString = require('react-native-xml2js').parseString;
-    axios
-      .get(url)
-      .then(response => {
+    if (licencePlateNumber != '') {
+      const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
+      setIsLoading(true);
+      axios.get(url).then(response => {
         setIsLoading(false);
         try {
           if (response?.data?.match('Out of credit')) {
@@ -123,26 +122,30 @@ function index(props) {
           } else {
             const split = response?.data?.substring(17, 23);
             if (split != 'failed') {
-              parseString(response?.data, {trim: true}, function (err, result) {
-                if (result) {
-                  setIsLoading(false);
-                  const {CarMake, CarModel, Colour, ExtendedInformation} =
-                    JSON.parse(result?.Vehicle?.vehicleJson);
-                  if (ExtendedInformation) {
-                    delete Object?.assign(ExtendedInformation, {
-                      ['co2']: ExtendedInformation['co2-utslipp'],
-                    })['co2-utslipp'];
-                    delete Object?.assign(ExtendedInformation, {
-                      ['color']: ExtendedInformation['farge'],
-                    })['farge'];
-                    setEngineSize(ExtendedInformation?.co2);
+              xml2js.parseString(
+                response?.data,
+                {trim: true},
+                function (err, result) {
+                  if (result) {
+                    setIsLoading(false);
+                    const {CarMake, CarModel, Colour, ExtendedInformation} =
+                      JSON.parse(result?.Vehicle?.vehicleJson);
+                    if (ExtendedInformation) {
+                      delete Object?.assign(ExtendedInformation, {
+                        ['co2']: ExtendedInformation['co2-utslipp'],
+                      })['co2-utslipp'];
+                      delete Object?.assign(ExtendedInformation, {
+                        ['color']: ExtendedInformation['farge'],
+                      })['farge'];
+                      setEngineSize(ExtendedInformation?.co2);
+                    }
+                    setCarMakerCompany(CarMake?.CurrentTextValue);
+                    setcarModel(CarModel?.CurrentTextValue);
+                    setcarColor(ExtendedInformation?.color);
+                    setNext(true);
                   }
-                  setCarMakerCompany(CarMake?.CurrentTextValue);
-                  setcarModel(CarModel?.CurrentTextValue);
-                  setcarColor(ExtendedInformation?.color);
-                  setNext(true);
-                }
-              });
+                },
+              );
             } else {
               Alert.alert('No Record Found!');
               setIsLoading(false);
@@ -152,11 +155,8 @@ function index(props) {
           setIsLoading(false);
           console.log('Error:', err);
         }
-      })
-      .catch(error => {
-        console.log('Error', error);
-        setIsLoading(false);
       });
+    }
   };
   //Add vehicle info
   const addVehicelInfo = async () => {
@@ -169,7 +169,7 @@ function index(props) {
       vehicleCompanyName: carMakerCompany,
       CO2Emissions: engineSize,
       presetCostPerPassenger: value,
-      bankID: bankdIdToken,
+      // bankID: bankdIdToken,
     };
     try {
       const response = await post(`vehicles`, requestBody, await header());
