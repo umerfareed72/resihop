@@ -182,7 +182,7 @@ const MapViewComponent = ({
             <MapViewDirections
               origin={returnOrigin.description}
               destination={returnDestinationMap.description}
-              apikey={'AIzaSyCDp-9R6VeL2G-8BpsHHxJSNkD5ZKyTZok'}
+              apikey={'AIzaSyBJIS-db487vhfySNWbG_iicYTyXO_xPTs'}
               strokeWidth={3}
               strokeColor={'#007BD2'}
               mode="DRIVING"
