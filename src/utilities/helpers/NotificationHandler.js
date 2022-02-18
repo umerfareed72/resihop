@@ -61,58 +61,59 @@ const getFcmToken = async () => {
 
 export const Notification_Listner = (dispatch, props) => {
   messaging().onNotificationOpenedApp(async remoteMessage => {
-    console.log(remoteMessage.data.additional_info);
-    let notificationObj = remoteMessage.data.additional_info;
-    if (notificationObj) {
-      notificationObj = JSON.parse(notificationObj);
-      if (remoteMessage.data != null) {
-        const requestBody = {
-          post_id: notificationObj.id,
-        };
-        const read_request_body = {
-          id: notificationObj.notification_id,
-        };
-        console.log(remoteMessage.data);
-        dispatch(
-          read_Notifications(read_request_body, () => {
-            console.log('Notification Readed');
-          }),
-        );
+    console.log('data', remoteMessage);
+    // let notificationObj = remoteMessage.data.additional_info;
+    // if (notificationObj) {
+    //   notificationObj = JSON.parse(notificationObj);
+    //   if (remoteMessage.data != null) {
+    //     const requestBody = {
+    //       post_id: notificationObj.id,
+    //     };
+    //     const read_request_body = {
+    //       id: notificationObj.notification_id,
+    //     };
+    //     console.log(remoteMessage.data);
+    //     dispatch(
+    //       read_Notifications(read_request_body, () => {
+    //         console.log('Notification Readed');
+    //       }),
+    //     );
 
-        dispatch(
-          save_Notification_Info(requestBody, () => {
-            if (notificationObj.type == 'Post') {
-              props?.navigation?.navigate('NotificationDetail');
-            } else {
-              props?.navigation?.navigate('Notification');
-            }
-          }),
-        );
-      }
-    }
+    //     dispatch(
+    //       save_Notification_Info(requestBody, () => {
+    //         if (notificationObj.type == 'Post') {
+    //           props?.navigation?.navigate('NotificationDetail');
+    //         } else {
+    //           props?.navigation?.navigate('Notification');
+    //         }
+    //       }),
+    //     );
+    //   }
+    // }
   });
   messaging().onMessage(async remoteMessage => {
-    let notificationObj = remoteMessage.data.additional_info;
-    if (notificationObj) {
-      notificationObj = JSON.parse(notificationObj);
-      if (remoteMessage.data != null) {
-        const requestBody = {
-          post_id: notificationObj.id,
-          remote_Notification: true,
-        };
-        dispatch(
-          save_Notification_Info(requestBody, () => {
-            Toast.show(remoteMessage?.data?.body, {
-              position: Toast.position.TOP,
-            });
-          }),
-        );
-      }
-    }
+    console.log('On Message', remoteMessage);
+    // let notificationObj = remoteMessage.data.additional_info;
+    // if (notificationObj) {
+    //   notificationObj = JSON.parse(notificationObj);
+    //   if (remoteMessage.data != null) {
+    //     const requestBody = {
+    //       post_id: notificationObj.id,
+    //       remote_Notification: true,
+    //     };
+    //     dispatch(
+    //       save_Notification_Info(requestBody, () => {
+    //         Toast.show(remoteMessage?.data?.body, {
+    //           position: Toast.position.TOP,
+    //         });
+    //       }),
+    //     );
+    //   }
+    // }
   });
   messaging().getInitialNotification(async remoteMessage => {
     if (remoteMessage) {
-      console.log('Initial Notification', remoteMessage.notification);
+      console.log('Initial Notification', remoteMessage);
     }
   });
 };
@@ -121,9 +122,10 @@ export const LocalNotification = () => {
   PushNotification.configure({
     // (required) Called when a remote or local notification is opened or received
     onNotification: notification => {
-      Toast.show(notification?.data?.body, {
-        position: Toast.position.TOP,
-      });
+      console.log('Noti', notification);
+      // Toast.show(notification?.data?.body, {
+      //   position: Toast.position.TOP,
+      // });
     },
     popInitialNotification: true,
     requestPermissions: true,

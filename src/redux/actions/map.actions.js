@@ -231,7 +231,6 @@ export const MyDrives = data => async dispatch => {
     });
 
     const responseJson = await response.json();
-    console.log('My Drives', responseJson);
     dispatch({
       type: Types.myDrives,
       payload: responseJson,

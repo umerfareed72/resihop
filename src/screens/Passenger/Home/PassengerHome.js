@@ -9,7 +9,13 @@ import {
   Platform,
   FlatList,
 } from 'react-native';
-import {colors, appIcons, appImages, family} from '../../../utilities';
+import {
+  colors,
+  appIcons,
+  appImages,
+  family,
+  requestPermission,
+} from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
@@ -27,9 +33,14 @@ import {
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import {getProfileInfo, SwitchDrive} from '../../../redux/actions/auth.action';
+import {
+  getProfileInfo,
+  SwitchDrive,
+  updateInfo,
+} from '../../../redux/actions/auth.action';
 import mapTypes from '../../../redux/types/map.types';
 import {move_from_drawer} from '../../../redux/actions/payment.action';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Data
 var TimeList = {
@@ -111,6 +122,23 @@ const PassengerHome = ({navigation}) => {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    AsyncStorage.getItem('fcmToken').then(token => {
+      if (requestPermission() != null) {
+        const requestBody = {
+          fireAppToken: token,
+        };
+        dispatch(
+          updateInfo(userId, requestBody, res => {
+            console.log('Notification Token saved');
+          }),
+          error => {
+            console.log('Unable to save Token', error);
+          },
+        );
+      }
+    });
+  }, []);
   const selectTime = val => {
     settime(val);
   };
