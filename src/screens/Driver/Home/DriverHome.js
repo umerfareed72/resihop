@@ -10,7 +10,13 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import {colors, appIcons, appImages, family} from '../../../utilities';
+import {
+  colors,
+  appIcons,
+  appImages,
+  family,
+  requestPermission,
+} from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
@@ -28,7 +34,7 @@ import {
   SearchRides,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {getProfileInfo} from '../../../redux/actions/auth.action';
+import {getProfileInfo, updateInfo} from '../../../redux/actions/auth.action';
 import {useIsFocused} from '@react-navigation/core';
 
 //Data
@@ -108,6 +114,25 @@ const DriverHome = ({navigation}) => {
       getUserdata();
     }
   }, [isFocus]);
+
+  //Save Notification
+  useEffect(() => {
+    AsyncStorage.getItem('fcmToken').then(token => {
+      if (requestPermission() != null) {
+        const requestBody = {
+          fireAppToken: token,
+        };
+        dispatch(
+          updateInfo(userId, requestBody, res => {
+            console.log('Notification Token saved');
+          }),
+          error => {
+            console.log('Unable to save Token', error);
+          },
+        );
+      }
+    });
+  }, []);
 
   const selectTime = val => {
     settime(val);
