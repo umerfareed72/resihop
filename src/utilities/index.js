@@ -17,6 +17,7 @@ export {
   publishableKey,
   agora_token,
   appId,
+  options,
 } from './constants';
 export {
   registerAppWithFCM,

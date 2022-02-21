@@ -7348,6 +7348,11 @@ react-native-calendars@^1.1269.0:
   optionalDependencies:
     moment "^2.24.0"
 
+react-native-callkeep@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/react-native-callkeep/-/react-native-callkeep-4.3.2.tgz#5cfd999551861cd07643c6da8170ce33194eb945"
+  integrity sha512-F2iO9Kil71dWxocYv0wEBHqdxjKjodf/sLrK0wGMoECyTXAjeDhYlprYyTSZcXX1M6vYhgGZeTtBrTZ7ZjLaFA==
+
 react-native-codegen@^0.0.7:
   version "0.0.7"
   resolved "https://registry.npmjs.org/react-native-codegen/-/react-native-codegen-0.0.7.tgz"

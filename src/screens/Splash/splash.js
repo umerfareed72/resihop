@@ -1,10 +1,18 @@
 import React, {useEffect} from 'react';
-import {View, Image, StyleSheet, Alert, Text} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Alert,
+  Text,
+  PermissionsAndroid,
+} from 'react-native';
 import {
   appImages,
   colors,
   LocalNotification,
   Notification_Listner,
+  options,
   registerAppWithFCM,
   requestPermission,
 } from '../../utilities';

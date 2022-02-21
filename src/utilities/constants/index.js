@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PermissionsAndroid} from 'react-native';
 import {Dimensions} from 'react-native';
 
 export const Constants = {
@@ -27,5 +28,27 @@ export let image_options = {
   storageOptions: {
     skipBackup: true,
     path: 'images',
+  },
+};
+
+export const options = {
+  ios: {
+    appName: 'My app name',
+  },
+  android: {
+    alertTitle: 'Permissions required',
+    alertDescription: 'This application needs to access your phone accounts',
+    cancelButton: 'Cancel',
+    okButton: 'ok',
+    imageName: 'phone_account_icon',
+    additionalPermissions: [PermissionsAndroid.PERMISSIONS.READ_CONTACTS],
+
+    // Required to get audio in background when using Android 11
+    foregroundService: {
+      channelId: 'com.reactnative.resihop',
+      channelName: 'Foreground service for my app',
+      notificationTitle: 'My app is running on background',
+      notificationIcon: 'Path to the resource icon of the notification',
+    },
   },
 };

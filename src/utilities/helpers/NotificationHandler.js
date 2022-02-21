@@ -2,6 +2,9 @@ import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-tiny-toast';
+import RNCallKeep from 'react-native-callkeep';
+import {options} from '../constants';
+
 // import {
 //   read_Notifications,
 //   save_Notification_Info,
@@ -58,58 +61,12 @@ const getFcmToken = async () => {
     return oldToken;
   }
 };
+// Currently iOS only
 
 export const Notification_Listner = (dispatch, props) => {
-  messaging().onNotificationOpenedApp(async remoteMessage => {
-    console.log('data', remoteMessage);
-    // let notificationObj = remoteMessage.data.additional_info;
-    // if (notificationObj) {
-    //   notificationObj = JSON.parse(notificationObj);
-    //   if (remoteMessage.data != null) {
-    //     const requestBody = {
-    //       post_id: notificationObj.id,
-    //     };
-    //     const read_request_body = {
-    //       id: notificationObj.notification_id,
-    //     };
-    //     console.log(remoteMessage.data);
-    //     dispatch(
-    //       read_Notifications(read_request_body, () => {
-    //         console.log('Notification Readed');
-    //       }),
-    //     );
-
-    //     dispatch(
-    //       save_Notification_Info(requestBody, () => {
-    //         if (notificationObj.type == 'Post') {
-    //           props?.navigation?.navigate('NotificationDetail');
-    //         } else {
-    //           props?.navigation?.navigate('Notification');
-    //         }
-    //       }),
-    //     );
-    //   }
-    // }
-  });
+  messaging().onNotificationOpenedApp(async remoteMessage => {});
   messaging().onMessage(async remoteMessage => {
-    console.log('On Message', remoteMessage);
-    // let notificationObj = remoteMessage.data.additional_info;
-    // if (notificationObj) {
-    //   notificationObj = JSON.parse(notificationObj);
-    //   if (remoteMessage.data != null) {
-    //     const requestBody = {
-    //       post_id: notificationObj.id,
-    //       remote_Notification: true,
-    //     };
-    //     dispatch(
-    //       save_Notification_Info(requestBody, () => {
-    //         Toast.show(remoteMessage?.data?.body, {
-    //           position: Toast.position.TOP,
-    //         });
-    //       }),
-    //     );
-    //   }
-    // }
+    console.log('remote Meessage', remoteMessage);
   });
   messaging().getInitialNotification(async remoteMessage => {
     if (remoteMessage) {

@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import <RNCallKeep.h>
 #import <UserNotifications/UserNotifications.h>
 #import <RNCPushNotificationIOS.h>
 #import <React/RCTBridge.h>
@@ -40,7 +41,13 @@ static void InitializeFlipper(UIApplication *application) {
   
 
     [GMSServices provideAPIKey:@"AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA"];
-    
+  [RNCallKeep setup:@{
+    @"appName": @"resihop",
+    @"maximumCallGroups": @2,
+    @"maximumCallsPerCallGroup": @1,
+    @"supportsVideo": @NO,
+  }];
+
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
@@ -106,4 +113,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
+ - (BOOL)application:(UIApplication *)application
+ continueUserActivity:(NSUserActivity *)userActivity
+   restorationHandler:(void(^)(NSArray * __nullable restorableObjects))restorationHandler
+ {
+   return [RNCallKeep application:application
+            continueUserActivity:userActivity
+              restorationHandler:restorationHandler];
+ }
+
 @end
