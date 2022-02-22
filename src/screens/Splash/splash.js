@@ -1,10 +1,18 @@
 import React, {useEffect} from 'react';
-import {View, Image, StyleSheet, Alert, Text} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Alert,
+  Text,
+  PermissionsAndroid,
+} from 'react-native';
 import {
   appImages,
   colors,
   LocalNotification,
   Notification_Listner,
+  options,
   registerAppWithFCM,
   requestPermission,
 } from '../../utilities';
@@ -86,9 +94,6 @@ function splash(props) {
           style={{width: 160, height: 160}}
           resizeMode={'contain'}
         />
-        <Text style={{color: 'green', fontSize: 25, marginTop: '-4%'}}>
-          RES IHOP
-        </Text>
       </View>
     </View>
   );

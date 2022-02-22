@@ -15,6 +15,7 @@ import {
   appImages,
   family,
   requestPermission,
+  options,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
@@ -23,6 +24,7 @@ import {RideFilterModal, SortModal} from '../../../components';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import I18n from '../../../utilities/translations';
+
 import {
   setOrigin,
   setMapDestination,

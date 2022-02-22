@@ -70,9 +70,7 @@ function index(props) {
   const carCompany = React.useRef();
   const modelName = React.useRef();
   // const bank_url = React.useRef();
-
   // const dispatch = useDispatch(null);
-
   // const acr = 'urn:grn:authn:se:bankid:same-device';
   // const appState = useAppState(async () => {
   //   if (acr === 'urn:grn:authn:se:bankid:same-device') {
@@ -112,50 +110,57 @@ function index(props) {
   //Get Latest Car Detail
   const getVahicleDetail = () => {
     if (licencePlateNumber != '') {
+      console.log(licencePlateNumber);
       const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
       setIsLoading(true);
-      axios.get(url).then(response => {
-        setIsLoading(false);
-        try {
-          if (response?.data?.match('Out of credit')) {
-            alert(response?.data);
-          } else {
-            const split = response?.data?.substring(17, 23);
-            if (split != 'failed') {
-              xml2js.parseString(
-                response?.data,
-                {trim: true},
-                function (err, result) {
-                  if (result) {
-                    setIsLoading(false);
-                    const {CarMake, CarModel, Colour, ExtendedInformation} =
-                      JSON.parse(result?.Vehicle?.vehicleJson);
-                    if (ExtendedInformation) {
-                      delete Object?.assign(ExtendedInformation, {
-                        ['co2']: ExtendedInformation['co2-utslipp'],
-                      })['co2-utslipp'];
-                      delete Object?.assign(ExtendedInformation, {
-                        ['color']: ExtendedInformation['farge'],
-                      })['farge'];
-                      setEngineSize(ExtendedInformation?.co2);
-                    }
-                    setCarMakerCompany(CarMake?.CurrentTextValue);
-                    setcarModel(CarModel?.CurrentTextValue);
-                    setcarColor(ExtendedInformation?.color);
-                    setNext(true);
-                  }
-                },
-              );
-            } else {
-              Alert.alert('No Record Found!');
-              setIsLoading(false);
-            }
-          }
-        } catch (err) {
+      axios
+        .get(url)
+        .then(response => {
           setIsLoading(false);
-          console.log('Error:', err);
-        }
-      });
+          try {
+            if (response?.data?.match('Out of credit')) {
+              alert(response?.data);
+            } else {
+              const split = response?.data?.substring(17, 23);
+              if (split != 'failed') {
+                xml2js.parseString(
+                  response?.data,
+                  {trim: true},
+                  function (err, result) {
+                    if (result) {
+                      setIsLoading(false);
+                      const {CarMake, CarModel, Colour, ExtendedInformation} =
+                        JSON.parse(result?.Vehicle?.vehicleJson);
+                      if (ExtendedInformation) {
+                        delete Object?.assign(ExtendedInformation, {
+                          ['co2']: ExtendedInformation['co2-utslipp'],
+                        })['co2-utslipp'];
+                        delete Object?.assign(ExtendedInformation, {
+                          ['color']: ExtendedInformation['farge'],
+                        })['farge'];
+                        setEngineSize(ExtendedInformation?.co2);
+                      }
+                      setCarMakerCompany(CarMake?.CurrentTextValue);
+                      setcarModel(CarModel?.CurrentTextValue);
+                      setcarColor(ExtendedInformation?.color);
+                      setNext(true);
+                    }
+                  },
+                );
+              } else {
+                Alert.alert('No Record Found!');
+                setIsLoading(false);
+              }
+            }
+          } catch (err) {
+            setIsLoading(false);
+            console.log('Error:', err);
+          }
+        })
+        .catch(error => {
+          alert(error?.response?.data);
+          setIsLoading(false);
+        });
     }
   };
   //Add vehicle info

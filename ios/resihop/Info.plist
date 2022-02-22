@@ -30,6 +30,14 @@
 				<string>com.googleusercontent.apps.1067990161909-k7hp41lt5rm4dvlfae6t9ns1kg342rn2</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.resihop</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -48,6 +56,10 @@
 			</dict>
 		</dict>
 	</dict>
+  <key>FirebaseDynamicLinksCustomDomains</key>
+  <array>
+    <string>https://resihop.page.link/N8fh</string>
+  </array>
 	<key>NSCameraUsageDescription</key>
 	<string>Resihop Camera Open</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
