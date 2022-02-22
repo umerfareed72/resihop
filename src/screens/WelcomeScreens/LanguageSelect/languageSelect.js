@@ -10,38 +10,10 @@ import {theme} from '../../../theme/theme';
 import {colors} from '../../../utilities';
 import {appIcons, drawerIcons} from '../../../utilities/images';
 import I18n from '../../../utilities/translations';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {Linking} from 'react-native';
-import {LinkHelper} from '../../../utilities/helpers/LinkHelper';
 
 function languageSelect(props) {
   const dispatch = useDispatch(null);
   const [language, setLanguage] = useState('');
-  // async function buildLink() {
-  //   const ShareableLink = await LinkHelper();
-  //   Linking.openURL(ShareableLink);
-  // }
-  // const handleDynamicLink = link => {
-  //   // Handle dynamic link inside your own application
-  //   if (link.url === 'https://resihop.page.link/N8fh') {
-  //     // ...navigate to your offers screen
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
-  //   // When the component is unmounted, remove the listener
-  //   return () => unsubscribe();
-  // }, []);
-  // useEffect(() => {
-  //   dynamicLinks()
-  //     .getInitialLink()
-  //     .then(link => {
-  //       if (link.url === 'https://resihop.page.link/N8fh') {
-  //         // ...set initial route as offers screen
-  //       }
-  //     });
-  // }, []);
 
   return (
     <>
@@ -65,7 +37,6 @@ function languageSelect(props) {
               buttonStyle={theme.Button.buttonStyle}
               titleStyle={theme.Button.titleStyle}
               onPress={() => {
-                // buildLink();
                 dispatch(
                   LanguageInfo(language, () => {
                     props.navigation.navigate('WalkThrough');
