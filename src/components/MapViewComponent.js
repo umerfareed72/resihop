@@ -59,6 +59,8 @@ const MapViewComponent = ({
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
+  const deltas = useSelector(state => state.map.deltas);
+  const walkingDistance = useSelector(state => state.map.walkingDistance);
 
   const mapRef = useRef();
 
@@ -157,10 +159,9 @@ const MapViewComponent = ({
           region={{
             latitude: origin !== null ? origin.location.lat : latitude,
             longitude: origin !== null ? origin.location.lng : longitude,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
+            latitudeDelta: deltas ? deltas.latDelta : 0.005,
+            longitudeDelta: deltas ? deltas.lngDelta : 0.005,
           }}
-          //onRegionChange={regionChanged}
           zoomEnabled={true}
           style={
             style
@@ -244,11 +245,12 @@ const MapViewComponent = ({
         region={{
           latitude: origin !== null ? origin.location.lat : latitude,
           longitude: origin !== null ? origin.location.lng : longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
+          latitudeDelta: deltas ? deltas.latDelta : 0.005,
+          longitudeDelta: deltas ? deltas.lngDelta : 0.005,
         }}
         //onRegionChange={regionChanged}
         zoomEnabled={true}
+        scrollEnabled={true}
         style={
           style
             ? style
@@ -334,7 +336,10 @@ const MapViewComponent = ({
                   latitude: driver?.drive?.startLocation?.latitude,
                   longitude: driver?.drive?.startLocation?.longitude,
                 }}
-                onPress={() => zoomToDriver(driver)}>
+                onPress={() => {
+                  zoomToDriver(driver);
+                  dispatch(SetNearestDriver(driver));
+                }}>
                 <View
                   style={[
                     styles.driverCard,
@@ -343,6 +348,10 @@ const MapViewComponent = ({
                         parseInt(driver.distance * 111 * 1000) === minDistance
                           ? colors.green
                           : colors.blue,
+                      display:
+                        driver.distance * 111 * 1000 < walkingDistance
+                          ? 'flex'
+                          : 'none',
                     },
                   ]}>
                   <Text style={styles.driverTxt}>{`${

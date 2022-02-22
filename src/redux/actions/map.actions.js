@@ -99,6 +99,27 @@ export const setMapSegment = data => async dispatch => {
   });
 };
 
+export const setWalkingDistance = data => async dispatch => {
+  dispatch({
+    type: Types.walkingDistance,
+    payload: data,
+  });
+};
+
+export const setDeltas = data => async dispatch => {
+  dispatch({
+    type: Types.deltas,
+    payload: data,
+  });
+};
+
+export const setReturnDateTimeStamp = data => async dispatch => {
+  dispatch({
+    type: Types.returnDateTimeStamp,
+    payload: data,
+  });
+};
+
 export const CreateDriveRequest =
   (body, setIsLoading, callback) => async dispatch => {
     let Token = await GetToken();
@@ -402,3 +423,23 @@ export const BookRide =
       console.log('Book Ride', error.response.data);
     }
   };
+
+export const Settings = data => async dispatch => {
+  let Token = await GetToken();
+  try {
+    const response = await fetch(`${baseURL}/settings`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${Token}`,
+      },
+    });
+    const responseJson = await response.json();
+    dispatch({
+      type: Types.settings,
+      payload: responseJson,
+    });
+  } catch (error) {
+    console.log('Settings', error);
+  }
+};

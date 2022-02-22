@@ -43,7 +43,6 @@ function MainStackNavigator() {
           name="PassengerDashboard"
           component={PassengerNavigator}
         />
-
         <Stack.Screen
           options={{headerShown: false}}
           name="DriverDashboard"

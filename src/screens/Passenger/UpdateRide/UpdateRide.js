@@ -64,8 +64,6 @@ const UpdateRide = ({route}) => {
     hideTimePicker();
   };
 
-  console.log(time);
-
   const handleUpDateRide = () => {
     const date = moment(ride.tripDate).format('YYYY-MM-DD');
     const body = {
@@ -167,6 +165,9 @@ const UpdateRide = ({route}) => {
         </View>
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
+          date={new Date(moment(ride.tripDate).format())}
+          is24Hour={true}
+          locale="en_GB"
           mode="time"
           onConfirm={handleConfirm}
           onCancel={hideTimePicker}
@@ -180,7 +181,9 @@ const UpdateRide = ({route}) => {
           <TouchableOpacity
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
+            <Text style={styles.dateTxt}>
+              {time ? time : `${moment(ride.tripDate).format('HH:mm')}`}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.returnTripWrapper}>
