@@ -17,7 +17,7 @@
 	android:roundIcon="@mipmap/ic_launcher_round"
 	android:allowBackup="false" 
 	android:theme="@style/AppTheme">
-		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA" />
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyD811RqiKbvd_wHEKDkmmTUuNTazgy7kes" />
 		 <!-- Change the value to true to enable pop-up for in foreground on receiving remote notifications (for prevent duplicating while showing local notifications set this to false) -->
         <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
                     android:value="false"/>

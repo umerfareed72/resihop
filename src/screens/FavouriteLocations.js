@@ -5,12 +5,18 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors} from '../utilities';
 import I18n from '../utilities/translations';
 import {GetFavLocations} from '../redux/actions/favLocation.actions';
-import {setOrigin, setMapDestination} from '../redux/actions/map.actions';
+import {
+  setOrigin,
+  setMapDestination,
+  setReturnOrigin,
+  setReturnMapDestination,
+} from '../redux/actions/map.actions';
 import {useDispatch} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
@@ -58,11 +64,31 @@ const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
           description: item?.location?.description,
         }),
       );
+
+      dispatch(
+        setReturnMapDestination({
+          location: {
+            lat: item?.location?.latitude,
+            lng: item?.location?.longitude,
+          },
+          description: item?.location?.description,
+        }),
+      );
     }
 
     if (favPress === 'destination') {
       dispatch(
         setMapDestination({
+          location: {
+            lat: item?.location?.latitude,
+            lng: item?.location?.longitude,
+          },
+          description: item?.location?.description,
+        }),
+      );
+
+      dispatch(
+        setReturnOrigin({
           location: {
             lat: item?.location?.latitude,
             lng: item?.location?.longitude,
@@ -88,31 +114,32 @@ const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
           borderTopLeftRadius: 35,
         },
       }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.selectTxt}>
-          {I18n.t('select_from_fav_location')}
-        </Text>
+      <Text style={styles.selectTxt}>{I18n.t('select_from_fav_location')}</Text>
 
-        <View style={styles.favAddressWrapper}>
-          {locations?.length > 0 ? (
-            locations.map(item => (
-              <View key={item.id}>
-                <TouchableOpacity
-                  style={styles.favTagBtnContainer}
-                  onPress={() => handleSetStartFav(item)}>
+      {locations?.length > 0 ? (
+        <FlatList
+          data={locations}
+          keyExtractor={item => item.id}
+          ItemSeparatorComponent={() => <View style={styles.line} />}
+          showsVerticalScrollIndicator={false}
+          style={{marginTop: 10}}
+          renderItem={({item}) => (
+            <>
+              <TouchableOpacity onPress={() => handleSetStartFav(item)}>
+                <View style={styles.favTagBtnContainer}>
                   <Text style={styles.tagTxt}>{item?.location?.name}</Text>
-                </TouchableOpacity>
+                </View>
                 <Text style={styles.address}>
                   {item?.location?.description}
                 </Text>
-                {item.id < data.length && <View style={styles.line} />}
-              </View>
-            ))
-          ) : (
-            <Text style={styles.nofavLocation}>No Favourite Location</Text>
+              </TouchableOpacity>
+            </>
           )}
-        </View>
-      </ScrollView>
+        />
+      ) : (
+        <Text style={styles.nofavLocation}>No Favourite Location</Text>
+      )}
+
       <TouchableOpacity
         style={styles.cancelBtnContainer}
         onPress={() => {
