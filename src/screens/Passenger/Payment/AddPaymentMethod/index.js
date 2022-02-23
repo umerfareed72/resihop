@@ -160,49 +160,6 @@ const index = ({navigation, route}) => {
     );
   };
 
-  //Authorize Driver
-  const auth_driver = async () => {
-    try {
-      const res = await get(`wallets/connectedAccount`, await header());
-      if (res.data) {
-        Linking.openURL('https://resihop.page.link/N8fh');
-      } else {
-        console.log(res.data);
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error?.response?.data);
-      setIsLoading(false);
-    }
-  };
-  async function buildLink() {
-    const ShareableLink = await LinkHelper();
-    Linking.openURL(ShareableLink);
-  }
-
-  const handleDynamicLink = link => {
-    // Handle dynamic link inside your own application
-    if (link.url === 'https://resihop.page.link/N8fh') {
-      // ...navigate to your offers screen
-    }
-  };
-
-  useEffect(() => {
-    const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
-    // When the component is unmounted, remove the listener
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    dynamicLinks()
-      .getInitialLink()
-      .then(link => {
-        // if (link.url === 'https://resihop.page.link/N8fh') {
-        // ...set initial route as offers screen
-        // }
-      });
-  }, []);
-
   const confirm_payment = async data => {
     const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
       type: 'Card',

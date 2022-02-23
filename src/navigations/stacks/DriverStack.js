@@ -9,7 +9,7 @@ import WithDrawPayment from '../../screens/Passenger/Payment/AddPaymentMethod/Wi
 import NotificationList from '../../screens/Passenger/NotificationList/NotificationList';
 import AddCard from '../../screens/Passenger/Payment/AddPaymentMethod/AddCard';
 import CardDetail from '../../screens/Passenger/Payment/AddPaymentMethod/CardDetail';
-import Payment from '../../screens/Passenger/Payment/AddPaymentMethod';
+import Payment from '../../screens/Driver/Payment';
 import Help from '../../screens/Passenger/Help/Help';
 import Terms from '../../screens/Passenger/Terms/Terms';
 import Privacy from '../../screens/Passenger/Privacy/Privacy';
@@ -83,7 +83,7 @@ function DriverStack(props) {
 
       <Stack.Screen
         options={{headerShown: false}}
-        name="Payment"
+        name="DriverPayment"
         component={Payment}
       />
 

@@ -21,7 +21,9 @@ module.exports = {
   Checkout_Card_Failure: 'Checkout_Card_Failure',
   //Move from Drawe
   Move_From_Drawer: 'Move_From_Drawer',
-
+  //Get Driver Account
+  Get_Account_Success: 'Get_Account_Success',
+  Get_Account_Failure: 'Get_Account_Failure',
   //Get Card
   Payment_Loader: 'Payment_Loader',
 };

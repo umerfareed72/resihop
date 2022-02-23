@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   header2Bold: {
     fontFamily: family.product_sans_bold,
     paddingHorizontal: 20,
+    paddingVertical: 10,
     fontSize: size.h3,
     color: colors.white,
   },

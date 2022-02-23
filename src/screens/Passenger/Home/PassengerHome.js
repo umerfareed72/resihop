@@ -119,6 +119,14 @@ const PassengerHome = ({navigation}) => {
   useEffect(() => {
     if (isFocused) {
       dispatch(MyRides());
+      dispatch(
+        MyRidesSortOrder('rides', 'tripDate:desc', res => {
+          dispatch({
+            type: mapTypes.myRides,
+            payload: res,
+          });
+        }),
+      );
       getUserdata();
       dispatch(move_from_drawer(true, () => {}));
     }

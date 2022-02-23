@@ -81,7 +81,7 @@ const CreateDrive = () => {
     const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
 
     const body = {
-      startLocation: [origin.location.lat, origin.location.lng],
+      startLocation: [origin?.location.lat, origin?.location?.lng],
       destinationLocation: [
         destinationMap.location.lat,
         destinationMap.location.lng,
@@ -91,8 +91,8 @@ const CreateDrive = () => {
       path: 0,
       costPerSeat: value,
       interCity: false,
-      startDes: origin.description,
-      destDes: destinationMap.description,
+      startDes: origin?.description,
+      destDes: destinationMap?.description,
     };
 
     dispatch(
