@@ -19,6 +19,7 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from './FavouriteLocations';
 import {CustomHeader, Loader} from '../components';
 import CalendarSheet from './CalendarSheet';
+import ReturnCalendarSheet from '../components/ReurnCalenderSheet';
 import I18n from '../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -33,6 +34,7 @@ import {
   setMapSegment,
   setReturnOrigin,
   setReturnMapDestination,
+  Settings,
 } from '../redux/actions/map.actions';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -41,12 +43,16 @@ const CreateRide = () => {
   let navigation = useNavigation();
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
+  const returnCalendarSheetRef = useRef(null);
   let dispatch = useDispatch();
 
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
+  const returnDateTimeStamp = useSelector(
+    state => state.map.returnDateTimeStamp,
+  );
   const time = useSelector(state => state.map.time);
   const returnFirstTime = useSelector(state => state.map.returnFirstTime);
 
@@ -54,6 +60,7 @@ const CreateRide = () => {
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
+  const settings = useSelector(state => state.map.settings);
 
   const [favPress, setFavPress] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
@@ -63,9 +70,13 @@ const CreateRide = () => {
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
   const [secondReturnTimePicker, setSecondReturnTimePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [normalTime, setNormalTime] = useState('');
+  const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
+  const [returnSecondTime, setReturnSecondTime] = useState('');
 
   useEffect(() => {
     dispatch(setTime(moment().format('HH:mm')));
+    dispatch(Settings());
     return () => {
       dispatch(setAvailableSeats(null));
       dispatch(setOrigin(null));
@@ -88,6 +99,7 @@ const CreateRide = () => {
   };
 
   const handleConfirm = date => {
+    setNormalTime(moment(date).format());
     dispatch(setTime(moment(date).format('HH:mm')));
     hideTimePicker();
   };
@@ -108,7 +120,11 @@ const CreateRide = () => {
   };
 
   const handleConfirmFirstReturnTime = date => {
+    setNormalFirstReturnTime(moment(date).format());
     dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
+
+    setReturnSecondTime(moment(date).add(30, 'minutes').format('HH:mm'));
+
     hideFirstReturnTimePicker();
   };
 
@@ -317,7 +333,8 @@ const CreateRide = () => {
           />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
-            is24Hour={true}
+            date={normalTime ? new Date(normalTime) : new Date()}
+            is24Hour
             locale="en_GB"
             mode="time"
             onConfirm={handleConfirm}
@@ -394,27 +411,53 @@ const CreateRide = () => {
               </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
               <TouchableOpacity
-                onPress={() => showSecondReturnTimePicker()}
                 style={[styles.noLater, {justifyContent: 'center'}]}>
-                <Text style={styles.dateTxt}>{`XX:XX`}</Text>
+                <Text style={styles.dateTxt}>
+                  {returnSecondTime ? returnSecondTime : `XX:XX`}
+                </Text>
               </TouchableOpacity>
               <DateTimePickerModal
                 isVisible={firstReturnTimePicker}
+                date={
+                  normalFirstReturnTime
+                    ? new Date(normalFirstReturnTime)
+                    : new Date()
+                }
                 mode="time"
                 is24Hour={true}
                 locale="en_GB"
                 onConfirm={handleConfirmFirstReturnTime}
                 onCancel={hideFirstReturnTimePicker}
               />
-              <DateTimePickerModal
+              {/* <DateTimePickerModal
                 isVisible={secondReturnTimePicker}
                 is24Hour={true}
                 locale="en_GB"
                 mode="time"
                 onConfirm={handleConfirmSecondReturnTime}
                 onCancel={hideSecondReturnTimePicker}
+              /> */}
+            </View>
+            <View style={{marginBottom: 20}}>
+              <TouchableOpacity
+                onPress={() => returnCalendarSheetRef.current.open()}
+                style={[
+                  styles.noLater,
+                  {justifyContent: 'center', width: '90%', alignSelf: 'center'},
+                ]}>
+                <Text style={styles.dateTxt}>
+                  {returnDateTimeStamp !== null
+                    ? moment(returnDateTimeStamp).format('DD MMM')
+                    : 'Date'}
+                </Text>
+              </TouchableOpacity>
+              <Image
+                source={appImages.calendar}
+                resizeMode="contain"
+                style={[styles.calendarIcon, {right: 30}]}
               />
             </View>
+            <ReturnCalendarSheet calendarSheetRef={returnCalendarSheetRef} />
           </>
         ) : null}
         <FavouriteLocations

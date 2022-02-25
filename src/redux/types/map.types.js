@@ -18,6 +18,10 @@ module.exports = {
   returnDestination: 'ReturnDestination',
   returnFirstTime: 'ReturnFirstTime',
   mapSegment: 'MapSegment',
+  walkingDistance: 'WalkingDistance',
+  deltas: 'Deltas',
+  returnDateTimeStamp: 'ReturnDateTimeStamp',
+  settings: 'Settings',
   //Get Rides
   Get_Rides_Success: 'Get_Rides_Success',
   Get_Rides_Failure: 'Get_Rides_Failure',

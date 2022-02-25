@@ -21,6 +21,10 @@ const initialState = {
   mapSegment: null,
   ride_history: [],
   selected_ride_history: null,
+  walkingDistance: null,
+  deltas: null,
+  returnDateTimeStamp: null,
+  settings: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -155,7 +159,26 @@ export default (state = initialState, action = {}) => {
         failure: true,
         selected_ride_history: null,
       };
-
+    case Types.walkingDistance:
+      return {
+        ...state,
+        walkingDistance: payload,
+      };
+    case Types.deltas:
+      return {
+        ...state,
+        deltas: payload,
+      };
+    case Types.returnDateTimeStamp:
+      return {
+        ...state,
+        returnDateTimeStamp: payload,
+      };
+    case Types.settings:
+      return {
+        ...state,
+        settings: payload,
+      };
     default:
       return state;
   }

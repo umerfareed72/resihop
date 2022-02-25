@@ -11,16 +11,20 @@ import Slider from '@react-native-community/slider';
 import {appIcons, appImages, colors} from '../utilities';
 import {fonts} from '../theme';
 import I18n from '../utilities/translations';
-import {useSelector} from 'react-redux';
+import {setWalkingDistance, setDeltas} from '../redux/actions/map.actions';
+import {useSelector, useDispatch} from 'react-redux';
 
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
-  const [sliderValue, setSliderValue] = useState(0);
+  let dispatch = useDispatch();
+
+  const [sliderValue, setSliderValue] = useState(100);
 
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );
 
   useEffect(() => {
+    dispatch(setWalkingDistance(sliderValue));
     setHeight(Dimensions.get('screen').height - 200);
   }, []);
 
@@ -28,20 +32,30 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
     <View style={styles.container}>
       <View style={styles.headingContainer}>
         <Text style={styles.walkDistaceTxt}>{I18n.t('walk_to_pickUp')}</Text>
-        <Text style={styles.distance}>500 M</Text>
+        <Text style={styles.distance}>{`${sliderValue} M`}</Text>
       </View>
       <Slider
         style={styles.slider}
         minimumValue={0}
-        maximumValue={500}
+        value={sliderValue}
+        maximumValue={3000}
         thumbImage={appIcons.sliderImage}
         minimumTrackTintColor={colors.green}
         maximumTrackTintColor={colors.g1}
         onValueChange={value => setSliderValue(parseInt(value))}
+        onSlidingComplete={value => {
+          dispatch(setWalkingDistance(value));
+          dispatch(
+            setDeltas({
+              latDelta: 0.05,
+              lngDelta: 0.05,
+            }),
+          );
+        }}
       />
       <View style={styles.startEndDistanceContainer}>
         <Text style={styles.intDistance}>{`${sliderValue} M`}</Text>
-        <Text style={styles.intDistance}>500 M</Text>
+        <Text style={styles.intDistance}>3000 M</Text>
       </View>
       <TouchableOpacity
         style={[
