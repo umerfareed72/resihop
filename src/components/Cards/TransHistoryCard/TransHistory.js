@@ -27,7 +27,7 @@ export const TransHistoryCard = () => {
         <Text style={styles.h3}>18:00, 12 June 2020</Text>
       </View>
       <View style={styles.rightContainer}>
-        <Text style={styles.h1}>100 SEK</Text>
+        <Text style={styles.h1}>100 NOK</Text>
       </View>
     </View>
   );

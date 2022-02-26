@@ -22,17 +22,20 @@ const StartMatching = props => {
   useEffect(() => {
     if (isFocus) {
       setModal(props?.route?.params?.modalName);
-      dispatch(
-        SearchDrives({
-          startLocation: [origin.location.lat, origin.location.lng],
-          destinationLocation: [
-            destinationMap.location.lat,
-            destinationMap.location.lng,
-          ],
-          time: dateTimeStamp,
-          seats: availableSeats,
-        }),
-      );
+      if (props?.route?.params?.modalName === 'available') {
+      } else {
+        dispatch(
+          SearchDrives({
+            startLocation: [origin.location.lat, origin.location.lng],
+            destinationLocation: [
+              destinationMap.location.lat,
+              destinationMap.location.lng,
+            ],
+            time: dateTimeStamp,
+            seats: availableSeats,
+          }),
+        );
+      }
     }
   }, [isFocus]);
 

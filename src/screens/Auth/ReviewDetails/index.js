@@ -10,7 +10,7 @@ function index(props) {
     {
       id: 6,
       fieldName: 'Preset cost for each passenger',
-      fieldValue: 'SEK 20',
+      fieldValue: 'NOK 20',
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);

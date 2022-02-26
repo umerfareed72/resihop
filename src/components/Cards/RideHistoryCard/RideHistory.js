@@ -27,7 +27,7 @@ export const RideHistoryCard = ({
               {moment(dateTime).format('HH:MM').toString()}
             </Text>
             {cancelled && <Text style={styles.specialText}>cancelled</Text>}
-            <Text style={styles.h2}>SEK {cost}</Text>
+            <Text style={styles.h2}>NOK {cost}</Text>
           </View>
           <View style={{paddingVertical: 10}}>
             <View style={styles.row2}>

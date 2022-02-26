@@ -23,14 +23,15 @@ import AvailablePassengersCard from './AvailablePassengersCard';
 import DriveStatusCard from './DriveStatusCard';
 import OfferReturnDriveCard from './OfferReturnDriveCard';
 import PickUpInfoCard from './PickUpInfoCard';
-
 import MapViewDirections from 'react-native-maps-directions';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setDistanceAndTime,
   SetNearestDriver,
+  setOrigin,
 } from '../redux/actions/map.actions';
 import {fonts} from '../theme';
+import database from '@react-native-firebase/database';
 
 const MapViewComponent = ({
   rideModals,
@@ -40,6 +41,7 @@ const MapViewComponent = ({
   modal,
   status,
   onPressCancel,
+  startRide,
 }) => {
   let dispatch = useDispatch();
 
@@ -61,12 +63,64 @@ const MapViewComponent = ({
   );
   const deltas = useSelector(state => state.map.deltas);
   const walkingDistance = useSelector(state => state.map.walkingDistance);
-
-  const mapRef = useRef();
+  var watchId;
+  const mapRef = useRef(null);
 
   useEffect(() => {
     getLocation();
+    if (startRide) {
+      getLiveLocation();
+    }
+    return () => {
+      Geolocation.clearWatch(watchId);
+    };
   }, []);
+  //Get Live Location
+  const getLiveLocation = async () => {
+    let permission;
+    try {
+      if (Platform.OS === 'ios') {
+        permission = await Geolocation.requestAuthorization('whenInUse');
+      } else {
+        permission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        );
+      }
+      if (permission || permission === 'granted') {
+        watchId = Geolocation.watchPosition(
+          position => {
+            setLatitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
+            dispatch(
+              setOrigin({
+                location: {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                },
+                description: '',
+              }),
+            );
+            var starCountRef = database().ref('live').child('Arose');
+            starCountRef.on('value', snapshot => {
+              const data = snapshot.val();
+            });
+          },
+          error => {
+            console.log(error.code, error.message);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 10000,
+            distanceFilter: 0,
+            useSignificantChanges: true,
+          },
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (!origin || !destination || !searchRideResponse) return;
@@ -260,7 +314,10 @@ const MapViewComponent = ({
         }>
         {origin && destination && (
           <MapViewDirections
-            origin={origin.description}
+            origin={{
+              latitude: origin !== null ? origin.location.lat : latitude,
+              longitude: origin !== null ? origin.location.lng : longitude,
+            }}
             destination={destination.description}
             apikey={'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA'}
             strokeWidth={3}
@@ -275,26 +332,31 @@ const MapViewComponent = ({
                   duration: result.duration,
                 }),
               );
-              mapRef.current.fitToCoordinates(result.coordinates, {
-                edgePadding: {
-                  right: 70,
-                  bottom: 70,
-                  left: 70,
-                  top: 70,
-                },
-              });
+              if (!startRide) {
+                mapRef.current.fitToCoordinates(result.coordinates, {
+                  edgePadding: {
+                    right: 70,
+                    bottom: 70,
+                    left: 70,
+                    top: 70,
+                  },
+                });
+              }
             }}
           />
         )}
-
-        <Marker
-          identifier="currentPosition"
-          coordinate={{
-            latitude: latitude,
-            longitude: longitude,
-          }}>
-          <View style={styles.currenLocation} />
-        </Marker>
+        {!startRide ? (
+          <Marker
+            identifier="currentPosition"
+            coordinate={{
+              latitude: latitude,
+              longitude: longitude,
+            }}>
+            <View style={styles.currenLocation} />
+          </Marker>
+        ) : (
+          false
+        )}
         {origin?.location && (
           <Marker
             identifier="location"
@@ -302,7 +364,7 @@ const MapViewComponent = ({
               latitude: origin.location.lat,
               longitude: origin.location.lng,
             }}
-            icon={appIcons.startLocatin}
+            icon={startRide ? appIcons.DriverCar : appIcons.startLocatin}
           />
         )}
 

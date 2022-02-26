@@ -141,7 +141,8 @@ const index = ({navigation, route}) => {
       customerID: cardDetail?.customer,
       cardID: cardDetail?.id,
       rideID: createRideRequest?._id,
-      driverUserID: bookRide.drive._id,
+      driverUserID: bookRide?.drive?.user?._id,
+      currency: 'usd',
     };
 
     dispatch(
@@ -317,7 +318,7 @@ const index = ({navigation, route}) => {
                     payFromCard();
                   }}
                   bgColor={cardDetail ? colors.green : colors.g1}
-                  title={`SEK ${bookRide?.drive?.costPerSeat} Pay From Card`}
+                  title={`NOK ${bookRide?.drive?.costPerSeat} Pay From Card`}
                   txtColor={colors.white}
                 />
               </View>

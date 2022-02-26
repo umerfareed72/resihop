@@ -118,7 +118,6 @@ const PassengerHome = ({navigation}) => {
 
   useEffect(() => {
     if (isFocused) {
-      dispatch(MyRides());
       dispatch(
         MyRidesSortOrder('rides', 'tripDate:desc', res => {
           dispatch({

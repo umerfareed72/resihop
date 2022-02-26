@@ -21,7 +21,7 @@
 		5EED09075BDB45A70549396C /* libPods-resihop-resihopTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AFB07C71AD63BD0F21FDF456 /* libPods-resihop-resihopTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E22DA7B811532126ECF23AD1 /* libPods-resihop.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D318C7280BDFB2F6BD838A6D /* libPods-resihop.a */; };
-		E35734B516E445FBBAB482BB /* (null) in Resources */ = {isa = PBXBuildFile; };
+		E35734B516E445FBBAB482BB /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -316,7 +316,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5D428A9C274F8B18004D44A3 /* ProductSans-Bold.ttf in Resources */,
-				E35734B516E445FBBAB482BB /* (null) in Resources */,
+				E35734B516E445FBBAB482BB /* BuildFile in Resources */,
 				53763919AFE4445F9D1A852D /* BebasNeue Bold.ttf in Resources */,
 				5D55E64427BC057E00FFE4AB /* GoogleService-Info.plist in Resources */,
 			);

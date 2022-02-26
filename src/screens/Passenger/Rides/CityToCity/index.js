@@ -169,7 +169,7 @@ const index = ({navigation}) => {
               </View>
             </View>
             <View style={styles.selectWrapper}>
-              <Text style={styles.selectTxt}>Sekect Return Date</Text>
+              <Text style={styles.selectTxt}>Select Return Date</Text>
             </View>
             <View style={styles.selectionInputWrapper}>
               <TouchableOpacity

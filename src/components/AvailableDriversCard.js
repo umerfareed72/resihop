@@ -109,7 +109,7 @@ const AvailableDrivers = ({
             <Text
               style={
                 styles.fair
-              }>{`SEk ${nearestDriver?.drive.costPerSeat}`}</Text>
+              }>{`NOK ${nearestDriver?.drive.costPerSeat}`}</Text>
             <Image
               source={appImages.car}
               resizeMode="contain"

@@ -72,6 +72,7 @@ const index = ({navigation, route}) => {
         await header(),
       );
       if (res.data) {
+        console.log(res.data);
         setLoading(false);
         Linking.openURL(res?.data?.accountLink);
       }
@@ -82,15 +83,19 @@ const index = ({navigation, route}) => {
   };
 
   const handleDynamicLink = link => {
-    // Handle dynamic link inside your own application
-    if (link.url === 'https://resihop.page.link/N8fh') {
-      console.log('Dynamic link', link.url);
-      dispatch(
-        check_driver_registered(res => {
-          console.log('Check Account', res);
-          setCheckAccount(res);
-        }),
-      );
+    try {
+      // Handle dynamic link inside your own application
+      if (link.url === 'https://resihop.page.link/N8fh') {
+        console.log('Dynamic link', link.url);
+        dispatch(
+          check_driver_registered(res => {
+            console.log('Check Account', res);
+            setCheckAccount(res);
+          }),
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -117,33 +122,6 @@ const index = ({navigation, route}) => {
       }),
     );
   }, []);
-
-  const confirm_payment = async data => {
-    const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
-      type: 'Card',
-      setupFutureUsage: 'OffSession',
-      billingDetails: {
-        name: cardDetail?.name,
-        addressCity: cardDetail?.addressCity,
-        addressCountry: cardDetail?.addressCountry,
-        addressLine1: cardDetail?.addressLine1,
-        addressLine2: cardDetail?.addressLine2,
-        addressPostalCode: cardDetail?.addressPostalCode,
-        addressState: cardDetail?.addressState,
-        email: cardDetail?.email,
-      },
-      paymentMethodId: cardDetail?.id,
-    });
-    if (paymentIntent) {
-      modalRef.current.open();
-      setpaymentSuccessonSuccess(true);
-    }
-    if (error) {
-      console.log(error);
-      modalRef.current.open();
-      setpaymentSuccessonFailed(true);
-    }
-  };
 
   return (
     <>
@@ -205,7 +183,7 @@ const index = ({navigation, route}) => {
               title={I18n.t('add_card')}
             />
           )}
-          {checkAccount == 'inactive' && (
+          {checkAccount == 'inactive' || checkAccount == undefined ? (
             <View style={{paddingVertical: 30}}>
               <View style={{paddingVertical: 20}}>
                 <PaymentButtons
@@ -218,6 +196,8 @@ const index = ({navigation, route}) => {
                 />
               </View>
             </View>
+          ) : (
+            false
           )}
         </View>
       </KeyboardAwareScrollView>

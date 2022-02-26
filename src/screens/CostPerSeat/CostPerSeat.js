@@ -30,21 +30,21 @@ const CostPerSeat = ({navigation}) => {
             </View>
             <View style={styles.inputContainer}>
               <View style={styles.inputText}>
-                <Text style={styles.sekText}>SEK</Text>
+                <Text style={styles.sekText}>NOK</Text>
               </View>
               <View style={styles.inputTextReplica}>
                 <TextInput placeholder={'Amount'} />
               </View>
             </View>
             <Text style={styles.reasonText}>
-              Reasonable cost could be set around 1 SEK / km
+              Reasonable cost could be set around 1 NOK / km
             </Text>
             <Text style={[styles.headingText, {marginVertical: HP('2')}]}>
               Per Seat
             </Text>
             <View style={styles.inputContainer}>
               <View style={styles.inputText}>
-                <Text style={styles.sekText}>SEK</Text>
+                <Text style={styles.sekText}>NOK</Text>
               </View>
               <View style={styles.inputTextReplica}>
                 <TextInput placeholder={'Amount'} />

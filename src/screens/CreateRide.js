@@ -159,7 +159,7 @@ const CreateRide = () => {
   };
 
   const handleCreateReturnRide = () => {
-    const stamp = moment(`${dateTimeStamp}T${returnFirstTime}`).valueOf();
+    const stamp = moment(`${returnDateTimeStamp}T${returnFirstTime}`).valueOf();
     const body = {
       startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
       destinationLocation: [
@@ -388,9 +388,23 @@ const CreateRide = () => {
                 </TouchableOpacity>
               </View>
               <View style={styles.switchWrapper}>
-                <HeartIcon name="heart" size={30} color={colors.btnGray} />
+                <HeartIcon
+                  onPress={() => {
+                    favourteLocationRef.current.open();
+                  }}
+                  name="heart"
+                  size={30}
+                  color={colors.btnGray}
+                />
                 <View style={{marginVertical: 23}} />
-                <HeartIcon name="heart" size={30} color={colors.btnGray} />
+                <HeartIcon
+                  onPress={() => {
+                    favourteLocationRef.current.open();
+                  }}
+                  name="heart"
+                  size={30}
+                  color={colors.btnGray}
+                />
               </View>
             </View>
             <View style={{marginLeft: 26}}>

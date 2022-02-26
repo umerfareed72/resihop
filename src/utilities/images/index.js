@@ -1,6 +1,7 @@
 export const appIcons = {
   backArrow: require('../../assets/icons/png/backArrow.png'),
   rightArrow: require('../../assets/icons/png/rightArrow.png'),
+  DriverCar: require('../../assets/icons/png/DriverCar.png'),
   downArrow: require('../../assets/icons/png/downArrow.png'),
   upArrow: require('../../assets/icons/png/upArrow.png'),
   timer: require('../../assets/icons/png/timer.png'),

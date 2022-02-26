@@ -84,7 +84,7 @@ const BookingDetails = () => {
                 fontFamily: fonts.bold,
                 fontSize: 18,
               }}>
-              {`SEK ${bookRide?.drive?.costPerSeat}`}
+              {`NOK ${bookRide?.drive?.costPerSeat}`}
             </Text>
             <Text
               style={{
@@ -93,7 +93,7 @@ const BookingDetails = () => {
                 color: colors.txtGray,
                 fontFamily: fonts.regular,
               }}>
-              {`(SEK ${bookRide?.drive?.costPerSeat}/Trip)`}
+              {`(NOK ${bookRide?.drive?.costPerSeat}/Trip)`}
             </Text>
             <Image
               source={appImages.car}
@@ -152,19 +152,19 @@ const BookingDetails = () => {
         <View style={styles.titleContainer}>
           <Text style={styles.bookingTitles}>{I18n.t('ride_booked')}</Text>
           <Text
-            style={styles.amount}>{`SEK ${bookRide?.drive?.costPerSeat}`}</Text>
+            style={styles.amount}>{`NOK ${bookRide?.drive?.costPerSeat}`}</Text>
         </View>
         <View style={styles.titleContainer}>
           <Text style={[styles.bookingTitles, {color: colors.g4}]}>
             {I18n.t('discount')}
           </Text>
-          <Text style={[styles.amount, {color: colors.g4}]}>SEK 0</Text>
+          <Text style={[styles.amount, {color: colors.g4}]}>NOK 0</Text>
         </View>
         <View style={[styles.line, {marginTop: 0}]} />
         <View style={styles.totalContainer}>
           <Text style={styles.bookingTitles}>{I18n.t('total_pay')}</Text>
           <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
-            {`SEK ${bookRide?.drive?.costPerSeat}`}
+            {`NOK ${bookRide?.drive?.costPerSeat}`}
           </Text>
         </View>
         <TouchableOpacity

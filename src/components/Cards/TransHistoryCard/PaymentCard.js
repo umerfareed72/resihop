@@ -31,7 +31,7 @@ export const PaymentCard = ({title, add_Money, onPress, onPressAddMoney}) => {
               false
             )}
           </View>
-          <Text style={styles.header2Bold}>00.00 SEK</Text>
+          <Text style={styles.header2Bold}>00.00 NOK</Text>
         </View>
       </View>
     </LinearGradient>
