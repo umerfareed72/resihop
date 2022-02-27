@@ -13,6 +13,8 @@ import {
   SearchDrives,
   CreateRideRequest,
   setDateTimeStamp,
+  setReturnOrigin,
+  setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import {CopyRideModal, Loader} from '../../../components';
@@ -49,7 +51,22 @@ const RideStatus = ({route}) => {
         description: item?.destDes,
       }),
     );
+    dispatch(
+      setReturnOrigin({
+        location: {
+          lat: item?.destinationLat,
+          lng: item?.destinationLng,
+        },
+        description: item?.destDes,
+      }),
+    );
 
+    dispatch(
+      setReturnMapDestination({
+        location: {lat: item?.startLat, lng: item?.startLng},
+        description: item?.startDes,
+      }),
+    );
     if (!item.status === 'WAITING_FOR_MATCH') {
       dispatch(
         SearchDrives({
@@ -64,6 +81,8 @@ const RideStatus = ({route}) => {
     return () => {
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
+      dispatch(setReturnOrigin(null));
+      dispatch(setReturnMapDestination(null));
       dispatch(SearchDrives(null));
       dispatch(setDateTimeStamp(null));
     };
@@ -95,18 +114,18 @@ const RideStatus = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <MapViewComponent />
+      <MapViewComponent startRide={item.status == 'CONFIRMED' && true} />
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => navigation.goBack()}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Image
-            source={appIcons.backArrow}
-            resizeMode="contain"
-            style={styles.arrowBack}
-          />
-          <Text style={styles.driver}>{I18n.t('ride')}</Text>
-        </View>
+        {/* <View style={{flexDirection: 'row', alignItems: 'center'}}> */}
+        <Image
+          source={appIcons.backArrow}
+          resizeMode="contain"
+          style={styles.arrowBack}
+        />
+        {/* <Text style={styles.driver}>{I18n.t('ride')}</Text> */}
+        {/* </View> */}
       </TouchableOpacity>
       <RideStatusCards
         statusType={item.status}
@@ -139,11 +158,10 @@ const styles = StyleSheet.create({
   },
   arrowBackCircle: {
     height: 42,
-    width: '85%',
+    width: 42,
     backgroundColor: colors.white,
     position: 'absolute',
     justifyContent: 'center',
-    alignSelf: 'center',
     top: 50,
     marginLeft: 18,
     elevation: 5,
@@ -153,7 +171,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowColor: colors.dropShadow2,
-    borderRadius: 10,
+    borderRadius: 42,
     paddingLeft: 14,
   },
   driver: {

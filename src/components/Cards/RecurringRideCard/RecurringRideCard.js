@@ -60,7 +60,7 @@ export const RecurringRideCard = ({onPressCard}) => {
             }}>
             <>
               <Text>Single Trip</Text>
-              <Text style={{fontSize: 15, fontWeight: 'bold'}}>SEK 20</Text>
+              <Text style={{fontSize: 15, fontWeight: 'bold'}}>NOK 20</Text>
             </>
           </View>
         </View>

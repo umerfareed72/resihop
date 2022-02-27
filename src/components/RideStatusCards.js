@@ -16,7 +16,7 @@ import {AddWalletModal} from '.';
 import {drawerIcons} from '../utilities/images';
 import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
-import {CancelRide} from '../redux/actions/map.actions';
+import {CancelRide, setBookRide} from '../redux/actions/map.actions';
 import {Loader} from '../components';
 import {Alert} from 'react-native';
 
@@ -129,20 +129,16 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
     );
   }
 
-  if (currentRide) {
+  if (statusType === 'CONFIRMED') {
     return (
       <View style={styles.currentRideContainer}>
         <Text style={styles.destinationTxt}>{I18n.t('destination10_km')}</Text>
         <View style={styles.addressContainer}>
-          <Text style={styles.addressTxt}>
-            123 abc apartment abc street abc...
-          </Text>
+          <Text style={styles.addressTxt}>{ride?.startDes}</Text>
           <View style={styles.addressCircle} />
         </View>
         <View style={[styles.addressContainer, {marginTop: 21}]}>
-          <Text style={styles.addressTxt}>
-            123 abc apartment abc street abc...
-          </Text>
+          <Text style={styles.addressTxt}>{ride?.destDes}</Text>
           <View style={styles.addressSquare} />
         </View>
       </View>
@@ -153,13 +149,11 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
     <>
       <View style={styles.container}>
         <View style={styles.addressContainer}>
-          <Text style={styles.addressTxt}>
-            {nearestDriver?.drive?.startDes}
-          </Text>
+          <Text style={styles.addressTxt}>{ride?.startDes}</Text>
           <View style={styles.addressCircle} />
         </View>
         <View style={[styles.addressContainer, {marginTop: 21}]}>
-          <Text style={styles.addressTxt}>{nearestDriver?.drive?.destDes}</Text>
+          <Text style={styles.addressTxt}>{ride?.destDes}</Text>
           <View style={styles.addressSquare} />
         </View>
         <View style={styles.dateTimeContainer}>
@@ -215,7 +209,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
                 <Text
                   style={
                     styles.fair
-                  }>{`SEK ${nearestDriver?.drive.costPerSeat}`}</Text>
+                  }>{`NOK ${nearestDriver?.drive.costPerSeat}`}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={styles.carDetails}>
                     {nearestDriver?.drive?.user.vehicle.vehicleCompanyName}
@@ -228,23 +222,23 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
             </View>
           </View>
         </View>
-        {statusType === 'Confirmed' || statusType === 'MATCHING_DONE' ? (
+        {statusType === 'CONFIRMED' && (
           <>
             <View style={styles.borderBtnMainContainer}>
               <TouchableOpacity
                 style={styles.borderBtnContainer}
-                disabled={statusType === 'Confirmed'}>
+                disabled={statusType === 'CONFIRMED'}>
                 <CallIcon
                   name="call"
                   size={18}
-                  color={statusType === 'Confirmed' ? colors.g1 : colors.black}
+                  color={statusType === 'CONFIRMED' ? colors.g1 : colors.black}
                 />
                 <Text
                   style={[
                     styles.borderBtnTxt,
                     {
                       color:
-                        statusType === 'Confirmed' ? colors.g1 : colors.black,
+                        statusType === 'CONFIRMED' ? colors.g1 : colors.black,
                     },
                   ]}>
                   {I18n.t('call_now')}
@@ -286,7 +280,22 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
               </TouchableOpacity>
             )}
           </>
-        ) : (
+        )}
+        {statusType === 'MATCHING_DONE' && (
+          <>
+            <View style={{padding: 30}}>
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch(setBookRide(nearestDriver));
+                  navigation.navigate('BookingDetails');
+                }}
+                style={styles.passengerHomeBtn}>
+                <Text style={styles.homeTxt}>{'Book Now'}</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+        {statusType === 'COMPLETED' && (
           <>
             <View style={styles.rideEndedbtns}>
               <TouchableOpacity style={styles.favBtnContainer}>

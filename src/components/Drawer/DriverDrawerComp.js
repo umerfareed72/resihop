@@ -36,8 +36,8 @@ const DriverDrawerComponent = ({navigation}) => {
       icon: drawerIcons.my_payment_methods,
       label: 'My Payment Methods',
       onPress: () => {
-        navigation.push('Payment', {
-          routeName: 'Payment',
+        navigation.push('DriverPayment', {
+          routeName: 'DriverPayment',
         });
         navigation.closeDrawer();
       },

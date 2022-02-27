@@ -18,7 +18,7 @@ export const DRideHistoryCard = ({
           <View style={styles.cardContainer}>
             <Text style={styles.h1}>Mon, 12 June, 08:00</Text>
             <Text style={[styles.h2, {marginLeft: driver ? 30 : 0}]}>
-              SEK 20
+              NOK 20
             </Text>
             {driver ? (
               <Image source={appIcons.redHeart} style={styles.imageStyle} />

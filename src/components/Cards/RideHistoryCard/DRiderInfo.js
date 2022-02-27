@@ -26,7 +26,7 @@ export const DRiderInfo = ({}) => {
               justifyContent: 'space-between',
               width: '30%',
             }}>
-            <Text style={styles.h2}>SEK 20</Text>
+            <Text style={styles.h2}>NOK 20</Text>
 
             <Image source={appIcons.redHeart} style={styles.imageStyle} />
           </View>

@@ -69,7 +69,7 @@ const AvailableDrivers = props => {
                       top: 5,
                     },
                   ]}>
-                  {`SEK ${item.drive.costPerSeat}`}
+                  {`NOK ${item.drive.costPerSeat}`}
                 </Text>
                 <Image
                   source={appImages.car}

@@ -159,7 +159,7 @@ const UpdateDrive = () => {
         </View>
         <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
         <TouchableOpacity style={styles.presetCostContainer}>
-          <Text style={{fontFamily: fonts.regular}}>SEK 20</Text>
+          <Text style={{fontFamily: fonts.regular}}>NOK 20</Text>
           <ArrowDown
             name="keyboard-arrow-down"
             size={24}

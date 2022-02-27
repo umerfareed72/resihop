@@ -73,7 +73,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
         </View>
         <View style={styles.dateWrapper}>
           {item.costPerSeat ? (
-            <Text style={styles.fair}>{`SEk ${item.costPerSeat}`}</Text>
+            <Text style={styles.fair}>{`NOK ${item.costPerSeat}`}</Text>
           ) : (
             <View />
           )}

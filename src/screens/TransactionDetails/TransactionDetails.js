@@ -38,7 +38,7 @@ const TransactionDetails = ({navigation}) => {
             <View style={{marginHorizontal: HP('2')}}>
               <View style={styles.priceContainer}>
                 <Text style={styles.payRide}>Paid for Ride</Text>
-                <Text style={styles.payPrice}>100 SEK</Text>
+                <Text style={styles.payPrice}>100 NOK</Text>
               </View>
               <Text style={styles.dateTime}>18:00, 12 June 2020</Text>
               <Text style={styles.dateTime}>Transaction ID : 1234567890</Text>

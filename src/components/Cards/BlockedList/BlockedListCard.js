@@ -39,7 +39,7 @@ export const BlockedListCard = ({card1}) => {
                       color: colors.light_black,
                       marginTop: 20,
                     }}>
-                    SEK 20
+                    NOK 20
                   </Text>
                   <Image
                     source={appImages.leftcar}

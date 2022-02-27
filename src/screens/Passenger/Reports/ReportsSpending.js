@@ -48,7 +48,7 @@ const ReportsSpending = ({onPressYear}) => {
               <Text style={styles.promoStyle}>
                 {I18n.t('rep_total_spending')}
               </Text>
-              <Text style={styles.promoText}>SEK 2500</Text>
+              <Text style={styles.promoText}>NOK 2500</Text>
             </View>
           </View>
         </LinearGradient>

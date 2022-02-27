@@ -6,7 +6,7 @@ import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
 
-export const RiderInfo = ({}) => {
+export const RiderInfo = ({driverInfo}) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -17,7 +17,9 @@ export const RiderInfo = ({}) => {
               alignItems: 'center',
             }}>
             <Image source={appImages.user} style={styles.icon42} />
-            <Text style={styles.textStyle}>John Doe</Text>
+            <Text style={styles.textStyle}>
+              {driverInfo?.firstName || 'Jon'} {driverInfo?.lastName || 'Due'}
+            </Text>
           </View>
           <Image source={appIcons.redHeart} style={styles.imageStyle} />
         </View>

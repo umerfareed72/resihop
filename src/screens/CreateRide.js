@@ -55,24 +55,20 @@ const CreateRide = () => {
   );
   const time = useSelector(state => state.map.time);
   const returnFirstTime = useSelector(state => state.map.returnFirstTime);
-
   const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
-  const settings = useSelector(state => state.map.settings);
-
   const [favPress, setFavPress] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
-  const [secondReturnTimePicker, setSecondReturnTimePicker] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [normalTime, setNormalTime] = useState('');
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
   const [returnSecondTime, setReturnSecondTime] = useState('');
+  const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
 
   useEffect(() => {
     dispatch(setTime(moment().format('HH:mm')));
@@ -107,30 +103,16 @@ const CreateRide = () => {
   const showFirstReturnTimePicker = () => {
     setFirstReturnTimePicker(true);
   };
-  const showSecondReturnTimePicker = () => {
-    setSecondReturnTimePicker(true);
-  };
 
   const hideFirstReturnTimePicker = () => {
     setFirstReturnTimePicker(false);
   };
 
-  const hideSecondReturnTimePicker = () => {
-    setSecondReturnTimePicker(false);
-  };
-
   const handleConfirmFirstReturnTime = date => {
     setNormalFirstReturnTime(moment(date).format());
     dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
-
     setReturnSecondTime(moment(date).add(30, 'minutes').format('HH:mm'));
-
     hideFirstReturnTimePicker();
-  };
-
-  const handleConfirmSecondReturnTime = date => {
-    // dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
-    // hideFirstReturnTimePicker();
   };
 
   const handleCreateRide = () => {
@@ -159,7 +141,7 @@ const CreateRide = () => {
   };
 
   const handleCreateReturnRide = () => {
-    const stamp = moment(`${dateTimeStamp}T${returnFirstTime}`).valueOf();
+    const stamp = moment(`${returnDateTimeStamp}T${returnFirstTime}`).valueOf();
     const body = {
       startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
       destinationLocation: [
@@ -388,9 +370,51 @@ const CreateRide = () => {
                 </TouchableOpacity>
               </View>
               <View style={styles.switchWrapper}>
-                <HeartIcon name="heart" size={30} color={colors.btnGray} />
-                <View style={{marginVertical: 23}} />
-                <HeartIcon name="heart" size={30} color={colors.btnGray} />
+                {favPress === 'returnstartLocation' ? (
+                  <HeartFilled
+                    name="heart"
+                    size={24}
+                    color={'red'}
+                    onPress={() => {
+                      favourteLocationRef.current.open();
+                    }}
+                  />
+                ) : (
+                  <HeartIcon
+                    name="heart"
+                    size={30}
+                    color={colors.btnGray}
+                    onPress={() => {
+                      setFavPress('returnstartLocation');
+                      favourteLocationRef.current.open();
+                    }}
+                  />
+                )}
+                <Image
+                  source={appIcons.mobiledata}
+                  style={styles.locationSwitch}
+                />
+
+                {favPress === 'returndestination' ? (
+                  <HeartFilled
+                    name="heart"
+                    size={24}
+                    color={'red'}
+                    onPress={() => {
+                      favourteLocationRef.current.open();
+                    }}
+                  />
+                ) : (
+                  <HeartIcon
+                    onPress={() => {
+                      setFavPress('returndestination');
+                      favourteLocationRef.current.open();
+                    }}
+                    name="heart"
+                    size={30}
+                    color={colors.btnGray}
+                  />
+                )}
               </View>
             </View>
             <View style={{marginLeft: 26}}>
@@ -429,14 +453,6 @@ const CreateRide = () => {
                 onConfirm={handleConfirmFirstReturnTime}
                 onCancel={hideFirstReturnTimePicker}
               />
-              {/* <DateTimePickerModal
-                isVisible={secondReturnTimePicker}
-                is24Hour={true}
-                locale="en_GB"
-                mode="time"
-                onConfirm={handleConfirmSecondReturnTime}
-                onCancel={hideSecondReturnTimePicker}
-              /> */}
             </View>
             <View style={{marginBottom: 20}}>
               <TouchableOpacity

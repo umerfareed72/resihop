@@ -31,7 +31,7 @@ export const PaymentCard = ({title, add_Money, onPress, onPressAddMoney}) => {
               false
             )}
           </View>
-          <Text style={styles.header2Bold}>00.00 SEK</Text>
+          <Text style={styles.header2Bold}>00.00 NOK</Text>
         </View>
       </View>
     </LinearGradient>
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   header2Bold: {
     fontFamily: family.product_sans_bold,
     paddingHorizontal: 20,
+    paddingVertical: 10,
     fontSize: size.h3,
     color: colors.white,
   },

@@ -8,6 +8,7 @@ const initialState = {
   current_card: {},
   checkout: null,
   move: false,
+  account_status: null,
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -92,7 +93,7 @@ export default (state = initialState, action = {}) => {
         failure: false,
         current_card: payload,
       };
-    case Types.Checkout_Card_Success:
+    case Types.Checkout_Card_Failure:
       return {
         ...state,
         loading: false,
@@ -100,13 +101,29 @@ export default (state = initialState, action = {}) => {
         failure: true,
         checkout: null,
       };
-    case Types.Checkout_Card_Failure:
+    case Types.Checkout_Card_Success:
       return {
         ...state,
         loading: false,
         success: true,
         failure: false,
         checkout: payload,
+      };
+    case Types.Get_Account_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        account_status: payload,
+      };
+    case Types.Get_Account_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        account_status: null,
       };
 
     case Types.Move_From_Drawer:

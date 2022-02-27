@@ -47,7 +47,6 @@ const AddressCards = ({
   const startReturnGoogleAutoComplete = useRef(null);
   const destinationReturnGoogleAutoComplete = useRef(null);
 
-  const [noLaterTime, setNoLaterTime] = useState('');
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
@@ -60,6 +59,7 @@ const AddressCards = ({
   const [currentReturnDestination, setCurrentReturnDestination] = useState('');
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
   const [secondReturnTimePicker, setSecondReturnTimePicker] = useState(false);
+  const [returnSecondTime, setReturnSecondTime] = useState('');
 
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
@@ -93,9 +93,6 @@ const AddressCards = ({
   const showFirstReturnTimePicker = () => {
     setFirstReturnTimePicker(true);
   };
-  const showSecondReturnTimePicker = () => {
-    setSecondReturnTimePicker(true);
-  };
 
   const hideFirstReturnTimePicker = () => {
     setFirstReturnTimePicker(false);
@@ -108,6 +105,8 @@ const AddressCards = ({
   const handleConfirmFirstReturnTime = date => {
     setNormalFirstReturnTime(moment(date).format());
     dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
+    setReturnSecondTime(moment(date).add(30, 'minutes').format('HH:mm'));
+
     hideFirstReturnTimePicker();
   };
 
@@ -152,30 +151,6 @@ const AddressCards = ({
       dispatch(setMapSegment(null));
     };
   }, []);
-
-  // const handleAddLocation = item => {
-  //   const body = {
-  //     latitude:
-  //       modalName === 'startLocation'
-  //         ? origin.location.lat
-  //         : destinationMap.location.lat,
-  //     longitude:
-  //       modalName === 'startLocation'
-  //         ? origin.location.lng
-  //         : destinationMap.location.lng,
-  //     name: item ? item : favName,
-  //     description:
-  //       modalName === 'startLocation'
-  //         ? origin.description
-  //         : destinationMap.description,
-  //   };
-
-  //   dispatch(
-  //     AddLocation(body, response => {
-  //       console.log(response);
-  //     }),
-  //   );
-  // };
 
   const handleAddFavLocation = item => {
     setIsLoading(true);
@@ -508,9 +483,10 @@ const AddressCards = ({
                 </TouchableOpacity>
                 <Text>{I18n.t('to')}</Text>
                 <TouchableOpacity
-                  onPress={() => showSecondReturnTimePicker()}
                   style={[styles.noLater, {justifyContent: 'center'}]}>
-                  <Text style={styles.dateTxt}>{`XX:XX`}</Text>
+                  <Text style={styles.dateTxt}>
+                    {returnSecondTime ? returnSecondTime : `XX:XX`}
+                  </Text>
                 </TouchableOpacity>
                 <DateTimePickerModal
                   isVisible={firstReturnTimePicker}

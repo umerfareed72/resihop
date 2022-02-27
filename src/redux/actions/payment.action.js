@@ -145,3 +145,24 @@ export const move_from_drawer = (data, callBack) => async dispatch => {
   });
   callBack();
 };
+
+export const check_driver_registered = callBack => async dispatch => {
+  try {
+    // dispatch({type: Types.Payment_Loader, payload: true});
+    const response = await get(`wallets/checkAccount`, await header());
+    // if (response?.data?.user?.details) {
+    dispatch({
+      type: Types.Get_Account_Success,
+      payload: response.data?.capabilities?.transfers,
+    });
+    callBack(response.data.capabilities?.transfers);
+  } catch (error) {
+    console.log('Unable to add card', error);
+    let status = error?.response?.data?.statusCode;
+    responseValidator(status, error?.response?.data?.message);
+    dispatch({
+      type: Types.Get_Account_Failure,
+      payload: null,
+    });
+  }
+};

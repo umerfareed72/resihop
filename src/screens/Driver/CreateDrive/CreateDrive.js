@@ -19,6 +19,7 @@ import {CustomHeader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
 import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
+import HeartFilled from 'react-native-vector-icons/Foundation';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setAvailableSeats,
@@ -28,11 +29,16 @@ import {
   setDateTimeStamp,
   setTime,
   SetRidesResponse,
+  setReturnFirstTime,
+  setMapSegment,
+  setReturnMapDestination,
+  setReturnOrigin,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Loader} from '../../../components/Loader/Loader';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import ReturnCalendarSheet from '../../../components/ReurnCalenderSheet';
 
 const CreateDrive = () => {
   let navigation = useNavigation();
@@ -40,6 +46,7 @@ const CreateDrive = () => {
 
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
+  const returnCalendarSheetRef = useRef(null);
 
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
@@ -58,7 +65,17 @@ const CreateDrive = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [normalTime, setnormalTime] = useState();
-
+  const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
+  const [returnSecondTime, setReturnSecondTime] = useState('');
+  const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
+  const returnDateTimeStamp = useSelector(
+    state => state.map.returnDateTimeStamp,
+  );
+  const returnFirstTime = useSelector(state => state.map.returnFirstTime);
+  const returnOrigin = useSelector(state => state.map.returnOrigin);
+  const returnDestinationMap = useSelector(
+    state => state.map.returnDestination,
+  );
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -67,6 +84,7 @@ const CreateDrive = () => {
     {label: '40', value: 40},
   ]);
 
+  // Release Redux States
   useEffect(() => {
     return () => {
       dispatch(setAvailableSeats(0));
@@ -74,6 +92,9 @@ const CreateDrive = () => {
       dispatch(setMapDestination(null));
       dispatch(setDateTimeStamp(null));
       dispatch(SetRidesResponse(null));
+      dispatch(setReturnOrigin(null));
+      dispatch(setReturnMapDestination(null));
+      dispatch(setReturnFirstTime(null));
     };
   }, []);
 
@@ -81,7 +102,7 @@ const CreateDrive = () => {
     const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
 
     const body = {
-      startLocation: [origin.location.lat, origin.location.lng],
+      startLocation: [origin?.location.lat, origin?.location?.lng],
       destinationLocation: [
         destinationMap.location.lat,
         destinationMap.location.lng,
@@ -91,8 +112,8 @@ const CreateDrive = () => {
       path: 0,
       costPerSeat: value,
       interCity: false,
-      startDes: origin.description,
-      destDes: destinationMap.description,
+      startDes: origin?.description,
+      destDes: destinationMap?.description,
     };
 
     dispatch(
@@ -116,6 +137,22 @@ const CreateDrive = () => {
     dispatch(setTime(moment(date).format('HH:mm')));
     setnormalTime(moment(date).format('hh:mm a'));
     hideTimePicker();
+  };
+
+  //Return Trip
+  const showFirstReturnTimePicker = () => {
+    setFirstReturnTimePicker(true);
+  };
+
+  const hideFirstReturnTimePicker = () => {
+    setFirstReturnTimePicker(false);
+  };
+
+  const handleConfirmFirstReturnTime = date => {
+    setNormalFirstReturnTime(moment(date).format());
+    dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
+    setReturnSecondTime(moment(date).add(30, 'minutes').format('HH:mm'));
+    hideFirstReturnTimePicker();
   };
 
   return (
@@ -186,21 +223,49 @@ const CreateDrive = () => {
             </View>
           </View>
           <View style={styles.switchWrapper}>
-            <HeartIcon
-              name="heart"
-              size={30}
-              color={colors.btnGray}
-              onPress={() => favourteLocationRef.current.open()}
-            />
+            {favPress === 'startLocation' ? (
+              <HeartFilled
+                name="heart"
+                size={24}
+                color={'red'}
+                onPress={() => {
+                  favourteLocationRef.current.open();
+                }}
+              />
+            ) : (
+              <HeartIcon
+                name="heart"
+                size={30}
+                color={colors.btnGray}
+                onPress={() => {
+                  setFavPress('startLocation');
+                  favourteLocationRef.current.open();
+                }}
+              />
+            )}
 
             <Image source={appIcons.mobiledata} style={styles.locationSwitch} />
 
-            <HeartIcon
-              onPress={() => favourteLocationRef.current.open()}
-              name="heart"
-              size={30}
-              color={colors.btnGray}
-            />
+            {favPress === 'destination' ? (
+              <HeartFilled
+                name="heart"
+                size={24}
+                color={'red'}
+                onPress={() => {
+                  favourteLocationRef.current.open();
+                }}
+              />
+            ) : (
+              <HeartIcon
+                name="heart"
+                size={30}
+                color={colors.btnGray}
+                onPress={() => {
+                  setFavPress('destination');
+                  favourteLocationRef.current.open();
+                }}
+              />
+            )}
           </View>
         </View>
         <Text style={styles.bookSeatsTxt}>{I18n.t('availableSeats')}</Text>
@@ -287,31 +352,83 @@ const CreateDrive = () => {
           <>
             <View style={styles.locationMainWrapper}>
               <View>
-                <View style={{marginBottom: 20}}>
-                  <TextInput
-                    placeholder={I18n.t('start_location')}
-                    placeholderTextColor={colors.inputTxtGray}
-                    value={startLocation}
-                    onChangeText={setStartLocation}
-                    style={styles.txtInput}
-                  />
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(setMapSegment('returnTrip'));
+                    navigation.navigate('StartLocationDriver', {
+                      type: 'returnTrip',
+                    });
+                  }}
+                  style={[styles.txtInput, {marginBottom: 20}]}>
+                  <Text style={styles.startTxt}>
+                    {returnOrigin
+                      ? returnOrigin.description
+                      : I18n.t('start_location')}
+                  </Text>
                   <View style={styles.startDot} />
-                </View>
-                <View>
-                  <TextInput
-                    placeholder={I18n.t('destination')}
-                    placeholderTextColor={colors.inputTxtGray}
-                    value={destination}
-                    onChangeText={setDestination}
-                    style={styles.txtInput}
-                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(setMapSegment('returnTrip'));
+                    navigation.navigate('StartLocationDriver', {
+                      type: 'returnTrip',
+                    });
+                  }}
+                  style={styles.txtInput}>
+                  <Text style={styles.startTxt}>
+                    {returnDestinationMap
+                      ? returnDestinationMap.description
+                      : I18n.t('destination')}
+                  </Text>
                   <View style={styles.destSquare} />
-                </View>
+                </TouchableOpacity>
               </View>
               <View style={styles.switchWrapper}>
-                <HeartIcon name="heart" size={30} color={colors.btnGray} />
-                <View style={{marginVertical: 23}} />
-                <HeartIcon name="heart" size={30} color={colors.btnGray} />
+                {favPress === 'returnstartLocation' ? (
+                  <HeartFilled
+                    name="heart"
+                    size={24}
+                    color={'red'}
+                    onPress={() => {
+                      favourteLocationRef.current.open();
+                    }}
+                  />
+                ) : (
+                  <HeartIcon
+                    name="heart"
+                    size={30}
+                    color={colors.btnGray}
+                    onPress={() => {
+                      setFavPress('returnstartLocation');
+                      favourteLocationRef.current.open();
+                    }}
+                  />
+                )}
+                <Image
+                  source={appIcons.mobiledata}
+                  style={styles.locationSwitch}
+                />
+
+                {favPress === 'returndestination' ? (
+                  <HeartFilled
+                    name="heart"
+                    size={24}
+                    color={'red'}
+                    onPress={() => {
+                      favourteLocationRef.current.open();
+                    }}
+                  />
+                ) : (
+                  <HeartIcon
+                    onPress={() => {
+                      setFavPress('returndestination');
+                      favourteLocationRef.current.open();
+                    }}
+                    name="heart"
+                    size={30}
+                    color={colors.btnGray}
+                  />
+                )}
               </View>
             </View>
             <View style={{marginLeft: 26}}>
@@ -323,27 +440,60 @@ const CreateDrive = () => {
               </Text>
             </View>
             <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
-              <TextInput
-                placeholder="XX:XX"
-                placeholderTextColor={colors.btnGray}
-                value={noLaterTime}
-                onChangeText={setNoLaterTime}
-                style={styles.noLater}
-              />
-              <Text style={styles.to}>{I18n.t('to')}</Text>
-              <TextInput
-                placeholder="XX:XX"
-                placeholderTextColor={colors.btnGray}
-                value={noLaterTime}
-                onChangeText={setNoLaterTime}
-                style={styles.noLater}
+              <TouchableOpacity
+                onPress={() => showFirstReturnTimePicker()}
+                style={[styles.noLater, {justifyContent: 'center'}]}>
+                <Text style={styles.dateTxt}>
+                  {returnFirstTime ? returnFirstTime : `XX:XX`}
+                </Text>
+              </TouchableOpacity>
+              <Text> {I18n.t('to')}</Text>
+              <TouchableOpacity
+                style={[styles.noLater, {justifyContent: 'center'}]}>
+                <Text style={styles.dateTxt}>
+                  {returnSecondTime ? returnSecondTime : `XX:XX`}
+                </Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={firstReturnTimePicker}
+                date={
+                  normalFirstReturnTime
+                    ? new Date(normalFirstReturnTime)
+                    : new Date()
+                }
+                mode="time"
+                is24Hour={true}
+                locale="en_GB"
+                onConfirm={handleConfirmFirstReturnTime}
+                onCancel={hideFirstReturnTimePicker}
               />
             </View>
+            <View style={{marginBottom: 20}}>
+              <TouchableOpacity
+                onPress={() => returnCalendarSheetRef.current.open()}
+                style={[
+                  styles.noLater,
+                  {justifyContent: 'center', width: '90%', alignSelf: 'center'},
+                ]}>
+                <Text style={styles.dateTxt}>
+                  {returnDateTimeStamp !== null
+                    ? moment(returnDateTimeStamp).format('DD MMM')
+                    : 'Date'}
+                </Text>
+              </TouchableOpacity>
+              <Image
+                source={appImages.calendar}
+                resizeMode="contain"
+                style={[styles.calendarIcon, {right: 30}]}
+              />
+            </View>
+            <ReturnCalendarSheet calendarSheetRef={returnCalendarSheetRef} />
           </>
         ) : null}
         <FavouriteLocations
           favourteLocationRef={favourteLocationRef}
           favPress={favPress}
+          setFavPress={setFavPress}
         />
         {isLoading ? <Loader /> : null}
       </ScrollView>
