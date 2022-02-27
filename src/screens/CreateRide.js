@@ -476,7 +476,10 @@ const CreateRide = () => {
                 style={[styles.calendarIcon, {right: 30}]}
               />
             </View>
-            <ReturnCalendarSheet calendarSheetRef={returnCalendarSheetRef} />
+            <ReturnCalendarSheet
+              mindate={dateTimeStamp}
+              calendarSheetRef={returnCalendarSheetRef}
+            />
           </>
         ) : null}
         <FavouriteLocations

@@ -82,6 +82,7 @@ const CalendarSheet = ({calendarSheetRef, setDate, setModalVisible}) => {
         onDayPress={handleDayPress}
         markedDates={markedDate}
         hideExtraDays={true}
+        minDate={new Date()}
         enableSwipeMonths={true}
         theme={{
           textSectionTitleColor: colors.black,

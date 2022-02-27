@@ -489,7 +489,10 @@ const CreateDrive = () => {
                 style={[styles.calendarIcon, {right: 30}]}
               />
             </View>
-            <ReturnCalendarSheet calendarSheetRef={returnCalendarSheetRef} />
+            <ReturnCalendarSheet
+              mindate={dateTimeStamp}
+              calendarSheetRef={returnCalendarSheetRef}
+            />
           </>
         ) : null}
         <FavouriteLocations
@@ -503,7 +506,19 @@ const CreateDrive = () => {
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
-          style={styles.nextBtnContainer}
+          style={[
+            styles.nextBtnContainer,
+            {
+              backgroundColor: handleColor(
+                origin,
+                destinationMap,
+                availableSeats,
+                dateTimeStamp,
+                time,
+                value,
+              ),
+            },
+          ]}
           disabled={
             origin === null ||
             destination === null ||
@@ -516,6 +531,27 @@ const CreateDrive = () => {
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
+};
+
+const handleColor = (
+  origin,
+  destinationMap,
+  availableSeats,
+  dateTimeStamp,
+  time,
+  cost,
+) => {
+  if (
+    !origin ||
+    !dateTimeStamp ||
+    !availableSeats ||
+    !destinationMap ||
+    !time ||
+    !cost
+  ) {
+    return colors.btnGray;
+  }
+  return colors.green;
 };
 
 const styles = StyleSheet.create({

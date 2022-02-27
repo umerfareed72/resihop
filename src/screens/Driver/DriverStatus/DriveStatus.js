@@ -10,8 +10,10 @@ import {
   setOrigin,
   setMapDestination,
   setIDToUpdateDrive,
+  CancelRide,
 } from '../../../redux/actions/map.actions';
 import {useDispatch} from 'react-redux';
+import {Alert} from 'react-native';
 
 const DriveStatus = ({route}) => {
   let navigation = useNavigation();
@@ -20,8 +22,8 @@ const DriveStatus = ({route}) => {
   const [show, setshow] = useState(false);
   const [selected, setSelected] = useState(false);
   const [modal, setModal] = useState('driveStatus');
-  const {status} = route.params;
-
+  const {status, id} = route.params;
+  const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     const {startLocation, destinationLocation, startDes, destDes, id} =
       route.params;
@@ -47,6 +49,22 @@ const DriveStatus = ({route}) => {
       dispatch(setMapDestination(null));
     };
   }, []);
+  const handleCancelRide = () => {
+    dispatch(
+      CancelRide(id, 'drives', setisLoading, response => {
+        setSelected(true);
+        setshow(false);
+        Alert.alert('Success', 'Drive Cancelled Successfully', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              navigation?.navigate('DriverHome');
+            },
+          },
+        ]);
+      }),
+    );
+  };
 
   return (
     <>
@@ -87,8 +105,7 @@ const DriveStatus = ({route}) => {
           bgColor={colors.green}
           textColor={colors.white}
           onPressYes={() => {
-            setSelected(true);
-            setshow(false);
+            handleCancelRide();
           }}
           onPressNo={() => {
             setSelected(false);

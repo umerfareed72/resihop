@@ -27,6 +27,8 @@ const initialState = {
   deltas: null,
   returnDateTimeStamp: null,
   settings: null,
+  drive_history: null,
+  selected_drive_history: [],
 };
 
 export default (state = initialState, action = {}) => {
@@ -146,6 +148,41 @@ export default (state = initialState, action = {}) => {
         success: false,
         failure: true,
         ride_history: payload,
+      };
+    case Types.Get_Drives_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        drive_history: payload,
+      };
+
+    case Types.Get_Drives_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        drive_history: payload,
+      };
+
+    case Types.Select_Drive_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        selected_drive_history: payload,
+      };
+
+    case Types.Select_Drive_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        selected_drive_history: payload,
       };
     case Types.Select_Ride_Success:
       return {

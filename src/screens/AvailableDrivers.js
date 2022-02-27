@@ -24,8 +24,6 @@ const AvailableDrivers = props => {
 
   const returnBookSheetRef = useRef(null);
 
-  const data = [1, 2, 3, 4, 5, 6, 7];
-
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );

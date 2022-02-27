@@ -15,6 +15,7 @@ import I18n from '../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {setBookRide} from '../redux/actions/map.actions';
+import {Alert} from 'react-native';
 
 const AvailableDrivers = ({
   modalName,
@@ -30,7 +31,9 @@ const AvailableDrivers = ({
   const createRideResponse = useSelector(
     state => state.map.createRideRequestResponse,
   );
-
+  const searchDrivesResponse = useSelector(
+    state => state.map.searchDriveResponse,
+  );
   const nearestDriver = useSelector(state => state.map.nearestDriver);
 
   useEffect(() => {
@@ -162,7 +165,13 @@ const AvailableDrivers = ({
             <TouchableOpacity
               style={styles.btnContainer}
               onPress={() => {
-                navigation.navigate('AvailableDrivers', {btnText: btnText});
+                console.log(searchDrivesResponse);
+                searchDrivesResponse.length > 1
+                  ? navigation.navigate('AvailableDrivers', {btnText: btnText})
+                  : Alert.alert(
+                      'Message!',
+                      'Currently No More Drivers Available',
+                    );
               }}>
               <Text style={styles.btnTxt}>{I18n.t('show_all_drivers')}</Text>
             </TouchableOpacity>

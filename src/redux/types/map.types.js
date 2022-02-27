@@ -25,6 +25,13 @@ module.exports = {
   //Get Rides
   Get_Rides_Success: 'Get_Rides_Success',
   Get_Rides_Failure: 'Get_Rides_Failure',
+  //Get Rides
+  Get_Drives_Success: 'Get_Drives_Success',
+  Get_Drives_Failure: 'Get_Drives_Failure',
+  //Select Drive
+  Select_Drive_Success: 'Select_Drive_Success',
+  Select_Drive_Failure: 'Select_Drive_Failure',
+
   //Select Rides
   Select_Ride_Success: 'Select_Ride_Success',
   Select_Ride_Failure: 'Select_Ride_Failure',
