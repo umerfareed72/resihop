@@ -9,5 +9,7 @@ export const GET_PRIVACY_POLICY = 'privacy-policy';
 export const MY_CONTRIBUTION = 'my-contributions';
 export const CARD_CONST = 'cards';
 export const RIDES_CONST = 'rides';
+export const DRIVE_CONST = 'drives';
+
 export const AGORA_CONST = 'agora';
 export const PAYMENT_CONST = 'payments';

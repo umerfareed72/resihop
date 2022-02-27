@@ -6,7 +6,7 @@ import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
 
-export const DRiderInfo = ({}) => {
+export const DRiderInfo = ({passenger_info, cost_per_seat}) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -17,7 +17,9 @@ export const DRiderInfo = ({}) => {
               alignItems: 'center',
             }}>
             <Image source={appImages.user} style={styles.icon42} />
-            <Text style={styles.textStyle}>John Doe</Text>
+            <Text style={styles.textStyle}>
+              {passenger_info?.user?.firstName} {passenger_info?.user?.lastName}
+            </Text>
           </View>
           <View
             style={{
@@ -26,9 +28,8 @@ export const DRiderInfo = ({}) => {
               justifyContent: 'space-between',
               width: '30%',
             }}>
-            <Text style={styles.h2}>NOK 20</Text>
-
-            <Image source={appIcons.redHeart} style={styles.imageStyle} />
+            <Text style={styles.h2}>NOK {cost_per_seat}</Text>
+            <Image source={appIcons.heart} style={styles.imageStyle} />
           </View>
         </View>
         <View style={{paddingVertical: 20}}>
@@ -40,13 +41,13 @@ export const DRiderInfo = ({}) => {
             }}>
             <View style={styles.circleStyle} />
             <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-              123 abc apartment abc street abc...
+              {passenger_info?.startDes} .....
             </Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.rectangleStyle} />
             <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-              123 abc apartment abc street abc...
+              {passenger_info?.destDes} .....
             </Text>
           </View>
         </View>
@@ -73,7 +74,7 @@ export const DRiderInfo = ({}) => {
           <View>
             <FlatList
               horizontal={true}
-              data={[1, 2]}
+              data={new Array(passenger_info?.bookedSeats)}
               renderItem={() => {
                 return (
                   <Image

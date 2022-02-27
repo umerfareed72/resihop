@@ -34,10 +34,6 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
     }
   }, [myRidesData]);
 
-  if (item.status === 'NO_MATCH' || item.status === 'CANCELLED') {
-    return <></>;
-  }
-
   return (
     <View>
       <TouchableOpacity

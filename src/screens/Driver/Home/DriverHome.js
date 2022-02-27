@@ -32,10 +32,12 @@ import {
   setMapDestination,
   SearchDrives,
   SearchRides,
+  MyRidesSortOrder,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProfileInfo, updateInfo} from '../../../redux/actions/auth.action';
 import {useIsFocused} from '@react-navigation/core';
+import mapTypes from '../../../redux/types/map.types';
 
 //Data
 var TimeList = {
@@ -110,7 +112,14 @@ const DriverHome = ({navigation}) => {
   const isFocus = useIsFocused();
   useEffect(() => {
     if (isFocus) {
-      dispatch(MyDrives());
+      dispatch(
+        MyRidesSortOrder('drives', 'tripDate:desc', res => {
+          dispatch({
+            type: mapTypes.myDrives,
+            payload: res,
+          });
+        }),
+      );
       getUserdata();
     }
   }, [isFocus]);
@@ -199,6 +208,16 @@ const DriverHome = ({navigation}) => {
           console.log('Get Profile Info Error', res);
         },
       ),
+    );
+  };
+  const getDrivesByOrder = item => {
+    dispatch(
+      MyRidesSortOrder('drives', item?.value, res => {
+        dispatch({
+          type: mapTypes.myDrives,
+          payload: res,
+        });
+      }),
     );
   };
   return (
@@ -334,7 +353,9 @@ const DriverHome = ({navigation}) => {
           </ScrollView>
         ) : (
           <FlatList
-            data={myDrives}
+            data={myDrives.filter(item => {
+              return item.status != 'NO_MATCH' && item.status != 'CANCELLED';
+            })}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
@@ -375,7 +396,7 @@ const DriverHome = ({navigation}) => {
           sortModalRef.current.close();
         }}
       />
-      <SortModal show={sortModalRef} />
+      <SortModal show={sortModalRef} onPress={getDrivesByOrder} />
     </>
   );
 };

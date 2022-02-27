@@ -16,6 +16,7 @@ import {appIcons, colors, family, HP, size} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {Divider, Icon} from 'react-native-elements';
+import {useSelector} from 'react-redux';
 const index = ({navigation}) => {
   //useState here
   const [data, setData] = useState([
@@ -69,7 +70,8 @@ const index = ({navigation}) => {
         'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
     },
   ]);
-
+  const {selected_drive_history} = useSelector(state => state.map);
+  console.log(selected_drive_history);
   //methods here
   const updateData = ({id}) => {
     setData(
@@ -92,7 +94,6 @@ const index = ({navigation}) => {
 
   //component here
   const ItemView = ({data}) => {
-    console.log('data value in item view is   ', data);
     return (
       <>
         <View style={styles.itemView}>
@@ -157,11 +158,17 @@ const index = ({navigation}) => {
       />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
-          <DRideHistoryCard onPressCard={() => {}} />
+          <DRideHistoryCard
+            drive_item={selected_drive_history}
+            onPressCard={() => {}}
+          />
         </View>
         <View style={styles.separator} />
         <View style={styles.contentContainer}>
-          <DRiderInfo />
+          <DRiderInfo
+            cost_per_seat={selected_drive_history?.costPerSeat}
+            passenger_info={selected_drive_history}
+          />
         </View>
         <View style={styles.separator} />
         <View

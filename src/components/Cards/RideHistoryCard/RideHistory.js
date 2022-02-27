@@ -5,6 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import moment from 'moment';
+import {fonts} from '../../../theme';
 
 export const RideHistoryCard = ({
   cancelled,
@@ -17,6 +18,7 @@ export const RideHistoryCard = ({
   destination,
   no_of_seats,
   vehicleInfo,
+  ride_status,
 }) => {
   return (
     <View style={styles.container}>
@@ -27,7 +29,17 @@ export const RideHistoryCard = ({
               {moment(dateTime).format('ddd, DD MMMM,').toString()} {''}
               {moment(dateTime).format('HH:MM').toString()}
             </Text>
-            {cancelled && <Text style={styles.specialText}>cancelled</Text>}
+            <View
+              style={[
+                styles.statusWrapper,
+                {borderColor: getStatusColor(ride_status)},
+              ]}>
+              <Text
+                style={[styles.status, {color: getStatusColor(ride_status)}]}>
+                {ride_status}
+              </Text>
+            </View>
+
             <Text style={styles.h2}>NOK {cost}</Text>
           </View>
           <View style={{paddingVertical: 10}}>
@@ -148,6 +160,21 @@ const styles = StyleSheet.create({
     backgroundColor: colors.green,
     marginRight: 10,
   },
+  status: {
+    fontSize: 14,
+    lineHeight: 16,
+    color: colors.green,
+    textTransform: 'uppercase',
+    fontFamily: fonts.bebasBold,
+  },
+  statusWrapper: {
+    borderTopWidth: 1.5,
+    borderBottomWidth: 1.5,
+    height: 23,
+    justifyContent: 'center',
+    borderColor: colors.green,
+    marginLeft: 40,
+  },
   rectangleStyle: {
     height: 12,
     width: 12,
@@ -216,3 +243,11 @@ const styles = StyleSheet.create({
     borderTopColor: colors?.dark_red,
   },
 });
+const getStatusColor = status => {
+  if (status === 'CANCELLED' || status === 'NO_MATCH') {
+    return colors.red;
+  }
+  if (status === 'COMPLETED') {
+    return colors.green;
+  }
+};

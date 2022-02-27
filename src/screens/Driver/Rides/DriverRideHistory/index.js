@@ -12,6 +12,7 @@ import {
   CustomHeader,
   DRideFilterModal,
   DRideHistoryCard,
+  Loader,
   PaymentFilterModal,
   RideFilterModal,
   RideHistoryCard,
@@ -21,6 +22,16 @@ import {
 import {appIcons, appImages, colors} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
+import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  get_drives_history,
+  MyRidesHistorySortOrder,
+  select_drive_history,
+} from '../../../../redux/actions/map.actions';
+import BlankField from '../../../../components/BlankField';
+import mapTypes from '../../../../redux/types/map.types';
+
 //Data
 var TimeList = {
   id: 1,
@@ -63,25 +74,51 @@ const index = ({navigation}) => {
   //States
   const [time, settime] = useState('');
   const [ridetype, setRideType] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   const [seats, setSeats] = useState('');
-
+  const drives = useSelector(state => state.map);
+  const dispatch = useDispatch(null);
+  const isFocus = useIsFocused();
   const selectTime = val => {
     settime(val);
   };
-
   const selectRideType = val => {
     setRideType(val);
   };
   const selectSeats = val => {
     setSeats(val);
   };
-
   const resetFilter = () => {
     settime('');
     setRideType('');
     setSeats('');
   };
-
+  //Get Drives
+  useEffect(() => {
+    if (isFocus) {
+      setisLoading(true);
+      try {
+        dispatch(
+          get_drives_history(res => {
+            setisLoading(false);
+          }),
+        );
+      } catch (error) {
+        console.log(error);
+        setisLoading(false);
+      }
+    }
+  }, [isFocus]);
+  const getRidesByOrder = item => {
+    dispatch(
+      MyRidesHistorySortOrder('drives', item?.value, res => {
+        dispatch({
+          type: mapTypes.Get_Drives_Success,
+          payload: res,
+        });
+      }),
+    );
+  };
   return (
     <>
       <CustomHeader
@@ -100,25 +137,35 @@ const index = ({navigation}) => {
         btnImage={appIcons.mobiledata}
       />
       <View style={styles.container}>
-        <View style={styles.contentContainer}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={[1, 2, 3, 4, 5, 6, 7]}
-            renderItem={() => {
-              return (
-                <DRideHistoryCard
-                  profilePic={true}
-                  onPressCard={() => {
-                    navigation?.navigate('DriverRideDetail');
-                  }}
-                />
-              );
-            }}
-            ItemSeparatorComponent={() => {
-              return <View style={styles.separator} />;
-            }}
-          />
-        </View>
+        {drives?.drive_history != '' ? (
+          <View style={styles.contentContainer}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={drives?.drive_history}
+              renderItem={({item}) => {
+                return (
+                  <DRideHistoryCard
+                    drive_item={item}
+                    profilePic={true}
+                    onPressCard={() => {
+                      dispatch(
+                        select_drive_history(item, () => {
+                          navigation?.navigate('DriverRideDetail');
+                        }),
+                      );
+                    }}
+                  />
+                );
+              }}
+              ItemSeparatorComponent={() => {
+                return <View style={styles.separator} />;
+              }}
+            />
+          </View>
+        ) : (
+          false
+        )}
+        <BlankField title={'No Drive Completed Yet.'} />
       </View>
       <DRideFilterModal
         time={TimeList}
@@ -137,7 +184,8 @@ const index = ({navigation}) => {
           sortModalRef.current.close();
         }}
       />
-      <SortModal show={sortModalRef} />
+      <SortModal show={sortModalRef} onPress={getRidesByOrder} />
+      {isLoading ? <Loader /> : false}
     </>
   );
 };

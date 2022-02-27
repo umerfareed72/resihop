@@ -9,14 +9,19 @@ import I18n from '../utilities/translations';
 import {setReturnDateTimeStamp} from '../redux/actions/map.actions';
 import {useDispatch} from 'react-redux';
 
-const ReturnCalendarSheet = ({calendarSheetRef, setDate, setModalVisible}) => {
+const ReturnCalendarSheet = ({
+  calendarSheetRef,
+  setDate,
+  setModalVisible,
+  mindate,
+}) => {
   let dispatch = useDispatch();
 
   const [markedDate, setMarkedDate] = useState();
 
   useEffect(() => {
     let markedObj = {};
-    const selectedDate = moment(new Date().toDateString()).format('YYYY-MM-DD');
+    const selectedDate = moment(mindate).format('YYYY-MM-DD');
     markedObj[selectedDate] = {
       selected: true,
       selectedColor: colors.green,
@@ -85,6 +90,7 @@ const ReturnCalendarSheet = ({calendarSheetRef, setDate, setModalVisible}) => {
         markedDates={markedDate}
         hideExtraDays={true}
         enableSwipeMonths={true}
+        minDate={mindate}
         theme={{
           textSectionTitleColor: colors.black,
           dayTextColor: colors.black,

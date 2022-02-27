@@ -427,7 +427,10 @@ const UpdateRide = ({route}) => {
                 style={[styles.calendarIcon, {right: 30}]}
               />
             </View>
-            <ReturnCalendarSheet calendarSheetRef={returnCalendarSheetRef} />
+            <ReturnCalendarSheet
+              mindate={new Date()}
+              calendarSheetRef={returnCalendarSheetRef}
+            />
           </>
         ) : null}
         <FavouriteLocations

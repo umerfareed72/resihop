@@ -14,6 +14,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   get_rides_history,
+  MyRidesHistorySortOrder,
   MyRidesSortOrder,
   select_ride_history,
 } from '../../../../redux/actions/map.actions';
@@ -133,7 +134,7 @@ const index = ({navigation}) => {
 
   const getRidesByOrder = item => {
     dispatch(
-      MyRidesSortOrder('rides', item?.value, res => {
+      MyRidesHistorySortOrder('rides', item?.value, res => {
         dispatch({
           type: mapTypes.Get_Rides_Success,
           payload: res,
@@ -158,8 +159,8 @@ const index = ({navigation}) => {
         }}
         btnImage={appIcons.mobiledata}
       />
-      {rides?.ride_history ? (
-        <View style={styles.container}>
+      <View style={styles.container}>
+        {rides?.ride_history != '' ? (
           <View style={styles.contentContainer}>
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -177,6 +178,7 @@ const index = ({navigation}) => {
                         }),
                       );
                     }}
+                    ride_status={item?.status}
                     no_of_seats={item?.requiredSeats}
                     startLocation={item?.startDes}
                     destination={item?.destDes}
@@ -189,12 +191,11 @@ const index = ({navigation}) => {
               }}
             />
           </View>
-        </View>
-      ) : (
-        <View style={styles.container}>
-          <BlankField title={'No Ride History Available'} />
-        </View>
-      )}
+        ) : (
+          <BlankField title={'No Ride Completed Yet.'} />
+        )}
+      </View>
+
       <RideFilterModal
         time={TimeList}
         seats={seatsList}

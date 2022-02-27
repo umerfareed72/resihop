@@ -46,7 +46,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
 
   const handleCancelRide = () => {
     dispatch(
-      CancelRide(ride._id, setIsLoading, response => {
+      CancelRide(ride._id, 'rides', setIsLoading, response => {
         Alert.alert('Success', 'Ride Cancelled Successfully', [
           {
             text: 'Ok',

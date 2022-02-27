@@ -351,7 +351,9 @@ const PassengerHome = ({navigation}) => {
         ) : (
           <>
             <FlatList
-              data={myRidesData}
+              data={myRidesData.filter(item => {
+                return item.status != 'NO_MATCH' && item.status != 'CANCELLED';
+              })}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => (

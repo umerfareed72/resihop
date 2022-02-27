@@ -1,7 +1,9 @@
+import moment from 'moment';
 import React from 'react';
 import {Image, Platform, StyleSheet, Text, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
+import {fonts} from '../../../theme';
 import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 
@@ -10,15 +12,32 @@ export const DRideHistoryCard = ({
   driver,
   profilePic,
   onPressCard,
+  drive_item,
 }) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={onPressCard}>
           <View style={styles.cardContainer}>
-            <Text style={styles.h1}>Mon, 12 June, 08:00</Text>
+            <Text style={styles.h1}>
+              {moment(drive_item?.date).format('ddd, DD MMMM,').toString()} {''}
+              {moment(drive_item?.date).format('HH:MM').toString()}
+            </Text>
+            <View
+              style={[
+                styles.statusWrapper,
+                {borderColor: getStatusColor(drive_item.status)},
+              ]}>
+              <Text
+                style={[
+                  styles.status,
+                  {color: getStatusColor(drive_item.status)},
+                ]}>
+                {drive_item.status}
+              </Text>
+            </View>
             <Text style={[styles.h2, {marginLeft: driver ? 30 : 0}]}>
-              NOK 20
+              NOK {drive_item?.costPerSeat}
             </Text>
             {driver ? (
               <Image source={appIcons.redHeart} style={styles.imageStyle} />
@@ -27,32 +46,27 @@ export const DRideHistoryCard = ({
             )}
           </View>
           <View style={{paddingVertical: 10}}>
-            <View style={styles.row2}>
-              <View style={styles.alignRow}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginBottom: 10,
-                    alignItems: 'center',
-                  }}>
-                  <View style={styles.circleStyle} />
-                  <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-                    123 abc apartment abc street abc...
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <View style={styles.rectangleStyle} />
-                  <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-                    123 abc apartment abc street abc...
-                  </Text>
-                </View>
-              </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginBottom: 10,
+              }}>
+              <View style={styles.circleStyle} />
+              <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
+                {drive_item?.startDes}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={styles.rectangleStyle} />
+              <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
+                {drive_item?.destDes}
+              </Text>
             </View>
           </View>
           <View style={{alignItems: 'center', flexDirection: 'row'}}>
             <FlatList
               horizontal={true}
-              data={[1, 2]}
+              data={new Array(drive_item?.bookedSeats)}
               renderItem={() => {
                 return (
                   <Image
@@ -157,4 +171,27 @@ const styles = StyleSheet.create({
     width: 18,
     resizeMode: 'contain',
   },
+  status: {
+    fontSize: 14,
+    lineHeight: 16,
+    color: colors.green,
+    textTransform: 'uppercase',
+    fontFamily: fonts.bebasBold,
+  },
+  statusWrapper: {
+    borderTopWidth: 1.5,
+    borderBottomWidth: 1.5,
+    height: 23,
+    justifyContent: 'center',
+    borderColor: colors.green,
+    marginLeft: 40,
+  },
 });
+const getStatusColor = status => {
+  if (status === 'CANCELLED' || status === 'NO_MATCH') {
+    return colors.red;
+  }
+  if (status === 'COMPLETED') {
+    return colors.green;
+  }
+};

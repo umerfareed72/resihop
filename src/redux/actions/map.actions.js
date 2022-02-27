@@ -3,7 +3,7 @@ import * as Types from '../types/map.types';
 import {GetToken, baseURL} from '../../utilities';
 import {get, put} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
-import {RIDES_CONST} from '../../utilities/routes';
+import {RIDES_CONST, DRIVE_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
 
 export const setOrigin = data => async dispatch => {
@@ -327,26 +327,27 @@ export const setUpdateRide =
     }
   };
 
-export const CancelRide = (id, setIsLoading, callback) => async dispatch => {
-  let Token = await GetToken();
-  setIsLoading(true);
-  try {
-    const response = await fetch(`${baseURL}rides/cancel/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Token}`,
-      },
-    });
+export const CancelRide =
+  (id, route, setIsLoading, callback) => async dispatch => {
+    let Token = await GetToken();
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${baseURL}${route}/cancel/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Token}`,
+        },
+      });
 
-    const responseJson = await response.json();
-    setIsLoading(false);
-    callback(responseJson);
-  } catch (error) {
-    setIsLoading(false);
-    console.log('Update Ride', error);
-  }
-};
+      const responseJson = await response.json();
+      setIsLoading(false);
+      callback(responseJson);
+    } catch (error) {
+      setIsLoading(false);
+      console.log('Update Ride', error);
+    }
+  };
 
 //My Ride Sort Order
 export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
@@ -366,13 +367,37 @@ export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
     console.log(error);
   }
 };
+export const MyRidesHistorySortOrder =
+  (route, data, callBack) => async dispatch => {
+    let Token = await GetToken();
+    try {
+      const response = await fetch(
+        `${baseURL}${route}?_sort=${data}?status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Token}`,
+          },
+        },
+      );
+
+      const responseJson = await response.json();
+      callBack(responseJson);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 ///////////////////////////////////////// Get Rides History ////////////////////////////
 
 export const get_rides_history = callBack => async dispatch => {
   try {
     dispatch({type: Types.Rides_Loader, payload: true});
-    const response = await get(`${RIDES_CONST}`, await header());
+    const response = await get(
+      `${RIDES_CONST}?status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=CANCELLED&status_in=NO_MATCH`,
+      await header(),
+    );
     // if (response?.data?.user?.details) {
     dispatch({
       type: Types.Get_Rides_Success,
@@ -388,6 +413,50 @@ export const get_rides_history = callBack => async dispatch => {
     );
     dispatch({
       type: Types.Get_Rides_Failure,
+      payload: null,
+    });
+  }
+};
+///////////////////////////////////////// Get Drives History ////////////////////////////
+
+export const get_drives_history = callBack => async dispatch => {
+  try {
+    dispatch({type: Types.Rides_Loader, payload: true});
+    const response = await get(
+      `${DRIVE_CONST}?status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
+      await header(),
+    );
+    // if (response?.data?.user?.details) {
+    dispatch({
+      type: Types.Get_Drives_Success,
+      payload: response.data,
+    });
+    callBack(response.data);
+  } catch (error) {
+    console.log('Unable to load drives', error);
+    let status = error?.response?.data?.statusCode;
+    responseValidator(
+      status,
+      error?.response?.data?.message[0]?.messages[0]?.message,
+    );
+    dispatch({
+      type: Types.Get_Drives_Failure,
+      payload: null,
+    });
+  }
+};
+
+//Select Drive History
+export const select_drive_history = (data, callBack) => async dispatch => {
+  try {
+    dispatch({
+      type: Types.Select_Drive_Success,
+      payload: data,
+    });
+    callBack();
+  } catch (error) {
+    dispatch({
+      type: Types.Select_Ride_Failure,
       payload: null,
     });
   }
