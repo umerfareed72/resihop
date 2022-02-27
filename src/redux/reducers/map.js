@@ -1,3 +1,4 @@
+import moment from 'moment';
 import * as Types from '../types/map.types';
 const initialState = {
   origin: null,
@@ -17,7 +18,8 @@ const initialState = {
   nearestDriver: null,
   returnOrigin: null,
   returnDestination: null,
-  returnFirstTime: null,
+  returnFirstTime: 'XX:XX',
+  returnSecondTime: 'XX:XX',
   mapSegment: null,
   ride_history: [],
   selected_ride_history: null,
@@ -116,9 +118,12 @@ export default (state = initialState, action = {}) => {
         returnDestination: payload,
       };
     case Types.returnFirstTime:
+      const firstTime = moment(payload).format('HH:mm');
+      const secondTime = moment(payload).add(30, 'minutes').format('HH:mm');
       return {
         ...state,
-        returnFirstTime: payload,
+        returnFirstTime: firstTime,
+        returnSecondTime: secondTime,
       };
     case Types.mapSegment:
       return {

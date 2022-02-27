@@ -26,7 +26,7 @@ const DriverDrawerComponent = ({navigation}) => {
   const list = [
     {
       icon: drawerIcons.rides_history,
-      label: 'Rides History',
+      label: 'Drive History',
       onPress: () => {
         navigation?.navigate('DriverRideHistory');
         navigation.closeDrawer();

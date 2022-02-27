@@ -21,6 +21,7 @@ import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  CreateRideRequest,
   setAvailableSeats,
   setMapSegment,
   setReturnFirstTime,
@@ -31,6 +32,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import HeartFilled from 'react-native-vector-icons/Foundation';
 import ReturnCalendarSheet from '../../../components/ReurnCalenderSheet';
+import {Alert} from 'react-native';
 
 const UpdateRide = ({route}) => {
   let navigation = useNavigation();
@@ -49,7 +51,7 @@ const UpdateRide = ({route}) => {
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
   const time = useSelector(state => state.map.time);
-  const returnFirstTime = useSelector(state => state.map.returnFirstTime);
+  const returnTime = useSelector(state => state.map);
   const availableSeats = useSelector(state => state.map.availableSeats);
   const {ride} = route.params;
   const returnOrigin = useSelector(state => state.map.returnOrigin);
@@ -62,7 +64,6 @@ const UpdateRide = ({route}) => {
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
   const [normalTime, setNormalTime] = useState('');
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
-  const [returnSecondTime, setReturnSecondTime] = useState('');
 
   useEffect(() => {
     dispatch(setAvailableSeats(ride.requiredSeats));
@@ -98,7 +99,14 @@ const UpdateRide = ({route}) => {
     dispatch(
       setUpdateRide(body, ride._id, setIsLoading, response => {
         console.log(response);
-        alert('Ride Updated Successfully');
+        Alert.alert('Success', 'Ride Updated Successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation?.navigate('PassengerHome');
+            },
+          },
+        ]);
       }),
     );
   };
@@ -113,9 +121,30 @@ const UpdateRide = ({route}) => {
   };
   const handleConfirmFirstReturnTime = date => {
     setNormalFirstReturnTime(moment(date).format());
-    dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
-    setReturnSecondTime(moment(date).add(30, 'minutes').format('HH:mm'));
+    dispatch(setReturnFirstTime(date));
     hideFirstReturnTimePicker();
+  };
+  const handleCreateReturnRide = () => {
+    const stamp = moment(
+      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
+    ).valueOf();
+    const body = {
+      startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
+      destinationLocation: [
+        returnDestinationMap.location.lat,
+        returnDestinationMap.location.lng,
+      ],
+      date: stamp,
+      requiredSeats: availableSeats,
+      startDes: returnOrigin.description,
+      destDes: returnDestinationMap.description,
+    };
+
+    dispatch(
+      CreateRideRequest(body, setIsLoading, response => {
+        console.log('Return Create Ride', response);
+      }),
+    );
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -351,14 +380,18 @@ const UpdateRide = ({route}) => {
                 onPress={() => showFirstReturnTimePicker()}
                 style={[styles.noLater, {justifyContent: 'center'}]}>
                 <Text style={styles.dateTxt}>
-                  {returnFirstTime ? returnFirstTime : `XX:XX`}
+                  {returnTime?.returnFirstTime != 'Invalid date'
+                    ? returnTime?.returnFirstTime
+                    : `XX:XX`}
                 </Text>
               </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
               <TouchableOpacity
                 style={[styles.noLater, {justifyContent: 'center'}]}>
                 <Text style={styles.dateTxt}>
-                  {returnSecondTime ? returnSecondTime : `XX:XX`}
+                  {returnTime?.returnSecondTime != 'Invalid date'
+                    ? returnTime?.returnSecondTime
+                    : `XX:XX`}
                 </Text>
               </TouchableOpacity>
               <DateTimePickerModal
@@ -409,7 +442,12 @@ const UpdateRide = ({route}) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <TouchableOpacity
           style={styles.nextBtnContainer}
-          onPress={() => handleUpDateRide()}>
+          onPress={() => {
+            handleUpDateRide();
+            if (toggleEnabled) {
+              handleCreateReturnRide();
+            }
+          }}>
           <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
