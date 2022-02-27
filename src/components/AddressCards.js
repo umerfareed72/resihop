@@ -74,7 +74,7 @@ const AddressCards = ({
     state => state.map.returnDestination,
   );
   const user = useSelector(state => state.auth.userdata);
-  const returnFirstTime = useSelector(state => state.map.returnFirstTime);
+  const returnTime = useSelector(state => state.map);
 
   const showTimePicker = () => {
     setDatePickerVisibility(true);
@@ -104,9 +104,7 @@ const AddressCards = ({
 
   const handleConfirmFirstReturnTime = date => {
     setNormalFirstReturnTime(moment(date).format());
-    dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
-    setReturnSecondTime(moment(date).add(30, 'minutes').format('HH:mm'));
-
+    dispatch(setReturnFirstTime(date));
     hideFirstReturnTimePicker();
   };
 
@@ -478,14 +476,18 @@ const AddressCards = ({
                   onPress={() => showFirstReturnTimePicker()}
                   style={[styles.noLater, {justifyContent: 'center'}]}>
                   <Text style={styles.dateTxt}>
-                    {returnFirstTime ? returnFirstTime : `XX:XX`}
+                    {returnTime?.returnFirstTime != 'Invalid date'
+                      ? returnTime?.returnFirstTime
+                      : `XX:XX`}
                   </Text>
                 </TouchableOpacity>
                 <Text>{I18n.t('to')}</Text>
                 <TouchableOpacity
                   style={[styles.noLater, {justifyContent: 'center'}]}>
                   <Text style={styles.dateTxt}>
-                    {returnSecondTime ? returnSecondTime : `XX:XX`}
+                    {returnTime?.returnSecondTime != 'Invalid date'
+                      ? returnTime?.returnSecondTime
+                      : `XX:XX`}
                   </Text>
                 </TouchableOpacity>
                 <DateTimePickerModal
@@ -617,7 +619,7 @@ const AddressCards = ({
               modalName,
               currentReturnStart,
               currentReturnDestination,
-              returnFirstTime,
+              returnTime,
             )}
             onPress={() => navigation.goBack()}>
             <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
@@ -849,7 +851,7 @@ const handleBackgroundColor = (
   modalName,
   currentReturnStart,
   currentReturnDestination,
-  returnFirstTime,
+  returnTime,
 ) => {
   if (modalName === 'startLocation' && (!currentAddress || !availableSeats)) {
     return colors.btnGray;
@@ -864,7 +866,7 @@ const handleBackgroundColor = (
 
   if (
     modalName === 'returnTrip' &&
-    (!currentReturnStart || !currentReturnDestination || !returnFirstTime)
+    (!currentReturnStart || !currentReturnDestination || !returnTime)
   ) {
     return colors.btnGray;
   }
@@ -880,7 +882,7 @@ const handleDisable = (
   modalName,
   currentReturnStart,
   currentReturnDestination,
-  returnFirstTime,
+  returnTime,
 ) => {
   if (modalName === 'startLocation' && currentAddress && availableSeats) {
     return false;
@@ -894,7 +896,7 @@ const handleDisable = (
     modalName === 'returnTrip' &&
     currentReturnStart &&
     currentReturnDestination &&
-    returnFirstTime
+    returnTime
   ) {
     return false;
   }

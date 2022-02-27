@@ -54,7 +54,7 @@ const CreateRide = () => {
     state => state.map.returnDateTimeStamp,
   );
   const time = useSelector(state => state.map.time);
-  const returnFirstTime = useSelector(state => state.map.returnFirstTime);
+  const returnTime = useSelector(state => state.map);
   const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
@@ -67,7 +67,6 @@ const CreateRide = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [normalTime, setNormalTime] = useState('');
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
-  const [returnSecondTime, setReturnSecondTime] = useState('');
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
 
   useEffect(() => {
@@ -110,8 +109,7 @@ const CreateRide = () => {
 
   const handleConfirmFirstReturnTime = date => {
     setNormalFirstReturnTime(moment(date).format());
-    dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
-    setReturnSecondTime(moment(date).add(30, 'minutes').format('HH:mm'));
+    dispatch(setReturnFirstTime(date));
     hideFirstReturnTimePicker();
   };
 
@@ -141,7 +139,9 @@ const CreateRide = () => {
   };
 
   const handleCreateReturnRide = () => {
-    const stamp = moment(`${returnDateTimeStamp}T${returnFirstTime}`).valueOf();
+    const stamp = moment(
+      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
+    ).valueOf();
     const body = {
       startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
       destinationLocation: [
@@ -160,7 +160,6 @@ const CreateRide = () => {
       }),
     );
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
@@ -430,14 +429,18 @@ const CreateRide = () => {
                 onPress={() => showFirstReturnTimePicker()}
                 style={[styles.noLater, {justifyContent: 'center'}]}>
                 <Text style={styles.dateTxt}>
-                  {returnFirstTime ? returnFirstTime : `XX:XX`}
+                  {returnTime?.returnFirstTime != 'Invalid date'
+                    ? returnTime?.returnFirstTime
+                    : `XX:XX`}
                 </Text>
               </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
               <TouchableOpacity
                 style={[styles.noLater, {justifyContent: 'center'}]}>
                 <Text style={styles.dateTxt}>
-                  {returnSecondTime ? returnSecondTime : `XX:XX`}
+                  {returnTime?.returnSecondTime != 'Invalid date'
+                    ? returnTime?.returnSecondTime
+                    : `XX:XX`}
                 </Text>
               </TouchableOpacity>
               <DateTimePickerModal

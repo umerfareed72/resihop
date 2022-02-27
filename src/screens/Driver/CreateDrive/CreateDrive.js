@@ -66,12 +66,11 @@ const CreateDrive = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [normalTime, setnormalTime] = useState();
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
-  const [returnSecondTime, setReturnSecondTime] = useState('');
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
   const returnDateTimeStamp = useSelector(
     state => state.map.returnDateTimeStamp,
   );
-  const returnFirstTime = useSelector(state => state.map.returnFirstTime);
+  const returnTime = useSelector(state => state.map);
   const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
@@ -150,8 +149,7 @@ const CreateDrive = () => {
 
   const handleConfirmFirstReturnTime = date => {
     setNormalFirstReturnTime(moment(date).format());
-    dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
-    setReturnSecondTime(moment(date).add(30, 'minutes').format('HH:mm'));
+    dispatch(setReturnFirstTime(date));
     hideFirstReturnTimePicker();
   };
 
@@ -444,14 +442,18 @@ const CreateDrive = () => {
                 onPress={() => showFirstReturnTimePicker()}
                 style={[styles.noLater, {justifyContent: 'center'}]}>
                 <Text style={styles.dateTxt}>
-                  {returnFirstTime ? returnFirstTime : `XX:XX`}
+                  {returnTime?.returnFirstTime != 'Invalid date'
+                    ? returnTime?.returnFirstTime
+                    : `XX:XX`}
                 </Text>
               </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
               <TouchableOpacity
                 style={[styles.noLater, {justifyContent: 'center'}]}>
                 <Text style={styles.dateTxt}>
-                  {returnSecondTime ? returnSecondTime : `XX:XX`}
+                  {returnTime?.returnSecondTime != 'Invalid date'
+                    ? returnTime?.returnSecondTime
+                    : `XX:XX`}
                 </Text>
               </TouchableOpacity>
               <DateTimePickerModal
