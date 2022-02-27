@@ -16,6 +16,7 @@ export const RideHistoryCard = ({
   startLocation,
   destination,
   no_of_seats,
+  vehicleInfo,
 }) => {
   return (
     <View style={styles.container}>
@@ -105,13 +106,16 @@ export const RideHistoryCard = ({
               <Image source={appIcons.car_left} style={styles.icon50} />
               <Text
                 style={[styles.h2Text, {fontWeight: '500', color: colors.g5}]}>
-                Ford, Focus,{' '}
+                {vehicleInfo?.vehicleCompanyName || 'Ford, Focus' + ' '}
                 <Text
                   style={[
                     styles.h2Text,
                     {fontWeight: 'bold', color: colors.light_black},
                   ]}>
-                  White, XT32TTU8
+                  {' '}
+                  {vehicleInfo?.color || 'White'}
+                  {', '}
+                  {vehicleInfo?.licencePlateNumber || 'XT32TTU8'}
                 </Text>
               </Text>
               {profilePic ? (

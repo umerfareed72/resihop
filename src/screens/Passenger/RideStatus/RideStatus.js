@@ -13,6 +13,8 @@ import {
   SearchDrives,
   CreateRideRequest,
   setDateTimeStamp,
+  setReturnOrigin,
+  setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import {CopyRideModal, Loader} from '../../../components';
@@ -49,7 +51,22 @@ const RideStatus = ({route}) => {
         description: item?.destDes,
       }),
     );
+    dispatch(
+      setReturnOrigin({
+        location: {
+          lat: item?.destinationLat,
+          lng: item?.destinationLng,
+        },
+        description: item?.destDes,
+      }),
+    );
 
+    dispatch(
+      setReturnMapDestination({
+        location: {lat: item?.startLat, lng: item?.startLng},
+        description: item?.startDes,
+      }),
+    );
     if (!item.status === 'WAITING_FOR_MATCH') {
       dispatch(
         SearchDrives({
@@ -64,6 +81,8 @@ const RideStatus = ({route}) => {
     return () => {
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
+      dispatch(setReturnOrigin(null));
+      dispatch(setReturnMapDestination(null));
       dispatch(SearchDrives(null));
       dispatch(setDateTimeStamp(null));
     };

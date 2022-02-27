@@ -25,24 +25,6 @@ const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
   const [locations, setLocations] = useState();
   const [loading, setLoading] = useState(false);
 
-  const data = [
-    {
-      id: 1,
-      tag: 'Home',
-      address: '123 abc apartment abc street abc abc city, abc country',
-    },
-    {
-      id: 2,
-      tag: 'Office',
-      address: '123 abc apartment abc street abc abc city, abc country',
-    },
-    {
-      id: 3,
-      tag: 'Gym',
-      address: '123 abc apartment abc street abc abc city, abc country',
-    },
-  ];
-
   useEffect(() => {
     if (isFocus) {
       dispatch(
@@ -87,6 +69,29 @@ const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
         }),
       );
 
+      dispatch(
+        setReturnOrigin({
+          location: {
+            lat: item?.location?.latitude,
+            lng: item?.location?.longitude,
+          },
+          description: item?.location?.description,
+        }),
+      );
+    }
+    if (favPress === 'returndestination') {
+      dispatch(
+        setReturnMapDestination({
+          location: {
+            lat: item?.location?.latitude,
+            lng: item?.location?.longitude,
+          },
+          description: item?.location?.description,
+        }),
+      );
+    }
+
+    if (favPress === 'returnstartLocation') {
       dispatch(
         setReturnOrigin({
           location: {

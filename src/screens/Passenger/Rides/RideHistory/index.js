@@ -86,6 +86,7 @@ const index = ({navigation}) => {
   const [seats, setSeats] = useState('');
   const isFocus = useIsFocused();
   const rides = useSelector(state => state.map);
+  const [loading, setloading] = useState(false);
   const dispatch = useDispatch(null);
   const selectTime = val => {
     settime(val);
@@ -121,8 +122,10 @@ const index = ({navigation}) => {
   }, [isFocus]);
 
   const getRides = async () => {
+    setloading(true);
     dispatch(
       get_rides_history(res => {
+        setloading(false);
         // console.log(res);
       }),
     );
@@ -177,6 +180,7 @@ const index = ({navigation}) => {
                     no_of_seats={item?.requiredSeats}
                     startLocation={item?.startDes}
                     destination={item?.destDes}
+                    vehicleInfo={item?.drive?.user?.vehicle}
                   />
                 );
               }}
@@ -215,7 +219,7 @@ const index = ({navigation}) => {
         }}
       />
       <SortModal show={sortModalRef} onPress={getRidesByOrder} />
-      {rides?.loading ? <Loader /> : null}
+      {loading ? <Loader /> : null}
     </>
   );
 };

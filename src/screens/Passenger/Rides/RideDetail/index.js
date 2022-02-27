@@ -194,11 +194,12 @@ const index = ({navigation, route}) => {
               no_of_seats={rides?.selected_ride_history?.requiredSeats}
               startLocation={rides?.selected_ride_history?.startDes}
               destination={rides?.selected_ride_history?.destDes}
+              vehicleInfo={rides?.selected_ride_history?.drive?.user?.vehicle}
             />
           </View>
           <View style={styles.separator} />
           <View style={styles.contentContainer}>
-            <RiderInfo />
+            <RiderInfo driverInfo={rides?.selected_ride_history?.drive?.user} />
           </View>
           <View style={styles.separator} />
           <View style={[styles.contentContainer, {margin: 20}]}>
