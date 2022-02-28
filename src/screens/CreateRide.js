@@ -329,7 +329,14 @@ const CreateRide = () => {
             onColor={colors.green}
             offColor={colors.btnGray}
             size="small"
-            onToggle={isOn => setToggleEnabled(isOn)}
+            onToggle={isOn => {
+              setToggleEnabled(isOn);
+              if (isOn) {
+                dispatch(setMapSegment('returnTrip'));
+              } else {
+                dispatch(setMapSegment(null));
+              }
+            }}
           />
         </View>
         <CalendarSheet calendarSheetRef={calendarSheetRef} />
