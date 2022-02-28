@@ -21,9 +21,9 @@ const AddFavrouteLocation = ({
 }) => {
   let dispatch = useDispatch();
 
-  const origin = useSelector(state => state.map.origin);
-  const destinationMap = useSelector(state => state.map.destination);
-  const user = useSelector(state => state.auth.userdata);
+  const origin = useSelector(state => state?.map?.origin);
+  const destinationMap = useSelector(state => state?.map?.destination);
+  const user = useSelector(state => state?.auth?.userdata);
   const [loading, setloading] = useState(false);
   const handleAddFavLocation = item => {
     setloading(true);
@@ -35,17 +35,17 @@ const AddFavrouteLocation = ({
       location: {
         latitude:
           modalName === 'startLocation'
-            ? origin.location.lat
-            : destinationMap.location.lat,
+            ? origin?.location?.lat
+            : destinationMap?.location?.lat,
         longitude:
           modalName === 'startLocation'
-            ? origin.location.lng
-            : destinationMap.location.lng,
+            ? origin?.location?.lng
+            : destinationMap?.location?.lng,
         name: favName,
         description:
           modalName === 'startLocation'
-            ? origin.description
-            : destinationMap.description,
+            ? origin?.description
+            : destinationMap?.description,
       },
     };
 

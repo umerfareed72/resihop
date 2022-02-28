@@ -42,6 +42,7 @@ const MapViewComponent = ({
   status,
   onPressCancel,
   startRide,
+  onPressCopyDrive,
 }) => {
   let dispatch = useDispatch();
 
@@ -465,6 +466,7 @@ const MapViewComponent = ({
           status={status}
           setModal={setModal}
           onPressCancel={onPressCancel}
+          onPressCopyDrive={onPressCopyDrive}
         />
       ) : rideModals === 'offerReturnDrive' ? (
         <OfferReturnDriveCard />

@@ -2,7 +2,12 @@ import React from 'react';
 import {Modal, StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import {colors} from '../../../utilities';
 
-const CopyRideModal = ({modalVisible, setModalVisible, handleCopyRide}) => {
+const CopyRideModal = ({
+  modalVisible,
+  setModalVisible,
+  handleCopyRide,
+  title,
+}) => {
   return (
     <>
       <Modal
@@ -14,9 +19,7 @@ const CopyRideModal = ({modalVisible, setModalVisible, handleCopyRide}) => {
         }}>
         <View style={styles.modalContainer}>
           <View style={styles.innerContainer}>
-            <Text style={{margin: 20, textAlign: 'center'}}>
-              Do you want to copy this Ride to selected date?
-            </Text>
+            <Text style={{margin: 20, textAlign: 'center'}}>{title}</Text>
             <View style={styles.btnMainContainer}>
               <TouchableOpacity
                 style={styles.yesBtnContainer}

@@ -14,7 +14,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/core';
 import I18n from '../utilities/translations';
 
-const DriveStatusCard = ({status, setModal, onPressCancel}) => {
+const DriveStatusCard = ({
+  status,
+  setModal,
+  onPressCancel,
+  onPressCopyDrive,
+}) => {
   const [seats, setSeats] = useState([]);
 
   let navigation = useNavigation();
@@ -76,7 +81,9 @@ const DriveStatusCard = ({status, setModal, onPressCancel}) => {
             onPress={() => navigation.navigate('UpdateDrive')}>
             <Text style={styles.btnTxt}>{I18n.t('update')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnContainer}>
+          <TouchableOpacity
+            onPress={onPressCopyDrive}
+            style={styles.btnContainer}>
             <Text style={styles.btnTxt}>{I18n.t('copy')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onPressCancel} style={styles.btnContainer}>

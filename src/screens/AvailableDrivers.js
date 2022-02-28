@@ -113,18 +113,20 @@ const AvailableDrivers = props => {
               style={styles.btnContainer}
               onPress={() => {
                 dispatch(setBookRide(item));
-                props?.route?.params?.btnText === 'Book Now'
-                  ? returnBookSheetRef.current.open()
-                  : navigation?.navigate('StartMatching', {
-                      modalName: 'pickUpInfo',
-                    });
+                navigation.navigate('BookingDetails');
+
+                // props?.route?.params?.btnText === 'Book Now'
+                //   ? returnBookSheetRef.current.open()
+                //   : navigation?.navigate('StartMatching', {
+                //       modalName: 'pickUpInfo',
+                //     });
               }}>
               <Text style={styles.btnTxt}>{props?.route?.params?.btnText}</Text>
             </TouchableOpacity>
           </View>
         )}
       />
-      <ReturnBookSheet
+      {/* <ReturnBookSheet
         onPressReturn={() => {
           returnBookSheetRef.current.close();
           navigation.navigate('ReturnTrip');
@@ -134,7 +136,7 @@ const AvailableDrivers = props => {
           navigation.navigate('BookingDetails');
         }}
         returnBookSheetRef={returnBookSheetRef}
-      />
+      /> */}
     </View>
   );
 };

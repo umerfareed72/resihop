@@ -195,6 +195,9 @@ const DriverHome = ({navigation}) => {
       startDes: item.startDes,
       destDes: item.destDes,
       id: item._id,
+      cost: item?.costPerSeat,
+      availableSeats: item?.availableSeats,
+      drive_date: item?.date,
     });
   };
   const getUserdata = async () => {

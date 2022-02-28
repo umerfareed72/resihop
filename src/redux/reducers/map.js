@@ -29,6 +29,7 @@ const initialState = {
   settings: null,
   drive_history: null,
   selected_drive_history: [],
+  cost_per_seat: 0,
 };
 
 export default (state = initialState, action = {}) => {
@@ -99,11 +100,18 @@ export default (state = initialState, action = {}) => {
         ...state,
         bookRide: payload,
       };
+    case Types.Cost_Per_Seat:
+      return {
+        ...state,
+        cost_per_seat: payload,
+      };
+
     case Types.time:
       return {
         ...state,
         time: payload,
       };
+
     case Types.nearest:
       return {
         ...state,

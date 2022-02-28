@@ -36,6 +36,12 @@ export const setAvailableSeats = data => async dispatch => {
     payload: data,
   });
 };
+export const setCostPerSeat = data => async dispatch => {
+  dispatch({
+    type: Types.Cost_Per_Seat,
+    payload: data,
+  });
+};
 export const setDistanceAndTime = data => async dispatch => {
   dispatch({
     type: Types.distanceAndTime,
@@ -150,7 +156,7 @@ export const CreateDriveRequest =
   };
 
 export const CreateRideRequest =
-  (body, setIsLoading, callback) => async dispatch => {
+  (body, setIsLoading, returnTrip, callback) => async dispatch => {
     let Token = await GetToken();
     setIsLoading(true);
     try {
@@ -166,6 +172,7 @@ export const CreateRideRequest =
       const responseJson = await response.json();
       setIsLoading(false);
       callback(responseJson);
+      responseJson['return_trip'] = returnTrip;
       dispatch({
         type: Types.createRideRequest,
         payload: responseJson,
@@ -285,23 +292,24 @@ export const MyRides = data => async dispatch => {
   }
 };
 
-export const setUpdateDrive = data => async dispatch => {
+export const setUpdateDrive = (id, data, callBack) => async dispatch => {
   let Token = await GetToken();
 
-  const id = data.id;
-  delete data['id'];
   try {
     axios
-      .put(`${baseURL}drives/${id}`, JSON.stringify(data), {
+      .put(`${baseURL}drives/${id}`, data, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${Token}`,
         },
       })
-      .then(response => console.log(response));
-  } catch (error) {
-    console.log(error);
-  }
+      .then(response => {
+        callBack(response?.data);
+      })
+      .catch(error => {
+        console.log(error?.response?.data);
+      });
+  } catch (error) {}
 };
 
 export const setUpdateRide =

@@ -81,6 +81,10 @@ const CreateDrive = () => {
     {label: '20', value: 20},
     {label: '30', value: 30},
     {label: '40', value: 40},
+    {label: '50', value: 50},
+    {label: '60', value: 60},
+    {label: '70', value: 70},
+    {label: '80', value: 80},
   ]);
 
   // Release Redux States
@@ -114,14 +118,11 @@ const CreateDrive = () => {
       startDes: origin?.description,
       destDes: destinationMap?.description,
     };
-
     dispatch(
       CreateDriveRequest(body, setIsLoading, response => {
-        console.log('Create Drive', response);
+        navigation.navigate('SelectRoute');
       }),
     );
-
-    navigation.navigate('SelectRoute');
   };
 
   const showTimePicker = () => {
@@ -151,6 +152,31 @@ const CreateDrive = () => {
     setNormalFirstReturnTime(moment(date).format());
     dispatch(setReturnFirstTime(date));
     hideFirstReturnTimePicker();
+  };
+  //Hanlde Return Drive
+  const handleReturnCreateDrive = () => {
+    const stamp = moment(
+      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
+    ).valueOf();
+    const body = {
+      startLocation: [returnOrigin?.location.lat, returnOrigin?.location?.lng],
+      destinationLocation: [
+        returnDestinationMap.location.lat,
+        returnDestinationMap.location.lng,
+      ],
+      date: stamp,
+      availableSeats: availableSeats,
+      path: 0,
+      costPerSeat: value,
+      interCity: false,
+      startDes: returnOrigin?.description,
+      destDes: returnDestinationMap?.description,
+    };
+    dispatch(
+      CreateDriveRequest(body, setIsLoading, response => {
+        console.log('return ride  created');
+      }),
+    );
   };
 
   return (
@@ -525,7 +551,12 @@ const CreateDrive = () => {
             availableSeats === null ||
             dateTimeStamp === null
           }
-          onPress={() => handleCreateDrive()}>
+          onPress={() => {
+            handleCreateDrive();
+            if (toggleEnabled) {
+              handleReturnCreateDrive();
+            }
+          }}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

@@ -137,6 +137,7 @@ const RideStatus = ({route}) => {
         setModalVisible={setModalVisible}
       />
       <CopyRideModal
+        title={'Do you want to copy this Ride to selected date?'}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         handleCopyRide={handleCopyRide}

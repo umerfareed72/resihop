@@ -29,7 +29,7 @@ const StartLocation = props => {
         addfavrouiteAddressRef={addfavrouiteAddressRef}
         setfavName={setfavName}
         favName={favName}
-        modalName={props.route.params.modalName}
+        modalName={props?.route?.params?.modalName}
       />
     </View>
   );

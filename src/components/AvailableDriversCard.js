@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {setBookRide} from '../redux/actions/map.actions';
 import {Alert} from 'react-native';
+import ReturnBookSheet from './ReturnBookSheet';
 
 const AvailableDrivers = ({
   modalName,
@@ -27,6 +28,7 @@ const AvailableDrivers = ({
 }) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
+  const returnBookSheetRef = useRef(null);
 
   const createRideResponse = useSelector(
     state => state.map.createRideRequestResponse,
@@ -35,7 +37,9 @@ const AvailableDrivers = ({
     state => state.map.searchDriveResponse,
   );
   const nearestDriver = useSelector(state => state.map.nearestDriver);
-
+  const rideResponse = useSelector(
+    state => state.map?.createRideRequestResponse,
+  );
   useEffect(() => {
     setHeight(Dimensions.get('screen').height - 400);
   }, []);
