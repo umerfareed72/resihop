@@ -56,10 +56,6 @@
 			</dict>
 		</dict>
 	</dict>
-  <key>FirebaseDynamicLinksCustomDomains</key>
-  <array>
-    <string>https://resihop.page.link/N8fh</string>
-  </array>
 	<key>NSCameraUsageDescription</key>
 	<string>Resihop Camera Open</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -76,6 +72,10 @@
 	<string>Resihop gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Resihop Gallery Picker</string>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>Resihop will use location for sound and music</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Resihop will use Media Library info</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

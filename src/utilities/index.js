@@ -29,4 +29,5 @@ export {
   checkConnected,
   OnlineStatusProvider,
   useOnlineStatus,
+  GeoCoderHelper,
 } from './helpers/index';

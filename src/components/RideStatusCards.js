@@ -80,7 +80,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
             {borderColor: getStatusColor(statusType)},
           ]}>
           <Text style={[styles.statusTxt, {color: getStatusColor(statusType)}]}>
-            {statusType}
+            {statusType?.split('_').join(' ')}
           </Text>
         </View>
         <View style={[styles.btnWrapper, {width: '90%'}]}>
@@ -689,7 +689,7 @@ const styles = StyleSheet.create({
   },
   bookedTxt: {
     fontFamily: fonts.regular,
-    fontSize: 20,
+    fontSize: 18,
     lineHeight: 26,
     color: colors.txtBlack,
   },

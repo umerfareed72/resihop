@@ -12,7 +12,6 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
       setSelectedCard(selectedCard.filter(card => card !== id));
     } else setSelectedCard([id, ...selectedCard]);
   };
-
   const [seats, setSeats] = useState([]);
   const myRidesData = useSelector(state => state.map.myRidesData);
 
@@ -63,7 +62,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
               {borderColor: getStatusColor(item.status)},
             ]}>
             <Text style={[styles.status, {color: getStatusColor(item.status)}]}>
-              {item.status}
+              {item?.status.split('_').join(' ')}
             </Text>
           </View>
         </View>

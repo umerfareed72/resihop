@@ -78,7 +78,9 @@ export default (state = initialState, action = {}) => {
     case Types.myDrives:
       return {
         ...state,
-        myDrivesData: payload,
+        myDrivesData: payload?.filter(item => {
+          return item.status != 'NO_MATCH' && item.status != 'CANCELLED';
+        }),
       };
     case Types.idToUpdateDrive:
       return {
@@ -88,7 +90,9 @@ export default (state = initialState, action = {}) => {
     case Types.myRides:
       return {
         ...state,
-        myRidesData: payload,
+        myRidesData: payload.filter(item => {
+          return item?.status != 'NO_MATCH' && item?.status != 'CANCELLED';
+        }),
       };
     case Types.dateTimeStamp:
       return {

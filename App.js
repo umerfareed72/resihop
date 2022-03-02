@@ -11,6 +11,7 @@ import {options, publishableKey} from './src/utilities';
 import RNCallKeep from 'react-native-callkeep';
 import {LinkHelper} from './src/utilities/helpers/LinkHelper';
 import {Linking} from 'react-native';
+import Geocoder from 'react-native-geocoding';
 
 const App = props => {
   LogBox.ignoreAllLogs(true);
@@ -35,6 +36,8 @@ const App = props => {
   };
 
   useEffect(() => {
+    Geocoder.init('AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA'); // use a valid API key
+
     RNCallKeep.setup(options).then(accepted => {});
     RNCallKeep.setAvailable(true);
     RNCallKeep.addEventListener(

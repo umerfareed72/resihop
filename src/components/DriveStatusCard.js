@@ -72,7 +72,7 @@ const DriveStatusCard = ({
             {borderColor: getStatusColo(status)},
           ]}>
           <Text style={[styles.statusTxt, {color: getStatusColo(status)}]}>
-            {status}
+            {status?.split('_')?.join(' ')}
           </Text>
         </View>
         <View style={[styles.btnWrapper, {width: '90%'}]}>
@@ -111,7 +111,7 @@ const DriveStatusCard = ({
       <View
         style={[styles.statusContainer, {borderColor: getStatusColo(status)}]}>
         <Text style={[styles.statusTxt, {color: getStatusColo(status)}]}>
-          {status}
+          {status?.split('_')?.join(' ')}
         </Text>
       </View>
       <View>

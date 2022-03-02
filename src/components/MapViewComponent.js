@@ -12,7 +12,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation, {
   getCurrentPosition,
 } from 'react-native-geolocation-service';
-import {appImages, colors, appIcons} from '../utilities';
+import {appImages, colors, appIcons, GeoCoderHelper} from '../utilities';
 
 import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
@@ -43,6 +43,7 @@ const MapViewComponent = ({
   onPressCancel,
   startRide,
   onPressCopyDrive,
+  googleAutoComplete,
 }) => {
   let dispatch = useDispatch();
 
@@ -361,6 +362,15 @@ const MapViewComponent = ({
         {origin?.location && (
           <Marker
             identifier="location"
+            draggable={true}
+            onDragEnd={e => {
+              GeoCoderHelper(
+                e.nativeEvent.coordinate?.latitude,
+                e.nativeEvent.coordinate?.longitude,
+                dispatch,
+                googleAutoComplete,
+              );
+            }}
             coordinate={{
               latitude: origin.location.lat,
               longitude: origin.location.lng,

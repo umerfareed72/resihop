@@ -32,6 +32,7 @@ import {
   SearchRides,
   MyRides,
   MyRidesSortOrder,
+  setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -43,6 +44,8 @@ import {
 import mapTypes from '../../../redux/types/map.types';
 import {move_from_drawer} from '../../../redux/actions/payment.action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Geocoder from 'react-native-geocoding';
+import Geolocation from 'react-native-geolocation-service';
 
 //Data
 var TimeList = {
@@ -126,11 +129,41 @@ const PassengerHome = ({navigation}) => {
           });
         }),
       );
+      getLocation();
       getUserdata();
       dispatch(move_from_drawer(true, () => {}));
     }
   }, [isFocused]);
-
+  // Get Location
+  const getLocation = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const {latitude, longitude} = position?.coords;
+        Geocoder.from(latitude, longitude)
+          .then(json => {
+            var addressComponent = json.results[0]?.formatted_address;
+            dispatch(
+              setOrigin({
+                location: {lat: latitude, lng: longitude},
+                description: addressComponent,
+              }),
+            );
+            dispatch(
+              setReturnMapDestination({
+                location: {lat: latitude, lng: longitude},
+                description: addressComponent,
+              }),
+            );
+          })
+          .catch(error => console.warn(error));
+      },
+      error => {
+        // See error code charts below.
+        console.log(error.code, error.message);
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
+  };
   useEffect(() => {
     AsyncStorage.getItem('fcmToken').then(token => {
       if (requestPermission() != null) {
@@ -341,7 +374,7 @@ const PassengerHome = ({navigation}) => {
               style={styles.noUpcomingRide}
             />
 
-            <Text style={styles.Txt}>{I18n.t('lorem')}</Text>
+            {/* <Text style={styles.Txt}>{I18n.t('lorem')}</Text> */}
             <TouchableOpacity
               style={styles.createRideBtnContainer}
               onPress={() => navigation.navigate('CreateRide')}>
@@ -351,9 +384,7 @@ const PassengerHome = ({navigation}) => {
         ) : (
           <>
             <FlatList
-              data={myRidesData.filter(item => {
-                return item.status != 'NO_MATCH' && item.status != 'CANCELLED';
-              })}
+              data={myRidesData}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => (
@@ -368,7 +399,7 @@ const PassengerHome = ({navigation}) => {
             <TouchableOpacity
               style={styles.createRideBtnContainer}
               onPress={() => navigation.navigate('CreateRide')}>
-              <Text style={styles.btnTxt}>{I18n.t('first_ride')}</Text>
+              <Text style={styles.btnTxt}>{'Create your Ride'}</Text>
             </TouchableOpacity>
           </>
         )}
@@ -507,7 +538,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.dropShadow,
     shadowOpacity: 1,
     alignSelf: 'center',
-    marginVertical: 30,
+    marginTop: 50,
   },
   btnTxt: {
     fontSize: 16,

@@ -347,7 +347,7 @@ const DriverHome = ({navigation}) => {
               source={appIcons.driver_home}
               style={styles.noUpcomingRide}
             />
-            <Text style={styles.Txt}>{I18n.t('lorem')}</Text>
+            {/* <Text style={styles.Txt}>{I18n.t('lorem')}</Text> */}
             <TouchableOpacity
               style={styles.createRideBtnContainer}
               onPress={() => navigation.navigate('CreateDrive')}>
@@ -356,9 +356,7 @@ const DriverHome = ({navigation}) => {
           </ScrollView>
         ) : (
           <FlatList
-            data={myDrives.filter(item => {
-              return item.status != 'NO_MATCH' && item.status != 'CANCELLED';
-            })}
+            data={myDrives}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
@@ -368,9 +366,7 @@ const DriverHome = ({navigation}) => {
               <TouchableOpacity
                 style={styles.createRideBtnContainer}
                 onPress={() => navigation.navigate('CreateDrive')}>
-                <Text style={styles.btnTxt}>
-                  {I18n.t('create_first_drive')}
-                </Text>
+                <Text style={styles.btnTxt}>{'Create your Drive'}</Text>
               </TouchableOpacity>
             )}
           />
@@ -509,7 +505,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.dropShadow,
     shadowOpacity: 1,
     alignSelf: 'center',
-    marginTop: 30,
+    marginTop: 50,
   },
   btnTxt: {
     fontSize: 16,

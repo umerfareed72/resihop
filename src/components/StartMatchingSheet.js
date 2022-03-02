@@ -13,10 +13,11 @@ import {fonts} from '../theme';
 import I18n from '../utilities/translations';
 import {setWalkingDistance, setDeltas} from '../redux/actions/map.actions';
 import {useSelector, useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   let dispatch = useDispatch();
-
+  const navigation = useNavigation();
   const [sliderValue, setSliderValue] = useState(100);
 
   const searchDrivesResponse = useSelector(
@@ -58,19 +59,17 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
         <Text style={styles.intDistance}>3000 M</Text>
       </View>
       <TouchableOpacity
-        style={[
-          styles.btnWrapper,
-          {
-            backgroundColor:
-              searchDrivesResponse === null || searchDrivesResponse.length === 0
-                ? colors.g1
-                : colors.green,
-          },
-        ]}
-        disabled={
-          searchDrivesResponse === null || searchDrivesResponse.length === 0
-        }
-        onPress={() => setModal('finding')}>
+        style={[styles.btnWrapper]}
+        onPress={() => {
+          if (
+            searchDrivesResponse === null ||
+            searchDrivesResponse.length === 0
+          ) {
+            navigation?.replace('PassengerHome');
+          } else {
+            setModal('finding');
+          }
+        }}>
         <Text style={styles.btnTxt}>{I18n.t('start_matching')}</Text>
       </TouchableOpacity>
     </View>
