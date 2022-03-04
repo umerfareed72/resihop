@@ -21,6 +21,7 @@ const StartLocation = props => {
       <MapViewComponent
         googleAutoComplete={googleAutoComplete}
         style={styles.mapStyles}
+        rideModals={props.route.params.modalName}
       />
       <AddressCards
         modalName={props.route.params.modalName}

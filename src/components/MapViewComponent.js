@@ -67,7 +67,6 @@ const MapViewComponent = ({
   const walkingDistance = useSelector(state => state.map.walkingDistance);
   var watchId;
   const mapRef = useRef(null);
-
   useEffect(() => {
     getLocation();
     if (startRide) {
@@ -362,7 +361,7 @@ const MapViewComponent = ({
         {origin?.location && (
           <Marker
             identifier="location"
-            draggable={true}
+            draggable={rideModals == 'startLocation' ? true : false}
             onDragEnd={e => {
               GeoCoderHelper(
                 e.nativeEvent.coordinate?.latitude,

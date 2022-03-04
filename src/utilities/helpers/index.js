@@ -48,13 +48,11 @@ export const GeoCoderHelper = (
   longitude,
   dispatch,
   googleAutoComplete,
-  point,
 ) => {
   Geocoder.from(latitude, longitude)
     .then(json => {
       var addressComponent = json.results[0]?.formatted_address;
-      if (point == 'start') {
-      }
+
       dispatch(
         setOrigin({
           location: {lat: latitude, lng: longitude},

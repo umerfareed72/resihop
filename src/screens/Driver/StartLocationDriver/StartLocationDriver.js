@@ -9,16 +9,22 @@ import {colors} from '../../../utilities';
 const StartLocationDriver = ({route}) => {
   let navigation = useNavigation();
   const addfavrouiteAddressRef = useRef(null);
+  const googleAutoComplete = useRef();
 
   const {type} = route.params;
 
   return (
     <View style={styles.container}>
-      <MapViewComponent style={styles.mapStyles} />
+      <MapViewComponent
+        googleAutoComplete={googleAutoComplete}
+        rideModals={type}
+        style={styles.mapStyles}
+      />
       <AddressCards
         modalName={type}
         addfavrouiteAddressRef={addfavrouiteAddressRef}
         mode="driver"
+        googleAutoComplete={googleAutoComplete}
       />
       <AddFavrouteLocation addfavrouiteAddressRef={addfavrouiteAddressRef} />
     </View>

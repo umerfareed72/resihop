@@ -178,7 +178,6 @@ const CreateDrive = () => {
       }),
     );
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader

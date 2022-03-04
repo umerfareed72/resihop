@@ -44,7 +44,7 @@ export const RideHistoryCard = ({
           </View>
           <View style={{paddingVertical: 10}}>
             <View style={styles.row2}>
-              <View style={[styles.alignRow, {width: '60%'}]}>
+              <View style={[styles.alignRow, {width: '50%'}]}>
                 <View
                   style={{
                     flexDirection: 'row',

@@ -33,11 +33,14 @@ import {
   SearchDrives,
   SearchRides,
   MyRidesSortOrder,
+  setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProfileInfo, updateInfo} from '../../../redux/actions/auth.action';
 import {useIsFocused} from '@react-navigation/core';
 import mapTypes from '../../../redux/types/map.types';
+import Geocoder from 'react-native-geocoding';
+import Geolocation from 'react-native-geolocation-service';
 
 //Data
 var TimeList = {
@@ -120,9 +123,40 @@ const DriverHome = ({navigation}) => {
           });
         }),
       );
+      getLocation();
       getUserdata();
     }
   }, [isFocus]);
+  // Get Location
+  const getLocation = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const {latitude, longitude} = position?.coords;
+        Geocoder.from(latitude, longitude)
+          .then(json => {
+            var addressComponent = json.results[0]?.formatted_address;
+            dispatch(
+              setOrigin({
+                location: {lat: latitude, lng: longitude},
+                description: addressComponent,
+              }),
+            );
+            dispatch(
+              setReturnMapDestination({
+                location: {lat: latitude, lng: longitude},
+                description: addressComponent,
+              }),
+            );
+          })
+          .catch(error => console.warn(error));
+      },
+      error => {
+        // See error code charts below.
+        console.log(error.code, error.message);
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
+  };
 
   //Save Notification
   useEffect(() => {
