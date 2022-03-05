@@ -30,11 +30,17 @@ const initialState = {
   drive_history: null,
   selected_drive_history: [],
   cost_per_seat: 0,
+  all_routes: null,
 };
 
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
   switch (type) {
+    case Types.selectRoutes:
+      return {
+        ...state,
+        all_routes: payload,
+      };
     case Types.origin:
       return {
         ...state,

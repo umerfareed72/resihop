@@ -22,9 +22,7 @@ import CalendarSheet from '../../CalendarSheet';
 
 const RideStatus = ({route}) => {
   const {item} = route.params;
-
   const calendarSheetRef = useRef(null);
-
   let dispatch = useDispatch();
   let navigation = useNavigation();
 
@@ -114,7 +112,9 @@ const RideStatus = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <MapViewComponent startRide={item.status == 'CONFIRMED' && true} />
+      <MapViewComponent
+      // startRide={item.status == 'CONFIRMED' && true}
+      />
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => navigation.goBack()}>

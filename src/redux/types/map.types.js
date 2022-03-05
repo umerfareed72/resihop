@@ -5,6 +5,7 @@ module.exports = {
   distanceAndTime: 'DistanceAndTime',
   createDriveRequest: 'CreateDriveRequest',
   createRideRequest: 'CreateRideRequest',
+  selectRoutes: 'selectRoutes',
   searchRides: 'SearchRides',
   searchDrives: 'SearchDrives',
   myDrives: 'MyDrives',

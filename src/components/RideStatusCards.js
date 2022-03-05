@@ -144,7 +144,6 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
       </View>
     );
   }
-
   return (
     <>
       <View style={styles.container}>
@@ -185,10 +184,13 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
             />
             <View style={{width: '80%'}}>
               <View style={styles.nameRating}>
-                <Text
-                  style={
-                    styles.driverName
-                  }>{`${nearestDriver?.drive.user.firstName} ${nearestDriver?.drive.user.lastName}`}</Text>
+                <Text style={styles.driverName}>{`${
+                  nearestDriver?.drive.user.firstName ||
+                  ride?.pool_match?.user?.firstName
+                } ${
+                  nearestDriver?.drive.user.lastName ||
+                  ride?.pool_match?.user?.lastName
+                }`}</Text>
                 <View style={styles.ratingContainer}>
                   <StarIcon name="star" size={17} color={colors.white} />
                   <Text style={styles.ratingTxt}>4.5</Text>
@@ -206,16 +208,23 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
                   justifyContent: 'space-between',
                   marginTop: 10,
                 }}>
-                <Text
-                  style={
-                    styles.fair
-                  }>{`NOK ${nearestDriver?.drive.costPerSeat}`}</Text>
+                <Text style={styles.fair}>{`NOK ${
+                  nearestDriver?.drive.costPerSeat ||
+                  ride?.pool_match?.costPerSeat
+                }`}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={styles.carDetails}>
-                    {nearestDriver?.drive?.user.vehicle.vehicleCompanyName}
+                    {nearestDriver?.drive?.user.vehicle.vehicleCompanyName ||
+                      ride?.pool_match?.user?.vehicle?.vehicleCompanyName}
                   </Text>
                   <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-                    {`, ${nearestDriver?.drive?.user?.vehicle?.color}, ${nearestDriver?.drive?.user?.vehicle?.licencePlateNumber}`}
+                    {`, ${
+                      nearestDriver?.drive?.user?.vehicle?.color ||
+                      ride?.pool_match?.user?.vehicle?.color
+                    }, ${
+                      nearestDriver?.drive?.user?.vehicle?.licencePlateNumber ||
+                      ride?.pool_match?.user?.vehicle?.licencePlateNumber
+                    }`}
                   </Text>
                 </View>
               </View>
@@ -286,7 +295,13 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
             <View style={{padding: 30}}>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(setBookRide(nearestDriver));
+                  if (nearestDriver != null) {
+                    dispatch(setBookRide(nearestDriver));
+                  } else {
+                    dispatch(setBookRide(ride));
+
+                    //  ride?.pool_match?.user?.vehicle?.vehicleCompanyName
+                  }
                   navigation.navigate('BookingDetails');
                 }}
                 style={styles.passengerHomeBtn}>

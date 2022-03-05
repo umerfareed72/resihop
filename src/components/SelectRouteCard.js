@@ -25,7 +25,6 @@ const SelectRouteCard = ({setModal, setHeight}) => {
 
   useEffect(() => {
     let array = [];
-
     setHeight(Dimensions.get('screen').height - 320);
     for (let i = 0; i < availableSeats; i++) {
       array[i] = i + 1;
@@ -33,10 +32,10 @@ const SelectRouteCard = ({setModal, setHeight}) => {
     setData(array);
     dispatch(
       SearchRides({
-        startLocation: [origin.location.lat, origin.location.lng],
+        startLocation: [origin?.location.lat, origin?.location.lng],
         destinationLocation: [
-          destinationMap.location.lat,
-          destinationMap.location.lng,
+          destinationMap?.location.lat,
+          destinationMap?.location.lng,
         ],
       }),
     );
@@ -71,7 +70,7 @@ const SelectRouteCard = ({setModal, setHeight}) => {
       </View>
       <TouchableOpacity
         style={styles.btnContainer}
-        onPress={() => setModal('availablePassenger')}>
+        onPress={() => setModal('DriverHome')}>
         <Text style={styles.btnTxt}>{I18n.t('select_route')}</Text>
       </TouchableOpacity>
     </View>

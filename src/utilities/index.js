@@ -18,6 +18,8 @@ export {
   agora_token,
   appId,
   options,
+  APIKEY,
+  mode,
 } from './constants';
 export {
   registerAppWithFCM,

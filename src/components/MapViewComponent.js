@@ -8,12 +8,18 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import Geolocation, {
   getCurrentPosition,
 } from 'react-native-geolocation-service';
-import {appImages, colors, appIcons, GeoCoderHelper} from '../utilities';
-
+import {
+  appImages,
+  colors,
+  appIcons,
+  GeoCoderHelper,
+  APIKEY,
+  mode,
+} from '../utilities';
 import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
 import AvailableDriversCard from './AvailableDriversCard';
@@ -32,6 +38,7 @@ import {
 } from '../redux/actions/map.actions';
 import {fonts} from '../theme';
 import database from '@react-native-firebase/database';
+import polyline from '@mapbox/polyline';
 
 const MapViewComponent = ({
   rideModals,
@@ -46,12 +53,10 @@ const MapViewComponent = ({
   googleAutoComplete,
 }) => {
   let dispatch = useDispatch();
-
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [height, setHeight] = useState(0);
   const [minDistance, setMinDistance] = useState();
-
   const origin = useSelector(state => state.map.origin);
   const destination = useSelector(state => state.map.destination);
   const searchRideResponse = useSelector(state => state.map.searchRideResponse);
@@ -65,6 +70,8 @@ const MapViewComponent = ({
   );
   const deltas = useSelector(state => state.map.deltas);
   const walkingDistance = useSelector(state => state.map.walkingDistance);
+  const routes = useSelector(state => state.map.all_routes);
+
   var watchId;
   const mapRef = useRef(null);
   useEffect(() => {
@@ -326,6 +333,15 @@ const MapViewComponent = ({
             mode="DRIVING"
             timePrecision="now"
             precision="high"
+            waypoints={routes?.forEach(item => {
+              if (item) {
+                return polyline
+                  .decode(item?.overview_polyline.points)
+                  .forEach(data => {
+                    return {latitude: data[0], longitude: data[1]};
+                  });
+              }
+            })}
             onReady={result => {
               dispatch(
                 setDistanceAndTime({
@@ -346,6 +362,34 @@ const MapViewComponent = ({
             }}
           />
         )}
+
+        {routes?.map((item, index) => {
+          console.log(
+            polyline.decode(item?.overview_polyline.points).map(data => {
+              return {
+                latitude: data[0],
+                longitude: data[1],
+              };
+            }),
+          );
+          return (
+            <Polyline
+              key={index}
+              strokeWidth={4}
+              tappable={true}
+              // onPress={() => handlePathChange(index)}
+              strokeColor={'green'}
+              coordinates={polyline
+                .decode(item?.overview_polyline.points)
+                .map(data => {
+                  return {
+                    latitude: data[0],
+                    longitude: data[1],
+                  };
+                })}
+            />
+          );
+        })}
         {!startRide ? (
           <Marker
             identifier="currentPosition"
@@ -388,8 +432,10 @@ const MapViewComponent = ({
           />
         )}
 
-        {searchRideResponse !== null
-          ? searchRideResponse.map(ride => (
+        {/* Search Passenger List */}
+
+        {searchRideResponse !== null && searchRideResponse?.length > 0
+          ? searchRideResponse?.map(ride => (
               <Marker
                 identifier="ride"
                 coordinate={{
@@ -400,6 +446,7 @@ const MapViewComponent = ({
             ))
           : null}
 
+        {/* Search Driver List */}
         {searchDrivesResponse !== null && searchDrivesResponse?.length > 0
           ? searchDrivesResponse.map(driver => (
               <Marker

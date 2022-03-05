@@ -6,12 +6,20 @@ import {responseValidator} from '../../utilities/helpers';
 import {RIDES_CONST, DRIVE_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
 
+export const setRoutes = data => async dispatch => {
+  dispatch({
+    type: Types.selectRoutes,
+    payload: data,
+  });
+};
+
 export const setOrigin = data => async dispatch => {
   dispatch({
     type: Types.origin,
     payload: data,
   });
 };
+
 export const setMapDestination = data => async dispatch => {
   dispatch({
     type: Types.destination,
@@ -207,7 +215,6 @@ export const SearchRides = data => async dispatch => {
     );
 
     const responseJson = await response.json();
-    console.log('Search Rides', responseJson);
     dispatch({
       type: Types.searchRides,
       payload: responseJson,

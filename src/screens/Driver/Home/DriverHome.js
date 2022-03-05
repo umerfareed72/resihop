@@ -389,21 +389,21 @@ const DriverHome = ({navigation}) => {
             </TouchableOpacity>
           </ScrollView>
         ) : (
-          <FlatList
-            data={myDrives}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) => (
-              <UpcomingRideCards item={item} onPress={() => onPress(item)} />
-            )}
-            ListFooterComponent={() => (
-              <TouchableOpacity
-                style={styles.createRideBtnContainer}
-                onPress={() => navigation.navigate('CreateDrive')}>
-                <Text style={styles.btnTxt}>{'Create your Drive'}</Text>
-              </TouchableOpacity>
-            )}
-          />
+          <>
+            <FlatList
+              data={myDrives}
+              keyExtractor={item => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => (
+                <UpcomingRideCards item={item} onPress={() => onPress(item)} />
+              )}
+            />
+            <TouchableOpacity
+              style={styles.createRideBtnContainer}
+              onPress={() => navigation.navigate('CreateDrive')}>
+              <Text style={styles.btnTxt}>{'Create your Drive'}</Text>
+            </TouchableOpacity>
+          </>
         )}
       </SafeAreaView>
       <RideFilterModal
@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.dropShadow,
     shadowOpacity: 1,
     alignSelf: 'center',
-    marginTop: 50,
+    marginVertical: 20,
   },
   btnTxt: {
     fontSize: 16,

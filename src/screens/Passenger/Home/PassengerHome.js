@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.dropShadow,
     shadowOpacity: 1,
     alignSelf: 'center',
-    marginTop: 50,
+    marginVertical: 20,
   },
   btnTxt: {
     fontSize: 16,

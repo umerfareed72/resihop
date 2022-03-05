@@ -30,6 +30,8 @@ export let image_options = {
     path: 'images',
   },
 };
+export const APIKEY = 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA';
+export const mode = 'driving';
 
 export const options = {
   ios: {

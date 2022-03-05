@@ -24,7 +24,6 @@ const NearestDriverCard = ({setModal, setHeight, modalName}) => {
     for (let i = 0; i < createRideResponse?.requiredSeats; i++) {
       requiredSeats[i] = i;
     }
-
     setHeight(Dimensions.get('screen').height - 240);
 
     const interval = setTimeout(() => {
