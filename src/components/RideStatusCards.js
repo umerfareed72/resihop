@@ -184,15 +184,13 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
             />
             <View style={{width: '80%'}}>
               <View style={styles.nameRating}>
-                <Text style={styles.driverName}>
-                  {`${
-                    nearestDriver?.drive.user.firstName ||
-                    ride?.pool_match?.user?.firstName
-                  } ${
-                    nearestDriver?.drive.user.lastName ||
-                    ride?.pool_match?.user?.lastName
-                  }`}
-                </Text>
+                <Text style={styles.driverName}>{`${
+                  nearestDriver?.drive.user.firstName ||
+                  ride?.pool_match?.user?.firstName
+                } ${
+                  nearestDriver?.drive.user.lastName ||
+                  ride?.pool_match?.user?.lastName
+                }`}</Text>
                 <View style={styles.ratingContainer}>
                   <StarIcon name="star" size={17} color={colors.white} />
                   <Text style={styles.ratingTxt}>4.5</Text>
