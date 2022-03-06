@@ -11,13 +11,14 @@ import {appImages, colors} from '../utilities';
 import {fonts} from '../theme/theme';
 import I18n from '../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
-import {SearchRides} from '../redux/actions/map.actions';
+import {CreateDriveRequest, SearchRides} from '../redux/actions/map.actions';
 
-const SelectRouteCard = ({setModal, setHeight}) => {
+const SelectRouteCard = ({setModal, setHeight, onPressCreateDrive}) => {
   let dispatch = useDispatch();
   const [data, setData] = useState([1, 2, 3, 4]);
 
   const distanceAndTime = useSelector(state => state.map.distanceAndTime);
+  const routes = useSelector(state => state.map.all_routes);
   const availableSeats = useSelector(state => state.map.availableSeats);
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
@@ -40,14 +41,11 @@ const SelectRouteCard = ({setModal, setHeight}) => {
       }),
     );
   }, []);
-
   return (
     <View style={styles.container}>
-      <Text style={styles.detail}>{`${distanceAndTime?.duration.toFixed(
-        0,
-      )} min (${distanceAndTime?.distance.toFixed(2)} km) | ${
-        searchRideResponse?.length
-      } Passengers`}</Text>
+      <Text style={styles.detail}>
+        {`${distanceAndTime?.duration} (${distanceAndTime?.distance}) | ${searchRideResponse?.length} Passengers`}
+      </Text>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>{origin?.description}</Text>
         <View style={styles.addressCircle} />
@@ -70,7 +68,7 @@ const SelectRouteCard = ({setModal, setHeight}) => {
       </View>
       <TouchableOpacity
         style={styles.btnContainer}
-        onPress={() => setModal('DriverHome')}>
+        onPress={onPressCreateDrive}>
         <Text style={styles.btnTxt}>{I18n.t('select_route')}</Text>
       </TouchableOpacity>
     </View>
@@ -81,7 +79,6 @@ export default SelectRouteCard;
 
 const styles = StyleSheet.create({
   container: {
-    height: 343,
     width: '100%',
     backgroundColor: colors.white,
     position: 'absolute',
@@ -157,7 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    marginTop: 30,
+    marginVertical: 30,
   },
   btnTxt: {
     fontFamily: fonts.bold,

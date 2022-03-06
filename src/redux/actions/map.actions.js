@@ -13,6 +13,13 @@ export const setRoutes = data => async dispatch => {
   });
 };
 
+export const setReturnRide = data => async dispatch => {
+  dispatch({
+    type: Types.returnRide,
+    payload: data,
+  });
+};
+
 export const setOrigin = data => async dispatch => {
   dispatch({
     type: Types.origin,

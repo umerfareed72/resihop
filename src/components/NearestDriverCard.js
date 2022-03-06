@@ -14,10 +14,8 @@ import {useSelector} from 'react-redux';
 import moment from 'moment';
 
 const NearestDriverCard = ({setModal, setHeight, modalName}) => {
-  const createRideResponse = useSelector(
-    state => state.map.createRideRequestResponse,
-  );
-
+  const createRideResponse = useSelector(state => state.map.all_routes);
+  console.log(createRideResponse);
   const [requiredSeats, setRequiredSeats] = useState([]);
 
   useEffect(() => {

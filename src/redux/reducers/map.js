@@ -31,6 +31,7 @@ const initialState = {
   selected_drive_history: [],
   cost_per_seat: 0,
   all_routes: null,
+  returnRide: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -45,6 +46,11 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         origin: payload,
+      };
+    case Types.returnRide:
+      return {
+        ...state,
+        returnRide: payload,
       };
     case Types.destination:
       return {

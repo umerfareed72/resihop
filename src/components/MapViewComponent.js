@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import Geolocation, {
@@ -32,13 +33,19 @@ import PickUpInfoCard from './PickUpInfoCard';
 import MapViewDirections from 'react-native-maps-directions';
 import {useSelector, useDispatch} from 'react-redux';
 import {
+  CreateDriveRequest,
   setDistanceAndTime,
   SetNearestDriver,
   setOrigin,
+  setReturnRide,
+  setRoutes,
 } from '../redux/actions/map.actions';
 import {fonts} from '../theme';
 import database from '@react-native-firebase/database';
 import polyline from '@mapbox/polyline';
+import {Dimensions} from 'react-native';
+import {Loader} from './Loader/Loader';
+import {useNavigation} from '@react-navigation/core';
 
 const MapViewComponent = ({
   rideModals,
@@ -53,6 +60,7 @@ const MapViewComponent = ({
   googleAutoComplete,
 }) => {
   let dispatch = useDispatch();
+  const navigation = useNavigation();
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [height, setHeight] = useState(0);
@@ -63,6 +71,7 @@ const MapViewComponent = ({
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );
+  const [isLoading, setIsLoading] = useState(false);
   const mapSegment = useSelector(state => state.map.mapSegment);
   const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
@@ -71,9 +80,13 @@ const MapViewComponent = ({
   const deltas = useSelector(state => state.map.deltas);
   const walkingDistance = useSelector(state => state.map.walkingDistance);
   const routes = useSelector(state => state.map.all_routes);
+  const returnRide = useSelector(state => state.map.returnRide);
 
+  const [selectedPath, setSelectedPath] = useState(0);
   var watchId;
   const mapRef = useRef(null);
+  const [zoomLevel, setzoomLevel] = useState(20);
+
   useEffect(() => {
     getLocation();
     if (startRide) {
@@ -83,6 +96,7 @@ const MapViewComponent = ({
       Geolocation.clearWatch(watchId);
     };
   }, []);
+
   //Get Live Location
   const getLiveLocation = async () => {
     let permission;
@@ -299,9 +313,92 @@ const MapViewComponent = ({
     );
   }
 
+  const handlePathChange = (item, index) => {
+    if (index === selectedPath) return;
+    setzoomLevel(14);
+    setSelectedPath(index);
+    const dis = item?.legs[0]?.distance?.text;
+    const mins = item?.legs[0]?.duration?.text;
+    dispatch(
+      setDistanceAndTime({
+        distance: dis,
+        duration: mins,
+      }),
+    );
+  };
+
+  //On Load Routes
+  useEffect(() => {
+    if (routes?.selectedRoutes != null) {
+      setzoomLevel(14);
+      const dis = routes?.selectedRoutes[0]?.legs[0]?.distance?.text;
+      const mins = routes?.selectedRoutes[0]?.legs[0]?.duration?.text;
+      dispatch(
+        setDistanceAndTime({
+          distance: dis,
+          duration: mins,
+        }),
+      );
+      return () => {
+        dispatch(setRoutes(null));
+        dispatch(setReturnRide(null));
+        setzoomLevel(20);
+      };
+    }
+  }, []);
+
+  const handleCreateDrive = () => {
+    const body = {
+      startLocation: routes?.startLocation,
+      destinationLocation: routes?.destinationLocation,
+      date: routes?.date,
+      availableSeats: routes?.availableSeats,
+      path: selectedPath,
+      costPerSeat: routes?.costPerSeat,
+      interCity: routes?.interCity,
+      startDes: routes?.startDes,
+      destDes: routes?.destDes,
+    };
+    if (returnRide) {
+      const returnBody = {
+        startLocation: returnRide?.startLocation,
+        destinationLocation: returnRide?.destinationLocation,
+        date: returnRide?.date,
+        availableSeats: returnRide?.availableSeats,
+        path: selectedPath,
+        costPerSeat: returnRide?.costPerSeat,
+        interCity: returnRide?.interCity,
+        startDes: returnRide?.startDes,
+        destDes: returnRide?.destDes,
+      };
+      console.log(returnBody);
+      dispatch(
+        CreateDriveRequest(body, setIsLoading, async response => {
+          if (response?.error) {
+            Alert.alert('Failed', response?.message[0]?.messages[0]?.message);
+          } else {
+            navigation.navigate('DriverHome');
+          }
+        }),
+      );
+    }
+    dispatch(
+      CreateDriveRequest(body, setIsLoading, async response => {
+        if (response?.error) {
+          Alert.alert('Failed', response?.message[0]?.messages[0]?.message);
+        } else {
+          navigation.navigate('DriverHome');
+        }
+      }),
+    );
+  };
+
   return (
     <>
       <MapView
+        onDoublePress={() => {
+          setzoomLevel(20);
+        }}
         ref={mapRef}
         provider={PROVIDER_GOOGLE}
         region={{
@@ -311,6 +408,7 @@ const MapViewComponent = ({
           longitudeDelta: deltas ? deltas.lngDelta : 0.005,
         }}
         //onRegionChange={regionChanged}
+        maxZoomLevel={zoomLevel}
         zoomEnabled={true}
         scrollEnabled={true}
         style={
@@ -320,7 +418,7 @@ const MapViewComponent = ({
             ? {height: height, ...StyleSheet.absoluteFillObject}
             : {...StyleSheet.absoluteFillObject}
         }>
-        {origin && destination && (
+        {origin && destination && !routes?.selectedRoutes && (
           <MapViewDirections
             origin={{
               latitude: origin !== null ? origin.location.lat : latitude,
@@ -333,15 +431,6 @@ const MapViewComponent = ({
             mode="DRIVING"
             timePrecision="now"
             precision="high"
-            waypoints={routes?.forEach(item => {
-              if (item) {
-                return polyline
-                  .decode(item?.overview_polyline.points)
-                  .forEach(data => {
-                    return {latitude: data[0], longitude: data[1]};
-                  });
-              }
-            })}
             onReady={result => {
               dispatch(
                 setDistanceAndTime({
@@ -363,33 +452,26 @@ const MapViewComponent = ({
           />
         )}
 
-        {routes?.map((item, index) => {
-          console.log(
-            polyline.decode(item?.overview_polyline.points).map(data => {
-              return {
-                latitude: data[0],
-                longitude: data[1],
-              };
-            }),
-          );
-          return (
-            <Polyline
-              key={index}
-              strokeWidth={4}
-              tappable={true}
-              // onPress={() => handlePathChange(index)}
-              strokeColor={'green'}
-              coordinates={polyline
-                .decode(item?.overview_polyline.points)
-                .map(data => {
-                  return {
-                    latitude: data[0],
-                    longitude: data[1],
-                  };
-                })}
-            />
-          );
-        })}
+        {routes?.selectedRoutes &&
+          routes?.selectedRoutes?.map((item, index) => {
+            return (
+              <Polyline
+                key={index}
+                strokeWidth={4}
+                tappable={true}
+                onPress={() => handlePathChange(item, index)}
+                strokeColor={selectedPath == index ? 'green' : 'grey'}
+                coordinates={polyline
+                  .decode(item?.overview_polyline.points)
+                  .map(data => {
+                    return {
+                      latitude: data[0],
+                      longitude: data[1],
+                    };
+                  })}
+              />
+            );
+          })}
         {!startRide ? (
           <Marker
             identifier="currentPosition"
@@ -514,7 +596,11 @@ const MapViewComponent = ({
           btnText={title}
         />
       ) : rideModals === 'selectRoute' ? (
-        <SelectRouteCard setModal={setModal} setHeight={setHeight} />
+        <SelectRouteCard
+          setModal={setModal}
+          setHeight={setHeight}
+          onPressCreateDrive={handleCreateDrive}
+        />
       ) : rideModals === 'availablePassenger' ? (
         <AvailablePassengersCard />
       ) : rideModals === 'driveStatus' ? (
@@ -529,6 +615,7 @@ const MapViewComponent = ({
       ) : rideModals === 'pickUpInfo' ? (
         <PickUpInfoCard title={title} />
       ) : null}
+      {isLoading && <Loader />}
     </>
   );
 };

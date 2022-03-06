@@ -34,6 +34,7 @@ import {
   setReturnMapDestination,
   setReturnOrigin,
   setRoutes,
+  setReturnRide,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -109,7 +110,6 @@ const CreateDrive = () => {
         `https://maps.googleapis.com/maps/api/directions/json?alternatives=true&origin=${origin?.description}&destination=${destinationMap?.description}&key=${APIKEY}&mode=${mode}`,
       );
       let respJson = await resp.json();
-      dispatch(setRoutes(respJson?.routes));
       if (respJson) {
         const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
         const body = {
@@ -125,12 +125,15 @@ const CreateDrive = () => {
           interCity: false,
           startDes: origin?.description,
           destDes: destinationMap?.description,
+          selectedRoutes: respJson?.routes,
         };
-        dispatch(
-          CreateDriveRequest(body, setIsLoading, async response => {
-            navigation.navigate('SelectRoute');
-          }),
-        );
+        dispatch(setRoutes(body));
+        setIsLoading(false);
+        if (toggleEnabled) {
+          handleReturnCreateDrive();
+        } else {
+          navigation?.navigate('SelectRoute');
+        }
       }
     }
   };
@@ -182,11 +185,8 @@ const CreateDrive = () => {
       startDes: returnOrigin?.description,
       destDes: returnDestinationMap?.description,
     };
-    dispatch(
-      CreateDriveRequest(body, setIsLoading, response => {
-        console.log('return ride  created');
-      }),
-    );
+    dispatch(setReturnRide(body));
+    navigation?.navigate('SelectRoute');
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -566,9 +566,6 @@ const CreateDrive = () => {
           }
           onPress={() => {
             handleCreateDrive();
-            if (toggleEnabled) {
-              handleReturnCreateDrive();
-            }
           }}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>

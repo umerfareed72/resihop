@@ -11,6 +11,7 @@ module.exports = {
   myDrives: 'MyDrives',
   idToUpdateDrive: 'UpdateDriveID',
   myRides: 'MyRides',
+  returnRide: 'returnRide',
   dateTimeStamp: 'TimeStamp',
   Cost_Per_Seat: 'Cost_Per_Seat',
   bookRide: 'BookRide',
