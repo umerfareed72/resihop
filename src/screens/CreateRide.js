@@ -155,7 +155,7 @@ const CreateRide = () => {
     };
 
     dispatch(
-      CreateRideRequest(body, setIsLoading, response => {
+      CreateRideRequest(body, setIsLoading, null, response => {
         console.log('Return Create Ride', response);
       }),
     );

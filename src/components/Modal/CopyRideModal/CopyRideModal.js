@@ -29,7 +29,7 @@ const CopyRideModal = ({
               <TouchableOpacity
                 style={styles.cancelBtnContainer}
                 onPress={() => setModalVisible(false)}>
-                <Text style={{color: colors.white}}>Cancel</Text>
+                <Text style={{color: colors.black}}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.black,
+    backgroundColor: colors.white,
     borderBottomRightRadius: 10,
   },
 });

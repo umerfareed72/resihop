@@ -129,7 +129,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
     );
   }
 
-  if (statusType === 'CONFIRMED') {
+  if (statusType == 'ON_THE_WAY') {
     return (
       <View style={styles.currentRideContainer}>
         <Text style={styles.destinationTxt}>{I18n.t('destination10_km')}</Text>
@@ -265,7 +265,9 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
             </View>
             <Text style={styles.warnTxt}>{I18n.t('calls_allowed_txt')}</Text>
             <View style={styles.btnMainContainer}>
-              <TouchableOpacity style={styles.btnContainer}>
+              <TouchableOpacity
+                style={styles.btnContainer}
+                onPress={() => calendarSheetRef.current.open()}>
                 <Text style={styles.btnTxt}>{I18n.t('copy')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -299,8 +301,6 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
                     dispatch(setBookRide(nearestDriver));
                   } else {
                     dispatch(setBookRide(ride));
-
-                    //  ride?.pool_match?.user?.vehicle?.vehicleCompanyName
                   }
                   navigation.navigate('BookingDetails');
                 }}
@@ -339,6 +339,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
           onSelectRating={setRating}
         />
       </View>
+      {isLoading && <Loader />}
       {showModal && (
         <DeleteCardModal
           image={appIcons.cancel}
@@ -346,17 +347,16 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
             setShowModal(false);
           }}
           selected={selected}
-          h1={I18n.t('delete_h1')}
-          h2={I18n.t('delete_h2')}
+          h1={I18n.t('ride_delete_h1')}
+          h2={I18n.t('ride_delete_h2')}
           btn1Text={I18n.t('yes')}
           btn2Text={I18n.t('no')}
           show={showModal}
           bgColor={colors.green}
           textColor={colors.white}
           onPressYes={() => {
-            setSelected(true);
+            handleCancelRide();
             setShowModal(false);
-            walletRef.current.open();
           }}
           onPressNo={() => {
             setSelected(false);
@@ -428,8 +428,8 @@ const styles = StyleSheet.create({
   },
   greenSeat: {
     height: 25,
-    width: 18.75,
-    marginLeft: 9,
+    width: 15,
+    marginLeft: 2,
   },
   dateTimeTxt: {
     fontSize: 15,
@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
     height: 23,
     justifyContent: 'center',
     borderColor: colors.green,
-    marginLeft: 40,
+    marginLeft: 30,
   },
   dateTimeContainer: {
     flexDirection: 'row',

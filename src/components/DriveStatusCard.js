@@ -8,11 +8,14 @@ import {
   View,
 } from 'react-native';
 import {fonts} from '../theme';
-import {appImages, colors} from '../utilities';
+import {appImages, colors, header} from '../utilities';
 import CallIcon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/core';
 import I18n from '../utilities/translations';
+import {useSelector, useDispatch} from 'react-redux';
+import {get} from '../services';
+import {DRIVE_CONST} from '../utilities/routes';
 
 const DriveStatusCard = ({
   status,
@@ -20,36 +23,20 @@ const DriveStatusCard = ({
   onPressCancel,
   onPressCopyDrive,
 }) => {
-  const [seats, setSeats] = useState([]);
-
+  const driveItem = useSelector(state => state.map);
   let navigation = useNavigation();
-
-  const passengerData = [
-    {
-      id: 1,
-      name: 'John Deo',
-      pickUp: 'Coming to My start Location',
-      time: '08:00',
-    },
-    {
-      id: 2,
-      name: 'John Deo',
-      pickUp: 'Coming to My start Location',
-      time: '08:00',
-    },
-    {
-      id: 3,
-      name: 'John Deo',
-      pickUp: 'Coming to My start Location',
-      time: '08:00',
-    },
-    {
-      id: 4,
-      name: 'John Deo',
-      pickUp: 'Coming to My start Location',
-      time: '08:00',
-    },
-  ];
+  const startDrive = async () => {
+    try {
+      console.log(`${DRIVE_CONST}/start/${driveItem?.idToUpdateDrive?.id}`);
+      const startDriveResponse = await get(
+        `${DRIVE_CONST}/start/${driveItem?.idToUpdateDrive?.id}`,
+        await header(),
+      );
+      navigation?.navigate('DriverHome');
+    } catch (error) {
+      console.log(error?.response?.data);
+    }
+  };
 
   if (status === 'WAITING_FOR_MATCH') {
     return (
@@ -57,13 +44,15 @@ const DriveStatusCard = ({
         <View style={styles.heading}>
           <Text style={styles.bookedTxt}>{I18n.t('booked_passengers')}</Text>
           <View style={styles.seatContainer}>
-            {seats.map(() => (
-              <Image
-                source={appImages.seatBlue}
-                resizeMode="contain"
-                style={styles.seat}
-              />
-            ))}
+            {new Array(driveItem?.idToUpdateDrive?.availableSeats)
+              .fill(driveItem?.idToUpdateDrive?.availableSeats)
+              .map(() => (
+                <Image
+                  source={appImages.seatBlue}
+                  resizeMode="contain"
+                  style={styles.seat}
+                />
+              ))}
           </View>
         </View>
         <View
@@ -94,18 +83,27 @@ const DriveStatusCard = ({
     );
   }
 
+  if (status === 'ON_THE_WAY') {
+    setModal('offerReturnDrive');
+  }
+
+  if (status === 'COMPLETED') {
+    navigation?.navigate('AddFavourites');
+  }
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={styles.bookedTxt}>{I18n.t('booked_passengers')}</Text>
         <View style={styles.seatContainer}>
-          {seats.map(() => (
-            <Image
-              source={appImages.seatBlue}
-              resizeMode="contain"
-              style={styles.seat}
-            />
-          ))}
+          {new Array(driveItem?.idToUpdateDrive?.availableSeats)
+            .fill(driveItem?.idToUpdateDrive?.availableSeats)
+            .map(() => (
+              <Image
+                source={appImages.seatBlue}
+                resizeMode="contain"
+                style={styles.seat}
+              />
+            ))}
         </View>
       </View>
       <View
@@ -116,7 +114,7 @@ const DriveStatusCard = ({
       </View>
       <View>
         <FlatList
-          data={passengerData}
+          data={driveItem?.idToUpdateDrive?.rides}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => item.id}
@@ -132,16 +130,20 @@ const DriveStatusCard = ({
       </View>
       <Text style={styles.warnTxt}>{I18n.t('calls_allowed_txt')}</Text>
       <View style={styles.btnWrapper}>
-        <TouchableOpacity style={styles.btnContainer}>
+        <TouchableOpacity
+          style={styles.btnContainer}
+          onPress={onPressCopyDrive}>
           <Text style={styles.btnTxt}>{I18n.t('copy')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnContainer}>
+        <TouchableOpacity style={styles.btnContainer} onPress={onPressCancel}>
           <Text style={styles.btnTxt}>{I18n.t('cancel')}</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={styles.startTripContainer}
-        onPress={() => setModal('offerReturnDrive')}>
+        onPress={() => {
+          startDrive();
+        }}>
         <Icon name="angle-double-right" size={30} color={colors.white} />
         <Text style={styles.startTripTxt}>{I18n.t('start_drive')}</Text>
       </TouchableOpacity>
@@ -153,14 +155,16 @@ const PassengerInfoCard = ({item, onPressCard}) => {
   return (
     <View style={styles.passengerInfoContainer}>
       <TouchableOpacity onPress={onPressCard} style={styles.nameContainer}>
-        <Text style={{fontFamily: fonts.regular}}>{item.name}</Text>
+        <Text style={{fontFamily: fonts.regular}}>
+          {item?.user?.firstName} {item?.user?.lastName}
+        </Text>
         <Image
           source={appImages.driver}
           resizeMode="cover"
           style={styles.driver}
         />
       </TouchableOpacity>
-      <Text style={styles.pickUp}>{item.pickUp}</Text>
+      <Text style={styles.pickUp}>Coming to my Start Location</Text>
       <View style={styles.btnMainContainer}>
         <Text style={{fontFamily: fonts.regular}}>{item.time}</Text>
         <TouchableOpacity style={styles.callNowContainer}>
@@ -335,10 +339,10 @@ const styles = StyleSheet.create({
 });
 
 const getStatusColo = status => {
-  if (status === 'Fully Booked') {
+  if (status === 'FULLY_BOOKED') {
     return colors.green;
   }
-  if (status === 'Partially Booked') {
+  if (status === 'PARTIALLY_BOOKED') {
     return colors.blue;
   }
   if (status === 'WAITING_FOR_MATCH') {

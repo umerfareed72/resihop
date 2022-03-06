@@ -232,6 +232,7 @@ const DriverHome = ({navigation}) => {
       cost: item?.costPerSeat,
       availableSeats: item?.availableSeats,
       drive_date: item?.date,
+      bookedSeats: item?.bookedSeats,
     });
   };
   const getUserdata = async () => {

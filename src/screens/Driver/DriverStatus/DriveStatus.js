@@ -45,6 +45,7 @@ const DriveStatus = ({route}) => {
     availableSeats,
     cost,
     drive_date,
+    bookedSeats,
   } = route.params;
   const [isLoading, setisLoading] = useState(false);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
@@ -97,6 +98,7 @@ const DriveStatus = ({route}) => {
       dispatch(setReturnFirstTime(null));
     };
   }, []);
+
   const handleCancelRide = () => {
     dispatch(
       CancelRide(id, 'drives', setisLoading, response => {
@@ -127,14 +129,13 @@ const DriveStatus = ({route}) => {
         destinationLocation?.longitude,
       ],
       date: stamp,
-      availableSeats: availableSeats,
+      availableSeats: availableSeats + bookedSeats,
       path: 0,
       costPerSeat: cost,
       interCity: false,
       startDes: startDes,
       destDes: destDes,
     };
-    console.log(body);
     dispatch(
       CreateDriveRequest(body, setisLoading, response => {
         navigation?.navigate('DriverHome');

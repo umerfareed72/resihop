@@ -50,6 +50,9 @@ const index = ({navigation}) => {
   return (
     <>
       <CustomHeader
+        onPress={() => {
+          navigation?.navigate('DriverHome');
+        }}
         backButton={true}
         title={I18n.t('add_to_favourite')}
         navigation={navigation}
@@ -77,7 +80,7 @@ const index = ({navigation}) => {
               onPress={() => {
                 navigation?.navigate('DriverHome');
               }}
-              title={'Move to driver Home'}
+              title={'Move to Driver Home'}
               bgColor={colors.green}
               txtColor={colors.white}
               fontFamily={family.product_sans_bold}

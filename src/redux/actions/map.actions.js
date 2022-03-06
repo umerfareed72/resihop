@@ -144,9 +144,7 @@ export const setReturnDateTimeStamp = data => async dispatch => {
 export const CreateDriveRequest =
   (body, setIsLoading, callback) => async dispatch => {
     let Token = await GetToken();
-
     setIsLoading(true);
-
     try {
       const response = await fetch(`${baseURL}drives`, {
         method: 'POST',

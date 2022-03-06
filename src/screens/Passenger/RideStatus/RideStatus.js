@@ -104,7 +104,8 @@ const RideStatus = ({route}) => {
     };
 
     dispatch(
-      CreateRideRequest(body, setIsLoading, response => {
+      CreateRideRequest(body, setIsLoading, null, response => {
+        navigation?.navigate('PassengerHome');
         console.log('Create Ride', response);
       }),
     );
