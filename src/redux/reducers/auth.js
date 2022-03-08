@@ -130,7 +130,7 @@ export default (state = initialState, action = {}) => {
     case Types.Get_Profile_Failure:
       return {
         ...state,
-        profile_info: null,
+        profile_info: state?.profile_info,
       };
     case Types.Language_Success:
       return {

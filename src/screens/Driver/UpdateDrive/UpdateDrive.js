@@ -319,6 +319,16 @@ const UpdateDrive = () => {
               />
             </TouchableOpacity>
           ))}
+          <View
+            style={{
+              backgroundColor: colors.green,
+              padding: 10,
+              borderRadius: 20,
+            }}>
+            <Text style={{color: colors.white}}>
+              {!availableSeats ? 0 : availableSeats}
+            </Text>
+          </View>
         </View>
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
@@ -701,6 +711,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 21,
     marginTop: 25,
+    alignItems: 'center',
   },
   selectWrapper: {
     flexDirection: 'row',

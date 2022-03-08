@@ -34,10 +34,11 @@ import {
   setMapSegment,
   setReturnOrigin,
   setReturnMapDestination,
-  Settings,
+  get_settings,
 } from '../redux/actions/map.actions';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Alert} from 'react-native';
 
 const CreateRide = () => {
   let navigation = useNavigation();
@@ -71,7 +72,7 @@ const CreateRide = () => {
 
   useEffect(() => {
     dispatch(setTime(moment().format('HH:mm')));
-    dispatch(Settings());
+    dispatch(get_settings());
     return () => {
       dispatch(setAvailableSeats(null));
       dispatch(setOrigin(null));
@@ -129,13 +130,16 @@ const CreateRide = () => {
 
     dispatch(
       CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
-        console.log('Create Ride', response);
+        if (response.error) {
+          Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+        } else {
+          navigation.navigate('StartMatching', {
+            modalName: 'startMatching',
+            dateTimeStamp: stamp,
+          });
+        }
       }),
     );
-    navigation.navigate('StartMatching', {
-      modalName: 'startMatching',
-      dateTimeStamp: stamp,
-    });
   };
 
   const handleCreateReturnRide = () => {
@@ -284,6 +288,16 @@ const CreateRide = () => {
               />
             </TouchableOpacity>
           ))}
+          <View
+            style={{
+              backgroundColor: colors.green,
+              padding: 10,
+              borderRadius: 20,
+            }}>
+            <Text style={{color: colors.white}}>
+              {!availableSeats ? 0 : availableSeats}
+            </Text>
+          </View>
         </View>
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
@@ -668,6 +682,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 21,
     marginTop: 25,
+    alignItems: 'center',
   },
   selectWrapper: {
     flexDirection: 'row',

@@ -8,6 +8,7 @@ import {
   Image,
   Platform,
   FlatList,
+  Linking,
 } from 'react-native';
 import {
   colors,
@@ -46,6 +47,11 @@ import {move_from_drawer} from '../../../redux/actions/payment.action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
+import {
+  checkAppPermission,
+  requestAppPermission,
+} from '../../../utilities/helpers/permissions';
+import {Alert} from 'react-native';
 
 //Data
 var TimeList = {
@@ -105,7 +111,6 @@ const seatsList = {
 const PassengerHome = ({navigation}) => {
   let dispatch = useDispatch();
   let isFocused = useIsFocused();
-
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   //States
@@ -129,41 +134,54 @@ const PassengerHome = ({navigation}) => {
           });
         }),
       );
-      getLocation();
       getUserdata();
       dispatch(move_from_drawer(true, () => {}));
     }
   }, [isFocused]);
+
   // Get Location
-  const getLocation = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const {latitude, longitude} = position?.coords;
-        Geocoder.from(latitude, longitude)
-          .then(json => {
-            var addressComponent = json.results[0]?.formatted_address;
-            dispatch(
-              setOrigin({
-                location: {lat: latitude, lng: longitude},
-                description: addressComponent,
-              }),
-            );
-            dispatch(
-              setReturnMapDestination({
-                location: {lat: latitude, lng: longitude},
-                description: addressComponent,
-              }),
-            );
-          })
-          .catch(error => console.warn(error));
-      },
-      error => {
-        // See error code charts below.
-        console.log(error.code, error.message);
-      },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-    );
+  const getLocation = async () => {
+    const permission = await checkAppPermission('location');
+    if (permission) {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position?.coords;
+          Geocoder.from(latitude, longitude)
+            .then(json => {
+              var addressComponent = json.results[0]?.formatted_address;
+              dispatch(
+                setOrigin({
+                  location: {lat: latitude, lng: longitude},
+                  description: addressComponent,
+                }),
+              );
+              dispatch(
+                setReturnMapDestination({
+                  location: {lat: latitude, lng: longitude},
+                  description: addressComponent,
+                }),
+              );
+              navigation?.navigate('CreateRide');
+            })
+            .catch(error => console.warn(error));
+        },
+        error => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    } else {
+      Alert.alert('Error', 'Location Permission Denied', [
+        {
+          onPress: () => {
+            Linking.openURL('app-settings:');
+          },
+        },
+      ]);
+    }
   };
+
   useEffect(() => {
     AsyncStorage.getItem('fcmToken').then(token => {
       if (requestPermission() != null) {
@@ -181,21 +199,27 @@ const PassengerHome = ({navigation}) => {
       }
     });
   }, []);
+
   const selectTime = val => {
     settime(val);
   };
+
   const selectRideStatus = val => {
     setStatus(val);
   };
+
   const selectRideType = val => {
     setRideType(val);
   };
+
   const selectSeats = val => {
     setSeats(val);
   };
+
   const selectdDate = val => {
     setdate(val);
   };
+
   const resetFilter = () => {
     settime('');
     setdate('');
@@ -296,7 +320,7 @@ const PassengerHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
-              navigation?.navigate('CreateRide');
+              getLocation();
             }}
             style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />
@@ -398,7 +422,9 @@ const PassengerHome = ({navigation}) => {
             />
             <TouchableOpacity
               style={styles.createRideBtnContainer}
-              onPress={() => navigation.navigate('CreateRide')}>
+              onPress={() => {
+                getLocation();
+              }}>
               <Text style={styles.btnTxt}>{'Create your Ride'}</Text>
             </TouchableOpacity>
           </>

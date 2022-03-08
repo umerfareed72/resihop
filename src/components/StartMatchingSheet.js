@@ -18,15 +18,16 @@ import {useNavigation} from '@react-navigation/native';
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   let dispatch = useDispatch();
   const navigation = useNavigation();
+  const settings = useSelector(state => state.map.settings);
   const [sliderValue, setSliderValue] = useState(100);
 
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );
-
   useEffect(() => {
     dispatch(setWalkingDistance(sliderValue));
     setHeight(Dimensions.get('screen').height - 200);
+    setSliderValue(settings?.defaultRange * 1000);
   }, []);
 
   return (
@@ -37,7 +38,7 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
       </View>
       <Slider
         style={styles.slider}
-        minimumValue={0}
+        minimumValue={100}
         value={sliderValue}
         maximumValue={3000}
         thumbImage={appIcons.sliderImage}
@@ -55,7 +56,7 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
         }}
       />
       <View style={styles.startEndDistanceContainer}>
-        <Text style={styles.intDistance}>{`${sliderValue} M`}</Text>
+        <Text style={styles.intDistance}>{`${100} M`}</Text>
         <Text style={styles.intDistance}>3000 M</Text>
       </View>
       <TouchableOpacity

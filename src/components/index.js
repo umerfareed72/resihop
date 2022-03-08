@@ -12,6 +12,7 @@ export * from './Cards/TransHistoryCard/TransHistory';
 export * from './Buttons/Payment/PaymentButtons';
 export * from './Buttons/AgreeButton';
 export * from './Buttons/SmallBtn';
+export * from './BlankField';
 
 //App Inputs
 export * from './AppInput/PaymentInput/PaymentInput';

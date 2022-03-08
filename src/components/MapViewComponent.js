@@ -64,7 +64,7 @@ const MapViewComponent = ({
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [height, setHeight] = useState(0);
-  const [minDistance, setMinDistance] = useState();
+  const [minDistance, setMinDistance] = useState(0);
   const origin = useSelector(state => state.map.origin);
   const destination = useSelector(state => state.map.destination);
   const searchRideResponse = useSelector(state => state.map.searchRideResponse);
@@ -373,8 +373,9 @@ const MapViewComponent = ({
       };
       console.log(returnBody);
       dispatch(
-        CreateDriveRequest(body, setIsLoading, async response => {
+        CreateDriveRequest(returnBody, setIsLoading, async response => {
           if (response?.error) {
+            console.log('Create Drive Error', response);
             Alert.alert('Failed', response?.message[0]?.messages[0]?.message);
           } else {
             navigation.navigate('DriverHome');
@@ -382,10 +383,15 @@ const MapViewComponent = ({
         }),
       );
     }
+    console.log(body);
     dispatch(
       CreateDriveRequest(body, setIsLoading, async response => {
         if (response?.error) {
-          Alert.alert('Failed', response?.message[0]?.messages[0]?.message);
+          console.log(response);
+          Alert.alert(
+            'Failed',
+            response?.message || response?.message[0]?.messages[0]?.message,
+          );
         } else {
           navigation.navigate('DriverHome');
         }

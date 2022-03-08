@@ -512,20 +512,12 @@ export const BookRide =
     }
   };
 
-export const Settings = data => async dispatch => {
-  let Token = await GetToken();
+export const get_settings = () => async dispatch => {
   try {
-    const response = await fetch(`${baseURL}/settings`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Token}`,
-      },
-    });
-    const responseJson = await response.json();
+    const res = await get(`settings`, await header());
     dispatch({
       type: Types.settings,
-      payload: responseJson,
+      payload: res.data,
     });
   } catch (error) {
     console.log('Settings', error);

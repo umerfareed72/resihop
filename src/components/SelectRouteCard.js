@@ -12,6 +12,7 @@ import {fonts} from '../theme/theme';
 import I18n from '../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
 import {CreateDriveRequest, SearchRides} from '../redux/actions/map.actions';
+import moment from 'moment';
 
 const SelectRouteCard = ({setModal, setHeight, onPressCreateDrive}) => {
   let dispatch = useDispatch();
@@ -55,7 +56,10 @@ const SelectRouteCard = ({setModal, setHeight, onPressCreateDrive}) => {
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.dateContainer}>
-        <Text style={styles.dateTxt}>{I18n.t('date_time')}</Text>
+        <Text style={styles.dateTxt}>
+          {moment(routes?.date).format('DD MMM')}{' '}
+          {moment(routes?.date).format('hh:mm')}
+        </Text>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           {data.map(() => (
             <Image

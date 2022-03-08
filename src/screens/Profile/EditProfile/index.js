@@ -79,8 +79,8 @@ function index(props) {
 
     const {firstName, lastName, email} = inputData;
     //Call Image Upload Function
-    const mb = pic.fileSize / 1000000;
-    if (mb > 2) {
+    var sizeInMB = (pic.fileSize / (1024 * 1024)).toFixed(2);
+    if (sizeInMB > 20) {
       alert('File size should not be more than 20MB');
       setIsLoading(false);
     } else {
@@ -124,33 +124,38 @@ function index(props) {
 
   //Image Uploading
   const imageUpload = async (data, callBack) => {
-    if (photo) {
-      callBack(photo._id);
-    } else {
-      var form = new FormData();
-      form.append('files', {
-        name: data?.fileName,
-        type: data?.type,
-        uri: data?.uri,
-      });
-      console.log(data);
-      axios
-        .post(`${baseURL}upload`, form, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${await GetToken()}`,
-          },
-        })
-        .then(res => {
-          if (res.data) {
-            callBack(res?.data[0]._id);
-          }
-        })
-        .catch(error => {
-          console.log('error', error?.response?.data);
-          Alert.alert('Error', 'Failed to Upload Image');
-          setIsLoading(false);
+    try {
+      if (photo) {
+        callBack(photo._id);
+      } else {
+        var form = new FormData();
+        form.append('files', {
+          name: data?.fileName,
+          type: data?.type,
+          uri: data?.uri,
         });
+        console.log(data);
+        axios
+          .post(`${baseURL}upload`, form, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${await GetToken()}`,
+            },
+          })
+          .then(res => {
+            if (res.data) {
+              callBack(res?.data[0]._id);
+            }
+          })
+          .catch(error => {
+            console.log('error', error?.response?.data);
+            Alert.alert('Error', 'Failed to Upload Image');
+            setIsLoading(false);
+          });
+      }
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
     }
   };
 

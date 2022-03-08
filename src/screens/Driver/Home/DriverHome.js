@@ -9,6 +9,8 @@ import {
   Platform,
   ScrollView,
   FlatList,
+  Linking,
+  Alert,
 } from 'react-native';
 import {
   colors,
@@ -41,6 +43,7 @@ import {useIsFocused} from '@react-navigation/core';
 import mapTypes from '../../../redux/types/map.types';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
+import {checkAppPermission} from '../../../utilities/helpers/permissions';
 
 //Data
 var TimeList = {
@@ -113,6 +116,7 @@ const DriverHome = ({navigation}) => {
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
   const isFocus = useIsFocused();
+  //Get Data
   useEffect(() => {
     if (isFocus) {
       dispatch(
@@ -123,39 +127,51 @@ const DriverHome = ({navigation}) => {
           });
         }),
       );
-      getLocation();
       getUserdata();
     }
   }, [isFocus]);
+
   // Get Location
-  const getLocation = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const {latitude, longitude} = position?.coords;
-        Geocoder.from(latitude, longitude)
-          .then(json => {
-            var addressComponent = json.results[0]?.formatted_address;
-            dispatch(
-              setOrigin({
-                location: {lat: latitude, lng: longitude},
-                description: addressComponent,
-              }),
-            );
-            dispatch(
-              setReturnMapDestination({
-                location: {lat: latitude, lng: longitude},
-                description: addressComponent,
-              }),
-            );
-          })
-          .catch(error => console.warn(error));
-      },
-      error => {
-        // See error code charts below.
-        console.log(error.code, error.message);
-      },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-    );
+  const getLocation = async () => {
+    const permission = await checkAppPermission('location');
+    if (permission) {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position?.coords;
+          Geocoder.from(latitude, longitude)
+            .then(json => {
+              var addressComponent = json.results[0]?.formatted_address;
+              dispatch(
+                setOrigin({
+                  location: {lat: latitude, lng: longitude},
+                  description: addressComponent,
+                }),
+              );
+              dispatch(
+                setReturnMapDestination({
+                  location: {lat: latitude, lng: longitude},
+                  description: addressComponent,
+                }),
+              );
+              navigation.navigate('CreateDrive');
+            })
+            .catch(error => console.warn(error));
+        },
+        error => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    } else {
+      Alert.alert('Error', 'Location Permission Denied', [
+        {
+          onPress: () => {
+            Linking.openURL('app-settings:');
+          },
+        },
+      ]);
+    }
   };
 
   //Save Notification
@@ -304,7 +320,7 @@ const DriverHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
-              navigation?.navigate('CreateDrive');
+              getLocation();
               AsyncStorage.setItem('city', 'no');
             }}
             style={styles.cardContainer}>
@@ -385,7 +401,7 @@ const DriverHome = ({navigation}) => {
             {/* <Text style={styles.Txt}>{I18n.t('lorem')}</Text> */}
             <TouchableOpacity
               style={styles.createRideBtnContainer}
-              onPress={() => navigation.navigate('CreateDrive')}>
+              onPress={() => getLocation()}>
               <Text style={styles.btnTxt}>{I18n.t('create_first_drive')}</Text>
             </TouchableOpacity>
           </ScrollView>
@@ -401,7 +417,7 @@ const DriverHome = ({navigation}) => {
             />
             <TouchableOpacity
               style={styles.createRideBtnContainer}
-              onPress={() => navigation.navigate('CreateDrive')}>
+              onPress={() => getLocation()}>
               <Text style={styles.btnTxt}>{'Create your Drive'}</Text>
             </TouchableOpacity>
           </>

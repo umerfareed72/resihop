@@ -48,7 +48,6 @@ function splash(props) {
     //On  local Notification
     LocalNotification();
   };
-
   const handleNavigation = async () => {
     const lang = await AsyncStorage.getItem('lang');
     if (lang === null || lang === undefined) {

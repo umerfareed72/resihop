@@ -15,10 +15,13 @@ import {
   family,
   size,
   responseValidator,
+  header,
 } from '../../../utilities';
 import {Divider} from 'react-native-elements/dist/divider/Divider';
 import {GET_NOTIFICATION_LIST} from '../../../utilities/routes';
 import {get} from '../../../services';
+import {Loader} from '../../../components';
+import BlankField from '../../../components/BlankField';
 
 const NotificationList = ({navigation}) => {
   //useState here
@@ -35,10 +38,8 @@ const NotificationList = ({navigation}) => {
 
   const getNotificationList = async () => {
     try {
-      const response = await get(`${GET_NOTIFICATION_LIST}`);
+      const response = await get(`${GET_NOTIFICATION_LIST}`, await header());
       if (response.data) {
-        console.log('DATA ===>   ', response.data);
-
         setNotifData(response.data);
         setLoading(false);
       }
@@ -76,18 +77,19 @@ const NotificationList = ({navigation}) => {
         title={'Notifications'}
         backButton={true}
       />
-      {loading === true ? (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="large" color={colors.green} />
-        </View>
-      ) : (
-        <SafeAreaView style={styles.container}>
+
+      <SafeAreaView style={styles.container}>
+        {notifData != '' ? (
           <FlatList
             data={notifData}
             renderItem={item => <NotificationItem data={item} />}
           />
-        </SafeAreaView>
-      )}
+        ) : (
+          <BlankField title={'No Notification Available'} />
+        )}
+      </SafeAreaView>
+
+      {loading && <Loader />}
     </>
   );
 };

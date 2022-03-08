@@ -80,13 +80,13 @@ const CreateDrive = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: '20', value: 20},
-    {label: '30', value: 30},
-    {label: '40', value: 40},
-    {label: '50', value: 50},
-    {label: '60', value: 60},
-    {label: '70', value: 70},
-    {label: '80', value: 80},
+    {label: '20 NOK', value: 20},
+    {label: '30 NOK', value: 30},
+    {label: '40 NOK', value: 40},
+    {label: '50 NOK', value: 50},
+    {label: '60 NOK', value: 60},
+    {label: '70 NOK', value: 70},
+    {label: '80 NOK', value: 80},
   ]);
 
   // Release Redux States
@@ -318,6 +318,16 @@ const CreateDrive = () => {
               />
             </TouchableOpacity>
           ))}
+          <View
+            style={{
+              backgroundColor: colors.green,
+              padding: 10,
+              borderRadius: 20,
+            }}>
+            <Text style={{color: colors.white}}>
+              {!availableSeats ? 0 : availableSeats}
+            </Text>
+          </View>
         </View>
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
@@ -701,6 +711,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 21,
     marginTop: 25,
+    alignItems: 'center',
   },
   selectWrapper: {
     flexDirection: 'row',
