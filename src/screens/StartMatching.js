@@ -14,8 +14,8 @@ const StartMatching = props => {
   const [modal, setModal] = useState(null);
 
   const origin = useSelector(state => state.map.origin);
-  const destinationMap = useSelector(state => state.map.destination);
-  const availableSeats = useSelector(state => state.map.availableSeats);
+  const destinationMap = useSelector(state => state?.map?.destination);
+  const availableSeats = useSelector(state => state?.map?.availableSeats);
 
   const {dateTimeStamp} = props.route.params;
 

@@ -18,6 +18,9 @@ export {
   agora_token,
   appId,
   options,
+  APIKEY,
+  mode,
+  total_seats,
 } from './constants';
 export {
   registerAppWithFCM,
@@ -29,4 +32,5 @@ export {
   checkConnected,
   OnlineStatusProvider,
   useOnlineStatus,
+  GeoCoderHelper,
 } from './helpers/index';

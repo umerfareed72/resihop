@@ -37,12 +37,12 @@ const AddressCards = ({
   onPress,
   mode,
   favName,
+  googleAutoComplete,
 }) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
   const calenderSheetRef = useRef(null);
   const returnCalendarSheetRef = useRef(null);
-  const googleAutoComplete = useRef();
 
   const startReturnGoogleAutoComplete = useRef(null);
   const destinationReturnGoogleAutoComplete = useRef(null);

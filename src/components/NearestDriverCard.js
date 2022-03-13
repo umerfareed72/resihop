@@ -14,17 +14,16 @@ import {useSelector} from 'react-redux';
 import moment from 'moment';
 
 const NearestDriverCard = ({setModal, setHeight, modalName}) => {
-  const createRideResponse = useSelector(
-    state => state.map.createRideRequestResponse,
+  const {all_routes, createRideRequestResponse} = useSelector(
+    state => state.map,
   );
 
   const [requiredSeats, setRequiredSeats] = useState([]);
 
   useEffect(() => {
-    for (let i = 0; i < createRideResponse?.requiredSeats; i++) {
+    for (let i = 0; i < all_routes?.requiredSeats; i++) {
       requiredSeats[i] = i;
     }
-
     setHeight(Dimensions.get('screen').height - 240);
 
     const interval = setTimeout(() => {
@@ -35,23 +34,28 @@ const NearestDriverCard = ({setModal, setHeight, modalName}) => {
       clearTimeout(interval);
     };
   }, []);
-
   return (
     <View style={styles.mainWrapper}>
       {modalName === 'selectRoute' && (
         <Text style={styles.topText}>{I18n.t('min24')}</Text>
       )}
       <View style={styles.addressContainer}>
-        <Text style={styles.addressTxt}>{createRideResponse?.startDes}</Text>
+        <Text style={styles.addressTxt}>
+          {createRideRequestResponse?.startDes || all_routes?.drive?.startDes}
+        </Text>
         <View style={styles.addressCircle} />
       </View>
       <View style={[styles.addressContainer, {marginTop: 21}]}>
-        <Text style={styles.addressTxt}>{createRideResponse?.destDes}</Text>
+        <Text style={styles.addressTxt}>
+          {createRideRequestResponse?.destDes || all_routes?.drive?.destDes}
+        </Text>
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.rideInfoContainer}>
         <Text style={styles.date}>
-          {moment(createRideResponse?.tripDate).format('DD MMM, HH:mm')}
+          {moment(
+            createRideRequestResponse?.tripDate || all_routes?.tripDate,
+          ).format('DD MMM, HH:mm')}
         </Text>
         <View style={styles.imagesContainer}>
           {requiredSeats.map(seat => (

@@ -22,9 +22,7 @@ import CalendarSheet from '../../CalendarSheet';
 
 const RideStatus = ({route}) => {
   const {item} = route.params;
-
   const calendarSheetRef = useRef(null);
-
   let dispatch = useDispatch();
   let navigation = useNavigation();
 
@@ -106,7 +104,8 @@ const RideStatus = ({route}) => {
     };
 
     dispatch(
-      CreateRideRequest(body, setIsLoading, response => {
+      CreateRideRequest(body, setIsLoading, null, response => {
+        navigation?.navigate('PassengerHome');
         console.log('Create Ride', response);
       }),
     );
@@ -114,7 +113,9 @@ const RideStatus = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <MapViewComponent startRide={item.status == 'CONFIRMED' && true} />
+      <MapViewComponent
+      // startRide={item.status == 'CONFIRMED' && true}
+      />
       <TouchableOpacity
         style={styles.arrowBackCircle}
         onPress={() => navigation.goBack()}>
@@ -137,6 +138,7 @@ const RideStatus = ({route}) => {
         setModalVisible={setModalVisible}
       />
       <CopyRideModal
+        title={'Do you want to copy this Ride to selected date?'}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         handleCopyRide={handleCopyRide}

@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {fonts} from '../../../../theme';
-import {colors, appIcons, appImages, family, size} from '../../../../utilities';
+import {fonts} from '../../../theme';
+import {colors, appIcons, appImages, family, size} from '../../../utilities';
 export default StyleSheet.create({
   container: {
     flex: 1,

@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@mapbox/polyline": "^1.1.1",
     "@react-native-async-storage/async-storage": "^1.15.11",
     "@react-native-clipboard/clipboard": "^1.9.0",
     "@react-native-community/checkbox": "^0.5.9",

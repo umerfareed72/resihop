@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {fonts} from '../../../../theme';
 import {colors, family, size} from '../../../../utilities';
 
 export default StyleSheet.create({
@@ -40,6 +41,7 @@ export default StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.white,
+    fontFamily: fonts.regular,
   },
   txtInput: {
     height: 44,
@@ -49,6 +51,8 @@ export default StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 45,
     color: colors.inputTxtGray,
+    justifyContent: 'center',
+    fontFamily: fonts.regular,
   },
   startDot: {
     height: 16,
@@ -71,6 +75,7 @@ export default StyleSheet.create({
   locationSwitch: {
     height: 25,
     width: 25,
+    backgroundColor: colors.green,
     borderRadius: 25 / 2,
     marginVertical: 11,
   },
@@ -92,6 +97,7 @@ export default StyleSheet.create({
     marginTop: 37,
     color: colors.txtBlack,
     marginLeft: 21,
+    fontFamily: fonts.regular,
   },
   seat: {
     height: 31,
@@ -102,18 +108,18 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 21,
     marginTop: 25,
+    alignItems: 'center',
   },
   selectWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     marginTop: 26,
-    paddingHorizontal: 20,
+    marginLeft: 20,
   },
   selectTxt: {
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
-    width: '43%',
+    fontFamily: fonts.regular,
   },
   noLater: {
     height: 44,
@@ -125,6 +131,7 @@ export default StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.inputTxtGray,
+    fontFamily: fonts.regular,
   },
   calendarIcon: {
     height: 18,
@@ -145,10 +152,12 @@ export default StyleSheet.create({
     fontSize: 16,
     lineHeight: 29,
     color: colors.txtBlack,
+    fontFamily: fonts.regular,
   },
   returnTripWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 31,
     width: '87%',
     alignSelf: 'center',
   },
@@ -157,11 +166,13 @@ export default StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
     marginTop: 20,
+    fontFamily: fonts.regular,
   },
   timeBracketTxt: {
     fontSize: 12,
     lineHeight: 24,
     color: colors.btnGray,
+    fontFamily: fonts.regular,
   },
   nextBtnContainer: {
     height: 56,
@@ -177,20 +188,44 @@ export default StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: colors.white,
+    fontFamily: fonts.bold,
   },
-  starttxtBtn: {
+  dateTxt: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.g1,
+    fontFamily: fonts.regular,
+  },
+  presetCostContainer: {
     height: 44,
-    width: 291,
+    width: '90%',
     borderWidth: 1,
     borderColor: colors.greyBorder,
     borderRadius: 10,
-    paddingLeft: 45,
-    color: colors.inputTxtGray,
-    justifyContent: 'center',
+    alignSelf: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 15,
   },
-  starttxt: {
-    fontFamily: family.product_sans_regular,
-    fontSize: size.normal,
-    color: colors.inputTxtGray,
+  presetTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 14,
+    lineHeight: 24,
+    color: colors.black,
+    marginVertical: 25,
+    marginHorizontal: 22,
+  },
+  locationTxt: {
+    fontFamily: fonts.regular,
+    fontSize: 13,
+    lineHeight: 20,
+    color: colors.g4,
+  },
+  to: {
+    fontFamily: fonts.regular,
+    fontSize: 14,
+    lineHeight: 24,
+    color: colors.txtBlack,
   },
 });

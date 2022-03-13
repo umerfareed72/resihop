@@ -1,33 +1,56 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {colors, appIcons} from '../../../utilities';
 import MapViewComponent from '../../../components/MapViewComponent';
 import {fonts} from '../../../theme';
 import {useNavigation} from '@react-navigation/core';
-import {DeleteCardModal} from '../../../components';
+import {CopyRideModal, DeleteCardModal} from '../../../components';
 import I18n from '../../../utilities/translations';
 import {
   setOrigin,
   setMapDestination,
   setIDToUpdateDrive,
   CancelRide,
+  SetRidesResponse,
+  setReturnOrigin,
+  setReturnMapDestination,
+  setReturnFirstTime,
+  setDateTimeStamp,
+  setAvailableSeats,
+  CreateDriveRequest,
+  setTime,
+  setCostPerSeat,
 } from '../../../redux/actions/map.actions';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Alert} from 'react-native';
+import CalendarSheet from '../../CalendarSheet';
+import moment from 'moment';
+import CreateDrive from '../CreateDrive/CreateDrive';
 
 const DriveStatus = ({route}) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
-
+  const calendarSheetRef = useRef(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [show, setshow] = useState(false);
   const [selected, setSelected] = useState(false);
   const [modal, setModal] = useState('driveStatus');
-  const {status, id} = route.params;
+  const {
+    status,
+    startLocation,
+    destinationLocation,
+    startDes,
+    destDes,
+    id,
+    availableSeats,
+    cost,
+    drive_date,
+    bookedSeats,
+  } = route.params;
   const [isLoading, setisLoading] = useState(false);
-  useEffect(() => {
-    const {startLocation, destinationLocation, startDes, destDes, id} =
-      route.params;
+  const {dateTimeStamp} = useSelector(state => state.map);
 
+  useEffect(() => {
     dispatch(
       setOrigin({
         location: {lat: startLocation.latitude, lng: startLocation.longitude},
@@ -43,12 +66,39 @@ const DriveStatus = ({route}) => {
         description: destDes,
       }),
     );
+    dispatch(
+      setReturnOrigin({
+        location: {
+          lat: destinationLocation.latitude,
+          lng: destinationLocation.longitude,
+        },
+        description: destDes,
+      }),
+    );
+
+    dispatch(
+      setReturnMapDestination({
+        location: {lat: startLocation.latitude, lng: startLocation.longitude},
+        description: startDes,
+      }),
+    );
+    dispatch(setAvailableSeats(availableSeats));
+    dispatch(setCostPerSeat(cost));
+    dispatch(setTime(moment(drive_date).format('HH:mm')));
+    dispatch(setDateTimeStamp(drive_date));
 
     return () => {
+      dispatch(setAvailableSeats(0));
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
+      dispatch(setDateTimeStamp(null));
+      dispatch(SetRidesResponse(null));
+      dispatch(setReturnOrigin(null));
+      dispatch(setReturnMapDestination(null));
+      dispatch(setReturnFirstTime(null));
     };
   }, []);
+
   const handleCancelRide = () => {
     dispatch(
       CancelRide(id, 'drives', setisLoading, response => {
@@ -65,6 +115,33 @@ const DriveStatus = ({route}) => {
       }),
     );
   };
+  const handleCopyDrive = () => {
+    calendarSheetRef?.current?.close();
+    setModalVisible(false);
+    const stamp = moment(
+      `${dateTimeStamp}T${moment(drive_date).format('HH:mm')}`,
+    ).valueOf();
+    const body = {
+      startLocation: [startLocation?.latitude, startLocation?.longitude],
+      destinationLocation: [
+        destinationLocation?.latitude,
+        destinationLocation?.longitude,
+      ],
+      date: stamp,
+      availableSeats: availableSeats + bookedSeats,
+      path: 0,
+      costPerSeat: cost,
+      interCity: false,
+      startDes: startDes,
+      destDes: destDes,
+    };
+    console.log(body);
+    dispatch(
+      CreateDriveRequest(body, setisLoading, response => {
+        navigation?.navigate('DriverHome');
+      }),
+    );
+  };
 
   return (
     <>
@@ -75,6 +152,9 @@ const DriveStatus = ({route}) => {
           setModal={setModal}
           onPressCancel={() => {
             setshow(true);
+          }}
+          onPressCopyDrive={() => {
+            calendarSheetRef?.current?.open();
           }}
         />
         <TouchableOpacity
@@ -113,6 +193,16 @@ const DriveStatus = ({route}) => {
           }}
         />
       )}
+      <CalendarSheet
+        calendarSheetRef={calendarSheetRef}
+        setModalVisible={setModalVisible}
+      />
+      <CopyRideModal
+        title={'Do you want to copy this Drive to selected date?'}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleCopyRide={handleCopyDrive}
+      />
     </>
   );
 };

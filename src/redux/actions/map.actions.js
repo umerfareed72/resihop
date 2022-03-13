@@ -6,12 +6,27 @@ import {responseValidator} from '../../utilities/helpers';
 import {RIDES_CONST, DRIVE_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
 
+export const setRoutes = data => async dispatch => {
+  dispatch({
+    type: Types.selectRoutes,
+    payload: data,
+  });
+};
+
+export const setReturnRide = data => async dispatch => {
+  dispatch({
+    type: Types.returnRide,
+    payload: data,
+  });
+};
+
 export const setOrigin = data => async dispatch => {
   dispatch({
     type: Types.origin,
     payload: data,
   });
 };
+
 export const setMapDestination = data => async dispatch => {
   dispatch({
     type: Types.destination,
@@ -33,6 +48,12 @@ export const setReturnMapDestination = data => async dispatch => {
 export const setAvailableSeats = data => async dispatch => {
   dispatch({
     type: Types.availableSeats,
+    payload: data,
+  });
+};
+export const setCostPerSeat = data => async dispatch => {
+  dispatch({
+    type: Types.Cost_Per_Seat,
     payload: data,
   });
 };
@@ -123,9 +144,7 @@ export const setReturnDateTimeStamp = data => async dispatch => {
 export const CreateDriveRequest =
   (body, setIsLoading, callback) => async dispatch => {
     let Token = await GetToken();
-
     setIsLoading(true);
-
     try {
       const response = await fetch(`${baseURL}drives`, {
         method: 'POST',
@@ -150,7 +169,7 @@ export const CreateDriveRequest =
   };
 
 export const CreateRideRequest =
-  (body, setIsLoading, callback) => async dispatch => {
+  (body, setIsLoading, returnTrip, callback) => async dispatch => {
     let Token = await GetToken();
     setIsLoading(true);
     try {
@@ -166,6 +185,7 @@ export const CreateRideRequest =
       const responseJson = await response.json();
       setIsLoading(false);
       callback(responseJson);
+      responseJson['return_trip'] = returnTrip;
       dispatch({
         type: Types.createRideRequest,
         payload: responseJson,
@@ -200,7 +220,6 @@ export const SearchRides = data => async dispatch => {
     );
 
     const responseJson = await response.json();
-    console.log('Search Rides', responseJson);
     dispatch({
       type: Types.searchRides,
       payload: responseJson,
@@ -285,23 +304,24 @@ export const MyRides = data => async dispatch => {
   }
 };
 
-export const setUpdateDrive = data => async dispatch => {
+export const setUpdateDrive = (id, data, callBack) => async dispatch => {
   let Token = await GetToken();
 
-  const id = data.id;
-  delete data['id'];
   try {
     axios
-      .put(`${baseURL}drives/${id}`, JSON.stringify(data), {
+      .put(`${baseURL}drives/${id}`, data, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${Token}`,
         },
       })
-      .then(response => console.log(response));
-  } catch (error) {
-    console.log(error);
-  }
+      .then(response => {
+        callBack(response?.data);
+      })
+      .catch(error => {
+        console.log(error?.response?.data);
+      });
+  } catch (error) {}
 };
 
 export const setUpdateRide =
@@ -492,20 +512,43 @@ export const BookRide =
     }
   };
 
-export const Settings = data => async dispatch => {
-  let Token = await GetToken();
+export const get_settings = () => async dispatch => {
   try {
-    const response = await fetch(`${baseURL}/settings`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${Token}`,
-      },
-    });
-    const responseJson = await response.json();
+    const res = await get(`settings`, await header());
     dispatch({
       type: Types.settings,
-      payload: responseJson,
+      payload: res.data,
+    });
+  } catch (error) {
+    console.log('Settings', error);
+  }
+};
+//Set Recurring Dates Recurring Rides
+
+export const setRecurringDates = (data, remove) => async dispatch => {
+  try {
+    const dates = {
+      date_item: data,
+      remove_date: remove,
+    };
+    dispatch({
+      type: Types.Set_Recurring_Dates,
+      payload: dates,
+    });
+  } catch (error) {
+    console.log('Error', error);
+  }
+};
+
+export const setReturnRecurringDates = (data, remove) => async dispatch => {
+  try {
+    const dates = {
+      date_item: data,
+      remove_date: remove,
+    };
+    dispatch({
+      type: Types.Set_Return_Recurring_Dates,
+      payload: dates,
     });
   } catch (error) {
     console.log('Settings', error);

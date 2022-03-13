@@ -12,9 +12,9 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
       setSelectedCard(selectedCard.filter(card => card !== id));
     } else setSelectedCard([id, ...selectedCard]);
   };
-
   const [seats, setSeats] = useState([]);
   const myRidesData = useSelector(state => state.map.myRidesData);
+  const myDrives = useSelector(state => state.map.myDrivesData);
 
   useEffect(() => {
     if (item.availableSeats) {
@@ -32,7 +32,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
       }
       setSeats(requiredSeats);
     }
-  }, [myRidesData]);
+  }, [myRidesData, myDrives]);
 
   return (
     <View>
@@ -63,7 +63,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
               {borderColor: getStatusColor(item.status)},
             ]}>
             <Text style={[styles.status, {color: getStatusColor(item.status)}]}>
-              {item.status}
+              {item?.status.split('_').join(' ')}
             </Text>
           </View>
         </View>

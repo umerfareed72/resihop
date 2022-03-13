@@ -1,12 +1,17 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {SafeAreaView, View, FlatList} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   CustomHeader,
+  Loader,
   RecurringRideCard,
   RideFilterModal,
   SortModal,
 } from '../../../components';
-import {appIcons, appImages, colors} from '../../../utilities';
+import {get} from '../../../services';
+import * as Types from '../../../redux/types/map.types';
+import {appIcons, appImages, colors, header} from '../../../utilities';
+import BlankField from '../../../components/BlankField';
 
 var TimeList = {
   id: 1,
@@ -72,6 +77,10 @@ function index(props) {
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
+  const {recurring_ride} = useSelector(state => state.map);
+  const [isLoading, setisLoading] = useState(false);
+  //Redux States
+  const dispatch = useDispatch(null);
 
   const selectTime = val => {
     settime(val);
@@ -98,6 +107,30 @@ function index(props) {
 
   const onPress = () => {};
 
+  useEffect(() => {
+    get_recurring_rides();
+  }, []);
+  //Get Recurring Rides
+  const get_recurring_rides = async () => {
+    setisLoading(true);
+    try {
+      const res = await get(`rides?recurring=true`, await header());
+      if (res.data) {
+        setisLoading(false);
+        dispatch({
+          type: Types.Get_Reccuring_Rides_Success,
+          payload: res.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+      dispatch({
+        type: Types.Get_Reccuring_Rides_Failure,
+        payload: null,
+      });
+    }
+  };
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -111,22 +144,28 @@ function index(props) {
           backButton={true}
         />
         <View style={{flex: 1}}>
-          <FlatList
-            style={{height: '80%'}}
-            showsVerticalScrollIndicator={false}
-            data={[1, 2]}
-            renderItem={() => {
-              return (
-                <RecurringRideCard
-                  onPressCard={() => {
-                    props?.navigation?.navigate('RecurringRideDetail');
-                  }}
-                />
-              );
-            }}
-          />
+          {recurring_ride != '' ? (
+            <FlatList
+              style={{height: '80%'}}
+              showsVerticalScrollIndicator={false}
+              data={recurring_ride}
+              renderItem={({item}) => {
+                return (
+                  <RecurringRideCard
+                    ride={item}
+                    onPressCard={() => {
+                      // props?.navigation?.navigate('RecurringRideDetail');
+                    }}
+                  />
+                );
+              }}
+            />
+          ) : (
+            <BlankField title={'No Reccuring Ride Available'} />
+          )}
         </View>
       </SafeAreaView>
+      {isLoading && <Loader />}
       <RideFilterModal
         time={TimeList}
         seats={seatsList}

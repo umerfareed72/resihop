@@ -6,7 +6,10 @@ import {colors} from '../utilities';
 import moment from 'moment';
 import {fonts} from '../theme/theme';
 import I18n from '../utilities/translations';
-import {setReturnDateTimeStamp} from '../redux/actions/map.actions';
+import {
+  setReturnDateTimeStamp,
+  setReturnRecurringDates,
+} from '../redux/actions/map.actions';
 import {useDispatch} from 'react-redux';
 
 const ReturnCalendarSheet = ({
@@ -14,21 +17,20 @@ const ReturnCalendarSheet = ({
   setDate,
   setModalVisible,
   mindate,
+  recurring,
 }) => {
   let dispatch = useDispatch();
-
   const [markedDate, setMarkedDate] = useState();
-
-  useEffect(() => {
-    let markedObj = {};
-    const selectedDate = moment(mindate).format('YYYY-MM-DD');
-    markedObj[selectedDate] = {
-      selected: true,
-      selectedColor: colors.green,
-    };
-    setMarkedDate(markedObj);
-    dispatch(setReturnDateTimeStamp(selectedDate));
-  }, []);
+  // useEffect(() => {
+  //   let markedObj = {};
+  //   const selectedDate = moment(mindate).format('YYYY-MM-DD');
+  //   markedObj[selectedDate] = {
+  //     selected: true,
+  //     selectedColor: colors.green,
+  //   };
+  //   setMarkedDate(markedObj);
+  //   dispatch(setReturnDateTimeStamp(selectedDate));
+  // }, []);
 
   LocaleConfig.locales['en'] = {
     monthNames: [
@@ -59,16 +61,45 @@ const ReturnCalendarSheet = ({
   LocaleConfig.defaultLocale = 'en';
 
   const handleDayPress = date => {
-    dispatch(
-      setReturnDateTimeStamp(moment(date.dateString).format('YYYY-MM-DD')),
-    );
-    let markedObj = {};
-    const selectedDate = moment(date.dateString).format('YYYY-MM-DD');
-    markedObj[selectedDate] = {
-      selected: true,
-      selectedColor: colors.green,
-    };
-    setMarkedDate(markedObj);
+    if (!recurring) {
+      dispatch(
+        setReturnDateTimeStamp(moment(date.dateString).format('YYYY-MM-DD')),
+      );
+      let markedObj = {};
+      const selectedDate = moment(date.dateString).format('YYYY-MM-DD');
+      markedObj[selectedDate] = {
+        selected: true,
+        selectedColor: colors.green,
+      };
+      setMarkedDate(markedObj);
+    } else {
+      let selectedDate = date.dateString;
+      let newDates = markedDate;
+      if (markedDate[selectedDate]) {
+        delete newDates[selectedDate];
+        dispatch(
+          setReturnRecurringDates(
+            moment(date.dateString).format('YYYY-MM-DD'),
+            true,
+          ),
+        );
+      } else {
+        newDates[selectedDate] = {
+          selected: true,
+          selectedColor: colors.green,
+        };
+        dispatch(
+          setReturnRecurringDates(
+            moment(date.dateString).format('YYYY-MM-DD'),
+            false,
+          ),
+        );
+        dispatch(
+          setReturnDateTimeStamp(moment(date.dateString).format('YYYY-MM-DD')),
+        );
+      }
+      setMarkedDate({...newDates});
+    }
   };
 
   return (

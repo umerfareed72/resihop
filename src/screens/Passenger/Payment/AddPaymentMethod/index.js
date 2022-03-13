@@ -140,8 +140,9 @@ const index = ({navigation, route}) => {
     const requestBody = {
       customerID: cardDetail?.customer,
       cardID: cardDetail?.id,
-      rideID: createRideRequest?._id,
-      driverUserID: bookRide?.drive?.user?._id,
+      rideID: createRideRequest?._id || bookRide?._id,
+      driverUserID:
+        bookRide?.drive?.user?._id || bookRide?.pool_match?.user?._id,
       currency: 'usd',
     };
 
@@ -190,12 +191,17 @@ const index = ({navigation, route}) => {
 
   const handleBookRide = () => {
     const body = {
-      ride: createRideRequest._id,
+      ride: createRideRequest?._id || bookRide?._id,
     };
     dispatch(
-      BookRide(body, bookRide.drive._id, setBookLoading, response => {
-        navigation?.replace('PassengerHome');
-      }),
+      BookRide(
+        body,
+        bookRide?.drive?._id || bookRide?.pool_match?._id,
+        setBookLoading,
+        response => {
+          navigation?.replace('PassengerHome');
+        },
+      ),
     );
   };
   return (
@@ -318,7 +324,10 @@ const index = ({navigation, route}) => {
                     payFromCard();
                   }}
                   bgColor={cardDetail ? colors.green : colors.g1}
-                  title={`NOK ${bookRide?.drive?.costPerSeat} Pay From Card`}
+                  title={`NOK ${
+                    bookRide?.drive?.costPerSeat ||
+                    bookRide?.pool_match?.costPerSeat
+                  } Pay From Card`}
                   txtColor={colors.white}
                 />
               </View>

@@ -1,4 +1,6 @@
+import moment from 'moment';
 import React, {useState, useRef} from 'react';
+import {FlatList} from 'react-native';
 import {
   StyleSheet,
   View,
@@ -9,7 +11,7 @@ import {
 } from 'react-native';
 import {colors, appImages} from '../../../utilities';
 
-export const RecurringRideCard = ({onPressCard}) => {
+export const RecurringRideCard = ({onPressCard, ride}) => {
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
 
@@ -19,7 +21,9 @@ export const RecurringRideCard = ({onPressCard}) => {
         <View style={styles.cardStyle}>
           <View style={{marginBottom: 20}}>
             <TextInput
-              placeholder="123 abc apartment abc street abc..."
+              editable={false}
+              multiline={true}
+              placeholder={ride?.startDes}
               placeholderTextColor={colors.inputTxtGray}
               value={startLocation}
               onChangeText={setStartLocation}
@@ -29,7 +33,9 @@ export const RecurringRideCard = ({onPressCard}) => {
           </View>
           <View>
             <TextInput
-              placeholder="123 abc apartment abc street abc..."
+              multiline={true}
+              editable={false}
+              placeholder={ride?.destDes}
               placeholderTextColor={colors.inputTxtGray}
               value={destination}
               onChangeText={setDestination}
@@ -38,17 +44,25 @@ export const RecurringRideCard = ({onPressCard}) => {
             <View style={styles.destSquare} />
           </View>
           <View style={styles.filterContainer}>
-            <Text>{'12 June - 22 June | 08:00'}</Text>
-            <View style={styles.seatsContainer}>
-              <Image
-                source={appImages.seatGreen}
-                resizeMode="contain"
-                style={styles.greenSeat}
-              />
-              <Image
-                source={appImages.seatGreen}
-                resizeMode="contain"
-                style={styles.greenSeat}
+            <Text>
+              {moment(ride?.next[0]?.date).format('DD MMM')} {'-'}{' '}
+              {moment(ride?.next[ride.next.length - 1]?.date).format('DD MMM')}
+              {' | '}
+              {moment(ride?.next[ride.next.length - 1]?.date).format('hh:mm')}
+            </Text>
+            <View>
+              <FlatList
+                horizontal={true}
+                data={new Array(ride?.requiredSeats)}
+                renderItem={() => {
+                  return (
+                    <Image
+                      source={appImages.seatGreen}
+                      resizeMode="contain"
+                      style={styles.greenSeat}
+                    />
+                  );
+                }}
               />
             </View>
           </View>
@@ -59,8 +73,10 @@ export const RecurringRideCard = ({onPressCard}) => {
               marginTop: '4%',
             }}>
             <>
-              <Text>Single Trip</Text>
-              <Text style={{fontSize: 15, fontWeight: 'bold'}}>NOK 20</Text>
+              <Text></Text>
+              <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                NOK {ride?.amountPayable}
+              </Text>
             </>
           </View>
         </View>
@@ -133,15 +149,10 @@ const styles = StyleSheet.create({
     marginTop: '4%',
     alignItems: 'center',
   },
-  seatsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '12%',
-    justifyContent: 'space-between',
-  },
   greenSeat: {
     height: 21.85,
     width: 16.38,
+    marginLeft: 2,
   },
   seatTxt: {
     fontSize: 13,

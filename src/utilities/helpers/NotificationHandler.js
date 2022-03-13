@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-tiny-toast';
 import RNCallKeep from 'react-native-callkeep';
 import {options} from '../constants';
+import {Alert} from 'react-native';
 
 // import {
 //   read_Notifications,
@@ -67,6 +68,10 @@ export const Notification_Listner = (dispatch, props) => {
   messaging().onNotificationOpenedApp(async remoteMessage => {});
   messaging().onMessage(async remoteMessage => {
     console.log('remote Meessage', remoteMessage);
+    Alert.alert(
+      remoteMessage?.notification?.title,
+      remoteMessage?.notification?.body,
+    );
   });
   messaging().getInitialNotification(async remoteMessage => {
     if (remoteMessage) {
@@ -79,10 +84,11 @@ export const LocalNotification = () => {
   PushNotification.configure({
     // (required) Called when a remote or local notification is opened or received
     onNotification: notification => {
-      console.log('Noti', notification);
+      console.log(notification?.notification);
       // Toast.show(notification?.data?.body, {
       //   position: Toast.position.TOP,
       // });
+      // alert(notification?.notification?.body);
     },
     popInitialNotification: true,
     requestPermissions: true,

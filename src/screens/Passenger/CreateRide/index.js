@@ -4,23 +4,21 @@ import {
   Text,
   SafeAreaView,
   Image,
-  StyleSheet,
   TouchableOpacity,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
-import {colors, appIcons, appImages, family, size} from '../utilities';
-import {fonts} from '../theme';
+import {colors, appIcons, appImages} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import HeartFilled from 'react-native-vector-icons/Foundation';
 import ToggleSwitch from 'toggle-switch-react-native';
-import FavouriteLocations from './FavouriteLocations';
-import {CustomHeader, Loader} from '../components';
-import CalendarSheet from './CalendarSheet';
-import ReturnCalendarSheet from '../components/ReurnCalenderSheet';
-import I18n from '../utilities/translations';
+import FavouriteLocations from '../../FavouriteLocations';
+import {CustomHeader, Loader} from '../../../components';
+import CalendarSheet from '../../CalendarSheet';
+import ReturnCalendarSheet from '../../../components/ReurnCalenderSheet';
+import I18n from '../../../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setAvailableSeats,
@@ -34,12 +32,14 @@ import {
   setMapSegment,
   setReturnOrigin,
   setReturnMapDestination,
-  Settings,
-} from '../redux/actions/map.actions';
+  get_settings,
+  setRecurringDates,
+  setReturnRecurringDates,
+} from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
-const CreateRide = () => {
+import styles from './styles';
+const index = () => {
   let navigation = useNavigation();
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
@@ -48,14 +48,17 @@ const CreateRide = () => {
 
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
-  const availableSeats = useSelector(state => state.map.availableSeats);
-  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
-  const returnDateTimeStamp = useSelector(
-    state => state.map.returnDateTimeStamp,
-  );
-  const time = useSelector(state => state.map.time);
+  const {
+    availableSeats,
+    dateTimeStamp,
+    returnDateTimeStamp,
+    time,
+    returnOrigin,
+    recurring_dates,
+    return_recurring_dates,
+  } = useSelector(state => state.map);
+
   const returnTime = useSelector(state => state.map);
-  const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
@@ -71,7 +74,8 @@ const CreateRide = () => {
 
   useEffect(() => {
     dispatch(setTime(moment().format('HH:mm')));
-    dispatch(Settings());
+    dispatch(get_settings());
+
     return () => {
       dispatch(setAvailableSeats(null));
       dispatch(setOrigin(null));
@@ -82,6 +86,8 @@ const CreateRide = () => {
       dispatch(setReturnOrigin(null));
       dispatch(setReturnMapDestination(null));
       dispatch(setReturnFirstTime(null));
+      dispatch(setRecurringDates([]));
+      dispatch(setReturnRecurringDates([]));
     };
   }, []);
 
@@ -114,6 +120,9 @@ const CreateRide = () => {
   };
 
   const handleCreateRide = () => {
+    const recurring_stamp = recurring_dates.map(item => {
+      return moment(`${item}T${time}`).valueOf();
+    });
     const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
@@ -121,24 +130,30 @@ const CreateRide = () => {
         destinationMap.location.lat,
         destinationMap.location.lng,
       ],
-      date: stamp,
+      date: screen ? recurring_stamp : stamp,
       requiredSeats: availableSeats,
       startDes: origin.description,
       destDes: destinationMap.description,
     };
-
+    console.log(body);
     dispatch(
-      CreateRideRequest(body, setIsLoading, response => {
-        console.log('Create Ride', response);
+      CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
+        if (response.error) {
+          Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+        } else {
+          navigation.navigate('StartMatching', {
+            modalName: 'startMatching',
+            dateTimeStamp: stamp,
+          });
+        }
       }),
     );
-    navigation.navigate('StartMatching', {
-      modalName: 'startMatching',
-      dateTimeStamp: stamp,
-    });
   };
 
   const handleCreateReturnRide = () => {
+    const return_recurring_stamp = return_recurring_dates.map(item => {
+      return moment(`${item}T${returnTime?.returnFirstTime}`).valueOf();
+    });
     const stamp = moment(
       `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
     ).valueOf();
@@ -148,15 +163,15 @@ const CreateRide = () => {
         returnDestinationMap.location.lat,
         returnDestinationMap.location.lng,
       ],
-      date: stamp,
+      date: screen ? return_recurring_stamp : stamp,
       requiredSeats: availableSeats,
       startDes: returnOrigin.description,
       destDes: returnDestinationMap.description,
     };
-
+    console.log(body);
     dispatch(
-      CreateRideRequest(body, setIsLoading, response => {
-        console.log('Return Create Ride', response);
+      CreateRideRequest(body, setIsLoading, null, response => {
+        // console.log('Return Create Ride', response);
       }),
     );
   };
@@ -182,7 +197,6 @@ const CreateRide = () => {
           <TouchableOpacity
             onPress={() => {
               setScreen(true);
-              navigation?.navigate('RecurringRides');
             }}
             style={[
               styles.tripBtnContainer,
@@ -284,6 +298,16 @@ const CreateRide = () => {
               />
             </TouchableOpacity>
           ))}
+          <View
+            style={{
+              backgroundColor: colors.green,
+              padding: 10,
+              borderRadius: 20,
+            }}>
+            <Text style={{color: colors.white}}>
+              {!availableSeats ? 0 : availableSeats}
+            </Text>
+          </View>
         </View>
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
@@ -332,7 +356,7 @@ const CreateRide = () => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
-        <CalendarSheet calendarSheetRef={calendarSheetRef} />
+        <CalendarSheet recurring={screen} calendarSheetRef={calendarSheetRef} />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -477,6 +501,7 @@ const CreateRide = () => {
               />
             </View>
             <ReturnCalendarSheet
+              recurring={screen}
               mindate={dateTimeStamp}
               calendarSheetRef={returnCalendarSheetRef}
             />
@@ -505,13 +530,13 @@ const CreateRide = () => {
               ),
             },
           ]}
-          disabled={handleDisable(
-            origin,
-            destinationMap,
-            availableSeats,
-            dateTimeStamp,
-            time,
-          )}
+          // disabled={handleDisable(
+          //   origin,
+          //   destinationMap,
+          //   availableSeats,
+          //   dateTimeStamp,
+          //   time,
+          // )}
           onPress={() => {
             handleCreateRide();
             if (toggleEnabled) {
@@ -563,207 +588,4 @@ const handleColor = (
   return colors.green;
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  backArrow: {
-    height: 15,
-    width: 20,
-    marginRight: 19,
-  },
-  createHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 21,
-  },
-  rideTxt: {
-    fontSize: 20,
-    lineHeight: 24,
-  },
-  tripBtnContainer: {
-    height: 39,
-    width: 145,
-    backgroundColor: colors.btnGray,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tripBtnWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    justifyContent: 'space-between',
-    width: '85%',
-    alignSelf: 'center',
-  },
-  btnTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.white,
-    fontFamily: fonts.regular,
-  },
-  txtInput: {
-    height: 44,
-    width: 291,
-    borderWidth: 1,
-    borderColor: colors.greyBorder,
-    borderRadius: 10,
-    paddingLeft: 45,
-    color: colors.inputTxtGray,
-    justifyContent: 'center',
-    fontFamily: fonts.regular,
-  },
-  startDot: {
-    height: 16,
-    width: 16,
-    borderRadius: 16 / 2,
-    backgroundColor: colors.green,
-    position: 'absolute',
-    top: 14,
-    left: 15,
-  },
-  destSquare: {
-    height: 16,
-    width: 16,
-    backgroundColor: colors.blue,
-    position: 'absolute',
-    top: 14,
-    left: 15,
-    borderRadius: 4,
-  },
-  locationSwitch: {
-    height: 25,
-    width: 25,
-    borderRadius: 25 / 2,
-    marginVertical: 11,
-  },
-  switchWrapper: {
-    alignItems: 'center',
-  },
-  locationMainWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 19,
-    justifyContent: 'space-between',
-    width: '90%',
-    alignSelf: 'center',
-  },
-  bookSeatsTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    marginTop: 37,
-    color: colors.txtBlack,
-    marginLeft: 21,
-    fontFamily: fonts.regular,
-  },
-  seat: {
-    height: 31,
-    width: 24,
-    marginRight: 20,
-  },
-  seatsWrapper: {
-    flexDirection: 'row',
-    marginLeft: 21,
-    marginTop: 25,
-  },
-  selectWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '70%',
-    marginTop: 26,
-    marginLeft: 20,
-  },
-  selectTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.txtBlack,
-    fontFamily: fonts.regular,
-  },
-  noLater: {
-    height: 44,
-    width: 140,
-    borderWidth: 1,
-    borderColor: colors.greyBorder,
-    borderRadius: 10,
-    paddingLeft: 16,
-    fontSize: 16,
-    lineHeight: 24,
-    color: colors.inputTxtGray,
-    fontFamily: fonts.regular,
-  },
-  calendarIcon: {
-    height: 18,
-    width: 18,
-    position: 'absolute',
-    right: 22,
-    top: 13,
-  },
-  selectionInputWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    alignSelf: 'center',
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  returnTxt: {
-    fontSize: 16,
-    lineHeight: 29,
-    color: colors.txtBlack,
-    fontFamily: fonts.regular,
-  },
-  returnTripWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 31,
-    width: '87%',
-    alignSelf: 'center',
-  },
-  returntimeTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.txtBlack,
-    marginTop: 20,
-    fontFamily: fonts.regular,
-  },
-  timeBracketTxt: {
-    fontSize: 12,
-    lineHeight: 24,
-    color: colors.btnGray,
-    fontFamily: fonts.regular,
-  },
-  nextBtnContainer: {
-    height: 56,
-    backgroundColor: colors.green,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '80%',
-    borderRadius: 15,
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  nextTxt: {
-    fontSize: 16,
-    lineHeight: 26,
-    color: colors.white,
-    fontFamily: fonts.bold,
-  },
-  dateTxt: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: colors.g1,
-    fontFamily: fonts.regular,
-  },
-  startTxt: {
-    fontFamily: fonts.regular,
-    fontSize: 13,
-    lineHeight: 20,
-    color: colors.g4,
-  },
-});
-
-export default CreateRide;
+export default index;

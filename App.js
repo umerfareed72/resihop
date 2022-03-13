@@ -7,10 +7,11 @@ import {Provider} from 'react-redux';
 import {persistor, store} from './src/redux/store/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {StripeProvider} from '@stripe/stripe-react-native';
-import {options, publishableKey} from './src/utilities';
+import {APIKEY, options, publishableKey} from './src/utilities';
 import RNCallKeep from 'react-native-callkeep';
 import {LinkHelper} from './src/utilities/helpers/LinkHelper';
 import {Linking} from 'react-native';
+import Geocoder from 'react-native-geocoding';
 
 const App = props => {
   LogBox.ignoreAllLogs(true);
@@ -35,6 +36,8 @@ const App = props => {
   };
 
   useEffect(() => {
+    Geocoder.init(APIKEY); // use a valid API key
+
     RNCallKeep.setup(options).then(accepted => {});
     RNCallKeep.setAvailable(true);
     RNCallKeep.addEventListener(

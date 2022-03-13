@@ -83,37 +83,37 @@ function PersonalDetails(props) {
   const bank_url = useRef();
   const acr = 'urn:grn:authn:se:bankid:same-device';
 
-  const appState = useAppState(async () => {
-    if (acr === 'urn:grn:authn:se:bankid:same-device') {
-      const result = await fetch(bank_url?.current).then(response => {
-        return response;
-      });
-      const token = result?.url.split('id_token=');
-      if (token) {
-        setBankIdToken(token[1]);
-      } else {
-        setIsLoading(false);
-      }
-    } else {
-      setIsLoading(false);
-    }
-  });
-  const openBankId = async values => {
-    setUserDetail(values);
-    setIsLoading(true);
-    const result = await axios.get(
-      `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
-        Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
-      }`,
-    );
-    if (result?.data) {
-      console.log(result?.data);
-      bank_url.current = result?.data?.completeUrl;
-      Linking.openURL(result?.data?.launchLinks?.universalLink);
-    } else {
-      setIsLoading(false);
-    }
-  };
+  // const appState = useAppState(async () => {
+  //   if (acr === 'urn:grn:authn:se:bankid:same-device') {
+  //     const result = await fetch(bank_url?.current).then(response => {
+  //       return response;
+  //     });
+  //     const token = result?.url.split('id_token=');
+  //     if (token) {
+  //       setBankIdToken(token[1]);
+  //     } else {
+  //       setIsLoading(false);
+  //     }
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // });
+  // const openBankId = async values => {
+  //   setUserDetail(values);
+  //   setIsLoading(true);
+  //   const result = await axios.get(
+  //     `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+  //       Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+  //     }`,
+  //   );
+  //   if (result?.data) {
+  //     console.log(result?.data);
+  //     bank_url.current = result?.data?.completeUrl;
+  //     Linking.openURL(result?.data?.launchLinks?.universalLink);
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   // useEffect(() => {
   //   if (bankdIdToken) {
@@ -157,7 +157,7 @@ function PersonalDetails(props) {
             cca2: country_data?.cca2,
             code: country_data?.code,
           },
-          bankID: bankdIdToken,
+          // bankID: bankdIdToken,
         };
         dispatch(
           updateInfo(
@@ -198,8 +198,8 @@ function PersonalDetails(props) {
           ),
         );
       } else {
-        const mb = pic.fileSize / 1000000;
-        if (mb > 2) {
+        var sizeInMB = (pic.fileSize / (1024 * 1024)).toFixed(2);
+        if (sizeInMB > 20) {
           alert('File size should not be more than 20MB');
           setIsLoading(false);
         } else {
@@ -228,7 +228,7 @@ function PersonalDetails(props) {
                 cca2: country_data?.cca2,
                 code: country_data?.code,
               },
-              bankID: token,
+              // bankID: token,
             };
             dispatch(
               updateInfo(
@@ -297,7 +297,7 @@ function PersonalDetails(props) {
         }
       })
       .catch(error => {
-        console.log('error', error?.response?.data);
+        console.log('error', error);
         Alert.alert('Error', 'Failed to Upload Image');
         setIsLoading(false);
       });

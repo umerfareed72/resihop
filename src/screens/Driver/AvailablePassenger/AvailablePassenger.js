@@ -9,10 +9,7 @@ import I18n from '../../../utilities/translations';
 
 const AvailablePassenger = () => {
   let navigation = useNavigation();
-
-  const [seat, setSeats] = useState([1, 2]);
-
-  const data = [1, 2, 3, 4, 5];
+  const searchRideResponse = useSelector(state => state.map.searchRideResponse);
 
   return (
     <View style={styles.container}>
@@ -22,7 +19,7 @@ const AvailablePassenger = () => {
         title={'Available Passenger'}
       />
       <FlatList
-        data={data}
+        data={searchRideResponse}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
           <View style={styles.availableCard}>

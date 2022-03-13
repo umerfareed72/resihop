@@ -35,16 +35,26 @@ const BookingDetails = () => {
       />
       <ScrollView>
         <View style={styles.addressContainer}>
-          <Text style={styles.addressTxt}>{createRideRequest?.startDes}</Text>
+          <Text style={styles.addressTxt}>
+            {createRideRequest?.startDes ||
+              bookRide?.drive?.startDes ||
+              bookRide?.startDes}
+          </Text>
           <View style={styles.addressCircle} />
         </View>
         <View style={[styles.addressContainer, {marginTop: 21}]}>
-          <Text style={styles.addressTxt}>{createRideRequest?.destDes}</Text>
+          <Text style={styles.addressTxt}>
+            {createRideRequest?.destDes ||
+              bookRide?.drive?.destDes ||
+              bookRide?.destDes}
+          </Text>
           <View style={styles.addressSquare} />
         </View>
         <View style={styles.timeDateContainer}>
           <Text style={styles.dateTimeTxt}>
-            {moment(createRideRequest?.tripDate).format('DD MMM, HH:mm')}
+            {moment(createRideRequest?.tripDate || bookRide?.tripDate).format(
+              'DD MMM, HH:mm',
+            )}
           </Text>
 
           <View style={styles.seatsContainer}>
@@ -53,10 +63,9 @@ const BookingDetails = () => {
               resizeMode="contain"
               style={styles.greenSeat}
             />
-            <Text
-              style={
-                styles.seatTxt
-              }>{`${createRideRequest?.requiredSeats} Seat`}</Text>
+            <Text style={styles.seatTxt}>{`${
+              createRideRequest?.requiredSeats || bookRide?.drive?.requiredSeats
+            } Seat`}</Text>
           </View>
         </View>
         <View style={styles?.driverInfoContainer}>
@@ -67,10 +76,13 @@ const BookingDetails = () => {
               style={styles.driver}
             />
             <View>
-              <Text
-                style={
-                  styles.driverName
-                }>{`${bookRide?.drive?.user?.firstName} ${bookRide?.drive?.user?.lastName}`}</Text>
+              <Text style={styles.driverName}>{`${
+                bookRide?.drive?.user?.firstName ||
+                bookRide?.pool_match?.user?.firstName
+              } ${
+                bookRide?.drive?.user?.lastName ||
+                bookRide?.pool_match?.user?.lastName
+              }`}</Text>
               <View style={styles.ratingContainer}>
                 <StarIcon name="star" size={17} color={colors.white} />
                 <Text style={styles.ratingTxt}>4.5</Text>
@@ -84,7 +96,10 @@ const BookingDetails = () => {
                 fontFamily: fonts.bold,
                 fontSize: 18,
               }}>
-              {`NOK ${bookRide?.drive?.costPerSeat}`}
+              {`NOK ${
+                bookRide?.drive?.costPerSeat ||
+                bookRide?.pool_match?.costPerSeat
+              }`}
             </Text>
             <Text
               style={{
@@ -93,7 +108,10 @@ const BookingDetails = () => {
                 color: colors.txtGray,
                 fontFamily: fonts.regular,
               }}>
-              {`(NOK ${bookRide?.drive?.costPerSeat}/Trip)`}
+              {`(NOK ${
+                bookRide?.drive?.costPerSeat ||
+                bookRide?.pool_match?.costPerSeat
+              }/Trip)`}
             </Text>
             <Image
               source={appImages.car}
@@ -114,17 +132,24 @@ const BookingDetails = () => {
               resizeMode="contain"
               style={styles.seatGreen}
             />
-            <Text
-              style={
-                styles.seatNum
-              }>{`${bookRide?.drive?.availableSeats} Seat Available`}</Text>
+            <Text style={styles.seatNum}>{`${
+              bookRide?.drive?.availableSeats ||
+              bookRide?.pool_match?.availableSeats
+            } Seat Available`}</Text>
           </View>
           <View style={styles.carDetailsTxt}>
             <Text style={styles.carDetails}>
-              {bookRide?.drive?.user.vehicle.vehicleCompanyName}
+              {bookRide?.drive?.user.vehicle.vehicleCompanyName ||
+                bookRide?.pool_match?.user.vehicle.vehicleCompanyName}
             </Text>
             <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
-              {`,${bookRide?.drive?.user?.vehicle?.color},${bookRide?.drive?.user?.vehicle?.licencePlateNumber}`}
+              {`,${
+                bookRide?.drive?.user?.vehicle?.color ||
+                bookRide?.pool_match?.user.vehicle.color
+              },${
+                bookRide?.drive?.user?.vehicle?.licencePlateNumber ||
+                bookRide?.pool_match?.user.vehicle.licencePlateNumber
+              }`}
             </Text>
           </View>
         </View>
@@ -151,8 +176,9 @@ const BookingDetails = () => {
         </Text>
         <View style={styles.titleContainer}>
           <Text style={styles.bookingTitles}>{I18n.t('ride_booked')}</Text>
-          <Text
-            style={styles.amount}>{`NOK ${bookRide?.drive?.costPerSeat}`}</Text>
+          <Text style={styles.amount}>{`NOK ${
+            bookRide?.drive?.costPerSeat || bookRide?.pool_match?.costPerSeat
+          }`}</Text>
         </View>
         <View style={styles.titleContainer}>
           <Text style={[styles.bookingTitles, {color: colors.g4}]}>
@@ -164,7 +190,9 @@ const BookingDetails = () => {
         <View style={styles.totalContainer}>
           <Text style={styles.bookingTitles}>{I18n.t('total_pay')}</Text>
           <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
-            {`NOK ${bookRide?.drive?.costPerSeat}`}
+            {`NOK ${
+              bookRide?.drive?.costPerSeat || bookRide?.pool_match?.costPerSeat
+            }`}
           </Text>
         </View>
         <TouchableOpacity

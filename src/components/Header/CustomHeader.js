@@ -28,6 +28,7 @@ export const CustomHeader = ({
   bg3Color,
   height3,
   width3,
+  onPress,
 }) => {
   return (
     <>
@@ -47,9 +48,13 @@ export const CustomHeader = ({
             {backButton ? (
               <TouchableOpacity
                 style={styles.headerContainer}
-                onPress={() => {
-                  navigation.goBack();
-                }}>
+                onPress={
+                  onPress
+                    ? () => onPress()
+                    : () => {
+                        navigation.goBack();
+                      }
+                }>
                 <Image source={appIcons.backArrow} style={styles.imageStyle} />
               </TouchableOpacity>
             ) : (

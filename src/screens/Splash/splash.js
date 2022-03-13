@@ -48,7 +48,6 @@ function splash(props) {
     //On  local Notification
     LocalNotification();
   };
-
   const handleNavigation = async () => {
     const lang = await AsyncStorage.getItem('lang');
     if (lang === null || lang === undefined) {
@@ -94,6 +93,9 @@ function splash(props) {
           style={{width: 160, height: 160}}
           resizeMode={'contain'}
         />
+        <Text style={{color: 'green', fontSize: 25, marginTop: '-4%'}}>
+          RES IHOP
+        </Text>
       </View>
     </View>
   );

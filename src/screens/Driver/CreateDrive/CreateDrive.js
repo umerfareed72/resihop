@@ -10,7 +10,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {colors, appIcons, appImages} from '../../../utilities';
+import {colors, appIcons, appImages, mode, APIKEY} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -33,6 +33,8 @@ import {
   setMapSegment,
   setReturnMapDestination,
   setReturnOrigin,
+  setRoutes,
+  setReturnRide,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -78,9 +80,13 @@ const CreateDrive = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: '20', value: 20},
-    {label: '30', value: 30},
-    {label: '40', value: 40},
+    {label: '20 NOK', value: 20},
+    {label: '30 NOK', value: 30},
+    {label: '40 NOK', value: 40},
+    {label: '50 NOK', value: 50},
+    {label: '60 NOK', value: 60},
+    {label: '70 NOK', value: 70},
+    {label: '80 NOK', value: 80},
   ]);
 
   // Release Redux States
@@ -97,31 +103,39 @@ const CreateDrive = () => {
     };
   }, []);
 
-  const handleCreateDrive = () => {
-    const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
-
-    const body = {
-      startLocation: [origin?.location.lat, origin?.location?.lng],
-      destinationLocation: [
-        destinationMap.location.lat,
-        destinationMap.location.lng,
-      ],
-      date: stamp,
-      availableSeats: availableSeats,
-      path: 0,
-      costPerSeat: value,
-      interCity: false,
-      startDes: origin?.description,
-      destDes: destinationMap?.description,
-    };
-
-    dispatch(
-      CreateDriveRequest(body, setIsLoading, response => {
-        console.log('Create Drive', response);
-      }),
-    );
-
-    navigation.navigate('SelectRoute');
+  const handleCreateDrive = async () => {
+    setIsLoading(true);
+    if (origin && destinationMap != null) {
+      let resp = await fetch(
+        `https://maps.googleapis.com/maps/api/directions/json?alternatives=true&origin=${origin?.description}&destination=${destinationMap?.description}&key=${APIKEY}&mode=${mode}`,
+      );
+      let respJson = await resp.json();
+      if (respJson) {
+        const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+        const body = {
+          startLocation: [origin?.location.lat, origin?.location?.lng],
+          destinationLocation: [
+            destinationMap.location.lat,
+            destinationMap.location.lng,
+          ],
+          date: stamp,
+          availableSeats: availableSeats,
+          path: 0,
+          costPerSeat: value,
+          interCity: false,
+          startDes: origin?.description,
+          destDes: destinationMap?.description,
+          selectedRoutes: respJson?.routes,
+        };
+        dispatch(setRoutes(body));
+        setIsLoading(false);
+        if (toggleEnabled) {
+          handleReturnCreateDrive();
+        } else {
+          navigation?.navigate('SelectRoute');
+        }
+      }
+    }
   };
 
   const showTimePicker = () => {
@@ -152,7 +166,28 @@ const CreateDrive = () => {
     dispatch(setReturnFirstTime(date));
     hideFirstReturnTimePicker();
   };
-
+  //Hanlde Return Drive
+  const handleReturnCreateDrive = () => {
+    const stamp = moment(
+      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
+    ).valueOf();
+    const body = {
+      startLocation: [returnOrigin?.location.lat, returnOrigin?.location?.lng],
+      destinationLocation: [
+        returnDestinationMap.location.lat,
+        returnDestinationMap.location.lng,
+      ],
+      date: stamp,
+      availableSeats: availableSeats,
+      path: 0,
+      costPerSeat: value,
+      interCity: false,
+      startDes: returnOrigin?.description,
+      destDes: returnDestinationMap?.description,
+    };
+    dispatch(setReturnRide(body));
+    navigation?.navigate('SelectRoute');
+  };
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
@@ -283,6 +318,16 @@ const CreateDrive = () => {
               />
             </TouchableOpacity>
           ))}
+          <View
+            style={{
+              backgroundColor: colors.green,
+              padding: 10,
+              borderRadius: 20,
+            }}>
+            <Text style={{color: colors.white}}>
+              {!availableSeats ? 0 : availableSeats}
+            </Text>
+          </View>
         </View>
         <View style={styles.selectWrapper}>
           <Text style={[styles.selectTxt, {marginRight: 23}]}>
@@ -332,7 +377,11 @@ const CreateDrive = () => {
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
-          style={{width: '90%', alignSelf: 'center'}}
+          style={{
+            width: '90%',
+            alignSelf: 'center',
+            borderColor: colors.greyBorder,
+          }}
           dropDownContainerStyle={{width: '90%', alignSelf: 'center'}}
         />
         <View style={styles.returnTripWrapper}>
@@ -525,7 +574,9 @@ const CreateDrive = () => {
             availableSeats === null ||
             dateTimeStamp === null
           }
-          onPress={() => handleCreateDrive()}>
+          onPress={() => {
+            handleCreateDrive();
+          }}>
           <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -660,6 +711,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 21,
     marginTop: 25,
+    alignItems: 'center',
   },
   selectWrapper: {
     flexDirection: 'row',

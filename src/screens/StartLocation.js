@@ -9,7 +9,7 @@ import AddFavrouteLocation from './AddFavrouteLocation';
 const StartLocation = props => {
   let navigation = useNavigation();
   const addfavrouiteAddressRef = useRef(null);
-
+  const googleAutoComplete = useRef();
   const [favName, setfavName] = useState();
 
   const onPress = () => {
@@ -18,18 +18,23 @@ const StartLocation = props => {
 
   return (
     <View style={styles.container}>
-      <MapViewComponent style={styles.mapStyles} />
+      <MapViewComponent
+        googleAutoComplete={googleAutoComplete}
+        style={styles.mapStyles}
+        rideModals={props.route.params.modalName}
+      />
       <AddressCards
         modalName={props.route.params.modalName}
         addfavrouiteAddressRef={addfavrouiteAddressRef}
         onPress={onPress}
         favName={favName}
+        googleAutoComplete={googleAutoComplete}
       />
       <AddFavrouteLocation
         addfavrouiteAddressRef={addfavrouiteAddressRef}
         setfavName={setfavName}
         favName={favName}
-        modalName={props.route.params.modalName}
+        modalName={props?.route?.params?.modalName}
       />
     </View>
   );

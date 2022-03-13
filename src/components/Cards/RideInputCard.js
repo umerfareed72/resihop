@@ -21,8 +21,8 @@ export const RideInputCard = ({onPressStart, onPressDes, p1, p2}) => {
 
 const styles = StyleSheet.create({
   starttxtBtn: {
-    height: 44,
-    width: 291,
+    width: '96%',
+    paddingVertical: 10,
     borderWidth: 1,
     borderColor: colors.greyBorder,
     borderRadius: 10,

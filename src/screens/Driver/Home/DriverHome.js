@@ -9,6 +9,8 @@ import {
   Platform,
   ScrollView,
   FlatList,
+  Linking,
+  Alert,
 } from 'react-native';
 import {
   colors,
@@ -33,11 +35,15 @@ import {
   SearchDrives,
   SearchRides,
   MyRidesSortOrder,
+  setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProfileInfo, updateInfo} from '../../../redux/actions/auth.action';
 import {useIsFocused} from '@react-navigation/core';
 import mapTypes from '../../../redux/types/map.types';
+import Geocoder from 'react-native-geocoding';
+import Geolocation from 'react-native-geolocation-service';
+import {checkAppPermission} from '../../../utilities/helpers/permissions';
 
 //Data
 var TimeList = {
@@ -110,6 +116,7 @@ const DriverHome = ({navigation}) => {
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
   const isFocus = useIsFocused();
+  //Get Data
   useEffect(() => {
     if (isFocus) {
       dispatch(
@@ -123,6 +130,49 @@ const DriverHome = ({navigation}) => {
       getUserdata();
     }
   }, [isFocus]);
+
+  // Get Location
+  const getLocation = async route => {
+    const permission = await checkAppPermission('location');
+    if (permission) {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position?.coords;
+          Geocoder.from(latitude, longitude)
+            .then(json => {
+              var addressComponent = json.results[0]?.formatted_address;
+              dispatch(
+                setOrigin({
+                  location: {lat: latitude, lng: longitude},
+                  description: addressComponent,
+                }),
+              );
+              dispatch(
+                setReturnMapDestination({
+                  location: {lat: latitude, lng: longitude},
+                  description: addressComponent,
+                }),
+              );
+              navigation.navigate(route);
+            })
+            .catch(error => console.warn(error));
+        },
+        error => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    } else {
+      Alert.alert('Error', 'Location Permission Denied', [
+        {
+          onPress: () => {
+            Linking.openURL('app-settings:');
+          },
+        },
+      ]);
+    }
+  };
 
   //Save Notification
   useEffect(() => {
@@ -195,6 +245,10 @@ const DriverHome = ({navigation}) => {
       startDes: item.startDes,
       destDes: item.destDes,
       id: item._id,
+      cost: item?.costPerSeat,
+      availableSeats: item?.availableSeats,
+      drive_date: item?.date,
+      bookedSeats: item?.bookedSeats,
     });
   };
   const getUserdata = async () => {
@@ -266,7 +320,7 @@ const DriverHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
-              navigation?.navigate('CreateDrive');
+              getLocation('CreateDrive');
               AsyncStorage.setItem('city', 'no');
             }}
             style={styles.cardContainer}>
@@ -302,7 +356,7 @@ const DriverHome = ({navigation}) => {
             <TouchableOpacity
               onPress={() => {
                 AsyncStorage.setItem('city', 'yes');
-                navigation?.navigate('DriverCityToCity');
+                getLocation('DriverCityToCity');
               }}
               style={styles.interiorContainer}>
               <Image
@@ -344,33 +398,29 @@ const DriverHome = ({navigation}) => {
               source={appIcons.driver_home}
               style={styles.noUpcomingRide}
             />
-            <Text style={styles.Txt}>{I18n.t('lorem')}</Text>
+            {/* <Text style={styles.Txt}>{I18n.t('lorem')}</Text> */}
             <TouchableOpacity
               style={styles.createRideBtnContainer}
-              onPress={() => navigation.navigate('CreateDrive')}>
+              onPress={() => getLocation()}>
               <Text style={styles.btnTxt}>{I18n.t('create_first_drive')}</Text>
             </TouchableOpacity>
           </ScrollView>
         ) : (
-          <FlatList
-            data={myDrives.filter(item => {
-              return item.status != 'NO_MATCH' && item.status != 'CANCELLED';
-            })}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) => (
-              <UpcomingRideCards item={item} onPress={() => onPress(item)} />
-            )}
-            ListFooterComponent={() => (
-              <TouchableOpacity
-                style={styles.createRideBtnContainer}
-                onPress={() => navigation.navigate('CreateDrive')}>
-                <Text style={styles.btnTxt}>
-                  {I18n.t('create_first_drive')}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
+          <>
+            <FlatList
+              data={myDrives}
+              keyExtractor={item => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => (
+                <UpcomingRideCards item={item} onPress={() => onPress(item)} />
+              )}
+            />
+            <TouchableOpacity
+              style={styles.createRideBtnContainer}
+              onPress={() => getLocation('CreateDrive')}>
+              <Text style={styles.btnTxt}>{'Create your Drive'}</Text>
+            </TouchableOpacity>
+          </>
         )}
       </SafeAreaView>
       <RideFilterModal
@@ -506,7 +556,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.dropShadow,
     shadowOpacity: 1,
     alignSelf: 'center',
-    marginTop: 30,
+    marginVertical: 20,
   },
   btnTxt: {
     fontSize: 16,
