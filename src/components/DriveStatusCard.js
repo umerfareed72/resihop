@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   seat: {
     height: 25,
     width: 18,
-    marginLeft: 9,
+    marginLeft: 2,
   },
   seatContainer: {
     flexDirection: 'row',

@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import PassengerHome from '../../screens/Passenger/Home/PassengerHome';
 import EditCard from '../../screens/Passenger/Payment/AddPaymentMethod/EditCard';
 import TransactionHistory from '../../screens/Passenger/Payment/PaymentHistory';
-import CreateRide from '../../screens/CreateRide';
+import CreateRide from '../../screens/Passenger/CreateRide';
 import StartLocation from '../../screens/StartLocation';
 import WithDrawPayment from '../../screens/Passenger/Payment/AddPaymentMethod/WithdrawPayment';
 import NotificationList from '../../screens/Passenger/NotificationList/NotificationList';

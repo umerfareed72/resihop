@@ -38,7 +38,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
 
   useEffect(() => {
     if (ride?.requiredSeats) {
-      for (let i = 0; i < ride.requiredSeats; i++) {
+      for (let i = 0; i < ride?.requiredSeats; i++) {
         seats[i] = i;
       }
     }

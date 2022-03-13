@@ -14,6 +14,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
   };
   const [seats, setSeats] = useState([]);
   const myRidesData = useSelector(state => state.map.myRidesData);
+  const myDrives = useSelector(state => state.map.myDrivesData);
 
   useEffect(() => {
     if (item.availableSeats) {
@@ -31,7 +32,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
       }
       setSeats(requiredSeats);
     }
-  }, [myRidesData]);
+  }, [myRidesData, myDrives]);
 
   return (
     <View>

@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  Platform,
   FlatList,
   Linking,
 } from 'react-native';
@@ -140,7 +139,7 @@ const PassengerHome = ({navigation}) => {
   }, [isFocused]);
 
   // Get Location
-  const getLocation = async () => {
+  const getLocation = async route => {
     const permission = await checkAppPermission('location');
     if (permission) {
       Geolocation.getCurrentPosition(
@@ -161,7 +160,7 @@ const PassengerHome = ({navigation}) => {
                   description: addressComponent,
                 }),
               );
-              navigation?.navigate('CreateRide');
+              navigation?.navigate(route);
             })
             .catch(error => console.warn(error));
         },
@@ -320,7 +319,7 @@ const PassengerHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
-              getLocation();
+              getLocation('CreateRide');
             }}
             style={styles.cardContainer}>
             <Image source={appIcons.homeIconBg} style={styles.homeCards} />
@@ -355,7 +354,7 @@ const PassengerHome = ({navigation}) => {
           <View style={styles.cardContainer}>
             <TouchableOpacity
               onPress={() => {
-                navigation?.navigate('CityToCity');
+                getLocation('CityToCity');
               }}
               style={styles.cardContainer}>
               <Image source={appIcons.homeIconBg} style={styles.homeCards} />
@@ -423,7 +422,7 @@ const PassengerHome = ({navigation}) => {
             <TouchableOpacity
               style={styles.createRideBtnContainer}
               onPress={() => {
-                getLocation();
+                getLocation('CreateRide');
               }}>
               <Text style={styles.btnTxt}>{'Create your Ride'}</Text>
             </TouchableOpacity>

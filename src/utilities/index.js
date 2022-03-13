@@ -20,6 +20,7 @@ export {
   options,
   APIKEY,
   mode,
+  total_seats,
 } from './constants';
 export {
   registerAppWithFCM,

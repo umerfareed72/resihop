@@ -67,7 +67,6 @@ const seatsList = {
 function index(props) {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
-
   const [time, settime] = useState('');
   const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');

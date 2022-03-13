@@ -132,7 +132,7 @@ const DriverHome = ({navigation}) => {
   }, [isFocus]);
 
   // Get Location
-  const getLocation = async () => {
+  const getLocation = async route => {
     const permission = await checkAppPermission('location');
     if (permission) {
       Geolocation.getCurrentPosition(
@@ -153,7 +153,7 @@ const DriverHome = ({navigation}) => {
                   description: addressComponent,
                 }),
               );
-              navigation.navigate('CreateDrive');
+              navigation.navigate(route);
             })
             .catch(error => console.warn(error));
         },
@@ -320,7 +320,7 @@ const DriverHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
-              getLocation();
+              getLocation('CreateDrive');
               AsyncStorage.setItem('city', 'no');
             }}
             style={styles.cardContainer}>
@@ -356,7 +356,7 @@ const DriverHome = ({navigation}) => {
             <TouchableOpacity
               onPress={() => {
                 AsyncStorage.setItem('city', 'yes');
-                navigation?.navigate('DriverCityToCity');
+                getLocation('DriverCityToCity');
               }}
               style={styles.interiorContainer}>
               <Image
@@ -417,7 +417,7 @@ const DriverHome = ({navigation}) => {
             />
             <TouchableOpacity
               style={styles.createRideBtnContainer}
-              onPress={() => getLocation()}>
+              onPress={() => getLocation('CreateDrive')}>
               <Text style={styles.btnTxt}>{'Create your Drive'}</Text>
             </TouchableOpacity>
           </>

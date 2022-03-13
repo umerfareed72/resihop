@@ -32,6 +32,10 @@ const initialState = {
   cost_per_seat: 0,
   all_routes: null,
   returnRide: null,
+  //Recurring Rides
+  recurring_ride: [],
+  recurring_dates: [],
+  return_recurring_dates: [],
 };
 
 export default (state = initialState, action = {}) => {
@@ -244,6 +248,52 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         settings: payload,
+      };
+    //Recurring Rides
+    case Types.Get_Reccuring_Rides_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        recurring_ride: payload,
+      };
+    case Types.Get_Reccuring_Rides_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        recurring_ride: state.recurring_ride,
+      };
+    case Types.Set_Recurring_Dates:
+      const {recurring_dates} = state;
+      let filterArray = [];
+      if (payload?.remove_date) {
+        filterArray = recurring_dates.filter(function (item) {
+          return item !== payload?.date_item;
+        });
+      } else {
+        filterArray = recurring_dates.push(payload?.date_item);
+      }
+      return {
+        ...state,
+        recurring_dates: [...new Set(filterArray)],
+      };
+    case Types.Set_Return_Recurring_Dates:
+      const {return_recurring_dates} = state;
+      let filteredArray = [];
+      if (payload?.remove_date) {
+        filteredArray = return_recurring_dates.filter(function (item) {
+          return item !== payload?.date_item;
+        });
+      } else {
+        filteredArray = return_recurring_dates.push(payload?.date_item);
+      }
+
+      return {
+        ...state,
+        return_recurring_dates: [...new Set(filteredArray)],
       };
     default:
       return state;

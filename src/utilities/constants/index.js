@@ -54,3 +54,33 @@ export const options = {
     },
   },
 };
+export const total_seats = [
+  {
+    id: 1,
+    book_seat: false,
+  },
+  {
+    id: 2,
+    book_seat: false,
+  },
+  {
+    id: 3,
+    book_seat: false,
+  },
+  {
+    id: 4,
+    book_seat: false,
+  },
+  {
+    id: 5,
+    book_seat: false,
+  },
+  {
+    id: 6,
+    book_seat: false,
+  },
+  {
+    id: 7,
+    book_seat: false,
+  },
+];

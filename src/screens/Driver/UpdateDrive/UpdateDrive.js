@@ -10,7 +10,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {colors, appIcons, appImages} from '../../../utilities';
+import {colors, appIcons, appImages, total_seats} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -28,6 +28,7 @@ import {
   setReturnFirstTime,
   setMapSegment,
   setUpdateDrive,
+  setSeats,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -39,17 +40,18 @@ import {Alert} from 'react-native';
 const UpdateDrive = () => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
-
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
   const returnCalendarSheetRef = useRef(null);
+  const {
+    origin,
+    availableSeats,
+    dateTimeStamp,
+    returnDateTimeStamp,
+    returnOrigin,
+  } = useSelector(state => state.map);
 
-  const origin = useSelector(state => state.map.origin);
-  const destinationMap = useSelector(state => state.map.destination);
-  const availableSeats = useSelector(state => state.map.availableSeats);
-  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
   const time = useSelector(state => state.map.time);
-
   const [destination, setDestination] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
@@ -61,46 +63,43 @@ const UpdateDrive = () => {
   const [normalTime, setnormalTime] = useState();
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
-  const returnDateTimeStamp = useSelector(
-    state => state.map.returnDateTimeStamp,
-  );
+  const destinationMap = useSelector(state => state.map.destination);
   const returnTime = useSelector(state => state.map);
-  const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: '20', value: 20},
-    {label: '30', value: 30},
-    {label: '40', value: 40},
-    {label: '50', value: 50},
-    {label: '60', value: 60},
-    {label: '70', value: 70},
-    {label: '80', value: 80},
+    {label: '20 NOK', value: 20},
+    {label: '30 NOK', value: 30},
+    {label: '40 NOK', value: 40},
+    {label: '50 NOK', value: 50},
+    {label: '60 NOK', value: 60},
+    {label: '70 NOK', value: 70},
+    {label: '80 NOK', value: 80},
   ]);
   useEffect(() => {
     setValue(returnTime?.cost_per_seat);
     dispatch(setDateTimeStamp(dateTimeStamp));
     setDate(dateTimeStamp);
+    // dispatch(setSeats(total_seats));
   }, []);
   //Handle Update Drive
-
   const handleCreateDrive = () => {
     setIsLoading(true);
+
     try {
-      const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
       const body = {
         startLocation: {
           latitude: origin?.location.lat,
           longitude: origin?.location?.lng,
         },
         destinationLocation: {
-          latitude: destinationMap.location.lat,
-          longitude: destinationMap.location.lng,
+          latitude: destinationMap?.location?.lat,
+          longitude: destinationMap?.location?.lng,
         },
-        date: new Date(stamp) || new Date(),
+        date: dateTimeStamp,
         availableSeats: availableSeats,
         path: 0,
         costPerSeat: value,
@@ -108,6 +107,7 @@ const UpdateDrive = () => {
         startDes: origin?.description,
         destDes: destinationMap?.description,
       };
+      console.log(body);
       dispatch(
         setUpdateDrive(returnTime?.idToUpdateDrive?.id, body, response => {
           Alert.alert('Success', 'Ride Updated Successfully', [
@@ -148,7 +148,6 @@ const UpdateDrive = () => {
   const hideFirstReturnTimePicker = () => {
     setFirstReturnTimePicker(false);
   };
-
   const handleConfirmFirstReturnTime = date => {
     setNormalFirstReturnTime(moment(date).format());
     dispatch(setReturnFirstTime(date));
@@ -158,19 +157,16 @@ const UpdateDrive = () => {
   const handleReturnCreateDrive = () => {
     setIsLoading(true);
     try {
-      const stamp = moment(
-        `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
-      ).valueOf();
       const body = {
         startLocation: [
           returnOrigin?.location.lat,
           returnOrigin?.location?.lng,
         ],
         destinationLocation: [
-          returnDestinationMap.location.lat,
-          returnDestinationMap.location.lng,
+          returnDestinationMap?.location?.lat,
+          returnDestinationMap?.location?.lng,
         ],
-        date: stamp,
+        date: returnDateTimeStamp,
         availableSeats: availableSeats,
         path: 0,
         costPerSeat: value,
@@ -249,7 +245,7 @@ const UpdateDrive = () => {
                 }>
                 <Text style={styles.locationTxt}>
                   {destinationMap !== null
-                    ? destinationMap.description
+                    ? destinationMap?.description
                     : I18n.t('destination')}
                 </Text>
               </TouchableOpacity>
@@ -421,7 +417,7 @@ const UpdateDrive = () => {
                   style={styles.txtInput}>
                   <Text style={styles.startTxt}>
                     {returnDestinationMap
-                      ? returnDestinationMap.description
+                      ? returnDestinationMap?.description
                       : I18n.t('destination')}
                   </Text>
                   <View style={styles.destSquare} />

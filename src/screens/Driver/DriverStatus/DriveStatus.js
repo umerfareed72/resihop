@@ -48,7 +48,7 @@ const DriveStatus = ({route}) => {
     bookedSeats,
   } = route.params;
   const [isLoading, setisLoading] = useState(false);
-  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
+  const {dateTimeStamp} = useSelector(state => state.map);
 
   useEffect(() => {
     dispatch(
@@ -115,12 +115,11 @@ const DriveStatus = ({route}) => {
       }),
     );
   };
-
   const handleCopyDrive = () => {
     calendarSheetRef?.current?.close();
     setModalVisible(false);
     const stamp = moment(
-      `${dateTimeStamp}T${moment(dateTimeStamp).format('HH:mm')}`,
+      `${dateTimeStamp}T${moment(drive_date).format('HH:mm')}`,
     ).valueOf();
     const body = {
       startLocation: [startLocation?.latitude, startLocation?.longitude],
@@ -136,6 +135,7 @@ const DriveStatus = ({route}) => {
       startDes: startDes,
       destDes: destDes,
     };
+    console.log(body);
     dispatch(
       CreateDriveRequest(body, setisLoading, response => {
         navigation?.navigate('DriverHome');

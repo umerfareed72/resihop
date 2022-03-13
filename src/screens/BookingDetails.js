@@ -25,6 +25,7 @@ const BookingDetails = () => {
     state => state.map.createRideRequestResponse,
   );
   const bookRide = useSelector(state => state.map.bookRide);
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -35,13 +36,17 @@ const BookingDetails = () => {
       <ScrollView>
         <View style={styles.addressContainer}>
           <Text style={styles.addressTxt}>
-            {createRideRequest?.startDes || bookRide?.startDes}
+            {createRideRequest?.startDes ||
+              bookRide?.drive?.startDes ||
+              bookRide?.startDes}
           </Text>
           <View style={styles.addressCircle} />
         </View>
         <View style={[styles.addressContainer, {marginTop: 21}]}>
           <Text style={styles.addressTxt}>
-            {createRideRequest?.destDes || bookRide?.destDes}
+            {createRideRequest?.destDes ||
+              bookRide?.drive?.destDes ||
+              bookRide?.destDes}
           </Text>
           <View style={styles.addressSquare} />
         </View>
@@ -59,7 +64,7 @@ const BookingDetails = () => {
               style={styles.greenSeat}
             />
             <Text style={styles.seatTxt}>{`${
-              createRideRequest?.requiredSeats || bookRide?.requiredSeats
+              createRideRequest?.requiredSeats || bookRide?.drive?.requiredSeats
             } Seat`}</Text>
           </View>
         </View>
