@@ -57,9 +57,14 @@ const SelectRouteCard = ({setModal, setHeight, onPressCreateDrive}) => {
       </View>
       <View style={styles.dateContainer}>
         <Text style={styles.dateTxt}>
-          {moment(routes?.date).format('DD MMM')}{' '}
-          {moment(routes?.date).format('hh:mm')}
+          {moment(routes?.date).format('DD MMM') == 'Invalid date'
+            ? ''
+            : moment(routes?.date).format('DD MMM')}{' '}
+          {moment(routes?.date).format('hh:mm') == 'Invalid date'
+            ? ''
+            : moment(routes?.date).format('hh:mm')}
         </Text>
+
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           {data.map(() => (
             <Image

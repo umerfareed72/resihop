@@ -126,7 +126,7 @@ const PassengerHome = ({navigation}) => {
   useEffect(() => {
     if (isFocused) {
       dispatch(
-        MyRidesSortOrder('rides', 'tripDate:desc', res => {
+        MyRidesSortOrder('rides', 'tripDate', res => {
           dispatch({
             type: mapTypes.myRides,
             payload: res,

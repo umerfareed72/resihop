@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {SafeAreaView, View, FlatList} from 'react-native';
 import {
   CustomHeader,
@@ -6,8 +6,12 @@ import {
   RideFilterModal,
   SortModal,
 } from '../../../components';
-import {appIcons, appImages, colors} from '../../../utilities';
+import {get} from '../../../services';
+import {appIcons, appImages, colors, header} from '../../../utilities';
 import I18n from '../../../utilities/translations';
+import * as Types from '../../../redux/types/map.types';
+import {useDispatch, useSelector} from 'react-redux';
+import BlankField from '../../../components/BlankField';
 
 var TimeList = {
   id: 1,
@@ -72,7 +76,10 @@ function index(props) {
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
-
+  const {recurring_drive} = useSelector(state => state.map);
+  const [isLoading, setisLoading] = useState(false);
+  //Redux States
+  const dispatch = useDispatch(null);
   const selectTime = val => {
     settime(val);
   };
@@ -95,7 +102,29 @@ function index(props) {
     setSeats('');
     setStatus('');
   };
-
+  useEffect(() => {
+    get_recurring_drives();
+  }, []);
+  const get_recurring_drives = async () => {
+    setisLoading(true);
+    try {
+      const res = await get(`drives?recurring=true`, await header());
+      if (res.data) {
+        setisLoading(false);
+        dispatch({
+          type: Types.Get_Reccuring_Drives_Success,
+          payload: res.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+      dispatch({
+        type: Types.Get_Reccuring_Drives_Failure,
+        payload: null,
+      });
+    }
+  };
   const onPress = () => {};
 
   return (
@@ -106,25 +135,30 @@ function index(props) {
           onPressbtnImage1={() => filterModalRef.current.open()}
           btnImage={appIcons.mobiledata}
           btnImage1={appIcons.filter}
-          title={'My Recurring Rides'}
+          title={'My Recurring Drives'}
           navigation={props?.navigation}
           backButton={true}
         />
         <View style={{flex: 1}}>
-          <FlatList
-            style={{height: '80%'}}
-            showsVerticalScrollIndicator={false}
-            data={[1, 2]}
-            renderItem={() => {
-              return (
-                <RecurringRideCard
-                  onPressCard={() => {
-                    props?.navigation?.navigate('DRecurringRideDetail');
-                  }}
-                />
-              );
-            }}
-          />
+          {recurring_drive != '' ? (
+            <FlatList
+              style={{height: '80%'}}
+              showsVerticalScrollIndicator={false}
+              data={recurring_drive}
+              renderItem={({item}) => {
+                return (
+                  <RecurringRideCard
+                    ride={item}
+                    onPressCard={() => {
+                      props?.navigation?.navigate('DRecurringRideDetail');
+                    }}
+                  />
+                );
+              }}
+            />
+          ) : (
+            <BlankField title={'No Reccuring Drive Available'} />
+          )}
         </View>
       </SafeAreaView>
       <RideFilterModal

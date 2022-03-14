@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {FlatList} from 'react-native';
 import {
   StyleSheet,
@@ -9,12 +9,29 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import {colors, appImages} from '../../../utilities';
 
 export const RecurringRideCard = ({onPressCard, ride}) => {
-  const [startLocation, setStartLocation] = useState('');
-  const [destination, setDestination] = useState('');
+  const [seats, setSeats] = useState([]);
+  const {recurring_ride, recurring_drive} = useSelector(state => state.map);
+  useEffect(() => {
+    if (ride.availableSeats) {
+      let availableSeats = [];
+      for (let i = 0; i < ride.availableSeats + ride.bookedSeats; i++) {
+        availableSeats[i] = i;
+      }
+      setSeats(availableSeats);
+    }
 
+    if (ride.requiredSeats) {
+      let requiredSeats = [];
+      for (let i = 0; i < ride.requiredSeats; i++) {
+        requiredSeats[i] = i;
+      }
+      setSeats(requiredSeats);
+    }
+  }, [recurring_ride, recurring_drive]);
   return (
     <>
       <TouchableOpacity style={styles.container} onPress={onPressCard}>
@@ -25,8 +42,6 @@ export const RecurringRideCard = ({onPressCard, ride}) => {
               multiline={true}
               placeholder={ride?.startDes}
               placeholderTextColor={colors.inputTxtGray}
-              value={startLocation}
-              onChangeText={setStartLocation}
               style={styles.txtInput}
             />
             <View style={styles.startDot} />
@@ -37,8 +52,6 @@ export const RecurringRideCard = ({onPressCard, ride}) => {
               editable={false}
               placeholder={ride?.destDes}
               placeholderTextColor={colors.inputTxtGray}
-              value={destination}
-              onChangeText={setDestination}
               style={styles.txtInput}
             />
             <View style={styles.destSquare} />
@@ -53,11 +66,19 @@ export const RecurringRideCard = ({onPressCard, ride}) => {
             <View>
               <FlatList
                 horizontal={true}
-                data={new Array(ride?.requiredSeats)}
-                renderItem={() => {
+                data={seats}
+                renderItem={({item}) => {
                   return (
                     <Image
-                      source={appImages.seatGreen}
+                      source={
+                        ride?.availableSeats
+                          ? ride?.bookedSeats
+                            ? ride.bookedSeats > item
+                              ? appImages.seatGreen
+                              : appImages.seatBlue
+                            : appImages.seatBlue
+                          : appImages.seatGreen
+                      }
                       resizeMode="contain"
                       style={styles.greenSeat}
                     />
@@ -75,7 +96,7 @@ export const RecurringRideCard = ({onPressCard, ride}) => {
             <>
               <Text></Text>
               <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                NOK {ride?.amountPayable}
+                NOK {ride?.amountPayable || ride?.costPerSeat}
               </Text>
             </>
           </View>

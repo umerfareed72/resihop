@@ -120,7 +120,7 @@ const DriverHome = ({navigation}) => {
   useEffect(() => {
     if (isFocus) {
       dispatch(
-        MyRidesSortOrder('drives', 'tripDate:desc', res => {
+        MyRidesSortOrder('drives', 'tripDate', res => {
           dispatch({
             type: mapTypes.myDrives,
             payload: res,

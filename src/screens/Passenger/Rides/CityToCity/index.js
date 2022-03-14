@@ -11,7 +11,6 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {colors, appIcons, appImages, family, size} from '../../../../utilities';
-import {fonts} from '../../../../theme';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import HeartFilled from 'react-native-vector-icons/Foundation';

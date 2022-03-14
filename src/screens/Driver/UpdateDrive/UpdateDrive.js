@@ -107,7 +107,6 @@ const UpdateDrive = () => {
         startDes: origin?.description,
         destDes: destinationMap?.description,
       };
-      console.log(body);
       dispatch(
         setUpdateDrive(returnTime?.idToUpdateDrive?.id, body, response => {
           Alert.alert('Success', 'Ride Updated Successfully', [

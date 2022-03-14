@@ -12,6 +12,15 @@ import {get} from '../../../services';
 import * as Types from '../../../redux/types/map.types';
 import {appIcons, appImages, colors, header} from '../../../utilities';
 import BlankField from '../../../components/BlankField';
+import {
+  setDateTimeStamp,
+  setMapDestination,
+  setOrigin,
+  setReturnMapDestination,
+  setReturnOrigin,
+  setTime,
+} from '../../../redux/actions/map.actions';
+import moment from 'moment';
 
 var TimeList = {
   id: 1,
@@ -105,7 +114,11 @@ function index(props) {
     setStatus('');
   };
 
-  const onPress = () => {};
+  const onPressCardItem = item => {
+    props?.navigation?.navigate('RecurringRideDetail', {
+      ride: item,
+    });
+  };
 
   useEffect(() => {
     get_recurring_rides();
@@ -114,7 +127,10 @@ function index(props) {
   const get_recurring_rides = async () => {
     setisLoading(true);
     try {
-      const res = await get(`rides?recurring=true`, await header());
+      const res = await get(
+        `rides?recurring=true&_sort=tripDate`,
+        await header(),
+      );
       if (res.data) {
         setisLoading(false);
         dispatch({
@@ -154,7 +170,7 @@ function index(props) {
                   <RecurringRideCard
                     ride={item}
                     onPressCard={() => {
-                      // props?.navigation?.navigate('RecurringRideDetail');
+                      onPressCardItem(item);
                     }}
                   />
                 );

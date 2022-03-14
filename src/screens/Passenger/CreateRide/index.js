@@ -135,7 +135,6 @@ const index = () => {
       startDes: origin.description,
       destDes: destinationMap.description,
     };
-    console.log(body);
     dispatch(
       CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
         if (response.error) {
@@ -145,6 +144,8 @@ const index = () => {
             modalName: 'startMatching',
             dateTimeStamp: stamp,
           });
+          dispatch(setRecurringDates([]));
+          dispatch(setReturnRecurringDates([]));
         }
       }),
     );
@@ -175,6 +176,7 @@ const index = () => {
       }),
     );
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
