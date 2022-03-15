@@ -527,6 +527,7 @@ export const get_settings = () => async dispatch => {
 
 export const setRecurringDates = data => async dispatch => {
   try {
+    console.log(data);
     dispatch({
       type: Types.Set_Recurring_Dates,
       payload: data,

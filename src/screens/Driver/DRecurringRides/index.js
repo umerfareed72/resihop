@@ -102,13 +102,18 @@ function index(props) {
     setSeats('');
     setStatus('');
   };
+  //Get All Rides Data
   useEffect(() => {
     get_recurring_drives();
   }, []);
+
   const get_recurring_drives = async () => {
     setisLoading(true);
     try {
-      const res = await get(`drives?recurring=true`, await header());
+      const res = await get(
+        `drives?recurring=true&status_in=WAITING_FOR_MATCH&status_in=MATCHING_DONE&status_in=CONFIRMED&status_in=ON_THE_WAY`,
+        await header(),
+      );
       if (res.data) {
         setisLoading(false);
         dispatch({
@@ -125,7 +130,12 @@ function index(props) {
       });
     }
   };
-  const onPress = () => {};
+  //On Press Drives
+  const onPressDrive = item => {
+    props?.navigation?.navigate('DRecurringRideDetail', {
+      drive: item,
+    });
+  };
 
   return (
     <>
@@ -150,7 +160,7 @@ function index(props) {
                   <RecurringRideCard
                     ride={item}
                     onPressCard={() => {
-                      props?.navigation?.navigate('DRecurringRideDetail');
+                      onPressDrive(item);
                     }}
                   />
                 );

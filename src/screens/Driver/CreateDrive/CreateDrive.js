@@ -612,21 +612,13 @@ const handleColor = (
   cost,
 ) => {
   if (
-    !origin ||
-    dateTimeStamp ||
-    !availableSeats ||
-    !destinationMap ||
-    !time ||
-    !cost
+    origin == null ||
+    dateTimeStamp == null ||
+    availableSeats == null ||
+    destinationMap == null ||
+    time == null ||
+    cost == null
   ) {
-    console.log(
-      origin,
-      dateTimeStamp,
-      availableSeats,
-      destinationMap,
-      time,
-      cost,
-    );
     return colors.btnGray;
   }
   return colors.green;

@@ -4,7 +4,6 @@ import {
   Text,
   View,
   SafeAreaView,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
@@ -21,6 +20,7 @@ import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  CancelRide,
   CreateRideRequest,
   setAvailableSeats,
   setDateTimeStamp,
@@ -61,6 +61,8 @@ const RecurringRideDetail = ({route}) => {
     time,
     availableSeats,
     returnOrigin,
+    recurring_dates,
+    return_recurring_dates,
   } = useSelector(state => state.map);
   const destinationMap = useSelector(state => state.map.destination);
   const returnTime = useSelector(state => state.map);
@@ -107,9 +109,8 @@ const RecurringRideDetail = ({route}) => {
         description: ride?.startDes,
       }),
     );
-    dispatch(setTime(moment(ride?.tripDate).format('HH mm').toString()));
+    dispatch(setTime(moment(ride.next[0]?.date).format('HH:mm').toString()));
     dispatch(setDateTimeStamp(moment(ride.next[0]?.date).format('YYYY-MM-DD')));
-
     return () => {
       dispatch(setAvailableSeats(null));
       dispatch(setOrigin(null));
@@ -136,24 +137,36 @@ const RecurringRideDetail = ({route}) => {
     dispatch(setTime(moment(date).format('HH:mm')));
     hideTimePicker();
   };
-
+  //Hanlde Update Ride
   const handleUpDateRide = () => {
-    const date = moment(ride.next[0]?.date).format('YYYY-MM-DD');
+    let prev_recurring_stamp = [];
+    const recurring_stamp = recurring_dates.map(item => {
+      return {date: moment(`${item}T${time}`).valueOf()};
+    });
+    if (recurring_stamp.length == 0) {
+      prev_recurring_stamp = ride?.next.map(item => {
+        const date = moment(item?.date).format('YYYY-MM-DD');
+        return {date: moment(`${date}T${time}`).valueOf()};
+      });
+    }
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [
         destinationMap.location.lat,
         destinationMap.location.lng,
       ],
-      date: moment(`${date}T${time}`).valueOf(),
+      next:
+        recurring_stamp.length == 0
+          ? prev_recurring_stamp.length == 0
+            ? ride?.next
+            : prev_recurring_stamp
+          : recurring_stamp,
       requiredSeats: availableSeats,
       startDes: origin.description,
       destDes: destinationMap.description,
     };
-
     dispatch(
       setUpdateRide(body, ride._id, setIsLoading, response => {
-        console.log(response);
         Alert.alert('Success', 'Ride Updated Successfully', [
           {
             text: 'OK',
@@ -180,24 +193,39 @@ const RecurringRideDetail = ({route}) => {
     hideFirstReturnTimePicker();
   };
   const handleCreateReturnRide = () => {
-    const stamp = moment(
-      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
-    ).valueOf();
+    const recurring_stamp = return_recurring_dates.map(item => {
+      return moment(`${item}T${returnTime?.returnFirstTime}`).valueOf();
+    });
     const body = {
       startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
       destinationLocation: [
         returnDestinationMap.location.lat,
         returnDestinationMap.location.lng,
       ],
-      date: stamp,
+      date: recurring_stamp,
       requiredSeats: availableSeats,
       startDes: returnOrigin.description,
       destDes: returnDestinationMap.description,
     };
-
     dispatch(
       CreateRideRequest(body, setIsLoading, null, response => {
         console.log('Return Create Ride', response);
+      }),
+    );
+  };
+  //Handle Delete Ride
+  const handleCancelRide = () => {
+    dispatch(
+      CancelRide(ride?._id, 'rides', setIsLoading, response => {
+        console.log(response);
+        Alert.alert('Success', 'Ride Cancelled Successfully', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              navigation?.navigate('PassengerHome');
+            },
+          },
+        ]);
       }),
     );
   };
@@ -363,7 +391,12 @@ const RecurringRideDetail = ({route}) => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
-        <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
+        <CalendarSheet
+          ride={ride}
+          recurring={true}
+          calendarSheetRef={calendarSheetRef}
+          setDate={setDate}
+        />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -508,6 +541,7 @@ const RecurringRideDetail = ({route}) => {
               />
             </View>
             <ReturnCalendarSheet
+              recurring={true}
               mindate={new Date()}
               calendarSheetRef={returnCalendarSheetRef}
             />
@@ -532,6 +566,13 @@ const RecurringRideDetail = ({route}) => {
             }
           }}>
           <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.nextBtnContainer, {backgroundColor: colors.black}]}
+          onPress={() => {
+            handleCancelRide();
+          }}>
+          <Text style={styles.nextTxt}>Delete Rides</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -17,20 +17,24 @@ const CalendarSheet = ({
   setDate,
   setModalVisible,
   recurring,
+  ride,
 }) => {
   let dispatch = useDispatch();
   const [markedDate, setMarkedDate] = useState({});
   const [dateList, setdateList] = useState([]);
-  // useEffect(() => {
-  //   let markedObj = {};
-  //   const selectedDate = moment(new Date().toDateString()).format('YYYY-MM-DD');
-  //   markedObj[selectedDate] = {
-  //     selected: true,
-  //     selectedColor: colors.green,
-  //   };
-  //   setMarkedDate(markedObj);
-  //   dispatch(setDateTimeStamp(selectedDate));
-  // }, []);
+  useEffect(() => {
+    if (ride) {
+      let markedObj = {};
+      ride?.next?.map(item => {
+        const selectedDate = moment(item.date).format('YYYY-MM-DD');
+        markedObj[selectedDate] = {
+          selected: true,
+          selectedColor: colors.green,
+        };
+      });
+      setMarkedDate(markedObj);
+    }
+  }, []);
 
   LocaleConfig.locales['en'] = {
     monthNames: [

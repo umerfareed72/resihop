@@ -88,7 +88,6 @@ const UpdateDrive = () => {
   //Handle Update Drive
   const handleCreateDrive = () => {
     setIsLoading(true);
-
     try {
       const body = {
         startLocation: {
