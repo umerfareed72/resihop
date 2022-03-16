@@ -144,48 +144,60 @@ const index = ({navigation, route}) => {
       driverUserID:
         bookRide?.drive?.user?._id || bookRide?.pool_match?.user?._id,
       currency: 'usd',
+      amountPayable:
+        bookRide?.drive?.costPerSeat * createRideRequest?.requiredSeats ||
+        bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats,
     };
-
+    console.log(requestBody);
     dispatch(
       checkout_current_card(requestBody, res => {
         console.log('Checkout', res, requestBody);
-        Alert.alert(
-          'Confirmation!',
-          'Do you want to pay?',
-          [
-            {text: 'Yes', onPress: () => confirm_payment(res)},
-            {text: 'No', onPress: () => console.log('Cancelled')},
-          ],
-          {cancelable: false},
-        );
+        if (res?.msg == 'Payment is confirmed, capture or cancel payment') {
+          modalRef.current.open();
+          setpaymentSuccessonSuccess(true);
+        } else {
+          Alert.alert(
+            'Confirmation!',
+            'Do you want to pay?',
+            [
+              {text: 'Yes', onPress: () => confirm_payment(res)},
+              {text: 'No', onPress: () => console.log('Cancelled')},
+            ],
+            {cancelable: false},
+          );
+        }
       }),
     );
   };
 
   const confirm_payment = async data => {
-    const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
-      type: 'Card',
-      setupFutureUsage: 'OffSession',
-      billingDetails: {
-        name: cardDetail?.name,
-        addressCity: cardDetail?.addressCity,
-        addressCountry: cardDetail?.addressCountry,
-        addressLine1: cardDetail?.addressLine1,
-        addressLine2: cardDetail?.addressLine2,
-        addressPostalCode: cardDetail?.addressPostalCode,
-        addressState: cardDetail?.addressState,
-        email: cardDetail?.email,
-      },
-      paymentMethodId: cardDetail?.id,
-    });
-    if (paymentIntent) {
-      modalRef.current.open();
-      setpaymentSuccessonSuccess(true);
-    }
-    if (error) {
+    try {
+      const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
+        type: 'Card',
+        setupFutureUsage: 'OffSession',
+        billingDetails: {
+          name: cardDetail?.name,
+          addressCity: cardDetail?.addressCity,
+          addressCountry: cardDetail?.addressCountry,
+          addressLine1: cardDetail?.addressLine1,
+          addressLine2: cardDetail?.addressLine2,
+          addressPostalCode: cardDetail?.addressPostalCode,
+          addressState: cardDetail?.addressState,
+          email: cardDetail?.email,
+        },
+        paymentMethodId: cardDetail?.id,
+      });
+      if (paymentIntent) {
+        modalRef.current.open();
+        setpaymentSuccessonSuccess(true);
+      }
+      if (error) {
+        console.log(error);
+        modalRef.current.open();
+        setpaymentSuccessonFailed(true);
+      }
+    } catch (error) {
       console.log(error);
-      modalRef.current.open();
-      setpaymentSuccessonFailed(true);
     }
   };
 
@@ -325,8 +337,9 @@ const index = ({navigation, route}) => {
                   }}
                   bgColor={cardDetail ? colors.green : colors.g1}
                   title={`NOK ${
-                    bookRide?.drive?.costPerSeat ||
-                    bookRide?.pool_match?.costPerSeat
+                    bookRide?.drive?.costPerSeat *
+                      createRideRequest?.requiredSeats ||
+                    bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats
                   } Pay From Card`}
                   txtColor={colors.white}
                 />

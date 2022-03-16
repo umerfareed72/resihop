@@ -33,6 +33,7 @@ import {
   MyRides,
   MyRidesSortOrder,
   setReturnMapDestination,
+  get_settings,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -135,6 +136,7 @@ const PassengerHome = ({navigation}) => {
       );
       getUserdata();
       dispatch(move_from_drawer(true, () => {}));
+      dispatch(get_settings());
     }
   }, [isFocused]);
 

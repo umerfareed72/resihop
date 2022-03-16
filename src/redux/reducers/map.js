@@ -150,7 +150,9 @@ export default (state = initialState, action = {}) => {
       };
     case Types.returnFirstTime:
       const firstTime = moment(payload).format('HH:mm');
-      const secondTime = moment(payload).add(30, 'minutes').format('HH:mm');
+      const secondTime = moment(payload)
+        .add(state?.settings?.returnRange, 'minutes')
+        .format('HH:mm');
       return {
         ...state,
         returnFirstTime: firstTime,

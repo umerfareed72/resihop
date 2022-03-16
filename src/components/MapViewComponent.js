@@ -65,22 +65,25 @@ const MapViewComponent = ({
   const [longitude, setLongitude] = useState(0);
   const [height, setHeight] = useState(0);
   const [minDistance, setMinDistance] = useState(0);
-  const origin = useSelector(state => state.map.origin);
-  const destination = useSelector(state => state.map.destination);
-  const searchRideResponse = useSelector(state => state.map.searchRideResponse);
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );
   const [isLoading, setIsLoading] = useState(false);
-  const mapSegment = useSelector(state => state.map.mapSegment);
-  const returnOrigin = useSelector(state => state.map.returnOrigin);
+  const {
+    mapSegment,
+    returnOrigin,
+    origin,
+    destination,
+    searchRideResponse,
+    returnRide,
+    settings,
+  } = useSelector(state => state.map);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
   const deltas = useSelector(state => state.map.deltas);
   const walkingDistance = useSelector(state => state.map.walkingDistance);
   const routes = useSelector(state => state.map.all_routes);
-  const returnRide = useSelector(state => state.map.returnRide);
 
   const [selectedPath, setSelectedPath] = useState(0);
   var watchId;
@@ -96,7 +99,6 @@ const MapViewComponent = ({
       Geolocation.clearWatch(watchId);
     };
   }, []);
-
   //Get Live Location
   const getLiveLocation = async () => {
     let permission;

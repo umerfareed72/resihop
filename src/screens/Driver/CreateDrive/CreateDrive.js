@@ -61,6 +61,7 @@ const CreateDrive = () => {
     time,
     returnOrigin,
     returnDateTimeStamp,
+    settings,
   } = useSelector(state => state.map);
   const destinationMap = useSelector(state => state.map.destination);
 
@@ -129,7 +130,7 @@ const CreateDrive = () => {
           date: screen ? recurring_stamp : stamp,
           availableSeats: availableSeats,
           path: 0,
-          costPerSeat: value,
+          costPerSeat: value + availableSeats * settings?.adminCommission,
           interCity: false,
           startDes: origin?.description,
           destDes: destinationMap?.description,

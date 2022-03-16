@@ -49,6 +49,7 @@ const UpdateDrive = () => {
     dateTimeStamp,
     returnDateTimeStamp,
     returnOrigin,
+    settings,
   } = useSelector(state => state.map);
 
   const time = useSelector(state => state.map.time);
@@ -167,7 +168,7 @@ const UpdateDrive = () => {
         date: returnDateTimeStamp,
         availableSeats: availableSeats,
         path: 0,
-        costPerSeat: value,
+        costPerSeat: value + availableSeats * settings?.adminCommission,
         interCity: false,
         startDes: returnOrigin?.description,
         destDes: returnDestinationMap?.description,
@@ -371,6 +372,7 @@ const UpdateDrive = () => {
           items={items}
           setOpen={setOpen}
           setValue={setValue}
+          dropDownDirection={'TOP'}
           setItems={setItems}
           style={{width: '90%', alignSelf: 'center'}}
           dropDownContainerStyle={{width: '90%', alignSelf: 'center'}}

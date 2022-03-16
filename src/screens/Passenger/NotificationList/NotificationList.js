@@ -52,12 +52,19 @@ const NotificationList = ({navigation}) => {
   };
 
   const NotificationItem = ({data}) => {
-    console.log('data in NotificationItem  ', data);
+    // console.log('data in NotificationItem  ', data?.item?.user?.picture?.url);
 
     return (
       <View style={styles.notifyItem}>
         <View style={styles.imageContainer}>
-          <Image style={styles.imageStyle} source={data?.item?.image} />
+          <Image
+            style={styles.imageStyle}
+            source={{
+              uri:
+                data?.item?.user?.picture?.url ||
+                'https://unsplash.it/400/400?image=1',
+            }}
+          />
         </View>
         <View style={styles.contentContainer}>
           <Text style={styles.titleTextStyle}>{data?.item?.title}</Text>
@@ -118,7 +125,8 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: 80,
     height: 80,
-    resizeMode: 'contain',
+    borderRadius: 80,
+    resizeMode: 'cover',
   },
   titleTextStyle: {
     fontSize: size.xsmall,

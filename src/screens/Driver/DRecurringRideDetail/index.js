@@ -58,6 +58,7 @@ const DRecurringDetail = ({route}) => {
     time,
     recurring_dates,
     return_recurring_dates,
+    settings,
   } = useSelector(state => state.map);
   const {drive} = route?.params;
   const [destination, setDestination] = useState('');
@@ -162,7 +163,7 @@ const DRecurringDetail = ({route}) => {
             : recurring_stamp,
         availableSeats: availableSeats,
         path: 0,
-        costPerSeat: value,
+        costPerSeat: value + availableSeats * settings?.adminCommission,
         interCity: false,
         startDes: origin?.description,
         destDes: destinationMap?.description,
@@ -425,6 +426,7 @@ const DRecurringDetail = ({route}) => {
           value={value}
           items={items}
           setOpen={setOpen}
+          dropDownDirection={'TOP'}
           setValue={setValue}
           setItems={setItems}
           style={{width: '90%', alignSelf: 'center'}}

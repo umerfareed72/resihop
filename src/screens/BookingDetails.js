@@ -64,7 +64,9 @@ const BookingDetails = () => {
               style={styles.greenSeat}
             />
             <Text style={styles.seatTxt}>{`${
-              createRideRequest?.requiredSeats || bookRide?.drive?.requiredSeats
+              createRideRequest?.requiredSeats ||
+              bookRide?.drive?.requiredSeats ||
+              bookRide?.requiredSeats
             } Seat`}</Text>
           </View>
         </View>
@@ -191,7 +193,8 @@ const BookingDetails = () => {
           <Text style={styles.bookingTitles}>{I18n.t('total_pay')}</Text>
           <Text style={[styles.amount, {fontSize: 18, fontFamily: fonts.bold}]}>
             {`NOK ${
-              bookRide?.drive?.costPerSeat || bookRide?.pool_match?.costPerSeat
+              bookRide?.drive?.costPerSeat * createRideRequest?.requiredSeats ||
+              bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats
             }`}
           </Text>
         </View>

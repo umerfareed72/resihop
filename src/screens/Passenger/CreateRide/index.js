@@ -32,7 +32,6 @@ import {
   setMapSegment,
   setReturnOrigin,
   setReturnMapDestination,
-  get_settings,
   setRecurringDates,
   setReturnRecurringDates,
 } from '../../../redux/actions/map.actions';
@@ -73,9 +72,7 @@ const index = () => {
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
 
   useEffect(() => {
-    dispatch(setTime(moment().format('HH:mm')));
-    dispatch(get_settings());
-
+    // dispatch(setTime(moment().format('HH:mm')));
     return () => {
       dispatch(setAvailableSeats(null));
       dispatch(setOrigin(null));
@@ -532,13 +529,13 @@ const index = () => {
               ),
             },
           ]}
-          // disabled={handleDisable(
-          //   origin,
-          //   destinationMap,
-          //   availableSeats,
-          //   dateTimeStamp,
-          //   time,
-          // )}
+          disabled={handleDisable(
+            origin,
+            destinationMap,
+            availableSeats,
+            dateTimeStamp,
+            time,
+          )}
           onPress={() => {
             handleCreateRide();
             if (toggleEnabled) {

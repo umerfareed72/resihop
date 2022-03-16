@@ -71,7 +71,6 @@ const index = () => {
 
   useEffect(() => {
     dispatch(setTime(moment().format('HH:mm')));
-    dispatch(get_settings());
     return () => {
       dispatch(setAvailableSeats(null));
       dispatch(setOrigin(null));

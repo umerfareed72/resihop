@@ -19,7 +19,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
   useEffect(() => {
     if (item.availableSeats) {
       let availableSeats = [];
-      for (let i = 0; i < item.availableSeats + item.bookedSeats; i++) {
+      for (let i = 0; i < item?.availableSeats + item?.bookedSeats; i++) {
         availableSeats[i] = i;
       }
       setSeats(availableSeats);
@@ -27,7 +27,7 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
 
     if (item.requiredSeats) {
       let requiredSeats = [];
-      for (let i = 0; i < item.requiredSeats; i++) {
+      for (let i = 0; i < item?.requiredSeats; i++) {
         requiredSeats[i] = i;
       }
       setSeats(requiredSeats);

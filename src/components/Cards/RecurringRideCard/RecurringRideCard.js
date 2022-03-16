@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useSelector} from 'react-redux';
+import {fonts} from '../../../theme';
 import {colors, appImages} from '../../../utilities';
 
 export const RecurringRideCard = ({onPressCard, ride}) => {
@@ -94,9 +95,21 @@ export const RecurringRideCard = ({onPressCard, ride}) => {
               marginTop: '4%',
             }}>
             <>
-              <Text></Text>
+              <View
+                style={[
+                  styles.statusWrapper,
+                  {borderColor: getStatusColor(ride.status)},
+                ]}>
+                <Text
+                  style={[styles.status, {color: getStatusColor(ride.status)}]}>
+                  {ride?.status.split('_').join(' ')}
+                </Text>
+              </View>
+
               <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                NOK {ride?.amountPayable || ride?.costPerSeat}
+                NOK{' '}
+                {ride?.amountPayable * ride?.requiredSeats ||
+                  ride?.costPerSeat * ride?.availableSeats}
               </Text>
             </>
           </View>
@@ -124,8 +137,21 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
   },
+  status: {
+    fontSize: 14,
+    lineHeight: 16,
+    color: colors.green,
+    textTransform: 'uppercase',
+    fontFamily: fonts.bebasBold,
+  },
+  statusWrapper: {
+    borderTopWidth: 1.5,
+    borderBottomWidth: 1.5,
+    height: 23,
+    justifyContent: 'center',
+    borderColor: colors.green,
+  },
   txtInput: {
-    height: 44,
     width: '100%',
     borderWidth: 1,
     borderColor: colors.greyBorder,
@@ -182,3 +208,14 @@ const styles = StyleSheet.create({
     marginLeft: 7,
   },
 });
+const getStatusColor = status => {
+  if (status === 'CONFIRMED' || status === 'FULLY_BOOKED') {
+    return colors.green;
+  }
+  if (status === 'MATCHING_DONE' || status === 'PARTIALLY_BOOKED') {
+    return colors.blue;
+  }
+  if (status === 'WAITING_FOR_MATCH') {
+    return colors.orange;
+  }
+};

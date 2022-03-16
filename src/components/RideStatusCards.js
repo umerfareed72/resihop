@@ -24,7 +24,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
 
-  const nearestDriver = useSelector(state => state.map.nearestDriver);
+  const {nearestDriver, settings} = useSelector(state => state.map);
 
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [currentRide, setCurrentRide] = useState(false);
@@ -208,10 +208,14 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
                   justifyContent: 'space-between',
                   marginTop: 10,
                 }}>
-                <Text style={styles.fair}>{`NOK ${
-                  nearestDriver?.drive.costPerSeat ||
-                  ride?.pool_match?.costPerSeat
-                }`}</Text>
+                <Text style={styles.fair}>
+                  {`NOK ${
+                    nearestDriver?.drive.costPerSeat ||
+                    ride?.pool_match?.costPerSeat
+                  } `}
+                  <Text style={{fontSize: 12}}>(per seat)</Text>
+                </Text>
+
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={styles.carDetails}>
                     {nearestDriver?.drive?.user.vehicle.vehicleCompanyName ||
