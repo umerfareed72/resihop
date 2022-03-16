@@ -48,6 +48,10 @@ module.exports = {
   Set_Recurring_Dates: 'Set_Recurring_Dates',
   Set_Return_Recurring_Dates: 'Set_Return_Recurring_Dates',
 
+  //Recurring Drives
+  Get_Reccuring_Drives_Success: 'Get_Reccuring_Drives_Success',
+  Get_Reccuring_Drives_Failure: 'Get_Reccuring_Drives_Failure',
+
   //Get Rides
   Rides_Loader: 'Rides_Loader',
 };

@@ -12,6 +12,7 @@ import {get} from '../../../services';
 import * as Types from '../../../redux/types/map.types';
 import {appIcons, appImages, colors, header} from '../../../utilities';
 import BlankField from '../../../components/BlankField';
+import {useIsFocused} from '@react-navigation/core';
 
 var TimeList = {
   id: 1,
@@ -71,7 +72,6 @@ const seatsList = {
 function index(props) {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
-
   const [time, settime] = useState('');
   const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
@@ -81,7 +81,7 @@ function index(props) {
   const [isLoading, setisLoading] = useState(false);
   //Redux States
   const dispatch = useDispatch(null);
-
+  const isFocus = useIsFocused(null);
   const selectTime = val => {
     settime(val);
   };
@@ -104,17 +104,25 @@ function index(props) {
     setSeats('');
     setStatus('');
   };
-
-  const onPress = () => {};
-
+  const onPressCardItem = item => {
+    props?.navigation?.navigate('RecurringRideDetail', {
+      ride: item,
+    });
+  };
   useEffect(() => {
-    get_recurring_rides();
-  }, []);
+    if (isFocus) {
+      get_recurring_rides();
+    }
+  }, [isFocus]);
+
   //Get Recurring Rides
   const get_recurring_rides = async () => {
     setisLoading(true);
     try {
-      const res = await get(`rides?recurring=true`, await header());
+      const res = await get(
+        `rides?recurring=true&status_in=WAITING_FOR_MATCH&status_in=MATCHING_DONE&status_in=CONFIRMED&status_in=ON_THE_WAY&_sort=tripDate`,
+        await header(),
+      );
       if (res.data) {
         setisLoading(false);
         dispatch({
@@ -131,6 +139,7 @@ function index(props) {
       });
     }
   };
+
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -154,7 +163,7 @@ function index(props) {
                   <RecurringRideCard
                     ride={item}
                     onPressCard={() => {
-                      // props?.navigation?.navigate('RecurringRideDetail');
+                      onPressCardItem(item);
                     }}
                   />
                 );

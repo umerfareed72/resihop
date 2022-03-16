@@ -52,11 +52,16 @@ const NearestDriverCard = ({setModal, setHeight, modalName}) => {
         <View style={styles.addressSquare} />
       </View>
       <View style={styles.rideInfoContainer}>
-        <Text style={styles.date}>
-          {moment(
-            createRideRequestResponse?.tripDate || all_routes?.tripDate,
-          ).format('DD MMM, HH:mm')}
-        </Text>
+        {createRideRequestResponse?.tripDate == 'Invalid date' ||
+        all_routes?.tripDate == 'Invalid date' ? (
+          false
+        ) : (
+          <Text style={styles.date}>
+            {moment(
+              createRideRequestResponse?.tripDate || all_routes?.tripDate,
+            ).format('DD MMM, HH:mm')}
+          </Text>
+        )}
         <View style={styles.imagesContainer}>
           {requiredSeats.map(seat => (
             <Image

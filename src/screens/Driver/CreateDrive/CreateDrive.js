@@ -35,6 +35,8 @@ import {
   setReturnOrigin,
   setRoutes,
   setReturnRide,
+  setRecurringDates,
+  setReturnRecurringDates,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -50,15 +52,20 @@ const CreateDrive = () => {
   const calendarSheetRef = useRef(null);
   const returnCalendarSheetRef = useRef(null);
 
-  const origin = useSelector(state => state.map.origin);
+  const {
+    origin,
+    recurring_dates,
+    return_recurring_dates,
+    dateTimeStamp,
+    availableSeats,
+    time,
+    returnOrigin,
+    returnDateTimeStamp,
+    settings,
+  } = useSelector(state => state.map);
   const destinationMap = useSelector(state => state.map.destination);
-  const availableSeats = useSelector(state => state.map.availableSeats);
-  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
-  const time = useSelector(state => state.map.time);
 
-  const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
-  const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
@@ -69,11 +76,8 @@ const CreateDrive = () => {
   const [normalTime, setnormalTime] = useState();
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
-  const returnDateTimeStamp = useSelector(
-    state => state.map.returnDateTimeStamp,
-  );
+
   const returnTime = useSelector(state => state.map);
-  const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
@@ -100,11 +104,13 @@ const CreateDrive = () => {
       dispatch(setReturnOrigin(null));
       dispatch(setReturnMapDestination(null));
       dispatch(setReturnFirstTime(null));
+      dispatch(setRecurringDates([]));
+      dispatch(setReturnRecurringDates([]));
     };
   }, []);
 
   const handleCreateDrive = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     if (origin && destinationMap != null) {
       let resp = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?alternatives=true&origin=${origin?.description}&destination=${destinationMap?.description}&key=${APIKEY}&mode=${mode}`,
@@ -112,16 +118,19 @@ const CreateDrive = () => {
       let respJson = await resp.json();
       if (respJson) {
         const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+        const recurring_stamp = recurring_dates.map(item => {
+          return moment(`${item}T${time}`).valueOf();
+        });
         const body = {
           startLocation: [origin?.location.lat, origin?.location?.lng],
           destinationLocation: [
             destinationMap.location.lat,
             destinationMap.location.lng,
           ],
-          date: stamp,
+          date: screen ? recurring_stamp : stamp,
           availableSeats: availableSeats,
           path: 0,
-          costPerSeat: value,
+          costPerSeat: value + availableSeats * settings?.adminCommission,
           interCity: false,
           startDes: origin?.description,
           destDes: destinationMap?.description,
@@ -134,6 +143,7 @@ const CreateDrive = () => {
         } else {
           navigation?.navigate('SelectRoute');
         }
+        console.log(body);
       }
     }
   };
@@ -171,13 +181,16 @@ const CreateDrive = () => {
     const stamp = moment(
       `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
     ).valueOf();
+    const return_recurring_stamp = return_recurring_dates.map(item => {
+      return moment(`${item}T${returnTime?.returnFirstTime}`).valueOf();
+    });
     const body = {
       startLocation: [returnOrigin?.location.lat, returnOrigin?.location?.lng],
       destinationLocation: [
         returnDestinationMap.location.lat,
         returnDestinationMap.location.lng,
       ],
-      date: stamp,
+      date: screen ? return_recurring_stamp : stamp,
       availableSeats: availableSeats,
       path: 0,
       costPerSeat: value,
@@ -188,6 +201,7 @@ const CreateDrive = () => {
     dispatch(setReturnRide(body));
     navigation?.navigate('SelectRoute');
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
@@ -210,7 +224,7 @@ const CreateDrive = () => {
           <TouchableOpacity
             onPress={() => {
               setScreen(true);
-              navigation?.navigate('DRecurringRides');
+              // navigation?.navigate('DRecurringRides');
             }}
             style={[
               styles.tripBtnContainer,
@@ -394,7 +408,11 @@ const CreateDrive = () => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
-        <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
+        <CalendarSheet
+          recurring={screen}
+          calendarSheetRef={calendarSheetRef}
+          setDate={setDate}
+        />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -539,6 +557,7 @@ const CreateDrive = () => {
               />
             </View>
             <ReturnCalendarSheet
+              recurring={screen}
               mindate={dateTimeStamp}
               calendarSheetRef={returnCalendarSheetRef}
             />
@@ -572,7 +591,8 @@ const CreateDrive = () => {
             origin === null ||
             destination === null ||
             availableSeats === null ||
-            dateTimeStamp === null
+            dateTimeStamp === null ||
+            value == null
           }
           onPress={() => {
             handleCreateDrive();
@@ -593,12 +613,12 @@ const handleColor = (
   cost,
 ) => {
   if (
-    !origin ||
-    !dateTimeStamp ||
-    !availableSeats ||
-    !destinationMap ||
-    !time ||
-    !cost
+    origin == null ||
+    dateTimeStamp == null ||
+    availableSeats == null ||
+    destinationMap == null ||
+    time == null ||
+    cost == null
   ) {
     return colors.btnGray;
   }

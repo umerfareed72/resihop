@@ -34,6 +34,7 @@ const initialState = {
   returnRide: null,
   //Recurring Rides
   recurring_ride: [],
+  recurring_drive: [],
   recurring_dates: [],
   return_recurring_dates: [],
 };
@@ -149,7 +150,9 @@ export default (state = initialState, action = {}) => {
       };
     case Types.returnFirstTime:
       const firstTime = moment(payload).format('HH:mm');
-      const secondTime = moment(payload).add(30, 'minutes').format('HH:mm');
+      const secondTime = moment(payload)
+        .add(state?.settings?.returnRange, 'minutes')
+        .format('HH:mm');
       return {
         ...state,
         returnFirstTime: firstTime,
@@ -266,34 +269,31 @@ export default (state = initialState, action = {}) => {
         failure: true,
         recurring_ride: state.recurring_ride,
       };
-    case Types.Set_Recurring_Dates:
-      const {recurring_dates} = state;
-      let filterArray = [];
-      if (payload?.remove_date) {
-        filterArray = recurring_dates.filter(function (item) {
-          return item !== payload?.date_item;
-        });
-      } else {
-        filterArray = recurring_dates.push(payload?.date_item);
-      }
+    case Types.Get_Reccuring_Drives_Success:
       return {
         ...state,
-        recurring_dates: [...new Set(filterArray)],
+        loading: false,
+        success: true,
+        failure: false,
+        recurring_drive: payload,
+      };
+    case Types.Get_Reccuring_Drives_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        recurring_drive: state.recurring_ride,
+      };
+    case Types.Set_Recurring_Dates:
+      return {
+        ...state,
+        recurring_dates: payload,
       };
     case Types.Set_Return_Recurring_Dates:
-      const {return_recurring_dates} = state;
-      let filteredArray = [];
-      if (payload?.remove_date) {
-        filteredArray = return_recurring_dates.filter(function (item) {
-          return item !== payload?.date_item;
-        });
-      } else {
-        filteredArray = return_recurring_dates.push(payload?.date_item);
-      }
-
       return {
         ...state,
-        return_recurring_dates: [...new Set(filteredArray)],
+        return_recurring_dates: payload,
       };
     default:
       return state;

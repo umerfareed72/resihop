@@ -29,14 +29,13 @@ const AvailableDrivers = ({
   let navigation = useNavigation();
   let dispatch = useDispatch();
   const returnBookSheetRef = useRef(null);
-
+  const {nearestDriver} = useSelector(state => state.map);
   const createRideResponse = useSelector(
     state => state.map.createRideRequestResponse,
   );
   const searchDrivesResponse = useSelector(
     state => state.map.searchDriveResponse,
   );
-  const nearestDriver = useSelector(state => state.map.nearestDriver);
   const rideResponse = useSelector(
     state => state.map?.createRideRequestResponse,
   );

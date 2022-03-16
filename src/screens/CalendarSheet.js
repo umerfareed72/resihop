@@ -17,20 +17,24 @@ const CalendarSheet = ({
   setDate,
   setModalVisible,
   recurring,
+  ride,
 }) => {
   let dispatch = useDispatch();
   const [markedDate, setMarkedDate] = useState({});
-
-  // useEffect(() => {
-  //   let markedObj = {};
-  //   const selectedDate = moment(new Date().toDateString()).format('YYYY-MM-DD');
-  //   markedObj[selectedDate] = {
-  //     selected: true,
-  //     selectedColor: colors.green,
-  //   };
-  //   setMarkedDate(markedObj);
-  //   dispatch(setDateTimeStamp(selectedDate));
-  // }, []);
+  const [dateList, setdateList] = useState([]);
+  useEffect(() => {
+    if (ride) {
+      let markedObj = {};
+      ride?.next?.map(item => {
+        const selectedDate = moment(item.date).format('YYYY-MM-DD');
+        markedObj[selectedDate] = {
+          selected: true,
+          selectedColor: colors.green,
+        };
+      });
+      setMarkedDate(markedObj);
+    }
+  }, []);
 
   LocaleConfig.locales['en'] = {
     monthNames: [
@@ -59,7 +63,10 @@ const CalendarSheet = ({
     dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
   };
   LocaleConfig.defaultLocale = 'en';
+
   const handleDayPress = date => {
+    let newdate = [];
+
     if (!recurring) {
       dispatch(setDateTimeStamp(moment(date.dateString).format('YYYY-MM-DD')));
       let markedObj = {};
@@ -74,28 +81,22 @@ const CalendarSheet = ({
       let newDates = markedDate;
       if (markedDate[selectedDate]) {
         delete newDates[selectedDate];
-        dispatch(
-          setRecurringDates(moment(date.dateString).format('YYYY-MM-DD'), true),
-        );
+        for (let index = 0; index < dateList.length; index++) {
+          if (dateList[index] === selectedDate) {
+            delete dateList[index];
+          }
+        }
+        setdateList(dateList.filter(item => item != undefined));
       } else {
         newDates[selectedDate] = {
           selected: true,
           selectedColor: colors.green,
         };
-        dispatch(
-          setRecurringDates(
-            moment(date.dateString).format('YYYY-MM-DD'),
-            false,
-          ),
-        );
-        dispatch(
-          setDateTimeStamp(moment(date.dateString).format('YYYY-MM-DD')),
-        );
+        setdateList([...dateList, selectedDate]);
       }
       setMarkedDate({...newDates});
     }
   };
-
   return (
     <RBSheet
       ref={calendarSheetRef}
@@ -138,6 +139,10 @@ const CalendarSheet = ({
       <TouchableOpacity
         style={styles.okBtn}
         onPress={() => {
+          if (recurring) {
+            dispatch(setRecurringDates(dateList));
+            dispatch(setDateTimeStamp(dateList[0]));
+          }
           calendarSheetRef.current.close();
           setTimeout(() => {
             setModalVisible?.(true);

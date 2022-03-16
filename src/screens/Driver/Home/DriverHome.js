@@ -36,6 +36,7 @@ import {
   SearchRides,
   MyRidesSortOrder,
   setReturnMapDestination,
+  get_settings,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProfileInfo, updateInfo} from '../../../redux/actions/auth.action';
@@ -120,7 +121,7 @@ const DriverHome = ({navigation}) => {
   useEffect(() => {
     if (isFocus) {
       dispatch(
-        MyRidesSortOrder('drives', 'tripDate:desc', res => {
+        MyRidesSortOrder('drives', 'tripDate', res => {
           dispatch({
             type: mapTypes.myDrives,
             payload: res,
@@ -128,6 +129,7 @@ const DriverHome = ({navigation}) => {
         }),
       );
       getUserdata();
+      dispatch(get_settings());
     }
   }, [isFocus]);
 

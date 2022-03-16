@@ -16,20 +16,21 @@ const ReturnCalendarSheet = ({
   calendarSheetRef,
   setDate,
   setModalVisible,
-  mindate,
   recurring,
+  mindate,
 }) => {
   let dispatch = useDispatch();
-  const [markedDate, setMarkedDate] = useState();
+  const [markedDate, setMarkedDate] = useState({});
+  const [dateList, setdateList] = useState([]);
   // useEffect(() => {
   //   let markedObj = {};
-  //   const selectedDate = moment(mindate).format('YYYY-MM-DD');
+  //   const selectedDate = moment(new Date().toDateString()).format('YYYY-MM-DD');
   //   markedObj[selectedDate] = {
   //     selected: true,
   //     selectedColor: colors.green,
   //   };
   //   setMarkedDate(markedObj);
-  //   dispatch(setReturnDateTimeStamp(selectedDate));
+  //   dispatch(setDateTimeStamp(selectedDate));
   // }, []);
 
   LocaleConfig.locales['en'] = {
@@ -61,6 +62,8 @@ const ReturnCalendarSheet = ({
   LocaleConfig.defaultLocale = 'en';
 
   const handleDayPress = date => {
+    let newdate = [];
+
     if (!recurring) {
       dispatch(
         setReturnDateTimeStamp(moment(date.dateString).format('YYYY-MM-DD')),
@@ -77,31 +80,22 @@ const ReturnCalendarSheet = ({
       let newDates = markedDate;
       if (markedDate[selectedDate]) {
         delete newDates[selectedDate];
-        dispatch(
-          setReturnRecurringDates(
-            moment(date.dateString).format('YYYY-MM-DD'),
-            true,
-          ),
-        );
+        for (let index = 0; index < dateList.length; index++) {
+          if (dateList[index] === selectedDate) {
+            delete dateList[index];
+          }
+        }
+        setdateList(dateList.filter(item => item != undefined));
       } else {
         newDates[selectedDate] = {
           selected: true,
           selectedColor: colors.green,
         };
-        dispatch(
-          setReturnRecurringDates(
-            moment(date.dateString).format('YYYY-MM-DD'),
-            false,
-          ),
-        );
-        dispatch(
-          setReturnDateTimeStamp(moment(date.dateString).format('YYYY-MM-DD')),
-        );
+        setdateList([...dateList, selectedDate]);
       }
       setMarkedDate({...newDates});
     }
   };
-
   return (
     <RBSheet
       ref={calendarSheetRef}
@@ -120,8 +114,8 @@ const ReturnCalendarSheet = ({
         onDayPress={handleDayPress}
         markedDates={markedDate}
         hideExtraDays={true}
-        enableSwipeMonths={true}
         minDate={mindate}
+        enableSwipeMonths={true}
         theme={{
           textSectionTitleColor: colors.black,
           dayTextColor: colors.black,
@@ -139,10 +133,15 @@ const ReturnCalendarSheet = ({
           selectedDayBackgroundColor: colors.green,
           //   todayBackgroundColor: colors.green,
         }}
+        markingType={'custom'}
       />
       <TouchableOpacity
         style={styles.okBtn}
         onPress={() => {
+          if (recurring) {
+            dispatch(setReturnRecurringDates(dateList));
+            dispatch(setReturnDateTimeStamp(dateList[0]));
+          }
           calendarSheetRef.current.close();
           setTimeout(() => {
             setModalVisible?.(true);

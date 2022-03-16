@@ -525,30 +525,23 @@ export const get_settings = () => async dispatch => {
 };
 //Set Recurring Dates Recurring Rides
 
-export const setRecurringDates = (data, remove) => async dispatch => {
+export const setRecurringDates = data => async dispatch => {
   try {
-    const dates = {
-      date_item: data,
-      remove_date: remove,
-    };
+    console.log(data);
     dispatch({
       type: Types.Set_Recurring_Dates,
-      payload: dates,
+      payload: data,
     });
   } catch (error) {
     console.log('Error', error);
   }
 };
 
-export const setReturnRecurringDates = (data, remove) => async dispatch => {
+export const setReturnRecurringDates = data => async dispatch => {
   try {
-    const dates = {
-      date_item: data,
-      remove_date: remove,
-    };
     dispatch({
       type: Types.Set_Return_Recurring_Dates,
-      payload: dates,
+      payload: data,
     });
   } catch (error) {
     console.log('Settings', error);

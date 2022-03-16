@@ -49,6 +49,7 @@ const UpdateDrive = () => {
     dateTimeStamp,
     returnDateTimeStamp,
     returnOrigin,
+    settings,
   } = useSelector(state => state.map);
 
   const time = useSelector(state => state.map.time);
@@ -88,7 +89,6 @@ const UpdateDrive = () => {
   //Handle Update Drive
   const handleCreateDrive = () => {
     setIsLoading(true);
-
     try {
       const body = {
         startLocation: {
@@ -107,7 +107,6 @@ const UpdateDrive = () => {
         startDes: origin?.description,
         destDes: destinationMap?.description,
       };
-      console.log(body);
       dispatch(
         setUpdateDrive(returnTime?.idToUpdateDrive?.id, body, response => {
           Alert.alert('Success', 'Ride Updated Successfully', [
@@ -169,7 +168,7 @@ const UpdateDrive = () => {
         date: returnDateTimeStamp,
         availableSeats: availableSeats,
         path: 0,
-        costPerSeat: value,
+        costPerSeat: value + availableSeats * settings?.adminCommission,
         interCity: false,
         startDes: returnOrigin?.description,
         destDes: returnDestinationMap?.description,
@@ -373,6 +372,7 @@ const UpdateDrive = () => {
           items={items}
           setOpen={setOpen}
           setValue={setValue}
+          dropDownDirection={'TOP'}
           setItems={setItems}
           style={{width: '90%', alignSelf: 'center'}}
           dropDownContainerStyle={{width: '90%', alignSelf: 'center'}}
