@@ -10,6 +10,7 @@ export const appIcons = {
   speaker: require('../../assets/icons/png/speaker.png'),
   wrongData: require('../../assets/icons/png/wrongData.png'),
   sliderImage: require('../../assets/icons/png/sliderImage.png'),
+  slide: require('../../assets/icons/png/slide.png'),
   filter: require('../../assets/icons/png/filter.png'),
   plus: require('../../assets/icons/png/plus.png'),
   sort: require('../../assets/icons/png/sort.png'),
@@ -49,6 +50,8 @@ export const appIcons = {
   edit_profile: require('../../assets/icons/png/editprofile.png'),
   startLocatin: require('../../assets/icons/png/startLocation.png'),
   destination: require('../../assets/icons/png/destination.png'),
+  passenger: require('../../assets/icons/png/passenger.png'),
+
   // /icons/png/Group9368.png
 };
 export const appImages = {

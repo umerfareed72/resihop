@@ -61,12 +61,11 @@ const AddressCards = ({
   const [secondReturnTimePicker, setSecondReturnTimePicker] = useState(false);
   const [returnSecondTime, setReturnSecondTime] = useState('');
 
-  const availableSeats = useSelector(state => state.map.availableSeats);
+  const {availableSeats, time, city_ride} = useSelector(state => state.map);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
   const returnDateTimeStamp = useSelector(
     state => state.map.returnDateTimeStamp,
   );
-  const time = useSelector(state => state.map.time);
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
   const returnOrigin = useSelector(state => state.map.returnOrigin);
@@ -214,6 +213,7 @@ const AddressCards = ({
                       query={{
                         key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                         language: 'en',
+                        types: city_ride ? '(cities)' : '(regions)', // default: 'geocode'
                       }}
                       debounce={400}
                       fetchDetails={true}
@@ -237,6 +237,10 @@ const AddressCards = ({
                           fontFamily: fonts.regular,
                         },
                       }}
+                      filterReverseGeocodingByTypes={[
+                        'locality',
+                        'administrative_area_level_3',
+                      ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
                       textInputProps={{
                         onChangeText: setCurrentReturnStart,
                       }}
@@ -258,6 +262,7 @@ const AddressCards = ({
                       query={{
                         key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                         language: 'en',
+                        types: city_ride ? '(cities)' : '(regions)', // default: 'geocode'
                       }}
                       debounce={400}
                       fetchDetails={true}
@@ -281,6 +286,10 @@ const AddressCards = ({
                           fontFamily: fonts.regular,
                         },
                       }}
+                      filterReverseGeocodingByTypes={[
+                        'locality',
+                        'administrative_area_level_3',
+                      ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
                       textInputProps={{
                         onChangeText: setCurrentReturnDestination,
                       }}
@@ -330,6 +339,7 @@ const AddressCards = ({
                   query={{
                     key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                     language: 'en',
+                    types: city_ride ? '(cities)' : '(regions)', // default: 'geocode'
                   }}
                   debounce={400}
                   fetchDetails={true}
@@ -354,6 +364,10 @@ const AddressCards = ({
                       fontFamily: fonts.regular,
                     },
                   }}
+                  filterReverseGeocodingByTypes={[
+                    'locality',
+                    'administrative_area_level_3',
+                  ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
                   textInputProps={{
                     onChangeText: setCurrentAddress,
                     autoCorrect: false,

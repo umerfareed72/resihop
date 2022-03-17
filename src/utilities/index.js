@@ -21,6 +21,7 @@ export {
   APIKEY,
   mode,
   total_seats,
+  profileIcon,
 } from './constants';
 export {
   registerAppWithFCM,

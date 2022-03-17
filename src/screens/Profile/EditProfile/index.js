@@ -12,7 +12,14 @@ import {
 import {Input, Text, Button, Avatar, Icon} from 'react-native-elements';
 import {CustomHeader, Loader} from '../../../components';
 import * as Yup from 'yup';
-import {appIcons, baseURL, colors, GetToken, header} from '../../../utilities';
+import {
+  appIcons,
+  baseURL,
+  colors,
+  GetToken,
+  header,
+  profileIcon,
+} from '../../../utilities';
 import {theme} from '../../../theme';
 import UploadImage from '../../../components/UploadImage';
 import GenderChips from '../../../components/GenderChips';
@@ -188,7 +195,7 @@ function index(props) {
               setFieldValue('firstName', auth?.profile_info.firstName);
               setFieldValue('lastName', auth?.profile_info.lastName);
               setPic({
-                uri: auth?.profile_info.picture?.url,
+                uri: auth?.profile_info.picture?.url || profileIcon,
               });
               setPhoto(auth?.profile_info.picture);
               setFieldValue('email', auth?.profile_info.email);

@@ -1,4 +1,5 @@
 module.exports = {
+  city_ride: 'city_ride',
   origin: 'Origin',
   destination: 'Destination',
   availableSeats: 'AvailableSeats',

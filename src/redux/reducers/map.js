@@ -37,11 +37,17 @@ const initialState = {
   recurring_drive: [],
   recurring_dates: [],
   return_recurring_dates: [],
+  city_ride: false,
 };
 
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
   switch (type) {
+    case Types.city_ride:
+      return {
+        ...state,
+        city_ride: payload,
+      };
     case Types.selectRoutes:
       return {
         ...state,

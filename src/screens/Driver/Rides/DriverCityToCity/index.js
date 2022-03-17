@@ -377,6 +377,7 @@ const index = () => {
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
+          dropDownDirection={'TOP'}
           style={{
             width: '90%',
             alignSelf: 'center',

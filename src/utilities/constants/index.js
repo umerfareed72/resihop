@@ -84,3 +84,5 @@ export const total_seats = [
     book_seat: false,
   },
 ];
+export const profileIcon =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4CRKPij6o2waFROp-89BCE8lEf96jLsndRQ&usqp=CAU';

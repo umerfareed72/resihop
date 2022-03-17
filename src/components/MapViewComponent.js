@@ -20,6 +20,7 @@ import {
   GeoCoderHelper,
   APIKEY,
   mode,
+  profileIcon,
 } from '../utilities';
 import StartMatchingSheet from './StartMatchingSheet';
 import NearestDriverCard from './NearestDriverCard';
@@ -43,7 +44,6 @@ import {
 import {fonts} from '../theme';
 import database from '@react-native-firebase/database';
 import polyline from '@mapbox/polyline';
-import {Dimensions} from 'react-native';
 import {Loader} from './Loader/Loader';
 import {useNavigation} from '@react-navigation/core';
 
@@ -389,7 +389,9 @@ const MapViewComponent = ({
     dispatch(
       CreateDriveRequest(body, setIsLoading, async response => {
         if (response?.error) {
-          console.log(response);
+          console.log(
+            response?.message || response?.message[0]?.messages[0]?.message,
+          );
           Alert.alert(
             'Failed',
             response?.message || response?.message[0]?.messages[0]?.message,
@@ -518,22 +520,36 @@ const MapViewComponent = ({
             coordinate={{
               latitude: destination.location.lat,
               longitude: destination.location.lng,
-            }}
-          />
+            }}>
+            <Image
+              source={appIcons.destination}
+              style={styles.destinationIcon}
+            />
+          </Marker>
         )}
 
         {/* Search Passenger List */}
 
         {searchRideResponse !== null && searchRideResponse?.length > 0
-          ? searchRideResponse?.map(ride => (
-              <Marker
-                identifier="ride"
-                coordinate={{
-                  latitude: ride.startLat,
-                  longitude: ride.startLng,
-                }}
-              />
-            ))
+          ? searchRideResponse?.map(ride => {
+              return (
+                <Marker
+                  identifier="ride"
+                  coordinate={{
+                    latitude: ride.startLat,
+                    longitude: ride.startLng,
+                  }}>
+                  <View style={styles.rideImageCon}>
+                    <Image
+                      style={styles.rideImage}
+                      source={{
+                        uri: ride?.user?.picture?.url || profileIcon,
+                      }}
+                    />
+                  </View>
+                </Marker>
+              );
+            })
           : null}
 
         {/* Search Driver List */}
@@ -667,7 +683,8 @@ const styles = StyleSheet.create({
     right: 16,
   },
   driverCard: {
-    padding: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 7,
     backgroundColor: colors.blue,
     borderRadius: 30,
   },
@@ -675,6 +692,27 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: fonts.bold,
     fontSize: 12,
+  },
+  destinationIcon: {
+    height: 33,
+    width: 23,
+    resizeMode: 'contain',
+  },
+  rideImageCon: {
+    height: 22,
+    width: 22,
+    borderRadius: 22,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: colors.dark_yellow,
+    backgroundColor: colors.white,
+  },
+  rideImage: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'cover',
+    borderRadius: 22,
   },
 });
 
