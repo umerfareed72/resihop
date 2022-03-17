@@ -387,6 +387,7 @@ const CreateDrive = () => {
         <DropDownPicker
           open={open}
           value={value}
+          dropDownDirection={'TOP'}
           items={items}
           setOpen={setOpen}
           setValue={setValue}

@@ -9,7 +9,15 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {checkConnected, colors, family, HP, size, WP} from '../../utilities';
+import {
+  checkConnected,
+  colors,
+  family,
+  HP,
+  profileIcon,
+  size,
+  WP,
+} from '../../utilities';
 import {ListItem} from 'react-native-elements';
 import {Icon} from 'react-native-elements';
 import {appImages, drawerIcons} from '../../utilities/images';
@@ -143,9 +151,7 @@ const DrawerComponent = ({navigation}) => {
               <Image
                 style={styles.profileImg}
                 source={{
-                  uri:
-                    Userdata?.profile_info?.picture?.url ||
-                    'https://unsplash.it/400/400?image=1',
+                  uri: Userdata?.profile_info?.picture?.url || profileIcon,
                 }}
               />
             </View>

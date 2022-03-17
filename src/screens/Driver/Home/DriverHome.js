@@ -37,6 +37,7 @@ import {
   MyRidesSortOrder,
   setReturnMapDestination,
   get_settings,
+  setCity,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProfileInfo, updateInfo} from '../../../redux/actions/auth.action';
@@ -322,6 +323,7 @@ const DriverHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
+              dispatch(setCity(false));
               getLocation('CreateDrive');
               AsyncStorage.setItem('city', 'no');
             }}
@@ -358,7 +360,8 @@ const DriverHome = ({navigation}) => {
             <TouchableOpacity
               onPress={() => {
                 AsyncStorage.setItem('city', 'yes');
-                getLocation('DriverCityToCity');
+                dispatch(setCity(true));
+                navigation?.navigate('DriverCityToCity');
               }}
               style={styles.interiorContainer}>
               <Image

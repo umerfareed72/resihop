@@ -14,6 +14,7 @@ import I18n from '../utilities/translations';
 import {setWalkingDistance, setDeltas} from '../redux/actions/map.actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import {Platform} from 'react-native';
 
 const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
   let dispatch = useDispatch();
@@ -41,7 +42,9 @@ const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
         minimumValue={100}
         value={sliderValue}
         maximumValue={3000}
-        thumbImage={appIcons.sliderImage}
+        thumbImage={
+          Platform?.OS === 'ios' ? appIcons.sliderImage : appIcons.slide
+        }
         minimumTrackTintColor={colors.green}
         maximumTrackTintColor={colors.g1}
         onValueChange={value => setSliderValue(parseInt(value))}

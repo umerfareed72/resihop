@@ -6,6 +6,12 @@ import {responseValidator} from '../../utilities/helpers';
 import {RIDES_CONST, DRIVE_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
 
+export const setCity = data => async dispatch => {
+  dispatch({
+    type: Types.city_ride,
+    payload: data,
+  });
+};
 export const setRoutes = data => async dispatch => {
   dispatch({
     type: Types.selectRoutes,

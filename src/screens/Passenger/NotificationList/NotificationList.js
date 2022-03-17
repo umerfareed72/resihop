@@ -16,6 +16,7 @@ import {
   size,
   responseValidator,
   header,
+  profileIcon,
 } from '../../../utilities';
 import {Divider} from 'react-native-elements/dist/divider/Divider';
 import {GET_NOTIFICATION_LIST} from '../../../utilities/routes';
@@ -60,9 +61,7 @@ const NotificationList = ({navigation}) => {
           <Image
             style={styles.imageStyle}
             source={{
-              uri:
-                data?.item?.user?.picture?.url ||
-                'https://unsplash.it/400/400?image=1',
+              uri: data?.item?.user?.picture?.url || profileIcon,
             }}
           />
         </View>

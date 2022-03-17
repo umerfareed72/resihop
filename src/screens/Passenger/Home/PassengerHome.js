@@ -34,6 +34,7 @@ import {
   MyRidesSortOrder,
   setReturnMapDestination,
   get_settings,
+  setCity,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -321,6 +322,7 @@ const PassengerHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
+              dispatch(setCity(false));
               getLocation('CreateRide');
             }}
             style={styles.cardContainer}>
@@ -356,7 +358,8 @@ const PassengerHome = ({navigation}) => {
           <View style={styles.cardContainer}>
             <TouchableOpacity
               onPress={() => {
-                getLocation('CityToCity');
+                dispatch(setCity(true));
+                navigation?.navigate('CityToCity');
               }}
               style={styles.cardContainer}>
               <Image source={appIcons.homeIconBg} style={styles.homeCards} />
