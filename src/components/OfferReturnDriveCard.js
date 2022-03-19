@@ -5,12 +5,13 @@ import {colors} from '../utilities';
 import {fonts} from '../theme';
 import {useNavigation} from '@react-navigation/core';
 import I18n from '../utilities/translations';
+import {useSelector} from 'react-redux';
 
 const OfferReturnDriveCard = () => {
   let navigation = useNavigation();
 
   const [toggleEnabled, setToggleEnabled] = useState(false);
-
+  const {origin, destination} = useSelector(state => state?.map);
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
@@ -30,15 +31,11 @@ const OfferReturnDriveCard = () => {
       </View>
       <Text style={styles.estimatedTxt}>{I18n.t('estimated')}</Text>
       <View style={styles.addressContainer}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{origin?.description}</Text>
         <View style={styles.addressCircle} />
       </View>
       <View style={[styles.addressContainer, {marginTop: 21}]}>
-        <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
-        </Text>
+        <Text style={styles.addressTxt}>{destination?.description}</Text>
         <View style={styles.addressSquare} />
       </View>
     </View>

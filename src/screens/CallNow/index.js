@@ -11,7 +11,7 @@ import {CustomHeader} from '../../components/Header/CustomHeader';
 import styles from './styles';
 import RtcEngine from 'react-native-agora';
 import {requestCameraAndAudioPermission} from '../../utilities/helpers/permissions';
-import {appIcons, appId, colors} from '../../utilities';
+import {appIcons, appId, colors, profileIcon} from '../../utilities';
 import {TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 
@@ -22,11 +22,12 @@ const index = ({navigation}) => {
   const [peerIds, setPeerIds] = useState([]);
   const rtcEngine = useRef(null);
   const app_reducer = useSelector(state => state.app_reducer);
+  console.log(app_reducer);
   //Init Agora
   const initAgora = useCallback(async () => {
     rtcEngine.current = await RtcEngine.create(appId);
     await rtcEngine.current.enableAudio();
-    await rtcEngine.current.setEnableSpeakerphone(true);
+    await rtcEngine.current.setEnableSpeakerphone(false);
     await rtcEngine.current.muteLocalAudioStream(false);
     if (requestCameraAndAudioPermission()) {
       _joinChannel();
@@ -114,10 +115,7 @@ const index = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.contentContainer}>
           <View style={styles.view1}>
-            <Image
-              style={styles.imageStyle}
-              source={{uri: 'https://unsplash.it/400/400?image=1'}}
-            />
+            <Image style={styles.imageStyle} source={{uri: profileIcon}} />
             <Text style={styles.username}>Umer Fareed</Text>
             <Text style={styles.ringingText}>
               {joinsucceed ? 'Connected' : 'Ringing'}

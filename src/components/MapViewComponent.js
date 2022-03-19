@@ -509,9 +509,12 @@ const MapViewComponent = ({
             coordinate={{
               latitude: origin.location.lat,
               longitude: origin.location.lng,
-            }}
-            icon={startRide ? appIcons.DriverCar : appIcons.startLocatin}
-          />
+            }}>
+            <Image
+              source={appIcons.startLocatin}
+              style={styles.destinationIcon}
+            />
+          </Marker>
         )}
 
         {destination?.location && (
