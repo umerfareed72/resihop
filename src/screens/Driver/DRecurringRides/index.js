@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import {SafeAreaView, View, FlatList} from 'react-native';
 import {
   BlankTrip,
+  CancelRideModal,
   CustomHeader,
   RecurringRideCard,
   RideFilterModal,
@@ -87,6 +88,9 @@ function index(props) {
   const [seats, setSeats] = useState('');
   const {recurring_drive} = useSelector(state => state.map);
   const [isLoading, setisLoading] = useState(false);
+  const [multiDelete, setmultiDelete] = useState(false);
+  const [selectedCard, setSelectedCard] = useState([]);
+
   //Redux States
   const dispatch = useDispatch(null);
   const selectTime = val => {
@@ -187,6 +191,12 @@ function index(props) {
       ]);
     }
   };
+  const onPressCancel = () => {
+    console.log(selectedCard);
+    setmultiDelete(false);
+    setSelectedCard([]);
+    alert('coming soon');
+  };
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -208,9 +218,19 @@ function index(props) {
               renderItem={({item}) => {
                 return (
                   <RecurringRideCard
+                    multiDelete={multiDelete}
                     ride={item}
                     onPressCard={() => {
-                      onPressDrive(item);
+                      if (multiDelete) {
+                        setSelectedCard(item?.id);
+                      } else {
+                        onPressDrive(item);
+                      }
+                    }}
+                    selectedCard={selectedCard}
+                    setSelectedCard={item => {
+                      setmultiDelete(true);
+                      setSelectedCard(item);
                     }}
                   />
                 );
@@ -256,6 +276,18 @@ function index(props) {
         }}
       />
       <SortModal show={sortModalRef} />
+      {multiDelete && (
+        <CancelRideModal
+          onPressCancel={() => {
+            onPressCancel();
+          }}
+          onPressClose={() => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          }}
+          show={multiDelete}
+        />
+      )}
     </>
   );
 }

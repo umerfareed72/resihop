@@ -55,11 +55,6 @@ const NotificationList = ({navigation}) => {
   };
 
   const NotificationItem = ({data}) => {
-    console.log(
-      'data in NotificationItem  ',
-      data?.item?.data?.ride?.createdAt,
-    );
-
     return (
       <View style={styles.notifyItem}>
         <View style={styles.imageContainer}>

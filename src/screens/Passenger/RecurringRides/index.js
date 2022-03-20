@@ -3,6 +3,7 @@ import {SafeAreaView, View, FlatList, Linking} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   BlankTrip,
+  CancelRideModal,
   CustomHeader,
   Loader,
   RecurringRideCard,
@@ -90,6 +91,9 @@ function index(props) {
   const [seats, setSeats] = useState('');
   const {recurring_ride} = useSelector(state => state.map);
   const [isLoading, setisLoading] = useState(false);
+  const [multiDelete, setmultiDelete] = useState(false);
+  const [selectedCard, setSelectedCard] = useState([]);
+
   //Redux States
   const dispatch = useDispatch(null);
   const isFocus = useIsFocused(null);
@@ -193,6 +197,12 @@ function index(props) {
       });
     }
   };
+  const onPressCancel = () => {
+    console.log(selectedCard);
+    setmultiDelete(false);
+    setSelectedCard([]);
+    alert('coming soon');
+  };
 
   return (
     <>
@@ -215,9 +225,19 @@ function index(props) {
               renderItem={({item}) => {
                 return (
                   <RecurringRideCard
+                    multiDelete={multiDelete}
                     ride={item}
                     onPressCard={() => {
-                      onPressCardItem(item);
+                      if (multiDelete) {
+                        setSelectedCard(item?.id);
+                      } else {
+                        onPressCardItem(item);
+                      }
+                    }}
+                    selectedCard={selectedCard}
+                    setSelectedCard={item => {
+                      setmultiDelete(true);
+                      setSelectedCard(item);
                     }}
                   />
                 );
@@ -266,6 +286,18 @@ function index(props) {
         }}
       />
       <SortModal show={sortModalRef} />
+      {multiDelete && (
+        <CancelRideModal
+          onPressCancel={() => {
+            onPressCancel();
+          }}
+          onPressClose={() => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          }}
+          show={multiDelete}
+        />
+      )}
     </>
   );
 }

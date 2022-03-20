@@ -13,9 +13,16 @@ import {useSelector} from 'react-redux';
 import {fonts} from '../../../theme';
 import {colors, appImages, size} from '../../../utilities';
 
-export const RecurringRideCard = ({onPressCard, ride}) => {
+export const RecurringRideCard = ({
+  onPressCard,
+  ride,
+  selectedCard,
+  setSelectedCard,
+  multiDelete,
+}) => {
   const [seats, setSeats] = useState([]);
   const {recurring_ride, recurring_drive} = useSelector(state => state.map);
+
   useEffect(() => {
     if (ride.availableSeats) {
       let availableSeats = [];
@@ -33,9 +40,23 @@ export const RecurringRideCard = ({onPressCard, ride}) => {
       setSeats(requiredSeats);
     }
   }, [recurring_ride, recurring_drive]);
+  const CardSelect = id => {
+    if (selectedCard?.includes(ride?.id)) {
+      setSelectedCard(selectedCard.filter(card => card !== id));
+    } else setSelectedCard([id, ...selectedCard]);
+  };
   return (
     <>
-      <TouchableOpacity style={styles.container} onPress={onPressCard}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => {
+          if (multiDelete) {
+            CardSelect(ride?.id);
+          } else {
+            onPressCard();
+          }
+        }}
+        onLongPress={() => CardSelect(ride.id)}>
         <View style={styles.cardStyle}>
           <View style={[styles.alignRow]}>
             <View
@@ -126,6 +147,35 @@ export const RecurringRideCard = ({onPressCard, ride}) => {
           </View>
         </View>
       </TouchableOpacity>
+      {selectedCard?.includes(ride.id) ? (
+        <>
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.green,
+              opacity: 0.5,
+              height: '83%',
+              borderRadius: 15,
+              top: 20,
+              width: '90%',
+              alignSelf: 'center',
+              position: 'absolute',
+            }}
+            onPress={() => CardSelect(ride.id)}
+          />
+          <Image
+            source={appImages.tickMark}
+            resizeMode="contain"
+            style={{
+              height: 49,
+              width: 49,
+              position: 'absolute',
+              alignSelf: 'center',
+              top: 100,
+              opacity: 1,
+            }}
+          />
+        </>
+      ) : null}
     </>
   );
 };
