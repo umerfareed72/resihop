@@ -20,7 +20,7 @@ import {
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
-import {RideFilterModal, SortModal} from '../../../components';
+import {BlankTrip, RideFilterModal, SortModal} from '../../../components';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import I18n from '../../../utilities/translations';
@@ -143,6 +143,7 @@ const PassengerHome = ({navigation}) => {
 
   // Get Location
   const getLocation = async route => {
+    dispatch(setCity(false));
     const permission = await checkAppPermission('location');
     if (permission) {
       Geolocation.getCurrentPosition(
@@ -322,7 +323,6 @@ const PassengerHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(setCity(false));
               getLocation('CreateRide');
             }}
             style={styles.cardContainer}>
@@ -396,19 +396,14 @@ const PassengerHome = ({navigation}) => {
         </View>
 
         {myRidesData === null || myRidesData.length === 0 ? (
-          <>
-            <Image
-              source={appIcons.noUpcomingRide}
-              style={styles.noUpcomingRide}
-            />
-
-            {/* <Text style={styles.Txt}>{I18n.t('lorem')}</Text> */}
-            <TouchableOpacity
-              style={styles.createRideBtnContainer}
-              onPress={() => navigation.navigate('CreateRide')}>
-              <Text style={styles.btnTxt}>{I18n.t('first_ride')}</Text>
-            </TouchableOpacity>
-          </>
+          <BlankTrip
+            icon={appIcons.noUpcomingRide}
+            role={'passenger'}
+            onPress={() => {
+              getLocation('CreateRide');
+            }}
+            text={I18n.t('first_ride')}
+          />
         ) : (
           <>
             <FlatList
@@ -539,12 +534,7 @@ const styles = StyleSheet.create({
     color: colors.txtBlack,
     fontFamily: fonts.regular,
   },
-  noUpcomingRide: {
-    height: 197,
-    width: 247,
-    alignSelf: 'center',
-    marginTop: 30,
-  },
+
   Txt: {
     textAlign: 'justify',
     alignSelf: 'center',

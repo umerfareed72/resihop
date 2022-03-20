@@ -1,18 +1,27 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {SafeAreaView, View, FlatList} from 'react-native';
 import {
+  BlankTrip,
   CustomHeader,
   RecurringRideCard,
   RideFilterModal,
   SortModal,
 } from '../../../components';
 import {get} from '../../../services';
-import {appIcons, appImages, colors, header} from '../../../utilities';
+import {appIcons, appImages, colors, header, WP} from '../../../utilities';
 import I18n from '../../../utilities/translations';
 import * as Types from '../../../redux/types/map.types';
 import {useDispatch, useSelector} from 'react-redux';
 import BlankField from '../../../components/BlankField';
-
+import {
+  setOrigin,
+  setReturnMapDestination,
+} from '../../../redux/actions/map.actions';
+import {Linking} from 'react-native';
+import {Alert} from 'react-native';
+import {checkAppPermission} from '../../../utilities/helpers/permissions';
+import Geolocation from 'react-native-geolocation-service';
+import Geocoder from 'react-native-geocoding';
 var TimeList = {
   id: 1,
   title: I18n.t('time'),
@@ -136,7 +145,48 @@ function index(props) {
       drive: item,
     });
   };
-
+  // Get Location
+  const getLocation = async route => {
+    const permission = await checkAppPermission('location');
+    if (permission) {
+      Geolocation.getCurrentPosition(
+        position => {
+          const {latitude, longitude} = position?.coords;
+          Geocoder.from(latitude, longitude)
+            .then(json => {
+              var addressComponent = json.results[0]?.formatted_address;
+              dispatch(
+                setOrigin({
+                  location: {lat: latitude, lng: longitude},
+                  description: addressComponent,
+                }),
+              );
+              dispatch(
+                setReturnMapDestination({
+                  location: {lat: latitude, lng: longitude},
+                  description: addressComponent,
+                }),
+              );
+              props?.navigation.navigate(route);
+            })
+            .catch(error => console.warn(error));
+        },
+        error => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    } else {
+      Alert.alert('Error', 'Location Permission Denied', [
+        {
+          onPress: () => {
+            Linking.openURL('app-settings:');
+          },
+        },
+      ]);
+    }
+  };
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -167,7 +217,17 @@ function index(props) {
               }}
             />
           ) : (
-            <BlankField title={'No Reccuring Drive Available'} />
+            <View
+              style={{
+                marginTop: WP('30'),
+              }}>
+              <BlankTrip
+                icon={appIcons.driver_home}
+                text={I18n.t('create_first_drive')}
+                onPress={() => getLocation('CreateDrive')}
+                role={'driver'}
+              />
+            </View>
           )}
         </View>
       </SafeAreaView>

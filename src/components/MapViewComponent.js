@@ -417,7 +417,14 @@ const MapViewComponent = ({
           latitudeDelta: deltas ? deltas.latDelta : 0.005,
           longitudeDelta: deltas ? deltas.lngDelta : 0.005,
         }}
-        //onRegionChange={regionChanged}
+        onRegionChangeComplete={e => {
+          GeoCoderHelper(
+            e?.latitude,
+            e?.longitude,
+            dispatch,
+            googleAutoComplete,
+          );
+        }}
         maxZoomLevel={zoomLevel}
         zoomEnabled={true}
         scrollEnabled={true}
@@ -497,15 +504,6 @@ const MapViewComponent = ({
         {origin?.location && (
           <Marker
             identifier="location"
-            draggable={rideModals == 'startLocation' ? true : false}
-            onDragEnd={e => {
-              GeoCoderHelper(
-                e.nativeEvent.coordinate?.latitude,
-                e.nativeEvent.coordinate?.longitude,
-                dispatch,
-                googleAutoComplete,
-              );
-            }}
             coordinate={{
               latitude: origin.location.lat,
               longitude: origin.location.lng,

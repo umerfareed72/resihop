@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {fonts} from '../../../theme';
-import {colors, appImages} from '../../../utilities';
+import {colors, appImages, size} from '../../../utilities';
 
 export const RecurringRideCard = ({onPressCard, ride}) => {
   const [seats, setSeats] = useState([]);
@@ -37,25 +37,36 @@ export const RecurringRideCard = ({onPressCard, ride}) => {
     <>
       <TouchableOpacity style={styles.container} onPress={onPressCard}>
         <View style={styles.cardStyle}>
-          <View style={{marginBottom: 20}}>
-            <TextInput
-              editable={false}
-              multiline={true}
-              placeholder={ride?.startDes}
-              placeholderTextColor={colors.inputTxtGray}
-              style={styles.txtInput}
-            />
-            <View style={styles.startDot} />
-          </View>
-          <View>
-            <TextInput
-              multiline={true}
-              editable={false}
-              placeholder={ride?.destDes}
-              placeholderTextColor={colors.inputTxtGray}
-              style={styles.txtInput}
-            />
-            <View style={styles.destSquare} />
+          <View style={[styles.alignRow]}>
+            <View
+              style={[
+                styles.txtInput,
+                {
+                  marginBottom: 10,
+                },
+              ]}>
+              <View style={styles.circleStyle} />
+
+              <Text
+                style={{
+                  color: colors.g4,
+                  fontSize: size.xxsmall,
+                  width: '90%',
+                }}>
+                {ride?.startDes}
+              </Text>
+            </View>
+            <View style={styles.txtInput}>
+              <View style={styles.rectangleStyle} />
+              <Text
+                style={{
+                  color: colors.g4,
+                  fontSize: size.xxsmall,
+                  width: '90%',
+                }}>
+                {ride?.destDes}
+              </Text>
+            </View>
           </View>
           <View style={styles.filterContainer}>
             <Text>
@@ -156,8 +167,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.greyBorder,
     borderRadius: 10,
-    paddingLeft: 45,
+    paddingLeft: 10,
     color: colors.inputTxtGray,
+    flexDirection: 'row',
+    paddingVertical: 10,
+    alignItems: 'center',
   },
   startDot: {
     height: 16,
@@ -206,6 +220,20 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.txtBlack,
     marginLeft: 7,
+  },
+  circleStyle: {
+    height: 12,
+    width: 12,
+    borderRadius: 12,
+    backgroundColor: colors.green,
+    marginRight: 10,
+  },
+  rectangleStyle: {
+    height: 12,
+    width: 12,
+    borderRadius: 4,
+    backgroundColor: colors.blue,
+    marginRight: 10,
   },
 });
 const getStatusColor = status => {

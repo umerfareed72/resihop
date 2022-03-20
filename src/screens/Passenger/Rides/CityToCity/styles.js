@@ -124,7 +124,7 @@ export default StyleSheet.create({
   },
   noLater: {
     height: 44,
-    width: 140,
+    width: '100%',
     borderWidth: 1,
     borderColor: colors.greyBorder,
     borderRadius: 10,

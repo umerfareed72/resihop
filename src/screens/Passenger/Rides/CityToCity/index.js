@@ -84,20 +84,6 @@ const index = () => {
     };
   }, []);
 
-  const showTimePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideTimePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = date => {
-    setNormalTime(moment(date).format());
-    dispatch(setTime(moment(date).format('HH:mm')));
-    hideTimePicker();
-  };
-
   const showFirstReturnTimePicker = () => {
     setFirstReturnTimePicker(true);
   };
@@ -305,11 +291,6 @@ const index = () => {
         </View>
         <View style={styles.selectionInputWrapper}>
           <TouchableOpacity
-            onPress={() => showTimePicker()}
-            style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
             style={[
               styles.noLater,
@@ -325,15 +306,6 @@ const index = () => {
             source={appImages.calendar}
             resizeMode="contain"
             style={styles.calendarIcon}
-          />
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            date={normalTime ? new Date(normalTime) : new Date()}
-            is24Hour
-            locale="en_GB"
-            mode="time"
-            onConfirm={handleConfirm}
-            onCancel={hideTimePicker}
           />
         </View>
         <View style={styles.returnTripWrapper}>
@@ -430,48 +402,10 @@ const index = () => {
                 )}
               </View>
             </View>
-            <View style={{marginLeft: 26}}>
-              <Text style={styles.returntimeTxt}>
-                {I18n.t('departure_time')}
-              </Text>
-              <Text style={styles.timeBracketTxt}>
-                {I18n.t('departure_time_desc')}
-              </Text>
+            <View style={styles.selectWrapper}>
+              <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
             </View>
-            <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
-              <TouchableOpacity
-                onPress={() => showFirstReturnTimePicker()}
-                style={[styles.noLater, {justifyContent: 'center'}]}>
-                <Text style={styles.dateTxt}>
-                  {returnTime?.returnFirstTime != 'Invalid date'
-                    ? returnTime?.returnFirstTime
-                    : `XX:XX`}
-                </Text>
-              </TouchableOpacity>
-              <Text> {I18n.t('to')}</Text>
-              <TouchableOpacity
-                style={[styles.noLater, {justifyContent: 'center'}]}>
-                <Text style={styles.dateTxt}>
-                  {returnTime?.returnSecondTime != 'Invalid date'
-                    ? returnTime?.returnSecondTime
-                    : `XX:XX`}
-                </Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={firstReturnTimePicker}
-                date={
-                  normalFirstReturnTime
-                    ? new Date(normalFirstReturnTime)
-                    : new Date()
-                }
-                mode="time"
-                is24Hour={true}
-                locale="en_GB"
-                onConfirm={handleConfirmFirstReturnTime}
-                onCancel={hideFirstReturnTimePicker}
-              />
-            </View>
-            <View style={{marginBottom: 20}}>
+            <View style={{marginVertical: 20}}>
               <TouchableOpacity
                 onPress={() => returnCalendarSheetRef.current.open()}
                 style={[
@@ -544,15 +478,8 @@ const handleDisable = (
   destinationMap,
   availableSeats,
   dateTimeStamp,
-  time,
 ) => {
-  if (
-    !origin ||
-    !dateTimeStamp ||
-    !availableSeats ||
-    !destinationMap ||
-    !time
-  ) {
+  if (!origin || !dateTimeStamp || !availableSeats || !destinationMap) {
     return true;
   }
   return false;

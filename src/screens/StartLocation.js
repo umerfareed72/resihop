@@ -29,6 +29,7 @@ const StartLocation = props => {
         onPress={onPress}
         favName={favName}
         googleAutoComplete={googleAutoComplete}
+        recurring={props?.route?.params?.recurring}
       />
       <AddFavrouteLocation
         addfavrouiteAddressRef={addfavrouiteAddressRef}

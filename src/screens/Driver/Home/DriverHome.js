@@ -22,7 +22,7 @@ import {
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
-import {RideFilterModal, SortModal} from '../../../components';
+import {BlankTrip, RideFilterModal, SortModal} from '../../../components';
 import I18n from '../../../utilities/translations';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
@@ -396,20 +396,12 @@ const DriverHome = ({navigation}) => {
           </View>
         </View>
         {myDrives === null || myDrives?.length === 0 ? (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{marginBottom: 10}}>
-            <Image
-              source={appIcons.driver_home}
-              style={styles.noUpcomingRide}
-            />
-            {/* <Text style={styles.Txt}>{I18n.t('lorem')}</Text> */}
-            <TouchableOpacity
-              style={styles.createRideBtnContainer}
-              onPress={() => getLocation()}>
-              <Text style={styles.btnTxt}>{I18n.t('create_first_drive')}</Text>
-            </TouchableOpacity>
-          </ScrollView>
+          <BlankTrip
+            icon={appIcons.driver_home}
+            text={I18n.t('create_first_drive')}
+            onPress={() => getLocation('CreateDrive')}
+            role={'driver'}
+          />
         ) : (
           <>
             <FlatList

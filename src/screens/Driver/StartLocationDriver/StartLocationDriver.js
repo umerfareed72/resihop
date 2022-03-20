@@ -11,7 +11,7 @@ const StartLocationDriver = ({route}) => {
   const addfavrouiteAddressRef = useRef(null);
   const googleAutoComplete = useRef();
 
-  const {type} = route.params;
+  const {type, recurring} = route.params;
 
   return (
     <View style={styles.container}>
@@ -21,6 +21,10 @@ const StartLocationDriver = ({route}) => {
         style={styles.mapStyles}
       />
       <AddressCards
+        onPress={() => {
+          navigation?.goBack();
+        }}
+        recurring={recurring}
         modalName={type}
         addfavrouiteAddressRef={addfavrouiteAddressRef}
         mode="driver"

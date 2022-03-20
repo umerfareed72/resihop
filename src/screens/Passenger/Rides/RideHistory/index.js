@@ -168,7 +168,7 @@ const index = ({navigation}) => {
               renderItem={({item}) => {
                 return (
                   <RideHistoryCard
-                    dateTime={item?.createdAt}
+                    dateTime={item?.tripDate}
                     profilePic={true}
                     cost={'30'}
                     onPressCard={() => {

@@ -186,6 +186,8 @@ const index = () => {
           <TouchableOpacity
             onPress={() => {
               setScreen(false);
+              dispatch(setRecurringDates([]));
+              dispatch(setReturnRecurringDates([]));
             }}
             style={[
               styles.tripBtnContainer,
@@ -223,7 +225,10 @@ const index = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('StartLocation', {modalName: 'destination'})
+                navigation.navigate('StartLocation', {
+                  modalName: 'destination',
+                  recurring: screen,
+                })
               }
               style={styles.txtInput}>
               <Text style={styles.startTxt}>
@@ -355,7 +360,16 @@ const index = () => {
             onToggle={isOn => setToggleEnabled(isOn)}
           />
         </View>
-        <CalendarSheet recurring={screen} calendarSheetRef={calendarSheetRef} />
+        <CalendarSheet
+          recurring={screen}
+          ride={{
+            next: recurring_dates?.map(item => {
+              return {date: item};
+            }),
+          }}
+          date={dateTimeStamp}
+          calendarSheetRef={calendarSheetRef}
+        />
         {toggleEnabled ? (
           <>
             <View style={styles.locationMainWrapper}>
@@ -380,6 +394,7 @@ const index = () => {
                     dispatch(setMapSegment('returnTrip'));
                     navigation.navigate('StartLocation', {
                       modalName: 'returnTrip',
+                      recurring: screen,
                     });
                   }}
                   style={styles.txtInput}>
@@ -502,6 +517,12 @@ const index = () => {
             <ReturnCalendarSheet
               recurring={screen}
               mindate={dateTimeStamp}
+              ride={{
+                next: return_recurring_dates?.map(item => {
+                  return {date: item};
+                }),
+              }}
+              date={returnDateTimeStamp}
               calendarSheetRef={returnCalendarSheetRef}
             />
           </>
