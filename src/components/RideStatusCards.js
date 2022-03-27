@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../theme/theme';
-import {appIcons, appImages, colors} from '../utilities';
+import {appIcons, appImages, colors, profileIcon} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CallIcon from 'react-native-vector-icons/Ionicons';
@@ -19,12 +19,14 @@ import moment from 'moment';
 import {CancelRide, setBookRide} from '../redux/actions/map.actions';
 import {Loader} from '../components';
 import {Alert} from 'react-native';
+import {create_agoral_channel} from '../redux/actions/app.action';
 
 const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
 
   const {nearestDriver, settings} = useSelector(state => state.map);
+  const auth = useSelector(state => state.auth);
 
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [currentRide, setCurrentRide] = useState(false);
@@ -32,6 +34,8 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
   const [selected, setSelected] = useState(false);
   const [rating, setRating] = useState(0);
   const [seats, setSeats] = useState([]);
+  const [remainingHours, setRemainingHours] = useState(2);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const walletRef = useRef(null);
@@ -42,6 +46,13 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
         seats[i] = i;
       }
     }
+
+    var given = moment(ride?.tripDate, 'YYYY-MM-DD');
+    var current = moment().startOf('day');
+
+    //Difference in number of days
+    const hours = moment.duration(given.diff(current)).asHours();
+    setRemainingHours(hours);
   }, []);
 
   const handleCancelRide = () => {
@@ -58,7 +69,20 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
       }),
     );
   };
-
+  const onCallPress = () => {
+    const requestBody = {
+      channel: ride?.drive?._id,
+      role: 'audience',
+      tokentype: 'uid',
+      uid: JSON.parse(auth?.profile_info?.country?.phone),
+    };
+    dispatch(
+      create_agoral_channel(requestBody, res => {
+        console.log(res);
+        navigation?.navigate('CallNow');
+      }),
+    );
+  };
   if (statusType === 'WAITING_FOR_MATCH') {
     return (
       <View style={styles.waitcontainer}>
@@ -178,7 +202,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
         <View style={styles.driverInfoContainer}>
           <View style={styles.driverInfo}>
             <Image
-              source={appImages.driver}
+              source={{uri: ride?.drive?.user?.picture?.url || profileIcon}}
               resizeMode="cover"
               style={styles.driver}
             />
@@ -239,19 +263,21 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
           <>
             <View style={styles.borderBtnMainContainer}>
               <TouchableOpacity
+                onPress={() => {
+                  onCallPress();
+                }}
                 style={styles.borderBtnContainer}
-                disabled={statusType === 'CONFIRMED'}>
+                disabled={remainingHours < 1 ? true : false}>
                 <CallIcon
                   name="call"
                   size={18}
-                  color={statusType === 'CONFIRMED' ? colors.g1 : colors.black}
+                  color={remainingHours < 1 ? colors.g1 : colors.black}
                 />
                 <Text
                   style={[
                     styles.borderBtnTxt,
                     {
-                      color:
-                        statusType === 'CONFIRMED' ? colors.g1 : colors.black,
+                      color: remainingHours < 1 ? colors.g1 : colors.black,
                     },
                   ]}>
                   {I18n.t('call_now')}

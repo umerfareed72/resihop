@@ -38,6 +38,7 @@ const AddressCards = ({
   mode,
   favName,
   googleAutoComplete,
+  recurring,
 }) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
@@ -66,7 +67,9 @@ const AddressCards = ({
   const returnDateTimeStamp = useSelector(
     state => state.map.returnDateTimeStamp,
   );
-  const origin = useSelector(state => state.map.origin);
+  const {origin, recurring_dates, return_recurring_dates} = useSelector(
+    state => state.map,
+  );
   const destinationMap = useSelector(state => state.map.destination);
   const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
@@ -182,7 +185,6 @@ const AddressCards = ({
       }),
     );
   };
-
   return (
     <>
       {modalName === 'startLocation' ||
@@ -213,7 +215,7 @@ const AddressCards = ({
                       query={{
                         key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                         language: 'en',
-                        types: city_ride ? '(cities)' : '(regions)', // default: 'geocode'
+                        types: city_ride ? '(cities)' : 'establishment', // default: 'geocode'
                       }}
                       debounce={400}
                       fetchDetails={true}
@@ -262,7 +264,7 @@ const AddressCards = ({
                       query={{
                         key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                         language: 'en',
-                        types: city_ride ? '(cities)' : '(regions)', // default: 'geocode'
+                        types: city_ride ? '(cities)' : 'establishment', // default: 'geocode'
                       }}
                       debounce={400}
                       fetchDetails={true}
@@ -339,7 +341,7 @@ const AddressCards = ({
                   query={{
                     key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                     language: 'en',
-                    types: city_ride ? '(cities)' : '(regions)', // default: 'geocode'
+                    types: city_ride ? '(cities)' : 'establishment', // default: 'geocode'
                   }}
                   debounce={400}
                   fetchDetails={true}
@@ -549,7 +551,16 @@ const AddressCards = ({
                   style={[styles.calendarIcon, {right: 30}]}
                 />
               </View>
-              <ReturnCalendarSheet calendarSheetRef={returnCalendarSheetRef} />
+              <ReturnCalendarSheet
+                ride={{
+                  next: return_recurring_dates?.map(item => {
+                    return {date: item};
+                  }),
+                }}
+                date={returnDateTimeStamp}
+                recurring={recurring}
+                calendarSheetRef={returnCalendarSheetRef}
+              />
             </>
           ) : (
             <>
@@ -635,12 +646,21 @@ const AddressCards = ({
               currentReturnDestination,
               returnTime,
             )}
-            onPress={() => navigation.goBack()}>
+            onPress={onPress}>
             <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
           </TouchableOpacity>
         </View>
       ) : null}
-      <CalendarSheet calendarSheetRef={calenderSheetRef} />
+      <CalendarSheet
+        ride={{
+          next: recurring_dates?.map(item => {
+            return {date: item};
+          }),
+        }}
+        date={dateTimeStamp}
+        recurring={recurring}
+        calendarSheetRef={calenderSheetRef}
+      />
       {isLoading ? <Loader /> : null}
     </>
   );

@@ -16,6 +16,7 @@ import I18n from '../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
 import {get} from '../services';
 import {DRIVE_CONST} from '../utilities/routes';
+import {create_agoral_channel} from '../redux/actions/app.action';
 
 const DriveStatusCard = ({
   status,
@@ -24,6 +25,8 @@ const DriveStatusCard = ({
   onPressCopyDrive,
 }) => {
   const driveItem = useSelector(state => state.map);
+  const auth = useSelector(state => state.auth);
+  const dispatch = useDispatch(null);
   let navigation = useNavigation();
   const startDrive = async () => {
     try {
@@ -36,6 +39,20 @@ const DriveStatusCard = ({
     } catch (error) {
       console.log(error?.response?.data);
     }
+  };
+  const onCallPress = () => {
+    const requestBody = {
+      channel: driveItem?.idToUpdateDrive?._id,
+      role: 'audience',
+      tokentype: 'uid',
+      uid: JSON.parse(auth?.profile_info?.country?.phone),
+    };
+    dispatch(
+      create_agoral_channel(requestBody, res => {
+        console.log(res);
+        navigation?.navigate('CallNow');
+      }),
+    );
   };
 
   if (status === 'WAITING_FOR_MATCH') {
@@ -123,6 +140,7 @@ const DriveStatusCard = ({
               onPressCard={() => {
                 navigation?.navigate('AddFavourites');
               }}
+              onPressCall={onCallPress}
               item={item}
             />
           )}
@@ -151,7 +169,7 @@ const DriveStatusCard = ({
   );
 };
 
-const PassengerInfoCard = ({item, onPressCard}) => {
+const PassengerInfoCard = ({item, onPressCard, onPressCall}) => {
   return (
     <View style={styles.passengerInfoContainer}>
       <TouchableOpacity onPress={onPressCard} style={styles.nameContainer}>
@@ -167,7 +185,7 @@ const PassengerInfoCard = ({item, onPressCard}) => {
       <Text style={styles.pickUp}>Coming to my Start Location</Text>
       <View style={styles.btnMainContainer}>
         <Text style={{fontFamily: fonts.regular}}>{item.time}</Text>
-        <TouchableOpacity style={styles.callNowContainer}>
+        <TouchableOpacity onPress={onPressCall} style={styles.callNowContainer}>
           <CallIcon name="call" size={15} color={colors.white} />
           <Text style={styles.callNowTxt}>{I18n.t('call_now')}</Text>
         </TouchableOpacity>

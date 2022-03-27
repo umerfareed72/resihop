@@ -110,7 +110,7 @@ const CreateDrive = () => {
   }, []);
 
   const handleCreateDrive = async () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     if (origin && destinationMap != null) {
       let resp = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?alternatives=true&origin=${origin?.description}&destination=${destinationMap?.description}&key=${APIKEY}&mode=${mode}`,
@@ -214,6 +214,8 @@ const CreateDrive = () => {
           <TouchableOpacity
             onPress={() => {
               setScreen(false);
+              dispatch(setRecurringDates([]));
+              dispatch(setReturnRecurringDates([]));
             }}
             style={[
               styles.tripBtnContainer,
@@ -258,6 +260,7 @@ const CreateDrive = () => {
                 onPress={() =>
                   navigation.navigate('StartLocationDriver', {
                     type: 'destination',
+                    recurring: screen,
                   })
                 }>
                 <Text style={styles.locationTxt}>
@@ -411,6 +414,12 @@ const CreateDrive = () => {
         </View>
         <CalendarSheet
           recurring={screen}
+          ride={{
+            next: recurring_dates?.map(item => {
+              return {date: item};
+            }),
+          }}
+          date={dateTimeStamp}
           calendarSheetRef={calendarSheetRef}
           setDate={setDate}
         />
@@ -438,6 +447,7 @@ const CreateDrive = () => {
                     dispatch(setMapSegment('returnTrip'));
                     navigation.navigate('StartLocationDriver', {
                       type: 'returnTrip',
+                      recurring: screen,
                     });
                   }}
                   style={styles.txtInput}>
@@ -560,6 +570,12 @@ const CreateDrive = () => {
             <ReturnCalendarSheet
               recurring={screen}
               mindate={dateTimeStamp}
+              ride={{
+                next: return_recurring_dates?.map(item => {
+                  return {date: item};
+                }),
+              }}
+              date={returnDateTimeStamp}
               calendarSheetRef={returnCalendarSheetRef}
             />
           </>

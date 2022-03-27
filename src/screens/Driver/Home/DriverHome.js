@@ -22,7 +22,12 @@ import {
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
-import {RideFilterModal, SortModal} from '../../../components';
+import {
+  BlankTrip,
+  CancelRideModal,
+  RideFilterModal,
+  SortModal,
+} from '../../../components';
 import I18n from '../../../utilities/translations';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
@@ -118,6 +123,9 @@ const DriverHome = ({navigation}) => {
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState('');
   const isFocus = useIsFocused();
+  const [multiDelete, setmultiDelete] = useState(false);
+  const [selectedCard, setSelectedCard] = useState([]);
+
   //Get Data
   useEffect(() => {
     if (isFocus) {
@@ -277,6 +285,13 @@ const DriverHome = ({navigation}) => {
       }),
     );
   };
+  const onPressCancel = () => {
+    console.log(selectedCard);
+    setmultiDelete(false);
+    setSelectedCard([]);
+    alert('coming soon');
+  };
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -396,20 +411,12 @@ const DriverHome = ({navigation}) => {
           </View>
         </View>
         {myDrives === null || myDrives?.length === 0 ? (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{marginBottom: 10}}>
-            <Image
-              source={appIcons.driver_home}
-              style={styles.noUpcomingRide}
-            />
-            {/* <Text style={styles.Txt}>{I18n.t('lorem')}</Text> */}
-            <TouchableOpacity
-              style={styles.createRideBtnContainer}
-              onPress={() => getLocation()}>
-              <Text style={styles.btnTxt}>{I18n.t('create_first_drive')}</Text>
-            </TouchableOpacity>
-          </ScrollView>
+          <BlankTrip
+            icon={appIcons.driver_home}
+            text={I18n.t('create_first_drive')}
+            onPress={() => getLocation('CreateDrive')}
+            role={'driver'}
+          />
         ) : (
           <>
             <FlatList
@@ -417,14 +424,24 @@ const DriverHome = ({navigation}) => {
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => (
-                <UpcomingRideCards item={item} onPress={() => onPress(item)} />
+                <UpcomingRideCards
+                  multiDelete={multiDelete}
+                  onPress={() => {
+                    if (multiDelete) {
+                      setSelectedCard(item?.id);
+                    } else {
+                      onPress(item);
+                    }
+                  }}
+                  selectedCard={selectedCard}
+                  setSelectedCard={item => {
+                    setmultiDelete(true);
+                    setSelectedCard(item);
+                  }}
+                  item={item}
+                />
               )}
             />
-            <TouchableOpacity
-              style={styles.createRideBtnContainer}
-              onPress={() => getLocation('CreateDrive')}>
-              <Text style={styles.btnTxt}>{'Create your Drive'}</Text>
-            </TouchableOpacity>
           </>
         )}
       </SafeAreaView>
@@ -452,6 +469,18 @@ const DriverHome = ({navigation}) => {
         }}
       />
       <SortModal show={sortModalRef} onPress={getDrivesByOrder} />
+      {multiDelete && (
+        <CancelRideModal
+          onPressCancel={() => {
+            onPressCancel();
+          }}
+          onPressClose={() => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          }}
+          show={multiDelete}
+        />
+      )}
     </>
   );
 };

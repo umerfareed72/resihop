@@ -23,6 +23,7 @@ import {GET_NOTIFICATION_LIST} from '../../../utilities/routes';
 import {get} from '../../../services';
 import {Loader} from '../../../components';
 import BlankField from '../../../components/BlankField';
+import moment from 'moment';
 
 const NotificationList = ({navigation}) => {
   //useState here
@@ -43,6 +44,7 @@ const NotificationList = ({navigation}) => {
       if (response.data) {
         setNotifData(response.data);
         setLoading(false);
+        console.log(response?.data);
       }
     } catch (error) {
       setLoading(false);
@@ -53,8 +55,6 @@ const NotificationList = ({navigation}) => {
   };
 
   const NotificationItem = ({data}) => {
-    // console.log('data in NotificationItem  ', data?.item?.user?.picture?.url);
-
     return (
       <View style={styles.notifyItem}>
         <View style={styles.imageContainer}>
@@ -67,8 +67,17 @@ const NotificationList = ({navigation}) => {
         </View>
         <View style={styles.contentContainer}>
           <Text style={styles.titleTextStyle}>{data?.item?.title}</Text>
-          <Text numberOfLines={2} style={styles.descriptionTextStyle}>
-            {data?.item?.description}
+          <Text numberOfLines={1} style={[styles.descriptionTextStyle]}>
+            {`Trip Date & Time: ${moment(
+              data?.item?.data?.ride?.tripDate,
+            ).format('DD MMM YYYY')}`}
+
+            {` ${moment(data?.item?.data?.ride?.tripDate).format('HH:MM')}`}
+          </Text>
+          <Text
+            numberOfLines={1}
+            style={[styles.descriptionTextStyle, {marginBottom: 5}]}>
+            {`Last ${moment(data?.item?.data?.ride?.createdAt).fromNow()}`}
           </Text>
           <Divider color={colors.lightGray} />
         </View>
@@ -134,7 +143,7 @@ const styles = StyleSheet.create({
   },
   descriptionTextStyle: {
     fontSize: size.xxsmall,
-    marginVertical: 10,
+    marginTop: 5,
     fontFamily: family.product_sans_regular,
     color: colors.grimmyGray,
   },

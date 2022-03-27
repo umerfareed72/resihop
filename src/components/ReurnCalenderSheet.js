@@ -18,20 +18,34 @@ const ReturnCalendarSheet = ({
   setModalVisible,
   recurring,
   mindate,
+  ride,
+  date,
 }) => {
   let dispatch = useDispatch();
   const [markedDate, setMarkedDate] = useState({});
   const [dateList, setdateList] = useState([]);
-  // useEffect(() => {
-  //   let markedObj = {};
-  //   const selectedDate = moment(new Date().toDateString()).format('YYYY-MM-DD');
-  //   markedObj[selectedDate] = {
-  //     selected: true,
-  //     selectedColor: colors.green,
-  //   };
-  //   setMarkedDate(markedObj);
-  //   dispatch(setDateTimeStamp(selectedDate));
-  // }, []);
+  useEffect(() => {
+    if (ride && recurring) {
+      let markedObj = {};
+      ride?.next?.map(item => {
+        const selectedDate = moment(item.date).format('YYYY-MM-DD');
+        markedObj[selectedDate] = {
+          selected: true,
+          selectedColor: colors.green,
+        };
+      });
+      setMarkedDate(markedObj);
+    } else {
+      let markedObj = {};
+
+      const selectedDate = moment(date).format('YYYY-MM-DD');
+      markedObj[selectedDate] = {
+        selected: true,
+        selectedColor: colors.green,
+      };
+      setMarkedDate(markedObj);
+    }
+  }, [ride, date]);
 
   LocaleConfig.locales['en'] = {
     monthNames: [

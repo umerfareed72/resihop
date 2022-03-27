@@ -6,7 +6,13 @@ import moment from 'moment';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 
-const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
+const UpcomingRideCards = ({
+  item,
+  onPress,
+  selectedCard,
+  setSelectedCard,
+  multiDelete,
+}) => {
   const CardSelect = id => {
     if (selectedCard?.includes(item.id)) {
       setSelectedCard(selectedCard.filter(card => card !== id));
@@ -38,7 +44,13 @@ const UpcomingRideCards = ({item, onPress, selectedCard, setSelectedCard}) => {
     <View>
       <TouchableOpacity
         style={styles.cardContainer}
-        onPress={onPress}
+        onPress={() => {
+          if (multiDelete) {
+            CardSelect(item?.id);
+          } else {
+            onPress();
+          }
+        }}
         onLongPress={() => CardSelect(item.id)}>
         <View style={styles.addressContainer}>
           <Text style={styles.addressTxt}>{item.startDes}</Text>

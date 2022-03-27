@@ -20,7 +20,12 @@ import {
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import MyStatusBar from '../../../components/Header/statusBar';
-import {RideFilterModal, SortModal} from '../../../components';
+import {
+  BlankTrip,
+  RideFilterModal,
+  SortModal,
+  CancelRideModal,
+} from '../../../components';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import I18n from '../../../utilities/translations';
@@ -124,7 +129,7 @@ const PassengerHome = ({navigation}) => {
   const auth = useSelector(state => state.auth);
   const myRidesData = useSelector(state => state.map.myRidesData);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
-
+  const [multiDelete, setmultiDelete] = useState(false);
   useEffect(() => {
     if (isFocused) {
       dispatch(
@@ -143,6 +148,7 @@ const PassengerHome = ({navigation}) => {
 
   // Get Location
   const getLocation = async route => {
+    dispatch(setCity(false));
     const permission = await checkAppPermission('location');
     if (permission) {
       Geolocation.getCurrentPosition(
@@ -258,7 +264,12 @@ const PassengerHome = ({navigation}) => {
       }),
     );
   };
-
+  const onPressCancel = () => {
+    console.log(selectedCard);
+    setmultiDelete(false);
+    setSelectedCard([]);
+    alert('coming soon');
+  };
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -322,7 +333,6 @@ const PassengerHome = ({navigation}) => {
         <View style={styles.cardMainContainer}>
           <TouchableOpacity
             onPress={() => {
-              dispatch(setCity(false));
               getLocation('CreateRide');
             }}
             style={styles.cardContainer}>
@@ -396,19 +406,14 @@ const PassengerHome = ({navigation}) => {
         </View>
 
         {myRidesData === null || myRidesData.length === 0 ? (
-          <>
-            <Image
-              source={appIcons.noUpcomingRide}
-              style={styles.noUpcomingRide}
-            />
-
-            {/* <Text style={styles.Txt}>{I18n.t('lorem')}</Text> */}
-            <TouchableOpacity
-              style={styles.createRideBtnContainer}
-              onPress={() => navigation.navigate('CreateRide')}>
-              <Text style={styles.btnTxt}>{I18n.t('first_ride')}</Text>
-            </TouchableOpacity>
-          </>
+          <BlankTrip
+            icon={appIcons.noUpcomingRide}
+            role={'passenger'}
+            onPress={() => {
+              getLocation('CreateRide');
+            }}
+            text={I18n.t('first_ride')}
+          />
         ) : (
           <>
             <FlatList
@@ -417,20 +422,23 @@ const PassengerHome = ({navigation}) => {
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => (
                 <UpcomingRideCards
+                  multiDelete={multiDelete}
                   item={item}
-                  onPress={() => onPress(item)}
+                  onPress={() => {
+                    if (multiDelete) {
+                      setSelectedCard(item?.id);
+                    } else {
+                      onPress(item);
+                    }
+                  }}
                   selectedCard={selectedCard}
-                  setSelectedCard={setSelectedCard}
+                  setSelectedCard={item => {
+                    setmultiDelete(true);
+                    setSelectedCard(item);
+                  }}
                 />
               )}
             />
-            <TouchableOpacity
-              style={styles.createRideBtnContainer}
-              onPress={() => {
-                getLocation('CreateRide');
-              }}>
-              <Text style={styles.btnTxt}>{'Create your Ride'}</Text>
-            </TouchableOpacity>
           </>
         )}
       </SafeAreaView>
@@ -458,6 +466,18 @@ const PassengerHome = ({navigation}) => {
         }}
       />
       <SortModal show={sortModalRef} onPress={getRidesByOrder} />
+      {multiDelete && (
+        <CancelRideModal
+          onPressCancel={() => {
+            onPressCancel();
+          }}
+          onPressClose={() => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          }}
+          show={multiDelete}
+        />
+      )}
     </>
   );
 };
@@ -539,12 +559,7 @@ const styles = StyleSheet.create({
     color: colors.txtBlack,
     fontFamily: fonts.regular,
   },
-  noUpcomingRide: {
-    height: 197,
-    width: 247,
-    alignSelf: 'center',
-    marginTop: 30,
-  },
+
   Txt: {
     textAlign: 'justify',
     alignSelf: 'center',

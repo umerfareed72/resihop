@@ -398,7 +398,7 @@ export const MyRidesHistorySortOrder =
     let Token = await GetToken();
     try {
       const response = await fetch(
-        `${baseURL}${route}?_sort=${data}?status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
+        `${baseURL}${route}?_sort=${data}&status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
         {
           method: 'GET',
           headers: {
@@ -421,7 +421,7 @@ export const get_rides_history = callBack => async dispatch => {
   try {
     dispatch({type: Types.Rides_Loader, payload: true});
     const response = await get(
-      `${RIDES_CONST}?status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=CANCELLED&status_in=NO_MATCH`,
+      `${RIDES_CONST}?_sort=tripDate:desc&status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
       await header(),
     );
     // if (response?.data?.user?.details) {
@@ -449,7 +449,7 @@ export const get_drives_history = callBack => async dispatch => {
   try {
     dispatch({type: Types.Rides_Loader, payload: true});
     const response = await get(
-      `${DRIVE_CONST}?status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
+      `${DRIVE_CONST}?_sort=tripDate:desc&status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
       await header(),
     );
     // if (response?.data?.user?.details) {
