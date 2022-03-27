@@ -30,10 +30,11 @@ import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 import {baseURL, checkConnected, colors} from '../../../utilities';
-import {GetToken} from '../../../utilities/constants';
+import {GetToken, header} from '../../../utilities/constants';
 
 import {SwitchDrive, updateInfo} from '../../../redux/actions/auth.action';
 import useAppState from '../../../hooks/useAppState';
+import {get} from '../../../services';
 const user = {
   Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
   Driver: 'Driver', // 616e6a8c6fc87c0016b740e8
@@ -68,6 +69,8 @@ function PersonalDetails(props) {
   const country_data = useSelector(state => state.auth?.country_info);
 
   const [codeId, setCodeId] = useState('');
+  const [code, setCode] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState(user.Driver);
   const [genderType, setGenderType] = useState(gender.Male);
@@ -142,14 +145,7 @@ function PersonalDetails(props) {
           isDriverAndPassenger:
             userType === 'Driver/Passenger both' ? true : false,
           gender: genderType,
-          referral:
-            codeId != ''
-              ? {
-                  _id: codeId,
-                }
-              : {
-                  _id: null,
-                },
+          referral: codeId != '' ? codeId : null,
           type: user,
           details: true,
           country: {
@@ -213,14 +209,7 @@ function PersonalDetails(props) {
               isDriverAndPassenger:
                 userType === 'Driver/Passenger both' ? true : false,
               gender: genderType,
-              referral:
-                codeId != ''
-                  ? {
-                      _id: codeId,
-                    }
-                  : {
-                      _id: null,
-                    },
+              referral: codeId != '' ? codeId : null,
               type: user,
               details: true,
               country: {
@@ -328,22 +317,25 @@ function PersonalDetails(props) {
               setFieldValue,
               handleBlur,
             }) => {
-              const getReferalCode = code => {
+              const getReferalCode = async () => {
                 setIsLoading(true);
-                fetch(`${baseURL}referrals?code=${code}`, {
-                  method: 'GET',
-                })
-                  .then(response => response.json())
-                  .then(responseData => {
-                    if (responseData.length > 0) {
-                      setIsLoading(false);
-                    } else {
-                      setIsLoading(false);
-                      setCodeId('');
-                      refCodeSheet?.current?.open();
-                    }
-                  })
-                  .done();
+
+                try {
+                  setIsLoading(true);
+                  const res = await get(`referrals`, await header());
+                  if (res?.data?.code == code) {
+                    setIsLoading(false);
+                    setCodeId(res?.data?._id);
+                  } else {
+                    setIsLoading(false);
+                    setCodeId('');
+                    setCode('');
+                    refCodeSheet?.current?.open();
+                    console.log(res.data);
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
               };
               return (
                 <>
@@ -375,6 +367,7 @@ function PersonalDetails(props) {
                           : I18n.t('first_name_driver_text')
                       }
                       autoFocus={false}
+                      value={values?.firstName}
                       autoCapitalize="none"
                       style={theme.Input.inputStyle}
                       autoCorrect={false}
@@ -399,6 +392,7 @@ function PersonalDetails(props) {
                           ? I18n.t('last_name_text')
                           : I18n.t('last_name_driver_text')
                       }
+                      value={values?.lastName}
                       autoFocus={false}
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -414,15 +408,11 @@ function PersonalDetails(props) {
                       errorMessage={errors.lastName}
                     />
                     <Input
-                      maxLength={4}
                       ref={refReferral}
                       onChangeText={val => {
-                        setCodeId(val);
-                        if (val.length == 4) {
-                          getReferalCode(val);
-                        }
+                        setCode(val);
                       }}
-                      value={codeId}
+                      value={code}
                       keyboardAppearance="light"
                       placeholder={I18n.t('referral_code_opt_text')}
                       style={theme.Input.inputStyle}
@@ -431,6 +421,7 @@ function PersonalDetails(props) {
                       autoCorrect={false}
                       returnKeyType="next"
                       onSubmitEditing={() => {
+                        getReferalCode();
                         refEmail.current.focus();
                       }}
                       inputContainerStyle={

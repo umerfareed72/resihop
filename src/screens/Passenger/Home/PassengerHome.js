@@ -25,6 +25,7 @@ import {
   RideFilterModal,
   SortModal,
   CancelRideModal,
+  Loader,
 } from '../../../components';
 import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
@@ -130,6 +131,7 @@ const PassengerHome = ({navigation}) => {
   const myRidesData = useSelector(state => state.map.myRidesData);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
   const [multiDelete, setmultiDelete] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     if (isFocused) {
       dispatch(
@@ -148,6 +150,7 @@ const PassengerHome = ({navigation}) => {
 
   // Get Location
   const getLocation = async route => {
+    setisLoading(true);
     dispatch(setCity(false));
     const permission = await checkAppPermission('location');
     if (permission) {
@@ -169,17 +172,23 @@ const PassengerHome = ({navigation}) => {
                   description: addressComponent,
                 }),
               );
+              setisLoading(false);
               navigation?.navigate(route);
             })
-            .catch(error => console.warn(error));
+            .catch(error => {
+              setisLoading(false);
+              console.warn(error);
+            });
         },
         error => {
+          setisLoading(false);
           // See error code charts below.
           console.log(error.code, error.message);
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     } else {
+      setisLoading(false);
       Alert.alert('Error', 'Location Permission Denied', [
         {
           onPress: () => {
@@ -478,6 +487,7 @@ const PassengerHome = ({navigation}) => {
           show={multiDelete}
         />
       )}
+      {isLoading && <Loader />}
     </>
   );
 };

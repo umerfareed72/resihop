@@ -25,6 +25,7 @@ import MyStatusBar from '../../../components/Header/statusBar';
 import {
   BlankTrip,
   CancelRideModal,
+  Loader,
   RideFilterModal,
   SortModal,
 } from '../../../components';
@@ -125,12 +126,12 @@ const DriverHome = ({navigation}) => {
   const isFocus = useIsFocused();
   const [multiDelete, setmultiDelete] = useState(false);
   const [selectedCard, setSelectedCard] = useState([]);
-
+  const [isLoading, setisLoading] = useState(false);
   //Get Data
   useEffect(() => {
     if (isFocus) {
       dispatch(
-        MyRidesSortOrder('drives', 'tripDate', res => {
+        MyRidesSortOrder('drives', 'date', res => {
           dispatch({
             type: mapTypes.myDrives,
             payload: res,
@@ -144,6 +145,7 @@ const DriverHome = ({navigation}) => {
 
   // Get Location
   const getLocation = async route => {
+    setisLoading(true);
     const permission = await checkAppPermission('location');
     if (permission) {
       Geolocation.getCurrentPosition(
@@ -164,17 +166,24 @@ const DriverHome = ({navigation}) => {
                   description: addressComponent,
                 }),
               );
+              setisLoading(false);
+
               navigation.navigate(route);
             })
-            .catch(error => console.warn(error));
+            .catch(error => {
+              setisLoading(false);
+              console.warn(error);
+            });
         },
         error => {
           // See error code charts below.
           console.log(error.code, error.message);
+          setisLoading(false);
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     } else {
+      setisLoading(false);
       Alert.alert('Error', 'Location Permission Denied', [
         {
           onPress: () => {
@@ -481,6 +490,7 @@ const DriverHome = ({navigation}) => {
           show={multiDelete}
         />
       )}
+      {isLoading && <Loader />}
     </>
   );
 };

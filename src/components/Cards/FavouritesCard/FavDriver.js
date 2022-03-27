@@ -17,34 +17,11 @@ import {
   colors,
   HP,
   appIcons,
+  profileIcon,
 } from '../../../utilities';
 import {Icon} from 'react-native-elements';
 
-let data = [
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-];
-
-export const FavDriver = () => {
+export const FavDriver = ({data}) => {
   const renderRightActions = (progress, dragX) => {
     return (
       <RectButton
@@ -65,10 +42,15 @@ export const FavDriver = () => {
         <View style={styles.container}>
           <View style={styles.leftContainer}>
             <View style={styles.userImageContainer}>
-              <Image style={styles.userImage} source={data?.image} />
+              <Image
+                style={styles.userImage}
+                source={{uri: data?.user?.picture?.url || profileIcon}}
+              />
               <View>
                 <View style={styles.userNameView}>
-                  <Text style={styles.userName}>{data?.name}</Text>
+                  <Text style={styles.userName}>
+                    {data?.user?.firstName} {data?.user?.lastName}
+                  </Text>
                   <Icon
                     name={'heart'}
                     type={'antdesign'}
@@ -111,7 +93,12 @@ export const FavDriver = () => {
   };
 
   return (
-    <FlatList data={data} renderItem={({item}) => <DriverCard data={item} />} />
+    <FlatList
+      style={{marginBottom: 80}}
+      showsVerticalScrollIndicator={false}
+      data={data}
+      renderItem={({item}) => <DriverCard data={item} />}
+    />
   );
 };
 

@@ -132,12 +132,10 @@ function walkThrough(props) {
           ) : (
             <View style={styles.bottomCon}>
               <Text style={[theme.Text.h1Bold, styles.heading]}>
-                {'Välkommen Till Res ihop'}
+                {I18n.t('walktrough_heading')}
               </Text>
               <Text style={[theme.Text.h3Normal, styles.headingSaying]}>
-                {
-                  'Erbjud tomma platser i bilen på väg till jobbet och få ersättning av de som reser. Oroa dig inte, vi tar hand om alla anslutningar, du anger bara din rutt du anger bara din rutt.'
-                }
+                {I18n.t('walkthrough_subtitle')}
               </Text>
             </View>
           )}

@@ -19,38 +19,13 @@ import {
 import CheckBox from '@react-native-community/checkbox';
 import {Icon} from 'react-native-elements';
 
-let data = [
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-];
-
-export const FavLocation = () => {
+export const FavLocation = ({data}) => {
   const DriverCard = ({data}) => {
-    console.log('DATA ===========>    ', data);
     return (
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <View style={styles.hometag}>
-            <Text style={styles.homeText}>Home</Text>
+            <Text style={styles.homeText}>{data?.location?.name}</Text>
           </View>
           <View>
             <Icon
@@ -64,7 +39,7 @@ export const FavLocation = () => {
         </View>
         <View stlye={styles.bottomContainer}>
           <Text style={styles.descriptionText}>
-            123 abc apartment abc street abc abc city, abc country
+            {data?.location?.description}
           </Text>
         </View>
       </View>
@@ -72,7 +47,12 @@ export const FavLocation = () => {
   };
 
   return (
-    <FlatList data={data} renderItem={({item}) => <DriverCard data={item} />} />
+    <FlatList
+      style={{marginBottom: 80}}
+      showsVerticalScrollIndicator={false}
+      data={data}
+      renderItem={({item}) => <DriverCard data={item} />}
+    />
   );
 };
 

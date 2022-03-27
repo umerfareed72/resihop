@@ -6,6 +6,7 @@ import {
   Image,
   Dimensions,
   Linking,
+  FlatList,
 } from 'react-native';
 import {
   AddWalletModal,
@@ -34,10 +35,7 @@ import {
 } from '../../../../redux/actions/payment.action';
 import {BookRide} from '../../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
-import {FlatList} from 'react-native';
 import BlankField from '../../../../components/BlankField';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {LinkHelper} from '../../../../utilities/helpers/LinkHelper';
 
 const index = ({navigation, route}) => {
   const [cardScreen, setCardScreen] = useState(false);
@@ -48,6 +46,7 @@ const index = ({navigation, route}) => {
   const [addMoney, onAddMoney] = useState(false);
   const [cardDetail, setcardDetail] = useState('');
   const [Loading, setLoading] = useState(false);
+  const [errorMsg, seterrorMsg] = useState('');
   const [bookLoading, setBookLoading] = useState(false);
   const modalRef = useRef(null);
   const isFocus = useIsFocused();
@@ -82,11 +81,23 @@ const index = ({navigation, route}) => {
   const getCards = async () => {
     const check = await checkConnected();
     if (check) {
-      dispatch(
-        get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
-          console.log('Cards', res);
-        }),
-      );
+      console.log(auth?.profile_info);
+
+      if (auth?.profile_info?.stripe_customer?.stripeID) {
+        dispatch(
+          get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
+            console.log('Cards', res);
+          }),
+        );
+      } else {
+        Alert.alert('Error', 'Your request is under processing!', [
+          {
+            onPress: () => {
+              navigation?.goBack();
+            },
+          },
+        ]);
+      }
     }
   };
 
@@ -106,21 +117,15 @@ const index = ({navigation, route}) => {
         };
         dispatch(
           add_stripe_card(requestBody, res => {
-            Alert.alert(
-              'Success',
-              'Card Added Successfully',
-              [
-                {
-                  text: 'Ok',
-                  onPress: () => {
-                    setLoading(false);
-                    setCardScreen(!cardScreen);
-                    getCards();
-                  },
+            Alert.alert('Success', 'Add card request send successfully!', [
+              {
+                onPress: () => {
+                  setLoading(false);
+                  setCardScreen(false);
+                  getCards();
                 },
-              ],
-              {cancelable: false},
-            );
+              },
+            ]);
           }),
         );
       }
@@ -151,7 +156,7 @@ const index = ({navigation, route}) => {
     console.log(requestBody);
     dispatch(
       checkout_current_card(requestBody, res => {
-        console.log('Checkout', res, requestBody);
+        seterrorMsg(res?.msg);
         if (res?.msg == 'Payment is confirmed, capture or cancel payment') {
           modalRef.current.open();
           setpaymentSuccessonSuccess(true);
@@ -268,8 +273,8 @@ const index = ({navigation, route}) => {
           /> */}
           {payment?.card_list != '' ? (
             <FlatList
-              numColumns={2}
               data={payment?.card_list}
+              numColumns={2}
               renderItem={({item}) => {
                 return (
                   <BankCard
@@ -374,7 +379,7 @@ const index = ({navigation, route}) => {
         icon={paymentSuccess ? appIcons.tickBg : appIcons.cancel}
         h1={
           paymentFailed
-            ? I18n.t('failed_payment')
+            ? errorMsg
             : '' || paymentSuccess
             ? I18n.t('success_payment')
             : ''

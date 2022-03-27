@@ -164,9 +164,11 @@ export const updateInfo =
         payload: null,
       });
       let status = error?.response?.data?.statusCode;
+      console.log(error?.response?.data);
       responseValidator(
         status,
-        error?.response?.data?.message[0]?.messages[0]?.message,
+        error?.response?.data?.message[0]?.messages[0]?.message ||
+          error?.data?.message,
       );
     }
   };

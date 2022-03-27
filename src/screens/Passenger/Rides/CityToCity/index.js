@@ -62,12 +62,7 @@ const index = () => {
   const [favPress, setFavPress] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
-  const [screen, setScreen] = useState(false);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [normalTime, setNormalTime] = useState('');
-  const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
-  const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
 
   useEffect(() => {
     dispatch(setTime(moment().format('HH:mm')));
@@ -83,20 +78,6 @@ const index = () => {
       dispatch(setReturnFirstTime(null));
     };
   }, []);
-
-  const showFirstReturnTimePicker = () => {
-    setFirstReturnTimePicker(true);
-  };
-
-  const hideFirstReturnTimePicker = () => {
-    setFirstReturnTimePicker(false);
-  };
-
-  const handleConfirmFirstReturnTime = date => {
-    setNormalFirstReturnTime(moment(date).format());
-    dispatch(setReturnFirstTime(date));
-    hideFirstReturnTimePicker();
-  };
 
   const handleCreateRide = () => {
     const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();

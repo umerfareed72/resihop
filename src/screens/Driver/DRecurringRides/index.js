@@ -4,6 +4,7 @@ import {
   BlankTrip,
   CancelRideModal,
   CustomHeader,
+  Loader,
   RecurringRideCard,
   RideFilterModal,
   SortModal,
@@ -288,6 +289,7 @@ function index(props) {
           show={multiDelete}
         />
       )}
+      {isLoading && <Loader />}
     </>
   );
 }

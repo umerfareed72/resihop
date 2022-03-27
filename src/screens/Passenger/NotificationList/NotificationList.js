@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   View,
   StyleSheet,
-  Image,
   Text,
   ActivityIndicator,
 } from 'react-native';
@@ -24,6 +23,7 @@ import {get} from '../../../services';
 import {Loader} from '../../../components';
 import BlankField from '../../../components/BlankField';
 import moment from 'moment';
+import {Image} from 'react-native-elements';
 
 const NotificationList = ({navigation}) => {
   //useState here
@@ -44,7 +44,6 @@ const NotificationList = ({navigation}) => {
       if (response.data) {
         setNotifData(response.data);
         setLoading(false);
-        console.log(response?.data);
       }
     } catch (error) {
       setLoading(false);
@@ -59,6 +58,7 @@ const NotificationList = ({navigation}) => {
       <View style={styles.notifyItem}>
         <View style={styles.imageContainer}>
           <Image
+            progressiveRenderingEnabled={true}
             style={styles.imageStyle}
             source={{
               uri: data?.item?.user?.picture?.url || profileIcon,

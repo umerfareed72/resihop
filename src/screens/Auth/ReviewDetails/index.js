@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
+import {Alert} from 'react-native';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
+import {useSelector} from 'react-redux';
 import {CustomHeader, Loader} from '../../../components';
+import {post} from '../../../services';
 import {theme} from '../../../theme';
-import {colors} from '../../../utilities';
+import {colors, header} from '../../../utilities';
 
 function index(props) {
   const [info, setInfo] = useState([
@@ -14,7 +17,45 @@ function index(props) {
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const userid = useSelector(state => state.auth?.userdata?.user?._id);
+  const {plateNumber, CarMake, CarModel, Colour, EngineSize, PresetCost} =
+    props?.route?.params;
+  //Add vehicle info
+  const addVehicelInfo = async () => {
+    setIsLoading(true);
+    const requestBody = {
+      user: userid,
+      color: Colour,
+      licencePlateNumber: plateNumber,
+      vehicleModelName: CarModel,
+      vehicleCompanyName: CarMake,
+      CO2Emissions: EngineSize,
+      presetCostPerPassenger: PresetCost,
+      // bankID: bankdIdToken,
+    };
+    try {
+      const response = await post(`vehicles`, requestBody, await header());
+      if (response?.data) {
+        setIsLoading(false);
+        Alert.alert(
+          'Success',
+          'Vehicle Info Added Successfully',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                props?.navigation?.replace('ApprovalStatus');
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -31,33 +72,25 @@ function index(props) {
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>{'Licence Plate'}</Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>
-                  {props.route.params.plateNumber}
-                </Text>
+                <Text style={theme.Text.h4Normal}>{plateNumber}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>{'Car Company'}</Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>
-                  {props.route.params.CarMake}
-                </Text>
+                <Text style={theme.Text.h4Normal}>{CarMake}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>{'Model Name'}</Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>
-                  {props.route.params.CarModel}
-                </Text>
+                <Text style={theme.Text.h4Normal}>{CarModel}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>{'Vahicle Colour'}</Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>
-                  {props.route.params.Colour}
-                </Text>
+                <Text style={theme.Text.h4Normal}>{Colour}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
@@ -65,9 +98,7 @@ function index(props) {
                 {'CO2 EMISSIONS (g CO2 / km)'}
               </Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>
-                  {props.route.params.EngineSize}
-                </Text>
+                <Text style={theme.Text.h4Normal}>{EngineSize}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
@@ -75,9 +106,7 @@ function index(props) {
                 {'Preset cost for each passenger'}
               </Text>
               <View style={{width: '35%'}}>
-                <Text style={theme.Text.h4Normal}>
-                  {props.route.params.PresetCost} NOK
-                </Text>
+                <Text style={theme.Text.h4Normal}>{PresetCost} NOK</Text>
               </View>
             </View>
 
@@ -87,14 +116,9 @@ function index(props) {
               }}>
               <Button
                 title={'OK'}
-                onPress={() => props?.navigation?.navigate('ApprovalStatus')}
+                onPress={() => addVehicelInfo()}
                 buttonStyle={[theme.Button.buttonStyle]}
-                disabled={
-                  props.route.params?.PresetCost != null &&
-                  props.route.params?.CarMake != ''
-                    ? false
-                    : true
-                }
+                disabled={PresetCost != null && CarMake != '' ? false : true}
                 titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
                 disabledTitleStyle={theme.Button.disabledTitleStyle}
                 containerStyle={{

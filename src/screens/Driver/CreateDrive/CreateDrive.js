@@ -193,7 +193,7 @@ const CreateDrive = () => {
       date: screen ? return_recurring_stamp : stamp,
       availableSeats: availableSeats,
       path: 0,
-      costPerSeat: value,
+      costPerSeat: value + availableSeats * settings?.adminCommission,
       interCity: false,
       startDes: returnOrigin?.description,
       destDes: returnDestinationMap?.description,

@@ -2,6 +2,10 @@ export default {
   //Language Page Strings
   select_language_title: 'Select Your Language',
   next: 'Next',
+  //WalkThrough
+  walktrough_heading: 'Välkommen Till Res ihop',
+  walkthrough_subtitle:
+    'Erbjud tomma platser i bilen på väg till jobbet och få ersättning av de som reser. Oroa dig inte, vi tar hand om alla anslutningar, du anger bara din rutt du anger bara din rutt.',
   //login page
   login: 'Login',
   sign_up: 'Sign up',
@@ -14,7 +18,12 @@ export default {
   personal_details_text: 'Personal Details',
   get_details_text: 'get details',
   license_plate_text: 'License plate',
-
+  invalid_phone_msg: 'Please Enter Valid Phone Number',
+  invalid_otp_msg: 'Your Phone Number is not valid',
+  user_not_exists: 'User not exists',
+  signup_error: 'User Alredy Registered',
+  signup_success: 'User Registered Successfully',
+  otp_inavlid: 'Invalid code.',
   //Approval Screen
   waiting_approval: 'Waiting For Approval',
   approved_desc:

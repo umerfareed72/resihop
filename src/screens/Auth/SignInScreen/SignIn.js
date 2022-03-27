@@ -33,10 +33,10 @@ function signIn(props) {
   function validate() {
     setPhoneError('');
     if (phoneNum.length == 0) {
-      return setPhoneError('Please Enter Valid Phone Number');
+      return setPhoneError(I18n.t('invalid_phone_msg'));
     }
     if (isNaN(phoneNum)) {
-      return setPhoneError('Your Phone Number is not valid');
+      return setPhoneError(I18n.t('invalid_otp_msg'));
     }
     return true;
   }
@@ -70,7 +70,7 @@ function signIn(props) {
 
           Alert.alert(
             'Failed',
-            'User not exists',
+            I18n.t('user_not_exists'),
             [
               {
                 text: 'ok',

@@ -50,7 +50,7 @@ const index = () => {
   const calendarSheetRef = useRef(null);
   const returnCalendarSheetRef = useRef(null);
 
-  const origin = useSelector(state => state.map.origin);
+  const {origin, settings} = useSelector(state => state.map);
   const destinationMap = useSelector(state => state.map.destination);
   const availableSeats = useSelector(state => state.map.availableSeats);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
@@ -181,6 +181,7 @@ const index = () => {
       availableSeats: availableSeats,
       path: 0,
       costPerSeat: value,
+      costPerSeat: value + availableSeats * settings?.adminCommission,
       startDes: returnOrigin?.description,
       destDes: returnDestinationMap?.description,
       interCity: true,
