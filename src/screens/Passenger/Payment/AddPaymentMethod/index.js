@@ -207,19 +207,23 @@ const index = ({navigation, route}) => {
   };
 
   const handleBookRide = () => {
-    const body = {
-      ride: createRideRequest?._id || bookRide?._id,
-    };
-    dispatch(
-      BookRide(
-        body,
-        bookRide?.drive?._id || bookRide?.pool_match?._id,
-        setBookLoading,
-        response => {
-          navigation?.replace('PassengerHome');
-        },
-      ),
-    );
+    try {
+      const body = {
+        ride: createRideRequest?._id || bookRide?._id,
+      };
+      dispatch(
+        BookRide(
+          body,
+          bookRide?.drive?._id || bookRide?.pool_match?._id,
+          setBookLoading,
+          response => {
+            navigation?.replace('PassengerHome');
+          },
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>

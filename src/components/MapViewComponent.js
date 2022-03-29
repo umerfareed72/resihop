@@ -361,6 +361,7 @@ const MapViewComponent = ({
       startDes: routes?.startDes,
       destDes: routes?.destDes,
     };
+    console.log(body);
     if (returnRide) {
       const returnBody = {
         startLocation: returnRide?.startLocation,

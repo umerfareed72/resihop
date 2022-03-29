@@ -17,6 +17,7 @@ export const RatingCardModal = ({
   onPressHide,
   rating,
   onSelectRating,
+  onPressSubmit,
 }) => {
   return (
     <View style={styles.container}>
@@ -42,9 +43,7 @@ export const RatingCardModal = ({
             />
           </View>
 
-          <TouchableOpacity
-            style={styles.btnContainer}
-            onPress={() => onPressHide(false)}>
+          <TouchableOpacity style={styles.btnContainer} onPress={onPressSubmit}>
             <Text style={styles.btnText}>Submit</Text>
           </TouchableOpacity>
         </View>

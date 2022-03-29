@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import {fonts} from '../theme/theme';
-import {appIcons, appImages, colors, profileIcon} from '../utilities';
+import {appIcons, appImages, colors, header, profileIcon} from '../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import CallIcon from 'react-native-vector-icons/Ionicons';
@@ -20,8 +20,18 @@ import {CancelRide, setBookRide} from '../redux/actions/map.actions';
 import {Loader} from '../components';
 import {Alert} from 'react-native';
 import {create_agoral_channel} from '../redux/actions/app.action';
+import HeartFilled from 'react-native-vector-icons/Foundation';
+import {put} from '../services';
+import {PAYMENT_CONST} from '../utilities/routes';
 
-const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
+const RideStatusCards = ({
+  statusType,
+  ride,
+  calendarSheetRef,
+  onPressAddFav,
+  onPressAddRating,
+  fav,
+}) => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
 
@@ -55,13 +65,26 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
     setRemainingHours(hours);
   }, []);
 
-  const handleCancelRide = () => {
+  const handleCancelRide = async () => {
+    if (statusType === 'CONFIRMED') {
+      const body = {
+        paymentID: ride?.payment,
+      };
+      const res = await put(`${PAYMENT_CONST}/dispute`, body, await header());
+      if (res?.data) {
+        cancelRide();
+      }
+    } else {
+      cancelRide();
+    }
+  };
+  const cancelRide = async () => {
     dispatch(
       CancelRide(ride._id, 'rides', setIsLoading, response => {
         Alert.alert('Success', 'Ride Cancelled Successfully', [
           {
             text: 'Ok',
-            onPress: () => {
+            onPress: async () => {
               navigation?.navigate('PassengerHome');
             },
           },
@@ -83,6 +106,12 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
       }),
     );
   };
+  //Set Rating
+  const setRatingHandler = () => {
+    onPressAddRating(rating);
+    setShowRatingModal(false);
+  };
+
   if (statusType === 'WAITING_FOR_MATCH') {
     return (
       <View style={styles.waitcontainer}>
@@ -168,6 +197,9 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
       </View>
     );
   }
+
+  //********************Main Card Return Info*******************
+
   return (
     <>
       <View style={styles.container}>
@@ -210,10 +242,12 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
               <View style={styles.nameRating}>
                 <Text style={styles.driverName}>{`${
                   nearestDriver?.drive.user.firstName ||
-                  ride?.pool_match?.user?.firstName
+                  ride?.pool_match?.user?.firstName ||
+                  ride?.drive?.user?.firstName
                 } ${
                   nearestDriver?.drive.user.lastName ||
-                  ride?.pool_match?.user?.lastName
+                  ride?.pool_match?.user?.lastName ||
+                  ride?.drive?.user?.lastName
                 }`}</Text>
                 <View style={styles.ratingContainer}>
                   <StarIcon name="star" size={17} color={colors.white} />
@@ -235,7 +269,8 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
                 <Text style={styles.fair}>
                   {`NOK ${
                     nearestDriver?.drive.costPerSeat ||
-                    ride?.pool_match?.costPerSeat
+                    ride?.pool_match?.costPerSeat ||
+                    ride?.drive?.costPerSeat
                   } `}
                   <Text style={{fontSize: 12}}>(per seat)</Text>
                 </Text>
@@ -243,15 +278,18 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={styles.carDetails}>
                     {nearestDriver?.drive?.user.vehicle.vehicleCompanyName ||
-                      ride?.pool_match?.user?.vehicle?.vehicleCompanyName}
+                      ride?.pool_match?.user?.vehicle?.vehicleCompanyName ||
+                      ride?.drive?.user?.vehicle?.vehicleCompanyName}
                   </Text>
                   <Text style={[styles.carDetails, {color: colors.txtBlack}]}>
                     {`, ${
                       nearestDriver?.drive?.user?.vehicle?.color ||
-                      ride?.pool_match?.user?.vehicle?.color
+                      ride?.pool_match?.user?.vehicle?.color ||
+                      ride?.drive?.user?.vehicle?.color
                     }, ${
                       nearestDriver?.drive?.user?.vehicle?.licencePlateNumber ||
-                      ride?.pool_match?.user?.vehicle?.licencePlateNumber
+                      ride?.pool_match?.user?.vehicle?.licencePlateNumber ||
+                      ride?.drive?.user?.vehicle?.licencePlateNumber
                     }`}
                   </Text>
                 </View>
@@ -324,8 +362,9 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
         )}
         {statusType === 'MATCHING_DONE' && (
           <>
-            <View style={{padding: 30}}>
+            <View style={styles.btnMainContainer}>
               <TouchableOpacity
+                style={styles.btnContainer}
                 onPress={() => {
                   if (nearestDriver != null) {
                     dispatch(setBookRide(nearestDriver));
@@ -333,9 +372,15 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
                     dispatch(setBookRide(ride));
                   }
                   navigation.navigate('BookingDetails');
+                }}>
+                <Text style={styles.btnTxt}>{'Book Now'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowModal(true);
                 }}
-                style={styles.passengerHomeBtn}>
-                <Text style={styles.homeTxt}>{'Book Now'}</Text>
+                style={styles.btnContainer}>
+                <Text style={styles.btnTxt}>{I18n.t('cancel')}</Text>
               </TouchableOpacity>
             </View>
           </>
@@ -343,8 +388,14 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
         {statusType === 'COMPLETED' && (
           <>
             <View style={styles.rideEndedbtns}>
-              <TouchableOpacity style={styles.favBtnContainer}>
-                <HeartIcon name="heart" size={15} color={'red'} />
+              <TouchableOpacity
+                onPress={onPressAddFav}
+                style={styles.favBtnContainer}>
+                {fav ? (
+                  <HeartFilled name="heart" size={24} color={'red'} />
+                ) : (
+                  <HeartIcon name="heart" size={20} color={colors.btnGray} />
+                )}
                 <Text style={styles.favTxt}>{I18n.t('add_to_favourite')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -367,6 +418,7 @@ const RideStatusCards = ({statusType, ride, calendarSheetRef}) => {
           onPressHide={setShowRatingModal}
           rating={rating}
           onSelectRating={setRating}
+          onPressSubmit={setRatingHandler}
         />
       </View>
       {isLoading && <Loader />}

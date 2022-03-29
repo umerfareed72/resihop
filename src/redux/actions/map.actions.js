@@ -514,7 +514,8 @@ export const BookRide =
       callback(response.data);
     } catch (error) {
       setBookLoading(false);
-      console.log('Book Ride', error.response.data);
+      let status = error?.response?.data?.statusCode;
+      responseValidator(status, error?.response?.data?.message);
     }
   };
 

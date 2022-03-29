@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-import {colors, appIcons} from '../../../utilities';
+import {colors, appIcons, header} from '../../../utilities';
 import MapViewComponent from '../../../components/MapViewComponent';
 import {fonts} from '../../../theme';
 import RideStatusCards from '../../../components/RideStatusCards';
@@ -19,6 +19,8 @@ import {
 import moment from 'moment';
 import {CopyRideModal, Loader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
+import {post} from '../../../services';
+import {Alert} from 'react-native';
 
 const RideStatus = ({route}) => {
   const {item} = route.params;
@@ -29,7 +31,8 @@ const RideStatus = ({route}) => {
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
-
+  const auth = useSelector(state => state.auth);
+  const [fav, setFav] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -110,7 +113,38 @@ const RideStatus = ({route}) => {
       }),
     );
   };
-
+  //On Add Rating
+  const onPressAddRating = async rating => {
+    try {
+      const requestBody = {
+        type: 'Ride',
+        drive: item?._id,
+        rating: rating,
+      };
+      const res = await post(`ratings`, requestBody, await header());
+      if (res.data) {
+        navigation?.navigate('PassengerHome');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //On Add Favourite
+  const onPressAddFav = async () => {
+    try {
+      const requestBody = {
+        type: 'DRIVER',
+        user: auth?.profile_info?.id,
+        driver_passenger: item?.drive?._id,
+      };
+      const res = await post(`favorites`, requestBody, await header());
+      if (res.data) {
+        setFav(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <MapViewComponent
@@ -132,6 +166,9 @@ const RideStatus = ({route}) => {
         statusType={item.status}
         ride={item}
         calendarSheetRef={calendarSheetRef}
+        onPressAddFav={onPressAddFav}
+        onPressAddRating={onPressAddRating}
+        fav={fav}
       />
       <CalendarSheet
         calendarSheetRef={calendarSheetRef}

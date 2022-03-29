@@ -246,6 +246,7 @@ const PassengerHome = ({navigation}) => {
   };
 
   const onPress = item => {
+    console.log(item);
     navigation.navigate('RideStatus', {item: item});
   };
 
@@ -536,6 +537,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     marginTop: 8,
     fontFamily: fonts.regular,
+    width: '80%',
   },
   cardMainContainer: {
     flexDirection: 'row',
