@@ -135,7 +135,7 @@ const RideStatus = ({route}) => {
       const requestBody = {
         type: 'DRIVER',
         user: auth?.profile_info?.id,
-        driver_passenger: item?.drive?._id,
+        driver_passenger: item?.drive?.user?._id,
       };
       const res = await post(`favorites`, requestBody, await header());
       if (res.data) {

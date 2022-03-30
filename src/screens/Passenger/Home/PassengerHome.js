@@ -246,8 +246,10 @@ const PassengerHome = ({navigation}) => {
   };
 
   const onPress = item => {
-    console.log(item);
-    navigation.navigate('RideStatus', {item: item});
+    if (item?.status === 'COMPLETED' && item?.drive?.rated) {
+    } else {
+      navigation.navigate('RideStatus', {item: item});
+    }
   };
 
   const getUserdata = async () => {

@@ -69,44 +69,44 @@ function index(props) {
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
   const modelName = React.useRef();
-  // const bank_url = React.useRef();
-  // const dispatch = useDispatch(null);
-  // const acr = 'urn:grn:authn:se:bankid:same-device';
-  // const appState = useAppState(async () => {
-  //   if (acr === 'urn:grn:authn:se:bankid:same-device') {
-  //     const result = await fetch(bank_url?.current).then(response => {
-  //       return response;
-  //     });
-  //     const token = result?.url.split('id_token=');
-  //     if (token) {
-  //       setBankIdToken(token[1]);
-  //     } else {
-  //       setIsLoading(false);
-  //     }
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // });
-  // const openBankId = async () => {
-  //   setIsLoading(true);
-  //   const result = await axios.get(
-  //     `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
-  //       Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
-  //     }`,
-  //   );
-  //   if (result?.data) {
-  //     bank_url.current = result?.data?.completeUrl;
-  //     Linking.openURL(result?.data?.launchLinks?.universalLink);
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // };
+  const bank_url = React.useRef();
+  const dispatch = useDispatch(null);
+  const acr = 'urn:grn:authn:se:bankid:same-device';
+  const appState = useAppState(async () => {
+    if (acr === 'urn:grn:authn:se:bankid:same-device') {
+      const result = await fetch(bank_url?.current).then(response => {
+        return response;
+      });
+      const token = result?.url.split('id_token=');
+      if (token) {
+        setBankIdToken(token[1]);
+      } else {
+        setIsLoading(false);
+      }
+    } else {
+      setIsLoading(false);
+    }
+  });
+  const openBankId = async () => {
+    setIsLoading(true);
+    const result = await axios.get(
+      `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+        Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+      }`,
+    );
+    if (result?.data) {
+      bank_url.current = result?.data?.completeUrl;
+      Linking.openURL(result?.data?.launchLinks?.universalLink);
+    } else {
+      setIsLoading(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (bankdIdToken) {
-  //     addVehicelInfo();
-  //   }
-  // }, [bankdIdToken]);
+  useEffect(() => {
+    if (bankdIdToken) {
+      addVehicelInfo();
+    }
+  }, [bankdIdToken]);
   //Get Latest Car Detail
   const getVahicleDetail = () => {
     if (licencePlateNumber != '') {
@@ -174,7 +174,7 @@ function index(props) {
       vehicleCompanyName: carMakerCompany,
       CO2Emissions: engineSize,
       presetCostPerPassenger: value,
-      // bankID: bankdIdToken,
+      bankID: bankdIdToken,
     };
     try {
       const response = await post(`vehicles`, requestBody, await header());
@@ -417,8 +417,7 @@ function index(props) {
                     <SigninViaBankID
                       disabled={value != null && next ? false : true}
                       onBankIdPress={() => {
-                        // openBankId();
-                        addVehicelInfo();
+                        openBankId();
                       }}
                       onPressTerms={() => {
                         props.navigation.navigate('Terms');
