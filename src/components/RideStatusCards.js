@@ -199,7 +199,6 @@ const RideStatusCards = ({
   }
 
   //********************Main Card Return Info*******************
-
   return (
     <>
       <View style={styles.container}>
@@ -305,17 +304,17 @@ const RideStatusCards = ({
                   onCallPress();
                 }}
                 style={styles.borderBtnContainer}
-                disabled={remainingHours < 1 ? true : false}>
+                disabled={remainingHours > 1 ? true : false}>
                 <CallIcon
                   name="call"
                   size={18}
-                  color={remainingHours < 1 ? colors.g1 : colors.black}
+                  color={remainingHours > 1 ? colors.g1 : colors.black}
                 />
                 <Text
                   style={[
                     styles.borderBtnTxt,
                     {
-                      color: remainingHours < 1 ? colors.g1 : colors.black,
+                      color: remainingHours > 1 ? colors.g1 : colors.black,
                     },
                   ]}>
                   {I18n.t('call_now')}
