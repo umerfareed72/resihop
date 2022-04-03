@@ -104,9 +104,6 @@ const DriveStatusCard = ({
     setModal('offerReturnDrive');
   }
 
-  if (status === 'COMPLETED') {
-    navigation?.navigate('AddFavourites');
-  }
   return (
     <View style={styles.container}>
       <View style={styles.heading}>

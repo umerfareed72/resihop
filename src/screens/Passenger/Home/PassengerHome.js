@@ -16,6 +16,7 @@ import {
   family,
   requestPermission,
   options,
+  header,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
@@ -59,6 +60,8 @@ import {
   requestAppPermission,
 } from '../../../utilities/helpers/permissions';
 import {Alert} from 'react-native';
+import {post} from '../../../services';
+import {RIDES_CONST} from '../../../utilities/routes';
 
 //Data
 var TimeList = {
@@ -134,20 +137,22 @@ const PassengerHome = ({navigation}) => {
   const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     if (isFocused) {
-      dispatch(
-        MyRidesSortOrder('rides', 'tripDate', res => {
-          dispatch({
-            type: mapTypes.myRides,
-            payload: res,
-          });
-        }),
-      );
+      getRides();
       getUserdata();
       dispatch(move_from_drawer(true, () => {}));
       dispatch(get_settings());
     }
   }, [isFocused]);
-
+  const getRides = async () => {
+    dispatch(
+      MyRidesSortOrder('rides', 'tripDate', res => {
+        dispatch({
+          type: mapTypes.myRides,
+          payload: res,
+        });
+      }),
+    );
+  };
   // Get Location
   const getLocation = async route => {
     setisLoading(true);
@@ -246,7 +251,8 @@ const PassengerHome = ({navigation}) => {
   };
 
   const onPress = item => {
-    if (item?.status === 'COMPLETED' && item?.drive?.rated) {
+    if (item?.status === 'DISPUTED') {
+    } else if (item?.status === 'COMPLETED' && item?.rated_drive) {
     } else {
       navigation.navigate('RideStatus', {item: item});
     }
@@ -276,11 +282,46 @@ const PassengerHome = ({navigation}) => {
       }),
     );
   };
-  const onPressCancel = () => {
-    console.log(selectedCard);
-    setmultiDelete(false);
-    setSelectedCard([]);
-    alert('coming soon');
+  const onPressCancel = async () => {
+    try {
+      setisLoading(true);
+
+      let uniqueItems = [...new Set(selectedCard)];
+      const requestBody = {
+        rides: uniqueItems,
+      };
+      const res = await post(
+        `${RIDES_CONST}/cancel`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setisLoading(false);
+        console.log(res.data);
+        Alert.alert('Success', 'Rides deleted successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setmultiDelete(false);
+              setSelectedCard([]);
+              getRides();
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+      Alert.alert('Failed', 'Unable to delete rides', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          },
+        },
+      ]);
+    }
   };
   return (
     <>

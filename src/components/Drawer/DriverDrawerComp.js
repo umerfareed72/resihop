@@ -54,8 +54,8 @@ const DriverDrawerComponent = ({navigation}) => {
       icon: drawerIcons.Favourites,
       label: 'Favourites',
       onPress: () => {
-        navigation.push('AddFavourites', {
-          routeName: 'AddFavourites',
+        navigation.push('Favourites', {
+          routeName: 'Favourites',
         });
         navigation.closeDrawer();
       },
@@ -190,7 +190,9 @@ const DriverDrawerComponent = ({navigation}) => {
                   color={colors.white}
                   size={15}
                 />
-                <Text style={styles.passengerStyle}>4.5</Text>
+                <Text style={styles.passengerStyle}>
+                  {Userdata?.profile_info?.rating_r}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.buttonContainer2}>
                 <Text style={styles.passengerStyle}>Driver</Text>
@@ -200,7 +202,9 @@ const DriverDrawerComponent = ({navigation}) => {
                   color={colors.white}
                   size={15}
                 />
-                <Text style={styles.passengerStyle}>4.5</Text>
+                <Text style={styles.passengerStyle}>
+                  {Userdata?.profile_info?.rating_d}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

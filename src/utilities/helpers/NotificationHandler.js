@@ -5,6 +5,7 @@ import Toast from 'react-native-tiny-toast';
 import RNCallKeep from 'react-native-callkeep';
 import {options} from '../constants';
 import {Alert} from 'react-native';
+import appTypes from '../../redux/types/app.types';
 
 // import {
 //   read_Notifications,
@@ -62,15 +63,35 @@ const getFcmToken = async () => {
     return oldToken;
   }
 };
+
 // Currently iOS only
 
 export const Notification_Listner = (dispatch, props) => {
   messaging().onNotificationOpenedApp(async remoteMessage => {});
   messaging().onMessage(async remoteMessage => {
-    console.log('remote Meessage', remoteMessage);
+    console.log('remote Meessage', remoteMessage?.data?.data);
+    const notificationObj = JSON.parse(remoteMessage?.data?.data);
+    const responseData = {
+      agora_token: notificationObj?.rtctoken,
+      agora_data: notificationObj,
+    };
+    console.log('response obj', responseData);
     Alert.alert(
       remoteMessage?.notification?.title,
       remoteMessage?.notification?.body,
+      [
+        {
+          text: 'Ok',
+          onPress: () => {
+            dispatch({
+              type: appTypes.Create_Agora_Channel_Success,
+              payload: responseData,
+            });
+            props?.navigation?.navigate('CallNow');
+          },
+        },
+      ],
+      {cancelable: false},
     );
   });
   messaging().getInitialNotification(async remoteMessage => {

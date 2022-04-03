@@ -16,62 +16,14 @@ import {appIcons, colors, family, HP, size} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {Divider, Icon} from 'react-native-elements';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {create_agoral_channel} from '../../../../redux/actions/app.action';
 const index = ({navigation}) => {
   //useState here
-  const [data, setData] = useState([
-    {
-      id: 1,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 2,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 3,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 4,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 5,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 6,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 7,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-  ]);
+  const [data, setData] = useState([]);
   const {selected_drive_history} = useSelector(state => state.map);
-  console.log(selected_drive_history);
+  const auth = useSelector(state => state.auth);
+  const dispatch = useDispatch(null);
   //methods here
   const updateData = ({id}) => {
     setData(
@@ -91,7 +43,16 @@ const index = ({navigation}) => {
       }),
     );
   };
-
+  const createAgoraChannel = () => {
+    const requestBody = {
+      to: auth?.profile_info?._id,
+    };
+    dispatch(
+      create_agoral_channel(requestBody, res => {
+        navigation?.navigate('CallNow');
+      }),
+    );
+  };
   //component here
   const ItemView = ({data}) => {
     return (
@@ -164,36 +125,45 @@ const index = ({navigation}) => {
           />
         </View>
         <View style={styles.separator} />
-        <View style={styles.contentContainer}>
-          <DRiderInfo
-            cost_per_seat={selected_drive_history?.costPerSeat}
-            passenger_info={selected_drive_history}
-          />
-        </View>
-        <View style={styles.separator} />
-        <View
-          style={[
-            styles.contentContainer,
-            {
-              padding: 20,
-            },
-          ]}>
-          <SmallButtons
-            bgColor={colors.green}
-            title={'Call Now'}
-            txtColor={colors.white}
-            fontFamily={family.product_sans_bold}
-            height={40}
-            width={'60%'}
-            image={appIcons.call}
-          />
-        </View>
-        <View style={[styles.contentContainer]}>
-          <Text style={styles.reportText}>Report</Text>
-          {data.map(item => (
-            <ItemView data={item} />
-          ))}
-        </View>
+        {selected_drive_history?.status == 'COMPLETED' ? (
+          <>
+            <View style={styles.contentContainer}>
+              <DRiderInfo
+                cost_per_seat={selected_drive_history?.costPerSeat}
+                passenger_info={selected_drive_history}
+              />
+            </View>
+            <View style={styles.separator} />
+            <View
+              style={[
+                styles.contentContainer,
+                {
+                  padding: 20,
+                },
+              ]}>
+              <SmallButtons
+                bgColor={colors.green}
+                title={'Call Now'}
+                txtColor={colors.white}
+                fontFamily={family.product_sans_bold}
+                height={40}
+                width={'60%'}
+                image={appIcons.call}
+                onPress={() => {
+                  createAgoraChannel();
+                }}
+              />
+            </View>
+          </>
+        ) : null}
+        {data != '' ? (
+          <View style={[styles.contentContainer]}>
+            <Text style={styles.reportText}>Report</Text>
+            {data.map(item => (
+              <ItemView data={item} />
+            ))}
+          </View>
+        ) : null}
       </ScrollView>
     </>
   );

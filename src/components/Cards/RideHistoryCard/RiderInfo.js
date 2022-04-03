@@ -1,11 +1,11 @@
 import React from 'react';
-import {Image, Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import {appIcons, colors, family, size} from '../../../utilities';
+import {appIcons, colors, family, profileIcon, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
-
+import {Image} from 'react-native-elements';
 export const RiderInfo = ({driverInfo}) => {
   return (
     <View style={styles.container}>
@@ -16,7 +16,11 @@ export const RiderInfo = ({driverInfo}) => {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Image source={appImages.user} style={styles.icon42} />
+            <Image
+              progressiveRenderingEnabled={true}
+              source={{uri: driverInfo?.picture?.url || profileIcon}}
+              style={styles.icon42}
+            />
             <Text style={styles.textStyle}>
               {driverInfo?.firstName || 'Jon'} {driverInfo?.lastName || 'Due'}
             </Text>
@@ -33,17 +37,21 @@ export const RiderInfo = ({driverInfo}) => {
             Your Rate
           </Text>
           <StarRating
-            disabled={false}
+            disabled={true}
             maxStars={5}
-            rating={5}
+            rating={driverInfo?.rating_d}
             starSize={19}
+            emptyStar={appIcons.empty_star}
+            fullStarColor={appIcons.full_star}
             starStyle={{paddingHorizontal: 2}}
             fullStarColor={colors.green}
             selectedStar={rating => console.log(rating)}
           />
           <View />
           <TouchableOpacity style={styles.btnContainer}>
-            <Text style={styles.btnText}>Block</Text>
+            <Text style={styles.btnText}>
+              {!driverInfo?.blocked ? 'Block' : 'Unblcok'}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

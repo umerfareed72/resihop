@@ -35,57 +35,7 @@ const index = ({navigation, route}) => {
   const rides = useSelector(state => state.map);
 
   //useState here
-  const [data, setData] = useState([
-    {
-      id: 1,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 2,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 3,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 4,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 5,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 6,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 7,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-  ]);
+  const [data, setData] = useState([]);
 
   //methods here
   const updateData = ({id}) => {
@@ -107,10 +57,7 @@ const index = ({navigation, route}) => {
   };
   const createAgoraChannel = () => {
     const requestBody = {
-      channel: rides?.selected_ride_history?._id,
-      role: 'audience',
-      tokentype: 'uid',
-      uid: JSON.parse(auth?.profile_info?.country?.phone),
+      to: auth?.profile_info?._id,
     };
     dispatch(
       create_agoral_channel(requestBody, res => {
@@ -181,7 +128,9 @@ const index = ({navigation, route}) => {
         title={I18n.t('ride_detail')}
         navigation={navigation}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{backgroundColor: 'white'}}>
         <View style={styles.container}>
           <View style={styles.contentContainer}>
             <RideHistoryCard
@@ -198,28 +147,36 @@ const index = ({navigation, route}) => {
             />
           </View>
           <View style={styles.separator} />
-          <View style={styles.contentContainer}>
-            <RiderInfo driverInfo={rides?.selected_ride_history?.drive?.user} />
-          </View>
-          <View style={styles.separator} />
-          <View style={[styles.contentContainer, {margin: 20}]}>
-            <PaymentButtons
-              bgColor={colors.green}
-              title={'Call Now'}
-              txtColor={colors.white}
-              fontFamily={family.product_sans_bold}
-              image={appIcons.call}
-              onPress={() => {
-                createAgoraChannel();
-              }}
-            />
-          </View>
-          <View style={[styles.contentContainer]}>
-            <Text style={styles.reportText}>Report</Text>
-            {data.map(item => (
-              <ItemView data={item} />
-            ))}
-          </View>
+          {rides?.selected_ride_history?.status == 'COMPLETED' ? (
+            <>
+              <View style={styles.contentContainer}>
+                <RiderInfo
+                  driverInfo={rides?.selected_ride_history?.drive?.user}
+                />
+              </View>
+              <View style={styles.separator} />
+              <View style={[styles.contentContainer, {margin: 20}]}>
+                <PaymentButtons
+                  bgColor={colors.green}
+                  title={'Call Now'}
+                  txtColor={colors.white}
+                  fontFamily={family.product_sans_bold}
+                  image={appIcons.call}
+                  onPress={() => {
+                    createAgoraChannel();
+                  }}
+                />
+              </View>
+            </>
+          ) : null}
+          {data != '' ? (
+            <View style={[styles.contentContainer]}>
+              <Text style={styles.reportText}>Report</Text>
+              {data.map(item => (
+                <ItemView data={item} />
+              ))}
+            </View>
+          ) : null}
         </View>
       </ScrollView>
     </>

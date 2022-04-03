@@ -23,8 +23,9 @@ export const FavDriverCard = ({
   favourite,
   onselectStar,
   selectedStar,
-
   addFavourite,
+  name,
+  pickupInfo,
 }) => {
   return (
     <View style={styles.container}>
@@ -51,8 +52,8 @@ export const FavDriverCard = ({
             source={appImages.user}
           />
           <View>
-            <Text style={styles.h1}>John Deo</Text>
-            <Text style={styles.h2}>Pickup Time 08:00</Text>
+            <Text style={styles.h1}>{name}</Text>
+            <Text style={styles.h2}>{`Pickup Time ${pickupInfo}`}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={addFavourite} style={{padding: 5}}>
@@ -80,7 +81,7 @@ export const FavDriverCard = ({
           Rate your Drive Experience
         </Text>
         <StarRating
-          disabled={false}
+          disabled={true}
           maxStars={5}
           rating={selectedStar}
           starSize={25}

@@ -21,7 +21,7 @@ import {Loader} from '../components';
 import {Alert} from 'react-native';
 import {create_agoral_channel} from '../redux/actions/app.action';
 import HeartFilled from 'react-native-vector-icons/Foundation';
-import {put} from '../services';
+import {post, put} from '../services';
 import {PAYMENT_CONST} from '../utilities/routes';
 
 const RideStatusCards = ({
@@ -70,7 +70,7 @@ const RideStatusCards = ({
       const body = {
         paymentID: ride?.payment,
       };
-      const res = await put(`${PAYMENT_CONST}/dispute`, body, await header());
+      const res = await post(`${PAYMENT_CONST}/dispute`, body, await header());
       if (res?.data) {
         cancelRide();
       }
@@ -94,14 +94,10 @@ const RideStatusCards = ({
   };
   const onCallPress = () => {
     const requestBody = {
-      channel: ride?.drive?._id,
-      role: 'audience',
-      tokentype: 'uid',
-      uid: JSON.parse(auth?.profile_info?.country?.phone),
+      to: auth?.profile_info?._id,
     };
     dispatch(
       create_agoral_channel(requestBody, res => {
-        console.log(res);
         navigation?.navigate('CallNow');
       }),
     );

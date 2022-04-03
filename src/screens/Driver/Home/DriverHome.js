@@ -18,6 +18,7 @@ import {
   appImages,
   family,
   requestPermission,
+  header,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
@@ -52,6 +53,8 @@ import mapTypes from '../../../redux/types/map.types';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
 import {checkAppPermission} from '../../../utilities/helpers/permissions';
+import {post} from '../../../services';
+import {DRIVE_CONST} from '../../../utilities/routes';
 
 //Data
 var TimeList = {
@@ -130,19 +133,22 @@ const DriverHome = ({navigation}) => {
   //Get Data
   useEffect(() => {
     if (isFocus) {
-      dispatch(
-        MyRidesSortOrder('drives', 'date', res => {
-          dispatch({
-            type: mapTypes.myDrives,
-            payload: res,
-          });
-        }),
-      );
+      getDrives();
       getUserdata();
       dispatch(get_settings());
     }
   }, [isFocus]);
 
+  const getDrives = async () => {
+    dispatch(
+      MyRidesSortOrder('drives', 'date', res => {
+        dispatch({
+          type: mapTypes.myDrives,
+          payload: res,
+        });
+      }),
+    );
+  };
   // Get Location
   const getLocation = async route => {
     setisLoading(true);
@@ -258,18 +264,23 @@ const DriverHome = ({navigation}) => {
   ];
   const onPress = item => {
     dispatch(setIDToUpdateDrive(item));
-    navigation.navigate('DriveStatus', {
-      status: item.status,
-      startLocation: item.startLocation,
-      destinationLocation: item.destinationLocation,
-      startDes: item.startDes,
-      destDes: item.destDes,
-      id: item._id,
-      cost: item?.costPerSeat,
-      availableSeats: item?.availableSeats,
-      drive_date: item?.date,
-      bookedSeats: item?.bookedSeats,
-    });
+
+    if (item?.status === 'COMPLETED') {
+      navigation?.navigate('AddFavourites');
+    } else {
+      navigation.navigate('DriveStatus', {
+        status: item.status,
+        startLocation: item.startLocation,
+        destinationLocation: item.destinationLocation,
+        startDes: item.startDes,
+        destDes: item.destDes,
+        id: item._id,
+        cost: item?.costPerSeat,
+        availableSeats: item?.availableSeats,
+        drive_date: item?.date,
+        bookedSeats: item?.bookedSeats,
+      });
+    }
   };
   const getUserdata = async () => {
     dispatch(
@@ -294,11 +305,46 @@ const DriverHome = ({navigation}) => {
       }),
     );
   };
-  const onPressCancel = () => {
-    console.log(selectedCard);
-    setmultiDelete(false);
-    setSelectedCard([]);
-    alert('coming soon');
+  const onPressCancel = async () => {
+    try {
+      setisLoading(true);
+
+      let uniqueItems = [...new Set(selectedCard)];
+      const requestBody = {
+        drives: uniqueItems,
+      };
+      const res = await post(
+        `${DRIVE_CONST}/cancel`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setisLoading(false);
+        console.log(res.data);
+        Alert.alert('Success', 'Rides deleted successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setmultiDelete(false);
+              setSelectedCard([]);
+              getDrives();
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+      Alert.alert('Failed', 'Unable to delete rides', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          },
+        },
+      ]);
+    }
   };
 
   return (

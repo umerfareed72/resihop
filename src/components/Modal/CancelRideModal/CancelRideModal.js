@@ -9,7 +9,7 @@ export const CancelRideModal = ({show, onPressCancel, onPressClose}) => {
       <TouchableOpacity
         onPress={onPressCancel}
         style={{width: '48%', alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={styles.modalTitle}>Cancel Selected Rides</Text>
+        <Text style={styles.modalTitle}>Delete Selected Rides</Text>
       </TouchableOpacity>
       <View>
         <Text style={{fontSize: 30, color: 'white', paddingBottom: 5}}>|</Text>

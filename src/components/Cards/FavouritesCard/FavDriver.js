@@ -44,12 +44,18 @@ export const FavDriver = ({data}) => {
             <View style={styles.userImageContainer}>
               <Image
                 style={styles.userImage}
-                source={{uri: data?.user?.picture?.url || profileIcon}}
+                source={{
+                  uri:
+                    data?.user?.picture?.url ||
+                    data?.driver_passenger?.picture?.url ||
+                    profileIcon,
+                }}
               />
               <View>
                 <View style={styles.userNameView}>
                   <Text style={styles.userName}>
-                    {data?.user?.firstName} {data?.user?.lastName}
+                    {data?.user?.firstName || data?.driver_passenger?.firstName}{' '}
+                    {data?.user?.lastName || data?.driver_passenger?.lastName}
                   </Text>
                   <Icon
                     name={'heart'}
@@ -67,14 +73,19 @@ export const FavDriver = ({data}) => {
                     //   style={{marginLeft: HP('1'), marginTop: HP('0.5')}}
                     size={15}
                   />
-                  <Text style={styles.ratingText}>4.5</Text>
+                  <Text style={styles.ratingText}>
+                    {data?.driver_passenger?.rating_d}
+                  </Text>
                 </View>
               </View>
             </View>
             <View style={{marginVertical: HP('1')}}>
               <Text style={styles.descriptionText}>
-                <Text style={styles.descriptionTextReplica}> Ford, Focus,</Text>{' '}
-                White, XT32TTU8
+                <Text style={styles.descriptionTextReplica}>
+                  {data?.driver_passenger?.vehicle?.vehicleCompanyName},
+                </Text>{' '}
+                {data?.driver_passenger?.vehicle?.color},{' '}
+                {data?.driver_passenger?.vehicle?.licencePlateNumber}
               </Text>
             </View>
           </View>

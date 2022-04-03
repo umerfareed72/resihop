@@ -138,6 +138,7 @@ const DrawerComponent = ({navigation}) => {
       Alert.alert('Internet Error', 'Check your internet connection');
     }
   }
+
   return (
     <>
       <MyStatusBar
@@ -180,7 +181,9 @@ const DrawerComponent = ({navigation}) => {
                 color={colors.white}
                 size={15}
               />
-              <Text style={styles.passengerStyle}>4.5</Text>
+              <Text style={styles.passengerStyle}>
+                {Userdata?.profile_info?.rating_r}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

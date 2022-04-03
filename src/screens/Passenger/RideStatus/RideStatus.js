@@ -19,7 +19,7 @@ import {
 import moment from 'moment';
 import {CopyRideModal, Loader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
-import {post} from '../../../services';
+import {post, remove} from '../../../services';
 import {Alert} from 'react-native';
 
 const RideStatus = ({route}) => {
@@ -35,7 +35,7 @@ const RideStatus = ({route}) => {
   const [fav, setFav] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [favId, setfavId] = useState('');
   useEffect(() => {
     dispatch(
       setOrigin({
@@ -117,9 +117,12 @@ const RideStatus = ({route}) => {
   const onPressAddRating = async rating => {
     try {
       const requestBody = {
-        type: 'Ride',
-        drive: item?._id,
+        type: 'Drive',
+        drive: item?.drive?._id,
         rating: rating,
+        by: auth?.profile_info?._id,
+        for: item?.drive?.user?._id,
+        ride: item?._id,
       };
       const res = await post(`ratings`, requestBody, await header());
       if (res.data) {
@@ -132,14 +135,23 @@ const RideStatus = ({route}) => {
   //On Add Favourite
   const onPressAddFav = async () => {
     try {
-      const requestBody = {
-        type: 'DRIVER',
-        user: auth?.profile_info?.id,
-        driver_passenger: item?.drive?.user?._id,
-      };
-      const res = await post(`favorites`, requestBody, await header());
-      if (res.data) {
-        setFav(true);
+      setFav(!fav);
+      if (!fav) {
+        const requestBody = {
+          type: 'DRIVER',
+          user: auth?.profile_info?.id,
+          driver_passenger: item?.drive?.user?._id,
+        };
+        const res = await post(`favorites`, requestBody, await header());
+        if (res.data) {
+          setfavId(res?.data?.id);
+          console.log('Favourite');
+        }
+      } else {
+        if (favId != '') {
+          const res = await remove(`favorites/${favId}`, await header());
+          console.log('UNFAVOURITE');
+        }
       }
     } catch (error) {
       console.log(error);

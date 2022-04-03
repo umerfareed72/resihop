@@ -10,7 +10,7 @@ import {
   RideFilterModal,
   SortModal,
 } from '../../../components';
-import {get} from '../../../services';
+import {get, post} from '../../../services';
 import * as Types from '../../../redux/types/map.types';
 import {appIcons, appImages, colors, header, WP} from '../../../utilities';
 import BlankField from '../../../components/BlankField';
@@ -197,11 +197,46 @@ function index(props) {
       });
     }
   };
-  const onPressCancel = () => {
-    console.log(selectedCard);
-    setmultiDelete(false);
-    setSelectedCard([]);
-    alert('coming soon');
+  const onPressCancel = async () => {
+    try {
+      setisLoading(true);
+
+      let uniqueItems = [...new Set(selectedCard)];
+      const requestBody = {
+        rides: uniqueItems,
+      };
+      const res = await post(
+        `${RIDES_CONST}/cancel`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setisLoading(false);
+        console.log(res.data);
+        Alert.alert('Success', 'Rides deleted successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setmultiDelete(false);
+              setSelectedCard([]);
+              get_recurring_rides();
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+      Alert.alert('Failed', 'Unable to delete rides', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          },
+        },
+      ]);
+    }
   };
 
   return (

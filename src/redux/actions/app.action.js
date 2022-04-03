@@ -1,5 +1,5 @@
 import * as Types from '../types/app.types';
-import {get} from '../../services';
+import {get, post} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
 import {AGORA_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
@@ -9,13 +9,10 @@ import {header} from '../../utilities';
 export const create_agoral_channel = (data, callBack) => async dispatch => {
   try {
     dispatch({type: Types.app_Loader, payload: true});
-    const response = await get(
-      `${AGORA_CONST}/rtc/${data?.channel}/${data?.role}/${data?.tokentype}/${data?.uid}`,
-      await header(),
-    );
+    const response = await post(`${AGORA_CONST}/call`, data, await header());
     const responseData = {
       agora_token: response?.data?.rtcToken,
-      agora_data: data,
+      agora_data: response?.data,
     };
     // if (response?.data?.user?.details) {
     dispatch({

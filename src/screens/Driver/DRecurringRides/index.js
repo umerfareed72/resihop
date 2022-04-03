@@ -9,7 +9,7 @@ import {
   RideFilterModal,
   SortModal,
 } from '../../../components';
-import {get} from '../../../services';
+import {get, post} from '../../../services';
 import {appIcons, appImages, colors, header, WP} from '../../../utilities';
 import I18n from '../../../utilities/translations';
 import * as Types from '../../../redux/types/map.types';
@@ -24,6 +24,7 @@ import {Alert} from 'react-native';
 import {checkAppPermission} from '../../../utilities/helpers/permissions';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
+import {DRIVE_CONST} from '../../../utilities/routes';
 var TimeList = {
   id: 1,
   title: I18n.t('time'),
@@ -192,11 +193,45 @@ function index(props) {
       ]);
     }
   };
-  const onPressCancel = () => {
-    console.log(selectedCard);
-    setmultiDelete(false);
-    setSelectedCard([]);
-    alert('coming soon');
+  const onPressCancel = async () => {
+    try {
+      setisLoading(true);
+
+      let uniqueItems = [...new Set(selectedCard)];
+      const requestBody = {
+        drives: uniqueItems,
+      };
+      const res = await post(
+        `${DRIVE_CONST}/cancel`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setisLoading(false);
+        Alert.alert('Success', 'Rides deleted successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setmultiDelete(false);
+              setSelectedCard([]);
+              get_recurring_drives();
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+      Alert.alert('Failed', 'Unable to delete rides', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          },
+        },
+      ]);
+    }
   };
   return (
     <>

@@ -62,7 +62,7 @@ const index = ({navigation}) => {
       app_reducer?.agora_info?.agora_token,
       app_reducer?.agora_info?.agora_data?.channel,
       null,
-      app_reducer?.agora_info?.agora_data?.uid,
+      JSON.parse(app_reducer?.agora_info?.agora_data?.uid),
     );
   };
   // Turn the microphone on or off.

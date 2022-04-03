@@ -13,11 +13,6 @@ const UpcomingRideCards = ({
   setSelectedCard,
   multiDelete,
 }) => {
-  const CardSelect = id => {
-    if (selectedCard?.includes(item.id)) {
-      setSelectedCard(selectedCard.filter(card => card !== id));
-    } else setSelectedCard([id, ...selectedCard]);
-  };
   const [seats, setSeats] = useState([]);
   const myRidesData = useSelector(state => state.map.myRidesData);
   const myDrives = useSelector(state => state.map.myDrivesData);
@@ -39,11 +34,18 @@ const UpcomingRideCards = ({
       setSeats(requiredSeats);
     }
   }, [myRidesData, myDrives]);
-
+  const CardSelect = id => {
+    if (selectedCard?.includes(item.id)) {
+      setSelectedCard(selectedCard.filter(card => card !== id));
+    } else setSelectedCard([id, ...selectedCard]);
+  };
   return (
     <View>
       <TouchableOpacity
-        style={styles.cardContainer}
+        style={[
+          styles.cardContainer,
+          {elevation: selectedCard?.includes(item.id) ? 0 : 10},
+        ]}
         onPress={() => {
           if (multiDelete) {
             CardSelect(item?.id);
@@ -145,7 +147,6 @@ const styles = StyleSheet.create({
     height: 199,
     width: 333,
     backgroundColor: colors.white,
-    elevation: 10,
     shadowOffset: {
       width: 0,
       height: 3,
