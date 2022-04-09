@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import {CustomHeader} from './Header/CustomHeader';
 import {appImages, colors, family, size} from '../utilities';
+import {GoogleInput} from '../components';
+
 import {useNavigation} from '@react-navigation/core';
 import CalendarSheet from '../screens/CalendarSheet';
 import I18n from '../utilities/translations';
@@ -201,181 +203,208 @@ const AddressCards = ({
               <View style={styles.locationMainWrapper}>
                 <View>
                   <View style={{marginBottom: 20}}>
-                    <GooglePlacesAutocomplete
-                      ref={startReturnGoogleAutoComplete}
-                      placeholder={I18n.t('address_placeholder')}
-                      onPress={(data, details = null) => {
-                        dispatch(
-                          setReturnOrigin({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
-                      }}
-                      query={{
-                        key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                        language: 'en',
-                        types: city_ride ? '(cities)' : 'establishment', // default: 'geocode'
-                      }}
-                      debounce={400}
-                      fetchDetails={true}
-                      nearbyPlacesAPI="GooglePlacesSearch"
-                      enablePoweredByContainer={false}
-                      returnKeyType={'search'}
-                      minLength={2}
-                      styles={{
-                        container: {
-                          flex: 0,
-                          width: 326,
-                        },
-                        textInput: {
-                          height: 44,
-                          borderWidth: 1,
-                          borderColor: colors.greyBorder,
-                          borderRadius: 10,
-                          paddingLeft: 45,
-                          fontSize: 13,
-                          color: colors.inputTxtGray,
-                          fontFamily: fonts.regular,
-                        },
-                      }}
-                      filterReverseGeocodingByTypes={[
-                        'locality',
-                        'administrative_area_level_3',
-                      ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
-                      textInputProps={{
-                        onChangeText: setCurrentReturnStart,
-                      }}
-                    />
+                    {city_ride ? (
+                      <GoogleInput
+                        ref={startReturnGoogleAutoComplete}
+                        placeholder={I18n.t('address_placeholder')}
+                        onPress={(data, details = null) => {
+                          dispatch(
+                            setReturnOrigin({
+                              location: details.geometry.location,
+                              description: data.description,
+                            }),
+                          );
+                        }}
+                        query={{
+                          key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                          language: 'en',
+                          types: '(cities)', // default: 'geocode'
+                        }}
+                        filterReverseGeocodingByTypes={[
+                          'locality',
+                          'administrative_area_level_3',
+                        ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
+                        textInputProps={{
+                          onChangeText: setCurrentReturnStart,
+                        }}
+                      />
+                    ) : (
+                      <GoogleInput
+                        ref={startReturnGoogleAutoComplete}
+                        placeholder={I18n.t('address_placeholder')}
+                        onPress={(data, details = null) => {
+                          dispatch(
+                            setReturnOrigin({
+                              location: details.geometry.location,
+                              description: data.description,
+                            }),
+                          );
+                        }}
+                        query={{
+                          key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                          language: 'en',
+                        }}
+                        textInputProps={{
+                          onChangeText: setCurrentReturnStart,
+                        }}
+                      />
+                    )}
                     <View style={styles.startDot} />
                   </View>
                   <View>
-                    <GooglePlacesAutocomplete
-                      ref={destinationReturnGoogleAutoComplete}
-                      placeholder={I18n.t('address_placeholder')}
-                      onPress={(data, details = null) => {
-                        dispatch(
-                          setReturnMapDestination({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
-                      }}
-                      query={{
-                        key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                        language: 'en',
-                        types: city_ride ? '(cities)' : 'establishment', // default: 'geocode'
-                      }}
-                      debounce={400}
-                      fetchDetails={true}
-                      nearbyPlacesAPI="GooglePlacesSearch"
-                      enablePoweredByContainer={false}
-                      returnKeyType={'search'}
-                      minLength={2}
-                      styles={{
-                        container: {
-                          flex: 0,
-                          width: 326,
-                        },
-                        textInput: {
-                          height: 44,
-                          borderWidth: 1,
-                          borderColor: colors.greyBorder,
-                          borderRadius: 10,
-                          paddingLeft: 45,
-                          fontSize: 13,
-                          color: colors.inputTxtGray,
-                          fontFamily: fonts.regular,
-                        },
-                      }}
-                      filterReverseGeocodingByTypes={[
-                        'locality',
-                        'administrative_area_level_3',
-                      ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
-                      textInputProps={{
-                        onChangeText: setCurrentReturnDestination,
-                      }}
-                    />
+                    {city_ride ? (
+                      <GoogleInput
+                        ref={destinationReturnGoogleAutoComplete}
+                        placeholder={I18n.t('address_placeholder')}
+                        onPress={(data, details = null) => {
+                          dispatch(
+                            setReturnMapDestination({
+                              location: details.geometry.location,
+                              description: data.description,
+                            }),
+                          );
+                        }}
+                        query={{
+                          key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                          language: 'en',
+                          types: '(cities)', // default: 'geocode'
+                        }}
+                        filterReverseGeocodingByTypes={[
+                          'locality',
+                          'administrative_area_level_3',
+                        ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
+                        textInputProps={{
+                          onChangeText: setCurrentReturnDestination,
+                        }}
+                      />
+                    ) : (
+                      <GoogleInput
+                        ref={destinationReturnGoogleAutoComplete}
+                        placeholder={I18n.t('address_placeholder')}
+                        onPress={(data, details = null) => {
+                          dispatch(
+                            setReturnMapDestination({
+                              location: details.geometry.location,
+                              description: data.description,
+                            }),
+                          );
+                        }}
+                        query={{
+                          key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                          language: 'en',
+                        }}
+                        textInputProps={{
+                          onChangeText: setCurrentReturnDestination,
+                        }}
+                      />
+                    )}
+
                     <View style={styles.destSquare} />
                   </View>
                 </View>
               </View>
             ) : (
               <>
-                <GooglePlacesAutocomplete
-                  ref={googleAutoComplete}
-                  placeholder={I18n.t('address_placeholder')}
-                  onPress={(data, details = null) => {
-                    if (modalName === 'startLocation') {
-                      dispatch(
-                        setOrigin({
-                          location: details.geometry.location,
-                          description: data.description,
-                        }),
-                      );
+                {city_ride ? (
+                  <GoogleInput
+                    ref={googleAutoComplete}
+                    placeholder={I18n.t('address_placeholder')}
+                    onPress={(data, details = null) => {
+                      if (modalName === 'startLocation') {
+                        dispatch(
+                          setOrigin({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
 
-                      dispatch(
-                        setReturnMapDestination({
-                          location: details.geometry.location,
-                          description: data.description,
-                        }),
-                      );
-                    }
+                        dispatch(
+                          setReturnMapDestination({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+                      }
 
-                    if (modalName === 'destination') {
-                      dispatch(
-                        setMapDestination({
-                          location: details.geometry.location,
-                          description: data.description,
-                        }),
-                      );
+                      if (modalName === 'destination') {
+                        dispatch(
+                          setMapDestination({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
 
-                      dispatch(
-                        setReturnOrigin({
-                          location: details.geometry.location,
-                          description: data.description,
-                        }),
-                      );
-                    }
-                  }}
-                  query={{
-                    key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                    language: 'en',
-                    types: city_ride ? '(cities)' : 'establishment', // default: 'geocode'
-                  }}
-                  debounce={400}
-                  fetchDetails={true}
-                  nearbyPlacesAPI="GooglePlacesSearch"
-                  enablePoweredByContainer={false}
-                  returnKeyType={'search'}
-                  minLength={2}
-                  onFail={err => console.log(err)}
-                  styles={{
-                    container: {
-                      flex: 0,
-                      width: 326,
-                    },
-                    textInput: {
-                      height: 44,
-                      borderWidth: 1,
-                      borderColor: colors.greyBorder,
-                      borderRadius: 10,
-                      paddingLeft: 45,
-                      fontSize: 13,
-                      color: colors.inputTxtGray,
-                      fontFamily: fonts.regular,
-                    },
-                  }}
-                  filterReverseGeocodingByTypes={[
-                    'locality',
-                    'administrative_area_level_3',
-                  ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
-                  textInputProps={{
-                    onChangeText: setCurrentAddress,
-                    autoCorrect: false,
-                    autoCapitalize: false,
-                  }}
-                />
+                        dispatch(
+                          setReturnOrigin({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+                      }
+                    }}
+                    query={{
+                      key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                      language: 'en',
+                      types: '(cities)',
+                    }}
+                    filterReverseGeocodingByTypes={[
+                      'locality',
+                      'administrative_area_level_3',
+                    ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
+                    textInputProps={{
+                      onChangeText: setCurrentAddress,
+                      autoCorrect: false,
+                      autoCapitalize: false,
+                    }}
+                  />
+                ) : (
+                  <GoogleInput
+                    ref={googleAutoComplete}
+                    placeholder={I18n.t('address_placeholder')}
+                    onPress={(data, details = null) => {
+                      if (modalName === 'startLocation') {
+                        dispatch(
+                          setOrigin({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+
+                        dispatch(
+                          setReturnMapDestination({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+                      }
+
+                      if (modalName === 'destination') {
+                        dispatch(
+                          setMapDestination({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+
+                        dispatch(
+                          setReturnOrigin({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+                      }
+                    }}
+                    query={{
+                      key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                      language: 'en',
+                    }}
+                    textInputProps={{
+                      onChangeText: setCurrentAddress,
+                      autoCorrect: false,
+                      autoCapitalize: false,
+                    }}
+                  />
+                )}
                 <View
                   style={
                     modalName === 'startLocation'

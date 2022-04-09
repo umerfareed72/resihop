@@ -32,7 +32,7 @@ const index = ({navigation}) => {
       setaddFavourite(!addFavourite);
       if (!addFavourite) {
         const requestBody = {
-          type: 'DRIVER',
+          type: 'PASSENGER',
           user: auth?.profile_info?.id,
           driver_passenger: item?.user?._id,
         };

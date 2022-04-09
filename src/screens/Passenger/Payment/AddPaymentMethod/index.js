@@ -83,7 +83,7 @@ const index = ({navigation, route}) => {
     if (check) {
       console.log(auth?.profile_info);
 
-      if (auth?.profile_info?.stripe_customer?.stripeID && !payment?.move) {
+      if (auth?.profile_info?.stripe_customer?.stripeID || !payment?.move) {
         dispatch(
           get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
             console.log('Cards', res);

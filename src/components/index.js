@@ -17,6 +17,7 @@ export * from './BlankField';
 //App Inputs
 export * from './AppInput/PaymentInput/PaymentInput';
 export * from './AppInput/ModalInput/BlockInput';
+export * from './AppInput/GoogleInput/GoogleInput';
 
 //Cards
 export * from './Cards/BankCard/BankCard';

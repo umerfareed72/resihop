@@ -126,7 +126,14 @@ const RideStatus = ({route}) => {
       };
       const res = await post(`ratings`, requestBody, await header());
       if (res.data) {
-        navigation?.navigate('PassengerHome');
+        Alert.alert('Success', 'Ride rated successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation?.navigate('PassengerHome');
+            },
+          },
+        ]);
       }
     } catch (error) {
       console.log(error);

@@ -40,7 +40,7 @@ const UpcomingRideCards = ({
     } else setSelectedCard([id, ...selectedCard]);
   };
   return (
-    <View>
+    <View style={{padding: 10}}>
       <TouchableOpacity
         style={[
           styles.cardContainer,
