@@ -248,6 +248,7 @@ export default {
 
   //Unblock button
   unblock: 'Unblock',
+  block: 'block',
 
   //Cost per seat
   cost_per_seat: 'Cost Per Seat',

@@ -60,16 +60,16 @@ const DriverDrawerComponent = ({navigation}) => {
         navigation.closeDrawer();
       },
     },
-    {
-      icon: appImages.green_car2,
-      label: 'Vehicle Information',
-      onPress: () => {
-        // navigation.push('VehicleInformation', {
-        //   routeName: 'VehicleInformation',
-        // });
-        navigation.closeDrawer();
-      },
-    },
+    // {
+    //   icon: appImages.green_car2,
+    //   label: 'Vehicle Information',
+    //   onPress: () => {
+    //     navigation.push('VehicleInformation', {
+    //       routeName: 'VehicleInformation',
+    //     });
+    //     navigation.closeDrawer();
+    //   },
+    // },
     {
       icon: drawerIcons.reports,
       label: 'Reports',

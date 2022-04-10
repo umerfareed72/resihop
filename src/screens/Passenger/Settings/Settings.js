@@ -41,10 +41,10 @@ const Settings = ({navigation}) => {
       title: I18n.t('set_help'),
       onPress: () => navigation.navigate('Help'),
     },
-    {
-      title: I18n.t('set_notif_set'),
-      onPress: () => navigation.navigate('NotificationSettings'),
-    },
+    // {
+    //   title: I18n.t('set_notif_set'),
+    //   onPress: () => navigation.navigate('NotificationSettings'),
+    // },
     {
       title: I18n.t('set_block'),
       onPress: () => navigation.navigate('BlockedList'),

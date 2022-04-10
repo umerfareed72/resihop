@@ -32,7 +32,7 @@ import moment from 'moment';
 import {fonts} from '../theme';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Loader} from './Loader/Loader';
-
+import {useIsFocused} from '@react-navigation/native';
 const AddressCards = ({
   modalName,
   addfavrouiteAddressRef,
@@ -79,7 +79,7 @@ const AddressCards = ({
   );
   const user = useSelector(state => state.auth.userdata);
   const returnTime = useSelector(state => state.map);
-
+  const isFocus = useIsFocused(null);
   const showTimePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -204,9 +204,10 @@ const AddressCards = ({
                 <View>
                   <View style={{marginBottom: 20}}>
                     {city_ride ? (
-                      <GoogleInput
+                      <GooglePlacesAutocomplete
                         ref={startReturnGoogleAutoComplete}
                         placeholder={I18n.t('address_placeholder')}
+                        styles={styles.googleInput}
                         onPress={(data, details = null) => {
                           dispatch(
                             setReturnOrigin({
@@ -220,6 +221,11 @@ const AddressCards = ({
                           language: 'en',
                           types: '(cities)', // default: 'geocode'
                         }}
+                        debounce={400}
+                        fetchDetails={true}
+                        nearbyPlacesAPI="GooglePlacesSearch"
+                        enablePoweredByContainer={false}
+                        returnKeyType={'search'}
                         filterReverseGeocodingByTypes={[
                           'locality',
                           'administrative_area_level_3',
@@ -229,9 +235,10 @@ const AddressCards = ({
                         }}
                       />
                     ) : (
-                      <GoogleInput
+                      <GooglePlacesAutocomplete
                         ref={startReturnGoogleAutoComplete}
                         placeholder={I18n.t('address_placeholder')}
+                        styles={styles.googleInput}
                         onPress={(data, details = null) => {
                           dispatch(
                             setReturnOrigin({
@@ -240,6 +247,11 @@ const AddressCards = ({
                             }),
                           );
                         }}
+                        debounce={400}
+                        fetchDetails={true}
+                        nearbyPlacesAPI="GooglePlacesSearch"
+                        enablePoweredByContainer={false}
+                        returnKeyType={'search'}
                         query={{
                           key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                           language: 'en',
@@ -253,8 +265,9 @@ const AddressCards = ({
                   </View>
                   <View>
                     {city_ride ? (
-                      <GoogleInput
+                      <GooglePlacesAutocomplete
                         ref={destinationReturnGoogleAutoComplete}
+                        styles={styles.googleInput}
                         placeholder={I18n.t('address_placeholder')}
                         onPress={(data, details = null) => {
                           dispatch(
@@ -264,6 +277,11 @@ const AddressCards = ({
                             }),
                           );
                         }}
+                        debounce={400}
+                        fetchDetails={true}
+                        nearbyPlacesAPI="GooglePlacesSearch"
+                        enablePoweredByContainer={false}
+                        returnKeyType={'search'}
                         query={{
                           key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                           language: 'en',
@@ -278,9 +296,10 @@ const AddressCards = ({
                         }}
                       />
                     ) : (
-                      <GoogleInput
+                      <GooglePlacesAutocomplete
                         ref={destinationReturnGoogleAutoComplete}
                         placeholder={I18n.t('address_placeholder')}
+                        styles={styles.googleInput}
                         onPress={(data, details = null) => {
                           dispatch(
                             setReturnMapDestination({
@@ -289,6 +308,11 @@ const AddressCards = ({
                             }),
                           );
                         }}
+                        debounce={400}
+                        fetchDetails={true}
+                        nearbyPlacesAPI="GooglePlacesSearch"
+                        enablePoweredByContainer={false}
+                        returnKeyType={'search'}
                         query={{
                           key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                           language: 'en',
@@ -306,8 +330,9 @@ const AddressCards = ({
             ) : (
               <>
                 {city_ride ? (
-                  <GoogleInput
+                  <GooglePlacesAutocomplete
                     ref={googleAutoComplete}
+                    styles={styles.googleInput}
                     placeholder={I18n.t('address_placeholder')}
                     onPress={(data, details = null) => {
                       if (modalName === 'startLocation') {
@@ -347,6 +372,11 @@ const AddressCards = ({
                       language: 'en',
                       types: '(cities)',
                     }}
+                    debounce={400}
+                    fetchDetails={true}
+                    nearbyPlacesAPI="GooglePlacesSearch"
+                    enablePoweredByContainer={false}
+                    returnKeyType={'search'}
                     filterReverseGeocodingByTypes={[
                       'locality',
                       'administrative_area_level_3',
@@ -358,8 +388,9 @@ const AddressCards = ({
                     }}
                   />
                 ) : (
-                  <GoogleInput
+                  <GooglePlacesAutocomplete
                     ref={googleAutoComplete}
+                    styles={styles.googleInput}
                     placeholder={I18n.t('address_placeholder')}
                     onPress={(data, details = null) => {
                       if (modalName === 'startLocation') {
@@ -394,6 +425,11 @@ const AddressCards = ({
                         );
                       }
                     }}
+                    debounce={400}
+                    fetchDetails={true}
+                    nearbyPlacesAPI="GooglePlacesSearch"
+                    enablePoweredByContainer={false}
+                    returnKeyType={'search'}
                     query={{
                       key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
                       language: 'en',
@@ -405,6 +441,7 @@ const AddressCards = ({
                     }}
                   />
                 )}
+
                 <View
                   style={
                     modalName === 'startLocation'
@@ -889,6 +926,22 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.g1,
     fontFamily: fonts.regular,
+  },
+  googleInput: {
+    container: {
+      flex: 0,
+      width: 326,
+    },
+    textInput: {
+      height: 44,
+      borderWidth: 1,
+      borderColor: colors.greyBorder,
+      borderRadius: 10,
+      paddingLeft: 45,
+      fontSize: 13,
+      color: colors.inputTxtGray,
+      fontFamily: fonts.regular,
+    },
   },
 });
 

@@ -1,22 +1,35 @@
 import I18n from 'i18n-js';
 import React from 'react';
-import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements/dist/icons/Icon';
-import {color} from 'react-native-reanimated';
-import {appIcons, appImages, colors, family, size} from '../../../utilities';
+import {
+  appIcons,
+  appImages,
+  colors,
+  family,
+  profileIcon,
+  size,
+} from '../../../utilities';
 import RideTitle from '../../Titles/RideTitle';
+import {Image} from 'react-native-elements';
 
-export const BlockedListCard = ({card1}) => {
+export const BlockedListCard = ({item, onPressBlock}) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {card1 ? (
+        {item?.vehicle ? (
           <View>
             <View style={styles.content1}>
               <View style={styles.alignRow}>
-                <Image source={appImages.user} style={styles.imageStyle} />
+                <Image
+                  progressiveRenderingEnabled={true}
+                  source={{uri: item?.picture?.url || profileIcon}}
+                  style={styles.imageStyle}
+                />
                 <View style={{width: '50%'}}>
-                  <Text style={styles.text1}>John Doe</Text>
+                  <Text style={styles.text1}>
+                    {item?.firstName} {item?.lastName}
+                  </Text>
                   <View style={[styles.content1H3Style, {marginVertical: 5}]}>
                     <Icon
                       name={'star'}
@@ -24,7 +37,7 @@ export const BlockedListCard = ({card1}) => {
                       color={colors.white}
                       size={11}
                     />
-                    <Text style={styles.content1H3}>4.5</Text>
+                    <Text style={styles.content1H3}>{item?.rating_d}</Text>
                   </View>
                 </View>
                 <View
@@ -39,7 +52,7 @@ export const BlockedListCard = ({card1}) => {
                       color: colors.light_black,
                       marginTop: 20,
                     }}>
-                    NOK 20
+                    NOK {item?.vehicle?.presetCostPerPassenger}
                   </Text>
                   <Image
                     source={appImages.leftcar}
@@ -58,13 +71,14 @@ export const BlockedListCard = ({card1}) => {
                 styles.h2Text,
                 {fontWeight: '500', color: colors.g5, paddingBottom: 20},
               ]}>
-              Ford, Focus,{' '}
+              {item?.vehicle?.vehicleCompanyName},{' '}
+              {item?.vehicle?.licencePlateNumber},{' '}
               <Text
                 style={[
                   styles.h2Text,
                   {fontWeight: 'bold', color: colors.light_black},
                 ]}>
-                White, XT32TTU8
+                {item?.vehicle?.color}, {item?.vehicle?.licencePlateNumber}
               </Text>
             </Text>
           </View>
@@ -91,8 +105,10 @@ export const BlockedListCard = ({card1}) => {
             </View>
           </>
         )}
-        <TouchableOpacity style={styles.btnContainer}>
-          <Text style={styles.btnText}>{I18n.t('unblock')}</Text>
+        <TouchableOpacity onPress={onPressBlock} style={styles.btnContainer}>
+          <Text style={styles.btnText}>
+            {item?.blocked ? I18n.t('unblock') : I18n.t('block')}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

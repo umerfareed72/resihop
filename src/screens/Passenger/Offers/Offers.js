@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {CustomHeader} from '../../../components';
+import {CustomHeader, Loader} from '../../../components';
 import {
   colors,
   family,
@@ -71,7 +71,7 @@ const Offers = ({navigation}) => {
           </SafeAreaView>
         </>
       ) : (
-        <Loading />
+        <Loader />
       )}
     </>
   );

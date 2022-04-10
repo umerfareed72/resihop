@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,17 @@ import {
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {AddWalletModal, CustomHeader} from '../../components';
-import {appIcons, appImages, colors, family, HP, size} from '../../utilities';
+import {
+  appIcons,
+  appImages,
+  baseURL,
+  checkConnected,
+  colors,
+  family,
+  header,
+  HP,
+  size,
+} from '../../utilities';
 import LinearGradient from 'react-native-linear-gradient';
 
 const TransactionDetails = ({navigation}) => {
