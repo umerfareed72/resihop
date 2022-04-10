@@ -6,7 +6,8 @@ import {appIcons, colors, family, profileIcon, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
 import {Image} from 'react-native-elements';
-export const RiderInfo = ({driverInfo}) => {
+import I18n from '../../../utilities/translations';
+export const RiderInfo = ({driverInfo, block, onPressBlock}) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -48,9 +49,9 @@ export const RiderInfo = ({driverInfo}) => {
             selectedStar={rating => console.log(rating)}
           />
           <View />
-          <TouchableOpacity style={styles.btnContainer}>
+          <TouchableOpacity onPress={onPressBlock} style={styles.btnContainer}>
             <Text style={styles.btnText}>
-              {!driverInfo?.blocked ? 'Block' : 'Unblcok'}
+              {block ? I18n.t('unblock') : I18n.t('block')}
             </Text>
           </TouchableOpacity>
         </View>

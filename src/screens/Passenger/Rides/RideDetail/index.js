@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {
   CustomHeader,
+  Loader,
   PaymentButtons,
   RideHistoryCard,
   RiderInfo,
@@ -20,9 +21,11 @@ import {
 import {
   appIcons,
   appImages,
+  baseURL,
   checkConnected,
   colors,
   family,
+  header,
   HP,
   size,
 } from '../../../../utilities';
@@ -33,6 +36,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {create_agoral_channel} from '../../../../redux/actions/app.action';
 import {useIsFocused} from '@react-navigation/core';
 import {create_ticket, get_help} from '../../../../redux/actions/map.actions';
+import {post, remove} from '../../../../services';
 const index = ({navigation, route}) => {
   //Redux States
   const dispatch = useDispatch(null);
@@ -42,6 +46,7 @@ const index = ({navigation, route}) => {
   //useState here
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const [block, setblock] = useState(false);
   const isFocus = useIsFocused(null);
 
   const createAgoraChannel = () => {
@@ -58,6 +63,7 @@ const index = ({navigation, route}) => {
   useEffect(() => {
     if (isFocus) {
       getHelps();
+      setblock(rides?.selected_ride_history?.drive?.user?.blocked);
     }
   }, [isFocus]);
 
@@ -134,7 +140,41 @@ const index = ({navigation, route}) => {
       />
     );
   };
-
+  const onPressBlock = async () => {
+    try {
+      const check = await checkConnected();
+      if (check) {
+        setisLoading(true);
+        setblock(!block);
+        if (!block) {
+          const requestBody = {
+            user: rides?.selected_ride_history?.drive?.user?._id,
+          };
+          const res = await post(
+            `${baseURL}blocked`,
+            requestBody,
+            await header(),
+          );
+          if (res?.data) {
+            Alert.alert('Success', 'User successfully blocked!');
+            setisLoading(false);
+          }
+        } else {
+          const res = await remove(
+            `${baseURL}blocked/${rides?.selected_ride_history?.drive?.user?._id}`,
+            await header(),
+          );
+          if (res?.data) {
+            Alert.alert('Success', 'User successfully unblocked!');
+            setisLoading(false);
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+    }
+  };
   return (
     <>
       <CustomHeader
@@ -165,6 +205,8 @@ const index = ({navigation, route}) => {
             <>
               <View style={styles.contentContainer}>
                 <RiderInfo
+                  block={block}
+                  onPressBlock={onPressBlock}
                   driverInfo={rides?.selected_ride_history?.drive?.user}
                 />
               </View>
@@ -193,6 +235,7 @@ const index = ({navigation, route}) => {
           ) : null}
         </View>
       </ScrollView>
+      {isLoading && <Loader />}
     </>
   );
 };

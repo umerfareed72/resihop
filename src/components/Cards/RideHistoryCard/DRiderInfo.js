@@ -6,8 +6,12 @@ import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
 
-export const DRiderInfo = ({passenger_info, cost_per_seat}) => {
-  console.log(passenger_info);
+export const DRiderInfo = ({
+  passenger_info,
+  cost_per_seat,
+  block,
+  onPressBlock,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -90,10 +94,8 @@ export const DRiderInfo = ({passenger_info, cost_per_seat}) => {
               }}
             />
           </View>
-          <TouchableOpacity style={styles.btnContainer}>
-            <Text style={styles.btnText}>
-              {!passenger_info?.user?.blocked ? 'Block' : 'Unblcok'}
-            </Text>
+          <TouchableOpacity onPress={onPressBlock} style={styles.btnContainer}>
+            <Text style={styles.btnText}>{!block ? 'Block' : 'Unblcok'}</Text>
           </TouchableOpacity>
         </View>
       </View>

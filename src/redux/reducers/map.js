@@ -103,7 +103,7 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         myDrivesData: payload?.filter(item => {
-          return item.status != 'NO_MATCH' && item.status != 'CANCELLED';
+          return item?.status != 'NO_MATCH' && item?.status != 'CANCELLED';
         }),
       };
     case Types.idToUpdateDrive:
@@ -202,7 +202,7 @@ export default (state = initialState, action = {}) => {
         loading: false,
         success: false,
         failure: true,
-        drive_history: payload,
+        drive_history: state?.drive_history,
       };
 
     case Types.Select_Drive_Success:

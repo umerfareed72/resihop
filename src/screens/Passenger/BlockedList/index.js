@@ -5,16 +5,16 @@ import {BlockedListCard, CustomHeader, Loader} from '../../../components';
 import I18n from '../../../utilities/translations';
 import styles from './styles';
 import {useIsFocused} from '@react-navigation/native';
-import {get, put} from '../../../services';
+import {get, post, put, remove} from '../../../services';
 import {baseURL, checkConnected, header} from '../../../utilities';
 import {Alert} from 'react-native';
 import {useSelector} from 'react-redux';
+import {deleteData} from '../../../services/apiServices';
 const BlockedList = ({navigation}) => {
   const isFocus = useIsFocused(null);
   const [blockedList, setblockedList] = useState([]);
   const [isLoading, setisLoading] = useState(false);
-  const auth = useSelector(state => state.auth);
-
+  const [block, setblock] = useState(true);
   useEffect(() => {
     if (isFocus) {
       getBlockedList();
@@ -45,15 +45,35 @@ const BlockedList = ({navigation}) => {
     try {
       const check = await checkConnected();
       if (check) {
-        const requestBody = {
-          blockedUsers: [item?.id],
-        };
-        // const res = await put(`${baseURL}users/${auth?.profile_info?.id}`);
-        // if (res?.data) {
-        // }
+        setisLoading(true);
+        setblock(!block);
+        if (!block) {
+          const requestBody = {
+            user: item?._id,
+          };
+          const res = await post(
+            `${baseURL}blocked`,
+            requestBody,
+            await header(),
+          );
+          if (res?.data) {
+            Alert.alert('Success', 'User successfully blocked!');
+            setisLoading(false);
+          }
+        } else {
+          const res = await remove(
+            `${baseURL}blocked/${item?._id}`,
+            await header(),
+          );
+          if (res?.data) {
+            Alert.alert('Success', 'User successfully unblocked!');
+            setisLoading(false);
+          }
+        }
       }
     } catch (error) {
       console.log(error);
+      setisLoading(false);
     }
   };
   return (
@@ -72,6 +92,7 @@ const BlockedList = ({navigation}) => {
                 <BlockedListCard
                   onPressBlock={() => onPressBlock(item)}
                   item={item}
+                  block={block}
                 />
               );
             }}

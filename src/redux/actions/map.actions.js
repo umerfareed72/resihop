@@ -461,10 +461,7 @@ export const get_drives_history = callBack => async dispatch => {
   } catch (error) {
     console.log('Unable to load drives', error);
     let status = error?.response?.data?.statusCode;
-    responseValidator(
-      status,
-      error?.response?.data?.message[0]?.messages[0]?.message,
-    );
+    responseValidator(status, 'Something went wrong!');
     dispatch({
       type: Types.Get_Drives_Failure,
       payload: null,

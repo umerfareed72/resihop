@@ -13,7 +13,7 @@ import {
 import RideTitle from '../../Titles/RideTitle';
 import {Image} from 'react-native-elements';
 
-export const BlockedListCard = ({item, onPressBlock}) => {
+export const BlockedListCard = ({item, onPressBlock, block}) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -86,8 +86,14 @@ export const BlockedListCard = ({item, onPressBlock}) => {
           <>
             <View style={styles.content1}>
               <View style={styles.alignRow}>
-                <Image source={appImages.user} style={styles.imageStyle} />
-                <Text style={styles.text1}>John Doe</Text>
+                <Image
+                  progressiveRenderingEnabled={true}
+                  source={{uri: item?.picture?.url || profileIcon}}
+                  style={styles.imageStyle}
+                />
+                <Text style={styles.text1}>
+                  {item?.firstName} {item?.lastName}
+                </Text>
               </View>
               <View style={styles.content1H3Style}>
                 <Icon
@@ -97,7 +103,7 @@ export const BlockedListCard = ({item, onPressBlock}) => {
                   size={11}
                 />
 
-                <Text style={styles.content1H3}>4.5</Text>
+                <Text style={styles.content1H3}>{item?.rating_d}</Text>
               </View>
             </View>
             <View style={{paddingVertical: 15}}>
@@ -107,7 +113,7 @@ export const BlockedListCard = ({item, onPressBlock}) => {
         )}
         <TouchableOpacity onPress={onPressBlock} style={styles.btnContainer}>
           <Text style={styles.btnText}>
-            {item?.blocked ? I18n.t('unblock') : I18n.t('block')}
+            {block ? I18n.t('unblock') : I18n.t('block')}
           </Text>
         </TouchableOpacity>
       </View>
