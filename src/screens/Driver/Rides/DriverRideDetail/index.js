@@ -5,31 +5,76 @@ import {
   View,
   TextInput,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {
   CustomHeader,
   DRideHistoryCard,
   DRiderInfo,
   SmallButtons,
+  SupportCard,
 } from '../../../../components';
-import {appIcons, colors, family, HP, size} from '../../../../utilities';
+import {
+  appIcons,
+  checkConnected,
+  colors,
+  family,
+  HP,
+  size,
+} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
 import {Divider, Icon} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {create_agoral_channel} from '../../../../redux/actions/app.action';
+import {useIsFocused} from '@react-navigation/core';
+import {create_ticket, get_help} from '../../../../redux/actions/map.actions';
 const index = ({navigation}) => {
   //useState here
-  const [data, setData] = useState([]);
   const {selected_drive_history} = useSelector(state => state.map);
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch(null);
+  //useState here
+  const [data, setData] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
+  const isFocus = useIsFocused(null);
+
+  const createAgoraChannel = () => {
+    const requestBody = {
+      to: auth?.profile_info?._id,
+    };
+    dispatch(
+      create_agoral_channel(requestBody, res => {
+        navigation?.navigate('CallNow');
+      }),
+    );
+  };
+
+  useEffect(() => {
+    if (isFocus) {
+      getHelps();
+    }
+  }, [isFocus]);
+
+  const getHelps = async () => {
+    const check = await checkConnected();
+    if (check) {
+      setisLoading(true);
+      dispatch(
+        get_help(res => {
+          setData(res);
+          setisLoading(false);
+        }),
+      );
+    } else {
+      Alert.alert('Error', 'Check Internet Connection!');
+    }
+  };
   //methods here
-  const updateData = ({id}) => {
+  const updateData = myItem => {
     setData(
       data.map(item => {
-        console.log('id in update DAta is  ', id);
-        if (item?.id === id) {
+        if (item?.id === myItem?.id) {
           return {
             ...item,
             expanded: !item.expanded,
@@ -43,70 +88,45 @@ const index = ({navigation}) => {
       }),
     );
   };
-  const createAgoraChannel = () => {
-    const requestBody = {
-      to: auth?.profile_info?._id,
-    };
-    dispatch(
-      create_agoral_channel(requestBody, res => {
-        navigation?.navigate('CallNow');
-      }),
-    );
+  const createTicket = async item => {
+    const check = await checkConnected();
+    if (check) {
+      setisLoading(true);
+      const requestBody = {
+        user: auth?.userInfo?.id,
+        customerQuery: item?.description,
+        question: item?.id,
+      };
+      dispatch(
+        create_ticket(requestBody, res => {
+          setisLoading(false);
+          Alert.alert('Success', 'Query submitted successfully', [
+            {
+              text: 'Ok',
+              onPress: () => {
+                navigation?.navigate('DriverHome');
+              },
+            },
+          ]);
+        }),
+      );
+    } else {
+      Alert.alert('Error', 'Check Internet Connection!');
+    }
   };
   //component here
-  const ItemView = ({data}) => {
+  const ItemView = ({item, index}) => {
     return (
-      <>
-        <View style={styles.itemView}>
-          <Text style={styles.titleText}>{data?.title}</Text>
-          <TouchableOpacity onPress={() => updateData(data)}>
-            <Icon
-              name={data?.expanded ? 'up' : 'right'}
-              color={colors.light_black}
-              size={22}
-              type={'antdesign'}
-            />
-          </TouchableOpacity>
-        </View>
-        {data?.expanded && (
-          <View>
-            <Text style={styles.descriptionText}>{data?.descripion}</Text>
-            <TextInput
-              style={{
-                height: HP('12'),
-                marginVertical: HP('2'),
-                borderRadius: 14,
-                borderColor: colors.gray_shade,
-                borderWidth: 1,
-                paddingHorizontal: 10,
-              }}
-              placeholder="Please tell us your issue."
-              placeholderTextColor={colors.gray_shade}
-              color={colors.lightGray}
-            />
-
-            <TouchableOpacity
-              style={{
-                borderRadius: 15,
-                height: HP('7'),
-                backgroundColor: colors.green,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: HP('2'),
-              }}>
-              <Text
-                style={{
-                  fontSize: size.normal,
-                  fontFamily: family.product_sans_bold,
-                  color: colors.white,
-                }}>
-                Generate Ticket
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        <Divider />
-      </>
+      <SupportCard
+        item={item}
+        onChangeText={text => {
+          item.description = text;
+        }}
+        onCreateTicket={() => {
+          createTicket(item);
+        }}
+        onPressCard={() => updateData(item)}
+      />
     );
   };
 
@@ -154,15 +174,15 @@ const index = ({navigation}) => {
                 }}
               />
             </View>
+            {data != '' ? (
+              <View style={[styles.contentContainer]}>
+                <Text style={styles.reportText}>Report</Text>
+                {data.map(item => (
+                  <ItemView item={item} />
+                ))}
+              </View>
+            ) : null}
           </>
-        ) : null}
-        {data != '' ? (
-          <View style={[styles.contentContainer]}>
-            <Text style={styles.reportText}>Report</Text>
-            {data.map(item => (
-              <ItemView data={item} />
-            ))}
-          </View>
         ) : null}
       </ScrollView>
     </>

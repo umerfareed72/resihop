@@ -96,17 +96,7 @@ const index = ({navigation}) => {
   //Get Drives
   useEffect(() => {
     if (isFocus) {
-      setisLoading(true);
-      try {
-        dispatch(
-          get_drives_history(res => {
-            setisLoading(false);
-          }),
-        );
-      } catch (error) {
-        console.log(error);
-        setisLoading(false);
-      }
+      getRides();
     }
   }, [isFocus]);
   const getRidesByOrder = item => {
@@ -119,6 +109,20 @@ const index = ({navigation}) => {
       }),
     );
   };
+  const getRides = () => {
+    setisLoading(true);
+    try {
+      dispatch(
+        get_drives_history(res => {
+          setisLoading(false);
+        }),
+      );
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+    }
+  };
+
   return (
     <>
       <CustomHeader

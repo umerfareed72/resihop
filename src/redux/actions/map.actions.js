@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as Types from '../types/map.types';
 import {GetToken, baseURL} from '../../utilities';
-import {get, put} from '../../services';
+import {get, post, put} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
 import {RIDES_CONST, DRIVE_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
@@ -552,5 +552,48 @@ export const setReturnRecurringDates = data => async dispatch => {
     });
   } catch (error) {
     console.log('Settings', error);
+  }
+};
+
+///////////////////////////////////////// Get help////////////////////////////
+
+export const get_help = callBack => async dispatch => {
+  try {
+    dispatch({type: Types.Rides_Loader, payload: true});
+    const response = await get(`questions`, await header());
+    for (let i = 0; i < response?.data.length; i++) {
+      response.data[i]['expanded'] = false;
+      response.data[i]['description'] = '';
+    }
+    dispatch({
+      type: Types.Get_Help_Success,
+      payload: response.data,
+    });
+    callBack(response.data);
+  } catch (error) {
+    let status = error?.response?.data?.statusCode;
+    responseValidator(status, '');
+    dispatch({
+      type: Types.Get_Help_Failure,
+      payload: null,
+    });
+  }
+};
+
+export const create_ticket = (data, callBack) => async dispatch => {
+  try {
+    const response = await post(`help-supports`, data, await header());
+    dispatch({
+      type: Types.Create_Ticket_Success,
+      payload: response.data,
+    });
+    callBack(response.data);
+  } catch (error) {
+    let status = error?.response?.data?.statusCode;
+    responseValidator(status, 'Something went wrong!');
+    dispatch({
+      type: Types.Create_Ticket_Failure,
+      payload: null,
+    });
   }
 };

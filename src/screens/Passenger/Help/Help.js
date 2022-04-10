@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,70 +8,45 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {CustomHeader} from '../../../components';
-import {colors, family, HP, size} from '../../../utilities';
+import {CustomHeader, Loader, SupportCard} from '../../../components';
+import {checkConnected, colors, family, HP, size} from '../../../utilities';
 import {Divider, Icon} from 'react-native-elements';
-
+import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {create_ticket, get_help} from '../../../redux/actions/map.actions';
+import {Alert} from 'react-native';
 const Help = ({navigation}) => {
-  //useState here
-  const [data, setData] = useState([
-    {
-      id: 1,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 2,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 3,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 4,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 5,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 6,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 7,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-  ]);
+  const isFocus = useIsFocused(null);
+  const dispatch = useDispatch(null);
+  const [data, setData] = useState(null);
+  const [isLoading, setisLoading] = useState(false);
+  const auth = useSelector(state => state.auth);
 
+  useEffect(() => {
+    if (isFocus) {
+      getHelps();
+    }
+  }, [isFocus]);
+
+  const getHelps = async () => {
+    const check = await checkConnected();
+    if (check) {
+      setisLoading(true);
+      dispatch(
+        get_help(res => {
+          setData(res);
+          setisLoading(false);
+        }),
+      );
+    } else {
+      Alert.alert('Error', 'Check Internet Connection!');
+    }
+  };
   //methods here
-  const updateData = ({id}) => {
+  const updateData = myItem => {
     setData(
       data.map(item => {
-        console.log('id in update DAta is  ', id);
-        if (item?.id === id) {
+        if (item?.id === myItem?.id) {
           return {
             ...item,
             expanded: !item.expanded,
@@ -85,62 +60,45 @@ const Help = ({navigation}) => {
       }),
     );
   };
-
+  const createTicket = async item => {
+    const check = await checkConnected();
+    if (check) {
+      setisLoading(true);
+      const requestBody = {
+        user: auth?.userInfo?.id,
+        customerQuery: item?.description,
+        question: item?.id,
+      };
+      dispatch(
+        create_ticket(requestBody, res => {
+          setisLoading(false);
+          Alert.alert('Success', 'Query submitted successfully', [
+            {
+              text: 'Ok',
+              onPress: () => {
+                navigation?.navigate('PassengerHome');
+              },
+            },
+          ]);
+        }),
+      );
+    } else {
+      Alert.alert('Error', 'Check Internet Connection!');
+    }
+  };
   //component here
-  const ItemView = ({data}) => {
-    console.log('data value in item view is   ', data);
+  const ItemView = ({item, index}) => {
     return (
-      <>
-        <View style={styles.itemView}>
-          <Text style={styles.titleText}>{data?.title}</Text>
-          <TouchableOpacity onPress={() => updateData(data)}>
-            <Icon
-              name={data?.expanded ? 'up' : 'right'}
-              color={colors.light_black}
-              size={22}
-              type={'antdesign'}
-            />
-          </TouchableOpacity>
-        </View>
-        {data?.expanded && (
-          <View>
-            <Text style={styles.descriptionText}>{data?.descripion}</Text>
-            <TextInput
-              style={{
-                height: HP('12'),
-                marginVertical: HP('2'),
-                borderRadius: 14,
-                borderColor: colors.gray_shade,
-                borderWidth: 1,
-                paddingHorizontal: 10,
-              }}
-              placeholder="Please tell us your issue."
-              placeholderTextColor={colors.gray_shade}
-              color={colors.lightGray}
-            />
-
-            <TouchableOpacity
-              style={{
-                borderRadius: 15,
-                height: HP('7'),
-                backgroundColor: colors.green,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: HP('2'),
-              }}>
-              <Text
-                style={{
-                  fontSize: size.normal,
-                  fontFamily: family.product_sans_bold,
-                  color: colors.white,
-                }}>
-                Submit
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        <Divider />
-      </>
+      <SupportCard
+        item={item}
+        onChangeText={text => {
+          item.description = text;
+        }}
+        onCreateTicket={() => {
+          createTicket(item);
+        }}
+        onPressCard={() => updateData(item)}
+      />
     );
   };
 
@@ -155,11 +113,12 @@ const Help = ({navigation}) => {
         <ScrollView>
           <View style={styles.mainContainer}>
             <Text style={styles.reportText}>Report</Text>
-            {data.map(item => (
-              <ItemView data={item} />
+            {data?.map(item => (
+              <ItemView item={item} />
             ))}
           </View>
         </ScrollView>
+        {isLoading && <Loader />}
       </SafeAreaView>
     </>
   );

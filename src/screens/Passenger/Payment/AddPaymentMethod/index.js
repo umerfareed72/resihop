@@ -81,12 +81,10 @@ const index = ({navigation, route}) => {
   const getCards = async () => {
     const check = await checkConnected();
     if (check) {
-      console.log(auth?.profile_info);
-
       if (auth?.profile_info?.stripe_customer?.stripeID || !payment?.move) {
         dispatch(
           get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
-            console.log('Cards', res);
+            console.log('Cards');
           }),
         );
       } else {

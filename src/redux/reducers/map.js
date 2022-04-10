@@ -38,6 +38,7 @@ const initialState = {
   recurring_dates: [],
   return_recurring_dates: [],
   city_ride: false,
+  get_helps: [],
 };
 
 export default (state = initialState, action = {}) => {
@@ -291,6 +292,24 @@ export default (state = initialState, action = {}) => {
         failure: true,
         recurring_drive: state.recurring_ride,
       };
+
+    case Types.Get_Help_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        get_helps: payload,
+      };
+    case Types.Get_Help_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        get_helps: state.recurring_ride,
+      };
+
     case Types.Set_Recurring_Dates:
       return {
         ...state,

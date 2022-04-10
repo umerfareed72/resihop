@@ -10,7 +10,7 @@ import {
 export const responseValidator = (code, msg) => {
   Alert.alert(
     'Error',
-    msg,
+    msg || 'Something went wrong!',
     [{text: 'ok', onPress: () => console.log('Cancelled')}],
     {cancelable: false},
   );
