@@ -33,6 +33,7 @@ import {create_agoral_channel} from '../../../../redux/actions/app.action';
 import {useIsFocused} from '@react-navigation/core';
 import {create_ticket, get_help} from '../../../../redux/actions/map.actions';
 import {post, remove} from '../../../../services';
+import {FlatList} from 'react-native';
 const index = ({navigation}) => {
   //useState here
   const {selected_drive_history} = useSelector(state => state.map);
@@ -42,8 +43,6 @@ const index = ({navigation}) => {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const isFocus = useIsFocused(null);
-  const [block, setblock] = useState(false);
-
   const createAgoraChannel = () => {
     const requestBody = {
       to: auth?.profile_info?._id,
@@ -58,7 +57,6 @@ const index = ({navigation}) => {
   useEffect(() => {
     if (isFocus) {
       getHelps();
-      setblock(selected_drive_history?.user?.blocked);
     }
   }, [isFocus]);
 
@@ -136,16 +134,18 @@ const index = ({navigation}) => {
     );
   };
 
-  const onPressBlock = async () => {
+  const onPressBlock = async (item, index) => {
     try {
       const check = await checkConnected();
       if (check) {
         setisLoading(true);
-        setblock(!block);
-        if (!block) {
+        selected_drive_history.rides[index].user.blocked =
+          !selected_drive_history.rides[index].user.blocked;
+        if (item?.user.blocked) {
           const requestBody = {
-            user: selected_drive_history?.user?._id,
+            user: item?.user?._id,
           };
+          console.log(requestBody);
           const res = await post(
             `${baseURL}blocked`,
             requestBody,
@@ -157,7 +157,7 @@ const index = ({navigation}) => {
           }
         } else {
           const res = await remove(
-            `${baseURL}blocked/${selected_drive_history?.user?._id}`,
+            `${baseURL}blocked/${item?.user?._id}`,
             await header(),
           );
           if (res?.data) {
@@ -189,14 +189,22 @@ const index = ({navigation}) => {
         <View style={styles.separator} />
         {selected_drive_history?.status == 'COMPLETED' ? (
           <>
-            <View style={styles.contentContainer}>
-              <DRiderInfo
-                cost_per_seat={selected_drive_history?.costPerSeat}
-                passenger_info={selected_drive_history}
-                onPressBlock={onPressBlock}
-                block={block}
-              />
-            </View>
+            <FlatList
+              data={selected_drive_history?.rides}
+              renderItem={({item, index}) => {
+                return (
+                  <View style={styles.contentContainer}>
+                    <DRiderInfo
+                      cost_per_seat={selected_drive_history?.costPerSeat}
+                      passenger_info={item}
+                      onPressBlock={() => onPressBlock(item, index)}
+                      block={item?.user?.blocked}
+                    />
+                  </View>
+                );
+              }}
+            />
+
             <View style={styles.separator} />
             <View
               style={[

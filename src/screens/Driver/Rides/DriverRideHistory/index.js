@@ -167,9 +167,8 @@ const index = ({navigation}) => {
             />
           </View>
         ) : (
-          false
+          <BlankField title={'No Drive Completed Yet.'} />
         )}
-        <BlankField title={'No Drive Completed Yet.'} />
       </View>
       <DRideFilterModal
         time={TimeList}
