@@ -31,7 +31,7 @@ const index = ({navigation, route}) => {
           {!time && (
             <ApprovalCard
               h1={I18n.t('waiting_approval')}
-              h2={I18n.t('lorem')}
+              h2={I18n.t('lorem_epsom3')}
               btnText={I18n.t('switch_passenger')}
               height={120}
               width={111}
@@ -54,7 +54,7 @@ const index = ({navigation, route}) => {
               btnText={I18n.t('set_driver')}
               height={120}
               width={111}
-              h3={I18n.t('lorem')}
+              h3={I18n.t('lorem_epsom4')}
               fontSize={size.large}
               textColor={colors.light_black}
               fontFamily={family.product_sans_bold}

@@ -25,34 +25,12 @@ const OtpValidator = ({
   const refTimer = useRef();
   const numRef = useRef();
 
-  // const onSelect = country => {
-  //   setCountry(country);
-  //   numRef.current.focus();
-  // };
-
   const [timerEnd, setTimerEnd] = useState(false);
   const timerCallbackFunc = timerFlag => {
     // Setting timer flag to finished
     setTimerEnd(timerFlag);
     setOtpArea(!otpArea);
   };
-
-  // const onSendCodePress = () => {
-  //   Keyboard.dismiss();
-  //   if (phoneNum === '') {
-  //     ToastAndroid.show(I18n.t('please_enter_phone_msg'), ToastAndroid.LONG);
-  //     return;
-  //   }
-  //   setOtpArea(true);
-  //   const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-  //   reactotron.log(phone);
-  //   reactotron.log(phoneNum);
-  //   // if (!isSignUp) {
-
-  //   // } else {
-  //   //   // goToHome();
-  //   // }
-  // };
 
   return (
     <View style={styles.viewCon}>
@@ -97,7 +75,7 @@ const OtpValidator = ({
           maxLength={14}
         />
         <Button
-          title={timerEnd ? 'Resend Code' : 'Send Code'}
+          title={timerEnd ? I18n.t('resend_code') : I18n.t('send_code')}
           onPress={onSendCodePress}
           disabled={otpCodeArea}
           buttonStyle={[theme.Button.buttonStyle]}

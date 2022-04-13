@@ -59,7 +59,7 @@ function index({navigation}) {
             {I18n.t('welcome_to_resihop_msg')}
           </Text>
           <Text style={[theme.Text.h4Normal, styles.sayingText]}>
-            {I18n.t('dummy_ipsum_msg_small')}
+            {I18n.t('lorum_epsom2')}
           </Text>
         </View>
         <View style={styles.permissionContainer}>

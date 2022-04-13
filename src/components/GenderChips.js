@@ -4,12 +4,6 @@ import {Chip} from 'react-native-elements';
 import {GENDER_CHIP, gender_type_enum} from '../shared-types';
 import {fonts, theme} from '../theme';
 
-const gender = {
-  Male: 'Male',
-  Female: 'Female',
-  Other: 'Other',
-};
-
 const GenderChips = ({onChipPress, horizontal = true, genderArray}) => {
   const [data, setData] = useState(genderArray);
   return (

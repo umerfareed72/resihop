@@ -42,9 +42,9 @@ const user = {
 };
 
 const gender = {
-  Male: 'male',
-  Female: 'female',
-  Other: 'other',
+  Male: I18n.t('male'),
+  Female: I18n.t('female'),
+  Other: I18n.t('other'),
 };
 const littleChips = [
   {
@@ -63,6 +63,25 @@ const littleChips = [
     isSelected: false,
   },
 ];
+
+const littleChips2 = [
+  {
+    key: 0,
+    text: gender.Male,
+    isSelected: false,
+  },
+  {
+    key: 1,
+    text: gender.Female,
+    isSelected: false,
+  },
+  {
+    key: 2,
+    text: gender.Other,
+    isSelected: false,
+  },
+];
+
 function PersonalDetails(props) {
   const dispatch = useDispatch(null);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
@@ -164,7 +183,7 @@ function PersonalDetails(props) {
               console.log(res);
               Alert.alert(
                 'Success',
-                'Your personal details successfuly saved',
+                I18n.t('personal_info_success'),
                 [
                   {
                     text: 'OK',
@@ -227,7 +246,7 @@ function PersonalDetails(props) {
                   setIsLoading(false);
                   Alert.alert(
                     'Success',
-                    'Your personal details successfuly saved',
+                    I18n.t('personal_info_success'),
                     [
                       {
                         text: 'OK',
@@ -461,6 +480,7 @@ function PersonalDetails(props) {
                       onChipPress={chips => {
                         setGenderType(chips[0].text);
                       }}
+                      genderArray={littleChips2}
                     />
                     <UploadImage
                       profile_url={''}

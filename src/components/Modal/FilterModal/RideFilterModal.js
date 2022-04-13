@@ -169,30 +169,27 @@ export const RideFilterModal = ({
     return (
       <View style={styles.listContainer}>
         <Text style={styles.listh1}>{data?.title}</Text>
+
         <FlatList
-          data={data?.items}
+          data={data}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           renderItem={({item}) => {
             return (
-              <>
-                <TouchableOpacity
-                  style={styles.itemImageContainer}
-                  onPress={() => {
-                    onPressseats(item);
-                  }}>
-                  <Image
-                    style={[
-                      styles.itemImageStyle,
-                      {
-                        tintColor:
-                          item === selectedSeats ? colors.green : colors.blue,
-                      },
-                    ]}
-                    source={item?.icon}
-                  />
-                </TouchableOpacity>
-              </>
+              <TouchableOpacity
+                style={styles.itemImageContainer}
+                key={item}
+                onPress={() => onPressseats(item)}>
+                <Image
+                  source={
+                    item <= selectedSeats
+                      ? appImages.seatGreen
+                      : appImages.seatBlue
+                  }
+                  resizeMode="contain"
+                  style={[styles.itemImageStyle]}
+                />
+              </TouchableOpacity>
             );
           }}
         />

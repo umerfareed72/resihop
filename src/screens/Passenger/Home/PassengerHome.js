@@ -42,6 +42,7 @@ import {
   setReturnMapDestination,
   get_settings,
   setCity,
+  setAvailableSeats,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -106,18 +107,6 @@ const DateList = {
   ],
 };
 
-const seatsList = {
-  id: 5,
-  title: 'Seat',
-  items: [
-    {id: 1, icon: appImages.seatBlue},
-    {id: 2, icon: appImages.seatBlue},
-    {id: 3, icon: appImages.seatBlue},
-    {id: 4, icon: appImages.seatBlue},
-    {id: 5, icon: appImages.seatBlue},
-    {id: 6, icon: appImages.seatBlue},
-  ],
-};
 const PassengerHome = ({navigation}) => {
   let dispatch = useDispatch();
   let isFocused = useIsFocused();
@@ -128,10 +117,10 @@ const PassengerHome = ({navigation}) => {
   const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
-  const [seats, setSeats] = useState('');
+  const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [selectedCard, setSelectedCard] = useState([]);
   const auth = useSelector(state => state.auth);
-  const myRidesData = useSelector(state => state.map.myRidesData);
+  const {myRidesData, availableSeats} = useSelector(state => state.map);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
   const [multiDelete, setmultiDelete] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -142,6 +131,9 @@ const PassengerHome = ({navigation}) => {
       dispatch(move_from_drawer(true, () => {}));
       dispatch(get_settings());
     }
+    return () => {
+      dispatch(setAvailableSeats(0));
+    };
   }, [isFocused]);
   const getRides = async () => {
     dispatch(
@@ -232,10 +224,6 @@ const PassengerHome = ({navigation}) => {
 
   const selectRideType = val => {
     setRideType(val);
-  };
-
-  const selectSeats = val => {
-    setSeats(val);
   };
 
   const selectdDate = val => {
@@ -497,13 +485,13 @@ const PassengerHome = ({navigation}) => {
       </SafeAreaView>
       <RideFilterModal
         time={TimeList}
-        seats={seatsList}
+        seats={seats}
         rideType={rideTypeList}
         status={RideStatusList}
         date={DateList}
         onPressdate={selectdDate}
         onPressrideType={selectRideType}
-        onPressseats={selectSeats}
+        onPressseats={item => dispatch(setAvailableSeats(item))}
         onPresstime={selectTime}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
@@ -511,7 +499,7 @@ const PassengerHome = ({navigation}) => {
         selectedDate={date}
         selectedStatus={status}
         selectedRideType={ridetype}
-        selectedSeats={seats}
+        selectedSeats={availableSeats}
         onPressReset={resetFilter}
         onApply={() => {
           filterModalRef.current.close();

@@ -38,8 +38,7 @@ export const vahicleFormSchema = Yup.object().shape({
 });
 
 function VehicleInformation(props) {
-  const userid = useSelector(state => state.auth?.userdata?.user?._id);
-  const switching = useSelector(state => state.auth?.switching);
+  const auth = useSelector(state => state.auth);
   const vehicle = useSelector(state => state.auth?.is_vehicle);
   const [licencePlateNumber, setLicencePlateNumber] = useState('');
   const [carMakerCompany, setCarMakerCompany] = useState('');
@@ -127,7 +126,7 @@ function VehicleInformation(props) {
   const addVehicelInfo = async () => {
     setIsLoading(true);
     const requestBody = {
-      user: userid,
+      user: auth?.profile_info?._id,
       color: carColor,
       licencePlateNumber: licencePlateNumber,
       vehicleModelName: carModel,
@@ -137,13 +136,20 @@ function VehicleInformation(props) {
     };
     try {
       const response = await put(
-        `vehicles/${userid}`,
+        `vehicles/${auth?.profile_info?.vehicle?._id}`,
         requestBody,
         await header(),
       );
       if (response?.data) {
         setIsLoading(false);
-        Alert.alert('Success', 'Vehicle Info updated Successfully');
+        Alert.alert('Success', 'Vehicle Info updated Successfully', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              props?.navigation?.navigate('DriverHome');
+            },
+          },
+        ]);
       }
     } catch (error) {
       setIsLoading(false);

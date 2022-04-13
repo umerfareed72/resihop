@@ -183,7 +183,7 @@ function index(props) {
           setIsLoading(false);
           Alert.alert(
             'Success',
-            'Vehicle Info Added Successfully',
+            I18n.t('vehicle_info_success'),
             [
               {
                 text: 'OK',

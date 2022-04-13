@@ -94,7 +94,7 @@ function splash(props) {
           resizeMode={'contain'}
         />
         <Text style={{color: 'green', fontSize: 25, marginTop: '-4%'}}>
-          RES IHOP
+          {I18n.t('app_title')}
         </Text>
       </View>
     </View>

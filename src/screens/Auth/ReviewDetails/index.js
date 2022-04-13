@@ -7,7 +7,7 @@ import {CustomHeader, Loader} from '../../../components';
 import {post} from '../../../services';
 import {theme} from '../../../theme';
 import {colors, header} from '../../../utilities';
-
+import I18n from '../../../utilities/translations';
 function index(props) {
   const [info, setInfo] = useState([
     {
@@ -39,7 +39,7 @@ function index(props) {
         setIsLoading(false);
         Alert.alert(
           'Success',
-          'Vehicle Info Added Successfully',
+          I18n.t('vehicle_info_success'),
           [
             {
               text: 'OK',
@@ -60,42 +60,44 @@ function index(props) {
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
         <CustomHeader
-          title={'Review Your Details'}
+          title={I18n.t('review_title')}
           backButton={true}
           navigation={props?.navigation}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{margin: 20}}>
             <Text style={[theme.Text.h2Bold, {fontSize: 16}]}>
-              {'Vahicle information'}
+              {I18n.t('vehicle_information')}
             </Text>
             <View style={styles.textContainer}>
-              <Text style={theme.Text.h4Normal}>{'Licence Plate'}</Text>
+              <Text style={theme.Text.h4Normal}>{I18n.t('license_plate')}</Text>
               <View style={{width: '35%'}}>
                 <Text style={theme.Text.h4Normal}>{plateNumber}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
-              <Text style={theme.Text.h4Normal}>{'Car Company'}</Text>
+              <Text style={theme.Text.h4Normal}>{I18n.t('car_company')}</Text>
               <View style={{width: '35%'}}>
                 <Text style={theme.Text.h4Normal}>{CarMake}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
-              <Text style={theme.Text.h4Normal}>{'Model Name'}</Text>
+              <Text style={theme.Text.h4Normal}>{I18n.t('modal_name')}</Text>
               <View style={{width: '35%'}}>
                 <Text style={theme.Text.h4Normal}>{CarModel}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
-              <Text style={theme.Text.h4Normal}>{'Vahicle Colour'}</Text>
+              <Text style={theme.Text.h4Normal}>
+                {I18n.t('vehicle_colour')}
+              </Text>
               <View style={{width: '35%'}}>
                 <Text style={theme.Text.h4Normal}>{Colour}</Text>
               </View>
             </View>
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>
-                {'CO2 EMISSIONS (g CO2 / km)'}
+                {I18n.t('vehicle_emission')}
               </Text>
               <View style={{width: '35%'}}>
                 <Text style={theme.Text.h4Normal}>{EngineSize}</Text>
@@ -103,7 +105,7 @@ function index(props) {
             </View>
             <View style={styles.textContainer}>
               <Text style={theme.Text.h4Normal}>
-                {'Preset cost for each passenger'}
+                {I18n.t('cost_percentage')}
               </Text>
               <View style={{width: '35%'}}>
                 <Text style={theme.Text.h4Normal}>{PresetCost} NOK</Text>
@@ -115,7 +117,7 @@ function index(props) {
                 marginTop: '15%',
               }}>
               <Button
-                title={'OK'}
+                title={I18n.t('ok')}
                 onPress={() => addVehicelInfo()}
                 buttonStyle={[theme.Button.buttonStyle]}
                 disabled={PresetCost != null && CarMake != '' ? false : true}
@@ -127,7 +129,7 @@ function index(props) {
                 }}
               />
               <Button
-                title={'Edit'}
+                title={I18n.t('edit')}
                 onPress={() => {
                   props.navigation.navigate('VahicleInformation');
                 }}

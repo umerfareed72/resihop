@@ -1,4 +1,7 @@
 export default {
+  // Splash Screem
+  app_title: 'RES IHOP',
+
   //Language Page Strings
   select_language_title: 'Select Your Language',
   next: 'Next',
@@ -10,47 +13,26 @@ export default {
   login: 'Login',
   sign_up: 'Sign up',
   sign_in: 'Sign in',
+  resend_code: 'Resend Code',
+  send_code: 'Send Code',
+  user_not_exists: 'User not exists',
+  signup_error: 'User Alredy Registered',
+  signup_success: 'User Registered Successfully',
+  otp_inavlid: 'Invalid code.',
+  invalid_phone_msg: 'Please Enter Valid Phone Number',
+  invalid_otp_msg: 'Your Phone Number is not valid',
+
+  // Personal Info Screen
+  personal_info_success: 'Your personal details successfuly saved',
+  male: 'male',
+  female: 'female',
+  other: 'other',
   sign_in_with_bank_id: 'Sign with Bank ID',
   upload_profile_picture_text: 'Upload Profile Picture',
   email_address_text: 'Email Address',
   vehicle_information: 'Vehicle Information',
   enter_vehicle_information: 'Enter Your Vehicle Information',
   personal_details_text: 'Personal Details',
-  get_details_text: 'get details',
-  license_plate_text: 'License plate',
-  invalid_phone_msg: 'Please Enter Valid Phone Number',
-  invalid_otp_msg: 'Your Phone Number is not valid',
-  user_not_exists: 'User not exists',
-  signup_error: 'User Alredy Registered',
-  signup_success: 'User Registered Successfully',
-  otp_inavlid: 'Invalid code.',
-  //Approval Screen
-  waiting_approval: 'Waiting For Approval',
-  approved_desc:
-    'You can always switch back to Driver in the app with just one click!',
-  congratulation: 'Congratulations!',
-  registered_driver: 'Your Driver Registration has \n been Approved',
-  set_driver: 'Set your First Drive',
-  register: 'Register',
-
-  //Passenger Home
-  passenger_home: 'Passenger Home',
-  switch_driver: 'Switch to Driver',
-  create_ride: 'Create Ride',
-  recurring_ride: 'My Recurring Rides',
-  city_to_city: 'City to City Rides',
-  upcoming_rides: 'My Upcoming Rides',
-  lorem:
-    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
-  first_ride: 'Create your First Ride',
-  success_payment: 'Transaction Successful!',
-  failed_payment: 'Your amount exceeds Balance',
-  review_details: 'Review Your Details',
-  car_company_text: 'Car Company',
-  model_name_text: 'Model Name',
-  vehicle_colour_text: 'Vehicle Colour',
-  co2_emission_text: 'CO2 EMISSIONS (g CO2 / km)',
-  enter_your_personal_details_text: 'Enter Your Personal Details',
   gender_text: 'Gender',
   upload_profile_picture_text: 'Upload Profile Picture',
   first_name_text: 'First Name',
@@ -77,6 +59,12 @@ export default {
   by_clicking_bank_id_text: `By Clicking “Sign with Bank ID" button,`,
   i_agree_to_res_ihop: 'I agree to RES IHOP',
   incorrect_ref_code: 'Incorrect Referral code',
+
+  // Vehcile Info Screen
+  get_details_text: 'get details',
+  license_plate_text: 'License plate',
+  vehicle_info_success: 'Vehicle Info Added Successfully',
+  review_details: 'Review Your Details',
   edit: 'Edit',
   continue: 'Continue',
   vehicle_information: 'Vehicle Information',
@@ -91,11 +79,39 @@ export default {
   cost_detail: '(You can always change it when setting new drive)',
   terms_and_condition_text: 'Terms and Conditions',
   walkthrough_msg_one: `Offer empty places in the car on the way to work and get compensation from those who travel. Don't worry, we take care of all connections, you just input you route.`,
-  dummy_ipsum_msg: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,`,
-  dummy_ipsum_msg_small: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
+  lorem_epsom1: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,`,
+  lorem_epsom2: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
   welcome_to_resihop_msg: 'Welcome To Res ihop',
-  add_to_wallet: 'Add Money to Wallet',
   ok: 'OK',
+  //Review Screen
+  review_title: 'Review Your Details',
+
+  //Approval Screen
+  waiting_approval: 'Waiting For Approval',
+  lorem_epsom3: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
+  lorem_epsom4: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
+
+  approved_desc:
+    'You can always switch back to Driver in the app with just one click!',
+  congratulation: 'Congratulations!',
+  registered_driver: 'Your Driver Registration has \n been Approved',
+  set_driver: 'Set your First Drive',
+  register: 'Register',
+
+  //Passenger Home
+  add_to_wallet: 'Add Money to Wallet',
+  passenger_home: 'Passenger Home',
+  switch_driver: 'Switch to Driver',
+  create_ride: 'Create Ride',
+  recurring_ride: 'My Recurring Rides',
+  city_to_city: 'City to City Ride',
+  upcoming_rides: 'My Upcoming Ride',
+  lorem:
+    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+  first_ride: 'Create your First Ride',
+  success_payment: 'Transaction Successful!',
+  failed_payment: 'Your amount exceeds Balance',
+
   //Passenger
   create_ride: 'Create Ride',
   //Payment Method
@@ -333,4 +349,10 @@ export default {
   //
   ride_delete_h2: 'Are you sure you want to Cancel this ride?',
   ride_delete_h1: 'Cancel',
+
+  //Connection Error
+  connection_error: 'Connection Error',
+  error_description:
+    'Oops! Looks like your device is not connected to the Internet.',
+  try_again: 'Try Again',
 };
