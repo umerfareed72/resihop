@@ -20,7 +20,7 @@ import {
   appIcons,
 } from '../../../utilities';
 import {PaymentButtons} from '../../Buttons/Payment/PaymentButtons';
-
+import I18n from '../../../utilities/translations';
 export const RideFilterModal = ({
   h1,
   h2,
@@ -211,9 +211,13 @@ export const RideFilterModal = ({
       }}>
       <View style={styles.container}>
         <View style={styles.alignRow}>
-          <Text style={styles.h1}>{h1}Filters</Text>
+          <Text style={styles.h1}>
+            {h1} {I18n.t('filter')}
+          </Text>
           <TouchableOpacity onPress={onPressReset}>
-            <Text style={styles.h2}>{h2}Reset</Text>
+            <Text style={styles.h2}>
+              {h2} {I18n.t('reset')}
+            </Text>
           </TouchableOpacity>
         </View>
         <ScrollView

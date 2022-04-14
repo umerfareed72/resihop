@@ -183,7 +183,9 @@ const DriverDrawerComponent = ({navigation}) => {
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableOpacity style={styles.buttonContainer}>
-                <Text style={styles.passengerStyle}>Passenger</Text>
+                <Text style={styles.passengerStyle}>
+                  {I18n.t('fav_passenger')}
+                </Text>
                 <Icon
                   name={'star'}
                   type={'entypo'}
@@ -195,7 +197,9 @@ const DriverDrawerComponent = ({navigation}) => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.buttonContainer2}>
-                <Text style={styles.passengerStyle}>Driver</Text>
+                <Text style={styles.passengerStyle}>
+                  {I18n.t('fav_driver')}
+                </Text>
                 <Icon
                   name={'star'}
                   type={'entypo'}

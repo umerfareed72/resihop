@@ -267,7 +267,7 @@ const RideStatusCards = ({
                     ride?.pool_match?.costPerSeat ||
                     ride?.drive?.costPerSeat
                   } `}
-                  <Text style={{fontSize: 12}}>(per seat)</Text>
+                  <Text style={{fontSize: 12}}>{I18n.t('per_seat')}</Text>
                 </Text>
 
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -368,7 +368,7 @@ const RideStatusCards = ({
                   }
                   navigation.navigate('BookingDetails');
                 }}>
-                <Text style={styles.btnTxt}>{'Book Now'}</Text>
+                <Text style={styles.btnTxt}>{I18n.t('book_now')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {

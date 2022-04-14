@@ -69,7 +69,7 @@ const AvailableDrivers = ({
               style={styles.greenSeat}
             />
             <Text style={styles.seatTxt}>
-              {`${createRideResponse?.requiredSeats} Seats`}
+              {`${createRideResponse?.requiredSeats} ${I18n.t('seats')}`}
             </Text>
           </View>
         </View>
@@ -133,10 +133,9 @@ const AvailableDrivers = ({
                 resizeMode="contain"
                 style={styles.seatGreen}
               />
-              <Text
-                style={
-                  styles.seatNum
-                }>{`${nearestDriver?.drive.availableSeats} Seat Available`}</Text>
+              <Text style={styles.seatNum}>{`${
+                nearestDriver?.drive.availableSeats
+              }  ${I18n.t('availableSeats')}`}</Text>
             </View>
             <View style={styles.carDetailsTxt}>
               <Text style={styles.carDetails}>
@@ -168,13 +167,9 @@ const AvailableDrivers = ({
             <TouchableOpacity
               style={styles.btnContainer}
               onPress={() => {
-                console.log(searchDrivesResponse);
                 searchDrivesResponse.length > 1
                   ? navigation.navigate('AvailableDrivers', {btnText: btnText})
-                  : Alert.alert(
-                      'Message!',
-                      'Currently No More Drivers Available',
-                    );
+                  : Alert.alert(I18n.t('message'), I18n.t('no_driver'));
               }}>
               <Text style={styles.btnTxt}>{I18n.t('show_all_drivers')}</Text>
             </TouchableOpacity>

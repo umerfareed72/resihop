@@ -155,6 +155,7 @@ export default {
   ride_type: 'Ride Type',
   date: 'Date',
   seat: 'Seat',
+  per_seat: '(per seat)',
   sort_by_date_as: 'Sort by Date (Ascending Order)',
   sort_by_date_ds: 'Sort by Date (Descending Order)',
   sort_by_date_ao: 'Sort by Destination (A-Ö)',
@@ -185,6 +186,7 @@ export default {
   departure_time_desc: '(Add a time bracket when you want ride for return)',
   to: 'To',
   available_drivers: 'Available Drivers',
+  drivers: `Driver's`,
   booking_detail: 'Booking Details',
   apply: 'Apply',
   //Notification Settings
@@ -205,11 +207,16 @@ export default {
   fav_driver: 'Driver',
   fav_passenger: 'Passenger',
   fav_location: 'Location',
+  pickup_time: 'Pickup Time',
+  rate_drive: 'Rate your Drive Experience',
 
   //Reports
   report: 'Reports',
   rep_earning: 'Earnings',
   rep_spending: 'Spendings',
+
+  //DRide Info
+  your_rate: 'Your Rate',
   //Reports Spending
   rep_month: 'This Month',
   rep_year: 'This Year',
@@ -309,6 +316,7 @@ export default {
   //Drive Status Card
   booked_passengers: 'Booked Passenger(s)',
   update: 'Update',
+  delete_drives: 'Delete Drives',
   copy: 'Copy',
   cancel: 'Cancel',
   calls_allowed_txt:
@@ -337,15 +345,17 @@ export default {
   pickUp_info: 'Pickup Info',
   start_trip: 'Start Trip',
   rate_driver: 'Rate Driver',
-
+  coming_to_start_location: 'Coming to my Start Location',
+  book_now: 'Book Now',
   //Start Matching sheet
   walk_to_pickUp: 'Walk Distance to pick up Location',
   start_matching: 'Start Matching',
-
+  seats: 'Seats',
   ride: 'Ride',
   address_placeholder: '123 abc apartment abc street abc...',
   availableSeats: 'Available Seats',
-
+  no_driver: 'Currently No More Drivers Available',
+  message: 'Message',
   //
   ride_delete_h2: 'Are you sure you want to Cancel this ride?',
   ride_delete_h1: 'Cancel',
@@ -355,4 +365,22 @@ export default {
   error_description:
     'Oops! Looks like your device is not connected to the Internet.',
   try_again: 'Try Again',
+
+  //Support
+  support_title: 'Please tell us your issue.',
+  submit: 'Submit',
+
+  loading: 'Loading',
+  camera: 'Camera',
+  gallery: 'Gallery',
+  select_calender_year: 'Select Calendar Year',
+  delete_ride: 'Delete Selected Rides',
+  delete_rides: 'Delete Rides',
+  close_modal: 'Close Modal',
+  filter: 'Filter',
+  reset: 'Reset',
+  sort_by: 'Sort By',
+  no_fav_location: 'No Favourite Location',
+  report: 'Report',
+  tripDateTime: 'Trip Date & Time:',
 };

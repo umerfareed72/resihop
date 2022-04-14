@@ -166,7 +166,7 @@ const DriveStatus = ({route}) => {
               resizeMode="contain"
               style={styles.arrowBack}
             />
-            <Text style={styles.driver}>Driver's</Text>
+            <Text style={styles.driver}>{I18n.t('drivers')}</Text>
           </View>
         </TouchableOpacity>
       </View>

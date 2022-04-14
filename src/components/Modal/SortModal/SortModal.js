@@ -77,7 +77,7 @@ export const SortModal = ({show, onPress}) => {
       }}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerStyle}>Sort By</Text>
+          <Text style={styles.headerStyle}>{I18n.t('sort_by')}</Text>
         </View>
         <FlatList data={items} renderItem={renderItems} />
       </View>

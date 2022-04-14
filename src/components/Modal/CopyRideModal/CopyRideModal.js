@@ -1,6 +1,7 @@
 import React from 'react';
 import {Modal, StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import {colors} from '../../../utilities';
+import I18n from '../../../utilities/translations';
 
 const CopyRideModal = ({
   modalVisible,
@@ -24,12 +25,12 @@ const CopyRideModal = ({
               <TouchableOpacity
                 style={styles.yesBtnContainer}
                 onPress={() => handleCopyRide()}>
-                <Text style={{color: colors.white}}>Yes</Text>
+                <Text style={{color: colors.white}}>{I18n.t('yes')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.cancelBtnContainer}
                 onPress={() => setModalVisible(false)}>
-                <Text style={{color: colors.black}}>Cancel</Text>
+                <Text style={{color: colors.black}}>{I18n.t('cancel')}</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -225,7 +225,7 @@ const index = ({navigation, route}) => {
               </View>
               {data != '' ? (
                 <View style={[styles.contentContainer]}>
-                  <Text style={styles.reportText}>Report</Text>
+                  <Text style={styles.reportText}>{I18n.t('report')}</Text>
                   {data?.map(item => (
                     <ItemView item={item} />
                   ))}

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Divider, Icon} from 'react-native-elements';
 import {colors, family, HP, size} from '../../../utilities';
-
+import i18n from '../../../utilities/translations';
 export const SupportCard = ({
   item,
   onPressCard,
@@ -42,7 +42,7 @@ export const SupportCard = ({
               paddingHorizontal: 10,
               color: colors.black,
             }}
-            placeholder="Please tell us your issue."
+            placeholder={i18n.t('support_title')}
             placeholderTextColor={colors.gray_shade}
           />
 
@@ -62,7 +62,7 @@ export const SupportCard = ({
                 fontFamily: family.product_sans_bold,
                 color: colors.white,
               }}>
-              Submit
+              {i18n.t('submit')}
             </Text>
           </TouchableOpacity>
         </View>

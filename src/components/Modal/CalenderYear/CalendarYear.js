@@ -19,6 +19,7 @@ import {
   appIcons,
   HP,
 } from '../../../utilities';
+import I18n from '../../../utilities/translations';
 
 export const CalendarYear = ({show, onPress}) => {
   useEffect(() => {
@@ -125,7 +126,9 @@ export const CalendarYear = ({show, onPress}) => {
       }}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerStyle}>Select Calendar Year</Text>
+          <Text style={styles.headerStyle}>
+            {I18n.t('select_calender_year')}
+          </Text>
         </View>
         <FlatList
           //   contentContainerStyle={{width: '100%', flex: 1}}
@@ -135,7 +138,7 @@ export const CalendarYear = ({show, onPress}) => {
         <TouchableOpacity
           onPress={() => show?.current?.close()}
           style={styles.button}>
-          <Text style={styles.buttonText}>OK</Text>
+          <Text style={styles.buttonText}>{I18n.t('ok')}</Text>
         </TouchableOpacity>
       </View>
     </RBSheet>

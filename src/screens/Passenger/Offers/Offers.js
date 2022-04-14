@@ -46,7 +46,7 @@ const Offers = ({navigation}) => {
           <Text style={styles.desciptionText}>{data?.item?.description}</Text>
           <View style={styles.promoStyle}>
             <Text style={styles.promoText}>
-              {data?.item?.promo != null ? data?.item?.promo : 'PM01234'}
+              {data?.item?.promo != null ? data?.item?.promo : ''}
             </Text>
           </View>
         </View>

@@ -7,6 +7,7 @@ import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
 import {Image} from 'react-native-elements';
 import I18n from '../../../utilities/translations';
+import i18n from '../../../utilities/translations';
 export const RiderInfo = ({driverInfo, block, onPressBlock}) => {
   return (
     <View style={styles.container}>
@@ -23,7 +24,7 @@ export const RiderInfo = ({driverInfo, block, onPressBlock}) => {
               style={styles.icon42}
             />
             <Text style={styles.textStyle}>
-              {driverInfo?.firstName || 'Jon'} {driverInfo?.lastName || 'Due'}
+              {driverInfo?.firstName || ''} {driverInfo?.lastName || ''}
             </Text>
           </View>
           <Image source={appIcons.redHeart} style={styles.imageStyle} />
@@ -35,7 +36,7 @@ export const RiderInfo = ({driverInfo, block, onPressBlock}) => {
               fontFamily: family.product_sans_regular,
               fontSize: size.xsmall,
             }}>
-            Your Rate
+            {i18n.t('your_rate')}
           </Text>
           <StarRating
             disabled={true}

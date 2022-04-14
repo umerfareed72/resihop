@@ -10,7 +10,7 @@ import {
 } from '../../../utilities';
 import Modal from 'react-native-modal';
 import StarRating from 'react-native-star-rating';
-
+import I18n from '../../../utilities/translations';
 export const RatingCardModal = ({
   h1,
   show,
@@ -44,7 +44,7 @@ export const RatingCardModal = ({
           </View>
 
           <TouchableOpacity style={styles.btnContainer} onPress={onPressSubmit}>
-            <Text style={styles.btnText}>Submit</Text>
+            <Text style={styles.btnText}>{I18n.t('submit')}</Text>
           </TouchableOpacity>
         </View>
       </Modal>

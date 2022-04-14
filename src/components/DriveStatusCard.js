@@ -179,7 +179,7 @@ const PassengerInfoCard = ({item, onPressCard, onPressCall}) => {
           style={styles.driver}
         />
       </TouchableOpacity>
-      <Text style={styles.pickUp}>Coming to my Start Location</Text>
+      <Text style={styles.pickUp}>{I18n.t('coming_to_start_location')}</Text>
       <View style={styles.btnMainContainer}>
         <Text style={{fontFamily: fonts.regular}}>{item.time}</Text>
         <TouchableOpacity onPress={onPressCall} style={styles.callNowContainer}>

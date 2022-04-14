@@ -634,14 +634,14 @@ const DRecurringDetail = ({route}) => {
             }
             handleCreateDrive();
           }}>
-          <Text style={styles.nextTxt}>Update</Text>
+          <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.nextBtnContainer, {backgroundColor: colors.black}]}
           onPress={() => {
             handleCancelDrive();
           }}>
-          <Text style={styles.nextTxt}>Delete Drives</Text>
+          <Text style={styles.nextTxt}>{I18n.t('delete_drives')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
-
+import i18n from '../../../utilities/translations';
 export const DRiderInfo = ({
   passenger_info,
   cost_per_seat,
@@ -66,7 +66,7 @@ export const DRiderInfo = ({
               fontFamily: family.product_sans_regular,
               fontSize: size.xsmall,
             }}>
-            Your Rate
+            {i18n.t('your_rate')}
           </Text>
           <StarRating
             disabled={true}
@@ -95,7 +95,9 @@ export const DRiderInfo = ({
             />
           </View>
           <TouchableOpacity onPress={onPressBlock} style={styles.btnContainer}>
-            <Text style={styles.btnText}>{block ? 'Unblcok' : 'Block'}</Text>
+            <Text style={styles.btnText}>
+              {block ? i18n.t('unblcok') : i18n.t('block')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

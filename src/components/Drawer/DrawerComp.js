@@ -174,7 +174,9 @@ const DrawerComponent = ({navigation}) => {
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {}} style={styles.buttonContainer}>
-              <Text style={styles.passengerStyle}>Passenger</Text>
+              <Text style={styles.passengerStyle}>
+                {I18n.t('fav_passenger')}
+              </Text>
               <Icon
                 name={'star'}
                 type={'entypo'}

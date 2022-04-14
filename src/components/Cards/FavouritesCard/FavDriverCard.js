@@ -7,7 +7,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import i18n from '../../../utilities/translations';
 import {
   family,
   size,
@@ -53,7 +53,9 @@ export const FavDriverCard = ({
           />
           <View>
             <Text style={styles.h1}>{name}</Text>
-            <Text style={styles.h2}>{`Pickup Time ${pickupInfo}`}</Text>
+            <Text style={styles.h2}>{`${i18n.t(
+              'pickup_time',
+            )}${pickupInfo}`}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={addFavourite} style={{padding: 5}}>
@@ -78,7 +80,7 @@ export const FavDriverCard = ({
             fontFamily: family.product_sans_regular,
             color: colors.light_black,
           }}>
-          Rate your Drive Experience
+          {i18n.t('rate_drive')}
         </Text>
         <StarRating
           disabled={true}

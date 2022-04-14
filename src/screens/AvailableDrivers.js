@@ -87,10 +87,9 @@ const AvailableDrivers = props => {
                   resizeMode="contain"
                   style={styles.seatGreen}
                 />
-                <Text
-                  style={
-                    styles.seatNum
-                  }>{`${item.drive.availableSeats} Seat Available`}</Text>
+                <Text style={styles.seatNum}>{`${
+                  item.drive.availableSeats
+                } ${I18n.t('availableSeats')}`}</Text>
               </View>
               <View style={styles.carDetailsTxt}>
                 <Text style={styles.carDetails}>

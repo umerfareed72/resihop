@@ -572,7 +572,7 @@ const RecurringRideDetail = ({route}) => {
           onPress={() => {
             handleCancelRide();
           }}>
-          <Text style={styles.nextTxt}>Delete Rides</Text>
+          <Text style={styles.nextTxt}>{I18n.t('delete_rides')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

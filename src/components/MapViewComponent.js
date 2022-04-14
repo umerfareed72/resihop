@@ -361,7 +361,6 @@ const MapViewComponent = ({
       startDes: routes?.startDes,
       destDes: routes?.destDes,
     };
-    console.log(body);
     if (returnRide) {
       const returnBody = {
         startLocation: returnRide?.startLocation,
@@ -378,7 +377,6 @@ const MapViewComponent = ({
       dispatch(
         CreateDriveRequest(returnBody, setIsLoading, async response => {
           if (response?.error) {
-            console.log('Create Drive Error', response);
             Alert.alert('Failed', response?.message[0]?.messages[0]?.message);
           } else {
             navigation.navigate('DriverHome');

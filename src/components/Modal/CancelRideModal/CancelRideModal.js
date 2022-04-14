@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
 import {colors} from '../../../utilities';
+import I18n from '../../../utilities/translations';
 
 export const CancelRideModal = ({show, onPressCancel, onPressClose}) => {
   return (
@@ -9,7 +10,7 @@ export const CancelRideModal = ({show, onPressCancel, onPressClose}) => {
       <TouchableOpacity
         onPress={onPressCancel}
         style={{width: '48%', alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={styles.modalTitle}>Delete Selected Rides</Text>
+        <Text style={styles.modalTitle}>{I18n.t('delete_ride')}</Text>
       </TouchableOpacity>
       <View>
         <Text style={{fontSize: 30, color: 'white', paddingBottom: 5}}>|</Text>
@@ -17,7 +18,7 @@ export const CancelRideModal = ({show, onPressCancel, onPressClose}) => {
       <TouchableOpacity
         onPress={onPressClose}
         style={{width: '48%', alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={styles.modalText}>Close Modal</Text>
+        <Text style={styles.modalText}>{I18n.t('close_modal')}</Text>
       </TouchableOpacity>
     </View>
   );

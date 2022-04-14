@@ -515,7 +515,9 @@ const AddressCards = ({
             <>
               <View style={styles.bookWrapper}>
                 <Text style={styles.bookSeatsTxt}>
-                  {mode === 'driver' ? ' Available Seats' : 'Book Your Seats'}
+                  {mode === 'driver'
+                    ? I18n.t('availableSeats')
+                    : I18n.t('book_seat')}
                 </Text>
                 <View
                   style={{

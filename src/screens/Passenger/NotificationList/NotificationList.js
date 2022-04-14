@@ -68,7 +68,7 @@ const NotificationList = ({navigation}) => {
         <View style={styles.contentContainer}>
           <Text style={styles.titleTextStyle}>{data?.item?.title}</Text>
           <Text numberOfLines={1} style={[styles.descriptionTextStyle]}>
-            {`Trip Date & Time: ${moment(
+            {`${I18n.t('tripDateTime')} ${moment(
               data?.item?.data?.ride?.tripDate,
             ).format('DD MMM YYYY')}`}
 

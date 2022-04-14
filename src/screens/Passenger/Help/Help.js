@@ -15,6 +15,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {create_ticket, get_help} from '../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
+import I18n from '../../../utilities/translations';
 const Help = ({navigation}) => {
   const isFocus = useIsFocused(null);
   const dispatch = useDispatch(null);
@@ -112,7 +113,7 @@ const Help = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <View style={styles.mainContainer}>
-            <Text style={styles.reportText}>Report</Text>
+            <Text style={styles.reportText}>{I18n.t('report')}</Text>
             {data?.map(item => (
               <ItemView item={item} />
             ))}

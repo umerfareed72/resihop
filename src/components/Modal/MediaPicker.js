@@ -66,7 +66,7 @@ const MediaPicker = ({show = false, onClosePress, onImageSelected}) => {
                   alignItems: 'center',
                 }}
               />
-              <Text style={theme.Text.h3Bold}>Camera</Text>
+              <Text style={theme.Text.h3Bold}>{I18n.t('camera')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -86,7 +86,7 @@ const MediaPicker = ({show = false, onClosePress, onImageSelected}) => {
                   alignItems: 'center',
                 }}
               />
-              <Text style={theme.Text.h3Bold}>Gallery</Text>
+              <Text style={theme.Text.h3Bold}>{I18n.t('gallery')}</Text>
             </TouchableOpacity>
           </View>
 
