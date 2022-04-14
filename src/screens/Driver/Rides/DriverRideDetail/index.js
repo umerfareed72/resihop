@@ -43,13 +43,17 @@ const index = ({navigation}) => {
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const isFocus = useIsFocused(null);
-  const createAgoraChannel = () => {
+
+  const createAgoraChannel = item => {
     const requestBody = {
-      to: auth?.profile_info?._id,
+      to: item?.user?._id,
     };
     dispatch(
       create_agoral_channel(requestBody, res => {
-        navigation?.navigate('CallNow');
+        navigation?.navigate('CallNow', {
+          firstName: item?.user?.firstName,
+          lastName: item?.user?.lastName,
+        });
       }),
     );
   };
@@ -200,32 +204,32 @@ const index = ({navigation}) => {
                       onPressBlock={() => onPressBlock(item, index)}
                       block={item?.user?.blocked}
                     />
+                    <View style={styles.separator} />
+                    <View
+                      style={[
+                        styles.contentContainer,
+                        {
+                          padding: 20,
+                        },
+                      ]}>
+                      <SmallButtons
+                        bgColor={colors.green}
+                        title={'Call Now'}
+                        txtColor={colors.white}
+                        fontFamily={family.product_sans_bold}
+                        height={40}
+                        width={'60%'}
+                        image={appIcons.call}
+                        onPress={() => {
+                          createAgoraChannel(item);
+                        }}
+                      />
+                    </View>
                   </View>
                 );
               }}
             />
 
-            <View style={styles.separator} />
-            <View
-              style={[
-                styles.contentContainer,
-                {
-                  padding: 20,
-                },
-              ]}>
-              <SmallButtons
-                bgColor={colors.green}
-                title={'Call Now'}
-                txtColor={colors.white}
-                fontFamily={family.product_sans_bold}
-                height={40}
-                width={'60%'}
-                image={appIcons.call}
-                onPress={() => {
-                  createAgoraChannel();
-                }}
-              />
-            </View>
             {data != '' ? (
               <View style={[styles.contentContainer]}>
                 <Text style={styles.reportText}>{I18n.t('report')}</Text>

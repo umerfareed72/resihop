@@ -14,14 +14,13 @@ import {appIcons, appId, colors, profileIcon} from '../../utilities';
 import {TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 
-const index = ({navigation}) => {
-  const [channelName, setChannelName] = useState('');
+const index = ({navigation, route}) => {
+  const {firstName, lastName} = route?.params;
   const [speaker, setSpeaker] = useState(true);
   const [joinsucceed, setJoinSucceed] = useState(false);
   const [peerIds, setPeerIds] = useState([]);
   const rtcEngine = useRef(null);
   const app_reducer = useSelector(state => state.app_reducer);
-  console.log(app_reducer);
   //Init Agora
   const initAgora = useCallback(async () => {
     rtcEngine.current = await RtcEngine.create(appId);
@@ -115,7 +114,9 @@ const index = ({navigation}) => {
         <View style={styles.contentContainer}>
           <View style={styles.view1}>
             <Image style={styles.imageStyle} source={{uri: profileIcon}} />
-            <Text style={styles.username}>Umer Fareed</Text>
+            <Text style={styles.username}>
+              {firstName} {lastName}
+            </Text>
             <Text style={styles.ringingText}>
               {joinsucceed ? 'Connected' : 'Ringing'}
             </Text>

@@ -96,7 +96,7 @@ export const DRiderInfo = ({
           </View>
           <TouchableOpacity onPress={onPressBlock} style={styles.btnContainer}>
             <Text style={styles.btnText}>
-              {block ? i18n.t('unblcok') : i18n.t('block')}
+              {block ? i18n.t('unblock') : i18n.t('block')}
             </Text>
           </TouchableOpacity>
         </View>

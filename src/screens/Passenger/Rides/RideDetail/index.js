@@ -51,11 +51,14 @@ const index = ({navigation, route}) => {
 
   const createAgoraChannel = () => {
     const requestBody = {
-      to: auth?.profile_info?._id,
+      to: rides?.selected_ride_history?.drive?.user?._id,
     };
     dispatch(
       create_agoral_channel(requestBody, res => {
-        navigation?.navigate('CallNow');
+        navigation?.navigate('CallNow', {
+          firstName: rides?.selected_ride_history?.drive?.user?.firstName,
+          lastName: rides?.selected_ride_history?.drive?.user?.lastName,
+        });
       }),
     );
   };
