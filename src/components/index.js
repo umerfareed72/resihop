@@ -45,6 +45,7 @@ export * from '../components/OtpValidator';
 
 //Modals
 export * from './Modal/CancelRideModal/CancelRideModal';
+export * from './DateTimePicker/DatePicker';
 
 export * from './Modal/DeleteCard/DeleteCardModal';
 export * from './Modal/AddWallet/AddWalletModal';

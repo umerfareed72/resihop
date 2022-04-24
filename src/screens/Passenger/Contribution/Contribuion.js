@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   ImageBackground,
-  Image,
   Text,
   StyleSheet,
   View,
@@ -19,14 +18,16 @@ import {
   MY_CONTRIBUTION,
   responseValidator,
   header,
+  profileIcon,
 } from '../../../utilities';
 import {ContributionCard} from '../../../components';
-import {get} from '../../../services';
-
+import {get, post} from '../../../services';
+import {useSelector} from 'react-redux';
+import {Image} from 'react-native-elements';
 const Contribution = ({navigation}) => {
   const [getContribution, setContributions] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const auth = useSelector(state => state.auth);
   useEffect(() => {
     getContributions();
   }, []);
@@ -41,6 +42,9 @@ const Contribution = ({navigation}) => {
       let msg = error.response.data.message;
       responseValidator(status, msg);
     }
+  };
+  const sharedContribution = async () => {
+    const res = await post(`my-contributions`);
   };
   return (
     <ImageBackground style={{flex: 1}} source={appImages.tree}>
@@ -59,21 +63,31 @@ const Contribution = ({navigation}) => {
       <View style={styles.viewContainer}>
         <View style={styles.imgContainer}>
           <Image
-            resizeMode={'contain'}
+            progressiveRenderingEnabled={true}
+            resizeMode={'cover'}
             style={styles.imgStyle}
-            source={appImages.app_logo}
+            source={{uri: auth?.profile_info?.picture?.url || profileIcon}}
           />
-          <Text style={styles.userName}>John Doe</Text>
+          <Text style={styles.userName}>
+            {auth?.profile_info?.firstName}
+            {auth?.profile_info?.lastName}
+          </Text>
         </View>
         <TouchableOpacity style={styles.buttonStyle}>
-          <Text style={styles.buttonText}>100 KG(s) CO2 Reduced</Text>
+          <Text style={styles.buttonText}>
+            {getContribution?.saved || 0} KG(s) CO2 Reduced
+          </Text>
         </TouchableOpacity>
-        <FlatList
-          data={getContribution}
-          contentContainerStyle={{marginVertical: HP('4')}}
-          numColumns="2"
-          renderItem={item => <ContributionCard data={item} />}
-        />
+        <View style={styles.aiRow}>
+          <ContributionCard
+            title={getContribution?.rideShared || 0}
+            description={'Ride(s) Shared'}
+          />
+          <ContributionCard
+            title={getContribution?.distance || 0}
+            description={'Distance Shared'}
+          />
+        </View>
       </View>
     </ImageBackground>
   );
@@ -93,6 +107,7 @@ const styles = StyleSheet.create({
     width: HP('12'),
     height: HP('12'),
     borderRadius: 100,
+    marginBottom: 10,
   },
   imgContainer: {
     marginVertical: HP('2'),
@@ -115,6 +130,13 @@ const styles = StyleSheet.create({
     fontSize: size.h5,
     fontFamily: family.product_sans_bold,
     color: colors.white,
+  },
+  aiRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 5,
   },
 });
 export default Contribution;

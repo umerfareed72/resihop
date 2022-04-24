@@ -23,10 +23,7 @@ export const create_agoral_channel = (data, callBack) => async dispatch => {
   } catch (error) {
     console.log('Unable to create agora channel', error?.response?.data);
     let status = error?.response?.data?.statusCode;
-    responseValidator(
-      status,
-      error?.response?.data?.message[0]?.messages[0]?.message,
-    );
+    responseValidator(status, 'Something went wrong!');
     dispatch({
       type: Types.Create_Agora_Channel_Failure,
       payload: null,

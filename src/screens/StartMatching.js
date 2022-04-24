@@ -17,7 +17,7 @@ const StartMatching = props => {
   const destinationMap = useSelector(state => state?.map?.destination);
   const availableSeats = useSelector(state => state?.map?.availableSeats);
 
-  const {dateTimeStamp} = props.route.params;
+  const {dateTimeStamp} = props?.route?.params;
 
   useEffect(() => {
     if (isFocus) {
@@ -26,10 +26,10 @@ const StartMatching = props => {
       } else {
         dispatch(
           SearchDrives({
-            startLocation: [origin.location.lat, origin.location.lng],
+            startLocation: [origin?.location?.lat, origin?.location?.lng],
             destinationLocation: [
-              destinationMap.location.lat,
-              destinationMap.location.lng,
+              destinationMap?.location?.lat,
+              destinationMap?.location?.lng,
             ],
             time: dateTimeStamp,
             seats: availableSeats,

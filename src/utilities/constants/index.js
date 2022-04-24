@@ -35,7 +35,7 @@ export const mode = 'driving';
 
 export const options = {
   ios: {
-    appName: 'My app name',
+    appName: 'com.resihop',
   },
   android: {
     alertTitle: 'Permissions required',

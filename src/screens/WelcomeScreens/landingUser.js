@@ -23,7 +23,7 @@ function landingUser({navigation}) {
         </Text>
         <View>
           <Text style={[theme.Text.h4Normal, styles.sayingText]}>
-            {I18n.t('lorum_epsom1')}
+            {I18n.t('lorem_epsom1')}
           </Text>
           <Button
             title={I18n.t('login')}

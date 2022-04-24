@@ -63,6 +63,8 @@ import {
 import {Alert} from 'react-native';
 import {post} from '../../../services';
 import {RIDES_CONST} from '../../../utilities/routes';
+import PushNotification from 'react-native-push-notification';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 //Data
 var TimeList = {
@@ -311,6 +313,28 @@ const PassengerHome = ({navigation}) => {
       ]);
     }
   };
+  useEffect(() => {
+    PushNotification.configure({
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: function (token) {
+        // console.log('TOKEN:', token);
+      },
+      onNotification: function (notification) {
+        navigation?.navigate('IncomingCall');
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+
+      popInitialNotification: true,
+      requestPermissions: Platform.OS === 'ios' ? true : false,
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+    });
+  }, []);
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />

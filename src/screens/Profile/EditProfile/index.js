@@ -287,7 +287,7 @@ function index(props) {
                     errorMessage={errors.lastName}
                   />
                   <Input
-                    editable={false}
+                    editable={true}
                     ref={refEmail}
                     keyboardAppearance="light"
                     onChangeText={handleChange('email')}

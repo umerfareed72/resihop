@@ -43,6 +43,8 @@ import DRecurringRideDetail from '../../screens/Driver/DRecurringRideDetail';
 import ChangePhone from '../../screens/Profile/ChangePhone';
 import EditProfile from '../../screens/Profile/EditProfile';
 import CallNow from '../../screens/CallNow';
+import IncomingCall from '../../screens/IncomingCall';
+
 import VehicleInformation from '../../screens/Driver/VehicleInformation/VehcileInformation';
 
 const Stack = createStackNavigator();
@@ -141,6 +143,12 @@ function DriverStack(props) {
         name="CallNow"
         component={CallNow}
       />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="IncomingCall"
+        component={IncomingCall}
+      />
+
       <Stack.Screen
         options={{headerShown: false}}
         name="Help"
