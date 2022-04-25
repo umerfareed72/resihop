@@ -141,7 +141,6 @@ const index = ({navigation, route}) => {
         bookRide?.drive?.costPerSeat * createRideRequest?.requiredSeats ||
         bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats,
     };
-    console.log(requestBody);
     dispatch(
       checkout_current_card(requestBody, res => {
         seterrorMsg(res?.msg);
@@ -198,10 +197,14 @@ const index = ({navigation, route}) => {
     try {
       const body = {
         ride: createRideRequest?._id || bookRide?._id,
+        amountPayable:
+          bookRide?.drive?.costPerSeat * createRideRequest?.requiredSeats ||
+          bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats,
       };
       dispatch(
         BookRide(
           body,
+          bookRide?.totalDistance || createRideRequest?.totalDistance,
           bookRide?.drive?._id || bookRide?.pool_match?._id,
           setBookLoading,
           response => {

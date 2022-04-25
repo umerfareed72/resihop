@@ -504,14 +504,18 @@ export const select_ride_history = (data, callBack) => async dispatch => {
 };
 
 export const BookRide =
-  (body, id, setBookLoading, callback) => async dispatch => {
+  (body, distance, id, setBookLoading, callback) => async dispatch => {
     setBookLoading(true);
     try {
-      const response = await put(`drives/book/${id}`, body, await header());
+      const response = await put(
+        `drives/book/${id}?totalDistance=${distance}`,
+        body,
+        await header(),
+      );
       setBookLoading(false);
       callback(response.data);
     } catch (error) {
-      console.log('book ride', error);
+      console.log('book ride', error?.response?.data);
       setBookLoading(false);
       let status = error?.response?.data?.statusCode;
       responseValidator(status, error?.response?.data?.message);
