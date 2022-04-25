@@ -109,12 +109,12 @@ const index = ({navigation}) => {
         backButton={true}
         title={I18n.t('trnsaction_history')}
         navigation={navigation}
-        btnImage1={appIcons.filter}
+        // btnImage1={appIcons.filter}
         height3={25}
         width3={25}
-        onPressbtnImage1={() => {
-          filterModalRef.current.open();
-        }}
+        // onPressbtnImage1={() => {
+        //   filterModalRef.current.open();
+        // }}
         onPressbtnImage={() => {
           sortModalRef.current.open();
         }}
@@ -131,7 +131,7 @@ const index = ({navigation}) => {
           />
         </View>
       </View>
-      <PaymentFilterModal
+      {/* <PaymentFilterModal
         time={TimeFrame}
         cost={Cost}
         transactionType={TransactionType}
@@ -143,7 +143,7 @@ const index = ({navigation}) => {
         selectedTransType={transactiontype}
         selectedCost={cost}
         onPressReset={resetFilter}
-      />
+      /> */}
       <SortModal show={sortModalRef} />
     </>
   );

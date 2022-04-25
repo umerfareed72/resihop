@@ -24,6 +24,7 @@ import {ContributionCard} from '../../../components';
 import {get, post} from '../../../services';
 import {useSelector} from 'react-redux';
 import {Image} from 'react-native-elements';
+import {Share} from 'react-native';
 const Contribution = ({navigation}) => {
   const [getContribution, setContributions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +45,14 @@ const Contribution = ({navigation}) => {
     }
   };
   const sharedContribution = async () => {
-    const res = await post(`my-contributions`);
+    const result = await Share.share({
+      title: 'RES IHOP',
+      message: `Your vehicle reduced ${
+        getContribution?.saved || 0
+      } KG(s) CO2 in ${getContribution?.rideShared || 0} rides with distance ${
+        getContribution?.distance || 0
+      } KM`,
+    });
   };
   return (
     <ImageBackground style={{flex: 1}} source={appImages.tree}>
@@ -59,6 +67,9 @@ const Contribution = ({navigation}) => {
         tintColor3={colors?.light_black}
         height3={25}
         width3={25}
+        onPressbtnImage1={() => {
+          sharedContribution();
+        }}
       />
       <View style={styles.viewContainer}>
         <View style={styles.imgContainer}>

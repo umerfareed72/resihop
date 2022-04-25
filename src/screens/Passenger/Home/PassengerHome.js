@@ -43,6 +43,7 @@ import {
   get_settings,
   setCity,
   setAvailableSeats,
+  MyRidesFiltering,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -66,25 +67,22 @@ import {post} from '../../../services';
 import {RIDES_CONST} from '../../../utilities/routes';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import {Call_Status} from '../../../redux/actions/app.action';
 
 //Data
-var TimeList = {
-  id: 1,
-  title: 'Time',
-  items: [
-    {id: 1, text: '08:00 to 12:00', status: false},
-    {id: 2, text: '08:00 to 12:00', status: false},
-    {id: 3, text: '08:00 to 12:00', status: false},
-  ],
-};
 
 var RideStatusList = {
   id: 1,
   title: 'Ride Status',
   items: [
-    {id: 1, text: 'Confirmed', status: false},
-    {id: 2, text: 'Waiting for Match', status: false},
-    {id: 3, text: 'Matching Done', status: false},
+    {id: 1, text: 'Confirmed', status: false, value: 'CONFIRMED'},
+    {
+      id: 2,
+      text: 'Waiting For Match',
+      status: false,
+      value: 'WAITING_FOR_MATCH',
+    },
+    {id: 3, text: 'Matching Done', status: false, value: 'MATCHING_DONE'},
   ],
 };
 
@@ -92,21 +90,9 @@ const rideTypeList = {
   id: 4,
   title: 'Ride Type',
   items: [
-    {id: 1, text: 'All Rides'},
-    {id: 2, text: 'Destination Rides'},
-    {id: 3, text: 'Return Rides'},
-  ],
-};
-
-const DateList = {
-  id: 1,
-  title: 'Date',
-  items: [
-    {id: 1, text: '12 June'},
-    {id: 2, text: '13 June'},
-    {id: 3, text: '14 June'},
-    {id: 4, text: '15 June'},
-    {id: 5, text: '16 June'},
+    {id: 1, text: 'All Rides', value: null},
+    {id: 2, text: 'Destination Rides', value: 'destination'},
+    {id: 3, text: 'Return Rides', value: 'return'},
   ],
 };
 
@@ -138,10 +124,20 @@ const PassengerHome = ({navigation}) => {
         let notificationObj = notification.data.data;
         if (notificationObj) {
           notificationObj = JSON.parse(notificationObj);
-          if (notificationObj?.type == 'agora') {
+          if (notification?.notification?.title == 'Agora Call') {
             dispatch(
               getUserInfo(notificationObj, res => {
                 navigation?.navigate('IncomingCall');
+              }),
+            );
+          }
+          if (notification?.notification?.title == 'Agora Call Accept') {
+            dispatch(Call_Status('answered', () => {}));
+          }
+          if (notification?.notification?.title == 'Agora Call Reject') {
+            dispatch(
+              Call_Status('deny', () => {
+                navigation?.goBack();
               }),
             );
           }
@@ -173,7 +169,7 @@ const PassengerHome = ({navigation}) => {
   }, [isFocused]);
   const getRides = async () => {
     dispatch(
-      MyRidesSortOrder('rides', 'tripDate', res => {
+      MyRidesSortOrder('rides?', 'tripDate', res => {
         dispatch({
           type: mapTypes.myRides,
           payload: res,
@@ -270,8 +266,27 @@ const PassengerHome = ({navigation}) => {
     settime('');
     setdate('');
     setRideType('');
-    setSeats('');
+    dispatch(setAvailableSeats(0));
     setStatus('');
+  };
+  const onApplyFilter = () => {
+    dispatch(
+      MyRidesFiltering(
+        'rides?',
+        ridetype?.value,
+        availableSeats,
+        status?.value,
+        res => {
+          console.log(res);
+          filterModalRef.current.close();
+          sortModalRef.current.close();
+          dispatch({
+            type: mapTypes.myRides,
+            payload: res,
+          });
+        },
+      ),
+    );
   };
 
   const onPress = item => {
@@ -298,7 +313,7 @@ const PassengerHome = ({navigation}) => {
 
   const getRidesByOrder = item => {
     dispatch(
-      MyRidesSortOrder('rides', item?.value, res => {
+      MyRidesSortOrder('rides?', item?.value, res => {
         dispatch({
           type: mapTypes.myRides,
           payload: res,
@@ -521,26 +536,21 @@ const PassengerHome = ({navigation}) => {
         )}
       </SafeAreaView>
       <RideFilterModal
-        time={TimeList}
         seats={seats}
         rideType={rideTypeList}
         status={RideStatusList}
-        date={DateList}
         onPressdate={selectdDate}
         onPressrideType={selectRideType}
         onPressseats={item => dispatch(setAvailableSeats(item))}
         onPresstime={selectTime}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
-        selectedTime={time}
-        selectedDate={date}
         selectedStatus={status}
         selectedRideType={ridetype}
         selectedSeats={availableSeats}
         onPressReset={resetFilter}
         onApply={() => {
-          filterModalRef.current.close();
-          sortModalRef.current.close();
+          onApplyFilter();
         }}
       />
       <SortModal show={sortModalRef} onPress={getRidesByOrder} />

@@ -17,6 +17,9 @@ import BlankField from '../../../components/BlankField';
 import {useIsFocused} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
 import {
+  MyRidesFiltering,
+  MyRidesSortOrder,
+  setAvailableSeats,
   setCity,
   setOrigin,
   setReturnMapDestination,
@@ -26,23 +29,21 @@ import {Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
 
-var TimeList = {
-  id: 1,
-  title: 'Time',
-  items: [
-    {id: 1, text: '08:00 to 12:00', status: false},
-    {id: 2, text: '08:00 to 12:00', status: false},
-    {id: 3, text: '08:00 to 12:00', status: false},
-  ],
-};
+//Data
 
 var RideStatusList = {
   id: 1,
   title: 'Ride Status',
   items: [
-    {id: 1, text: 'Confirmed', status: false},
-    {id: 2, text: 'Waiting for Match', status: false},
-    {id: 3, text: 'Matching Done', status: false},
+    {id: 1, text: 'Confirmed', status: false, value: 'CONFIRMED'},
+    {
+      id: 2,
+      text: 'Waiting For Match',
+      status: false,
+      value: 'WAITING_FOR_MATCH',
+    },
+    {id: 3, text: 'Matching Done', status: false, value: 'MATCHING_DONE'},
+    {id: 4, text: 'On The Way', status: false, value: 'ON_THE_WAY'},
   ],
 };
 
@@ -50,34 +51,9 @@ const rideTypeList = {
   id: 4,
   title: 'Ride Type',
   items: [
-    {id: 1, text: 'All Rides'},
-    {id: 2, text: 'Destination Rides'},
-    {id: 3, text: 'Return Rides'},
-  ],
-};
-
-const DateList = {
-  id: 1,
-  title: 'Date',
-  items: [
-    {id: 1, text: '12 June'},
-    {id: 2, text: '13 June'},
-    {id: 3, text: '14 June'},
-    {id: 4, text: '15 June'},
-    {id: 5, text: '16 June'},
-  ],
-};
-
-const seatsList = {
-  id: 5,
-  title: 'Seat',
-  items: [
-    {id: 1, icon: appImages.seatBlue},
-    {id: 2, icon: appImages.seatBlue},
-    {id: 3, icon: appImages.seatBlue},
-    {id: 4, icon: appImages.seatBlue},
-    {id: 5, icon: appImages.seatBlue},
-    {id: 6, icon: appImages.seatBlue},
+    {id: 1, text: 'All Rides', value: null},
+    {id: 2, text: 'Destination Rides', value: 'destination'},
+    {id: 3, text: 'Return Rides', value: 'return'},
   ],
 };
 
@@ -88,8 +64,8 @@ function index(props) {
   const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
-  const [seats, setSeats] = useState('');
-  const {recurring_ride} = useSelector(state => state.map);
+  const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const {recurring_ride, availableSeats} = useSelector(state => state.map);
   const [isLoading, setisLoading] = useState(false);
   const [multiDelete, setmultiDelete] = useState(false);
   const [selectedCard, setSelectedCard] = useState([]);
@@ -116,8 +92,36 @@ function index(props) {
     settime('');
     setdate('');
     setRideType('');
-    setSeats('');
+    dispatch(setAvailableSeats(0));
     setStatus('');
+  };
+  const onApplyFilter = () => {
+    dispatch(
+      MyRidesFiltering(
+        'rides?recurring=true&',
+        ridetype?.value,
+        availableSeats,
+        status?.value,
+        res => {
+          filterModalRef.current.close();
+          sortModalRef.current.close();
+          dispatch({
+            type: Types.Get_Reccuring_Rides_Success,
+            payload: res,
+          });
+        },
+      ),
+    );
+  };
+  const getRidesByOrder = item => {
+    dispatch(
+      MyRidesSortOrder('rides?recurring=true&', item?.value, res => {
+        dispatch({
+          type: Types.Get_Reccuring_Rides_Success,
+          payload: res,
+        });
+      }),
+    );
   };
   const onPressCardItem = item => {
     props?.navigation?.navigate('RecurringRideDetail', {
@@ -128,6 +132,9 @@ function index(props) {
     if (isFocus) {
       get_recurring_rides();
     }
+    return () => {
+      dispatch(setAvailableSeats(0));
+    };
   }, [isFocus]);
 
   // Get Location
@@ -297,30 +304,24 @@ function index(props) {
       </SafeAreaView>
       {isLoading && <Loader />}
       <RideFilterModal
-        time={TimeList}
-        seats={seatsList}
+        seats={seats}
         rideType={rideTypeList}
         status={RideStatusList}
-        date={DateList}
         onPressdate={selectdDate}
         onPressrideType={selectRideType}
-        onPressseats={selectSeats}
+        onPressseats={item => dispatch(setAvailableSeats(item))}
         onPresstime={selectTime}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
-        selectedTime={time}
-        selectedDate={date}
         selectedStatus={status}
         selectedRideType={ridetype}
-        selectedSeats={seats}
+        selectedSeats={availableSeats}
         onPressReset={resetFilter}
         onApply={() => {
-          filterModalRef.current.close();
-          sortModalRef.current.close();
-          props.navigation.navigate('RecurringRideDetail');
+          onApplyFilter();
         }}
       />
-      <SortModal show={sortModalRef} />
+      <SortModal show={sortModalRef} onPress={getRidesByOrder} />
       {multiDelete && (
         <CancelRideModal
           onPressCancel={() => {

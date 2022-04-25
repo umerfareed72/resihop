@@ -129,12 +129,12 @@ const index = ({navigation}) => {
         backButton={true}
         title={I18n.t('driver_ride_history')}
         navigation={navigation}
-        btnImage1={appIcons.filter}
+        // btnImage1={appIcons.filter}
         height3={25}
         width3={25}
-        onPressbtnImage1={() => {
-          filterModalRef.current.open();
-        }}
+        // onPressbtnImage1={() => {
+        //   filterModalRef.current.open();
+        // }}
         onPressbtnImage={() => {
           sortModalRef.current.open();
         }}

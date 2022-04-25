@@ -114,7 +114,7 @@ export default (state = initialState, action = {}) => {
     case Types.myRides:
       return {
         ...state,
-        myRidesData: payload.filter(item => {
+        myRidesData: payload?.filter(item => {
           return item?.status != 'NO_MATCH' && item?.status != 'CANCELLED';
         }),
       };

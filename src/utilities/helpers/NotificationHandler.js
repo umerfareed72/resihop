@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {set_event_request} from '../../redux/actions';
 import {getUserInfo} from '../../redux/actions/auth.action';
+import {Call_Status} from '../../redux/actions/app.action';
 
 export const registerAppWithFCM = async () => {
   await messaging().registerDeviceForRemoteMessages();
@@ -58,19 +59,31 @@ const getFcmToken = async () => {
 
 export const Notification_Listner = (dispatch, navigation) => {
   messaging().onNotificationOpenedApp(async remoteMessage => {
+    console.log(remoteMessage);
     let notificationObj = remoteMessage.data.data;
     if (notificationObj) {
       notificationObj = JSON.parse(notificationObj);
-      if (notificationObj?.type == 'agora') {
+      if (remoteMessage?.notification?.title == 'Agora Call') {
         dispatch(
           getUserInfo(notificationObj, res => {
             navigation?.navigate('IncomingCall');
           }),
         );
       }
+      if (remoteMessage?.notification?.title == 'Agora Call Accept') {
+        dispatch(Call_Status('answered', () => {}));
+      }
+      if (remoteMessage?.notification?.title == 'Agora Call Reject') {
+        dispatch(
+          Call_Status('deny', () => {
+            navigation?.goBack();
+          }),
+        );
+      }
     }
   });
   messaging().onMessage(async remoteMessage => {
+    console.log(remoteMessage);
     let notificationObj = remoteMessage.data.data;
     if (notificationObj) {
       notificationObj = JSON.parse(notificationObj);
@@ -102,16 +115,24 @@ export const LocalNotification = (
     soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
     invokeApp: false, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
   });
-  let type = notificationObj?.type;
 
-  if (type === 'agora') {
+  if (notify?.notification?.title == 'Agora Call') {
     dispatch(
       getUserInfo(notificationObj, res => {
         navigation?.navigate('IncomingCall');
       }),
     );
   }
-
+  if (notify?.notification?.title == 'Agora Call Accept') {
+    dispatch(Call_Status('answered', () => {}));
+  }
+  if (notify?.notification?.title == 'Agora Call Reject') {
+    dispatch(
+      Call_Status('deny', () => {
+        navigation?.goBack();
+      }),
+    );
+  }
   PushNotification.configure({
     // (optional) Called when Token is generated (iOS and Android)
     onRegister: function (token) {},

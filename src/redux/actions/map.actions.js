@@ -379,7 +379,7 @@ export const CancelRide =
 export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
   let Token = await GetToken();
   try {
-    const response = await fetch(`${baseURL}${route}?_sort=${data}`, {
+    const response = await fetch(`${baseURL}${route}_sort=${data}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -393,6 +393,59 @@ export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
     console.log(error);
   }
 };
+
+export const MyRidesFiltering =
+  (route, type, seats, status, callBack) => async dispatch => {
+    console.log(type, seats, status);
+    let Token = await GetToken();
+    try {
+      const url_with_type = `${baseURL}${route}requiredSeats=${seats}&status=${status}&type=${type}`;
+      const url_without_type = `${baseURL}${route}requiredSeats=${seats}&status=${status}`;
+
+      const response = await fetch(
+        `${type != null ? url_with_type : url_without_type}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Token}`,
+          },
+        },
+      );
+
+      const responseJson = await response.json();
+      callBack(responseJson);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const MyDrivesFiltering =
+  (route, type, seats, status, callBack) => async dispatch => {
+    console.log(type, seats, status);
+    let Token = await GetToken();
+    try {
+      const url_with_type = `${baseURL}${route}availableSeats=${seats}&status=${status}&type=${type}`;
+      const url_without_type = `${baseURL}${route}availableSeats=${seats}&status=${status}`;
+
+      const response = await fetch(
+        `${type != null ? url_with_type : url_without_type}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Token}`,
+          },
+        },
+      );
+
+      const responseJson = await response.json();
+      callBack(responseJson);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 export const MyRidesHistorySortOrder =
   (route, data, callBack) => async dispatch => {
     let Token = await GetToken();

@@ -12,7 +12,9 @@ import RtcEngine from 'react-native-agora';
 import {requestCameraAndAudioPermission} from '../../utilities/helpers/permissions';
 import {appIcons, appId, colors, profileIcon} from '../../utilities';
 import {TouchableOpacity} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {Call_Status, reject_call} from '../../redux/actions/app.action';
+import {Alert} from 'react-native';
 
 const index = ({navigation, route}) => {
   const {firstName, lastName, picture} = route?.params;
@@ -21,6 +23,9 @@ const index = ({navigation, route}) => {
   const [peerIds, setPeerIds] = useState([]);
   const rtcEngine = useRef(null);
   const app_reducer = useSelector(state => state.app_reducer);
+  const auth = useSelector(state => state.auth);
+
+  const dispatch = useDispatch(null);
   //Init Agora
   const initAgora = useCallback(async () => {
     rtcEngine.current = await RtcEngine.create(appId);
@@ -79,7 +84,7 @@ const index = ({navigation, route}) => {
     await rtcEngine.current?.leaveChannel();
     setPeerIds([]);
     setJoinSucceed(false);
-    navigation?.goBack();
+    RejectCall();
   };
   // Switch the audio playback device.
   const _switchSpeakerphone = () => {
@@ -100,8 +105,30 @@ const index = ({navigation, route}) => {
     initAgora();
     return () => {
       destroyEngine();
+      dispatch(Call_Status('', () => {}));
     };
   }, [destroyEngine, initAgora]);
+
+  //reject Call
+  const RejectCall = async () => {
+    try {
+      const requestBody = {
+        to: auth?.calling_user?.call_data?.by,
+      };
+      dispatch(
+        reject_call(requestBody, null, () => {
+          dispatch(
+            Call_Status('', () => {
+              navigation?.goBack();
+            }),
+          );
+        }),
+      );
+    } catch (error) {
+      Alert.alert('Error', 'Unable to Reject Call');
+    }
+  };
+
   return (
     <>
       <CustomHeader
@@ -122,7 +149,11 @@ const index = ({navigation, route}) => {
               {firstName} {lastName}
             </Text>
             <Text style={styles.ringingText}>
-              {joinsucceed ? 'Connected' : 'Ringing'}
+              {joinsucceed
+                ? app_reducer?.calling_status == 'answered'
+                  ? 'Connected'
+                  : 'Ringing'
+                : 'Calling'}
             </Text>
           </View>
           <View style={styles.card_container}>

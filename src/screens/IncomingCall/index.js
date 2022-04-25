@@ -18,7 +18,12 @@ import {
 } from '../../utilities';
 import {TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {create_agoral_channel} from '../../redux/actions/app.action';
+import {
+  accept_call,
+  Call_Status,
+  create_agoral_channel,
+  reject_call,
+} from '../../redux/actions/app.action';
 import I18n from '../../utilities/translations';
 import {post} from '../../services';
 import {AGORA_CONST} from '../../utilities/routes';
@@ -28,53 +33,46 @@ import * as Types from '../../redux/types/app.types';
 const index = ({navigation}) => {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch(null);
+  //Accept Call
   const acceptCall = async () => {
     try {
       const requestBody = {
         to: auth?.calling_user?.call_data?.by,
       };
-      const res = await post(
-        `${AGORA_CONST}/accept`,
-        requestBody,
-        await header(),
+      const responseData = {
+        agora_token: auth?.calling_user?.call_data?.rtctoken,
+        agora_data: auth?.calling_user?.call_data,
+      };
+      dispatch(
+        accept_call(requestBody, responseData, () => {
+          dispatch(Call_Status('answered', () => {}));
+          navigation?.navigate('CallNow', {
+            firstName: auth?.calling_user?.userData?.firstName,
+            lastName: auth?.calling_user?.userData?.lastName,
+            picture: auth?.calling_user?.userData?.picture?.url,
+          });
+        }),
       );
-      if (res?.data) {
-        const responseData = {
-          agora_token: auth?.calling_user?.call_data?.rtctoken,
-          agora_data: auth?.calling_user?.call_data,
-        };
-        dispatch({
-          type: Types.Create_Agora_Channel_Success,
-          payload: responseData,
-        });
-        navigation?.navigate('CallNow', {
-          firstName: auth?.calling_user?.userData?.firstName,
-          lastName: auth?.calling_user?.userData?.lastName,
-          picture: auth?.calling_user?.userData?.picture?.url,
-        });
-      } else {
-        Alert.alert('Error', 'Unable to Pick Call');
-      }
     } catch (error) {
       Alert.alert('Error', 'Unable to Pick Call');
     }
   };
 
+  //reject Call
   const RejectCall = async () => {
     try {
       const requestBody = {
         to: auth?.calling_user?.call_data?.by,
       };
-      const res = await post(
-        `${AGORA_CONST}/reject`,
-        requestBody,
-        await header(),
+      const responseData = {
+        agora_token: auth?.calling_user?.call_data?.rtctoken,
+        agora_data: auth?.calling_user?.call_data,
+      };
+      dispatch(
+        reject_call(requestBody, responseData, () => {
+          navigation?.goBack();
+        }),
       );
-      if (res?.data) {
-        navigation?.goBack();
-      } else {
-        Alert.alert('Error', 'Unable to Reject Call');
-      }
     } catch (error) {
       Alert.alert('Error', 'Unable to Reject Call');
     }

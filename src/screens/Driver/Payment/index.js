@@ -150,11 +150,10 @@ const index = ({navigation, route}) => {
               </Text>
             </TouchableOpacity> */}
           </View>
-          <PaymentCard
+          {/* <PaymentCard
             title={I18n.t('wallet_balance')}
             // add_Money={I18n.t('add_cards')}
-          />
-
+          /> */}
           <PaymentHistory
             onPress={() => {
               navigation?.navigate('TransactionHistory');
@@ -197,7 +196,9 @@ const index = ({navigation, route}) => {
               </View>
             </View>
           ) : (
-            false
+            <Text style={{textAlign: 'center', fontSize: 18, marginTop: 30}}>
+              Hurry! You have subscription of stripe connected account.
+            </Text>
           )}
         </View>
       </KeyboardAwareScrollView>

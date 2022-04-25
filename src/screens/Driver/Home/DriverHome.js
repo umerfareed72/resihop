@@ -45,6 +45,9 @@ import {
   setReturnMapDestination,
   get_settings,
   setCity,
+  setAvailableSeats,
+  MyRidesFiltering,
+  MyDrivesFiltering,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -61,60 +64,33 @@ import {post} from '../../../services';
 import {DRIVE_CONST} from '../../../utilities/routes';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import {Call_Status} from '../../../redux/actions/app.action';
 
 //Data
-var TimeList = {
-  id: 1,
-  title: I18n.t('time'),
-  items: [
-    {id: 1, text: '08:00 to 12:00', status: false},
-    {id: 2, text: '08:00 to 12:00', status: false},
-    {id: 3, text: '08:00 to 12:00', status: false},
-  ],
-};
 
 var RideStatusList = {
   id: 1,
-  title: I18n.t('ride_status'),
+  title: 'Ride Status',
   items: [
-    {id: 1, text: 'Confirmed', status: false},
-    {id: 2, text: 'Waiting for Match', status: false},
-    {id: 3, text: 'Matching Done', status: false},
+    {id: 1, text: 'Confirmed', status: false, value: 'CONFIRMED'},
+    {
+      id: 2,
+      text: 'Waiting For Match',
+      status: false,
+      value: 'WAITING_FOR_MATCH',
+    },
+    {id: 3, text: 'Matching Done', status: false, value: 'MATCHING_DONE'},
+    {id: 4, text: 'On The Way', status: false, value: 'ON_THE_WAY'},
   ],
 };
 
 const rideTypeList = {
   id: 4,
-  title: I18n.t('ride_type'),
+  title: 'Ride Type',
   items: [
-    {id: 1, text: 'All Rides'},
-    {id: 2, text: 'Destination Rides'},
-    {id: 3, text: 'Return Rides'},
-  ],
-};
-
-const DateList = {
-  id: 1,
-  title: I18n.t('date'),
-  items: [
-    {id: 1, text: '12 June'},
-    {id: 2, text: '13 June'},
-    {id: 3, text: '14 June'},
-    {id: 4, text: '15 June'},
-    {id: 5, text: '16 June'},
-  ],
-};
-
-const seatsList = {
-  id: 5,
-  title: I18n.t('seat'),
-  items: [
-    {id: 1, icon: appImages.seatBlue},
-    {id: 2, icon: appImages.seatBlue},
-    {id: 3, icon: appImages.seatBlue},
-    {id: 4, icon: appImages.seatBlue},
-    {id: 5, icon: appImages.seatBlue},
-    {id: 6, icon: appImages.seatBlue},
+    {id: 1, text: 'All Rides', value: null},
+    {id: 2, text: 'Destination Rides', value: 'destination'},
+    {id: 3, text: 'Return Rides', value: 'return'},
   ],
 };
 
@@ -131,11 +107,12 @@ const DriverHome = ({navigation}) => {
   const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
-  const [seats, setSeats] = useState('');
+  const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const isFocus = useIsFocused();
   const [multiDelete, setmultiDelete] = useState(false);
   const [selectedCard, setSelectedCard] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const {availableSeats} = useSelector(state => state.map);
 
   useEffect(() => {
     PushNotification.configure({
@@ -147,10 +124,20 @@ const DriverHome = ({navigation}) => {
         let notificationObj = notification.data.data;
         if (notificationObj) {
           notificationObj = JSON.parse(notificationObj);
-          if (notificationObj?.type == 'agora') {
+          if (notification?.notification?.title == 'Agora Call') {
             dispatch(
               getUserInfo(notificationObj, res => {
                 navigation?.navigate('IncomingCall');
+              }),
+            );
+          }
+          if (notification?.notification?.title == 'Agora Call Accept') {
+            dispatch(Call_Status('answered', () => {}));
+          }
+          if (notification?.notification?.title == 'Agora Call Reject') {
+            dispatch(
+              Call_Status('deny', () => {
+                navigation?.goBack();
               }),
             );
           }
@@ -176,11 +163,14 @@ const DriverHome = ({navigation}) => {
       getUserdata();
       dispatch(get_settings());
     }
+    return () => {
+      dispatch(setAvailableSeats(0));
+    };
   }, [isFocus]);
 
   const getDrives = async () => {
     dispatch(
-      MyRidesSortOrder('drives', 'date', res => {
+      MyRidesSortOrder('drives?', 'date', res => {
         dispatch({
           type: mapTypes.myDrives,
           payload: res,
@@ -267,40 +257,36 @@ const DriverHome = ({navigation}) => {
   const selectRideType = val => {
     setRideType(val);
   };
-  const selectSeats = val => {
-    setSeats(val);
-  };
+
   const selectdDate = val => {
     setdate(val);
   };
   const resetFilter = () => {
-    settime('');
-    setdate('');
     setRideType('');
-    setSeats('');
+    dispatch(setAvailableSeats(0));
     setStatus('');
   };
 
-  const ridesData = [
-    {
-      id: 1,
-      date: '12 June, 08:00',
-      status: 'Fully Booked',
-      seats: [1],
-    },
-    {
-      id: 2,
-      date: '12 June, 08:00',
-      status: 'Partially Booked',
-      seats: [1, 2],
-    },
-    {
-      id: 3,
-      date: '12 June, 08:00',
-      status: 'Waiting for Match',
-      seats: [1, 2],
-    },
-  ];
+  const onApplyFilter = () => {
+    dispatch(
+      MyDrivesFiltering(
+        'drives?',
+        ridetype?.value,
+        availableSeats,
+        status?.value,
+        res => {
+          console.log(res);
+          filterModalRef.current.close();
+          sortModalRef.current.close();
+          dispatch({
+            type: mapTypes.myDrives,
+            payload: res,
+          });
+        },
+      ),
+    );
+  };
+
   const onPress = item => {
     dispatch(setIDToUpdateDrive(item));
 
@@ -336,7 +322,7 @@ const DriverHome = ({navigation}) => {
   };
   const getDrivesByOrder = item => {
     dispatch(
-      MyRidesSortOrder('drives', item?.value, res => {
+      MyRidesSortOrder('drives?', item?.value, res => {
         dispatch({
           type: mapTypes.myDrives,
           payload: res,
@@ -539,26 +525,21 @@ const DriverHome = ({navigation}) => {
         )}
       </SafeAreaView>
       <RideFilterModal
-        time={TimeList}
-        seats={seatsList}
+        seats={seats}
         rideType={rideTypeList}
         status={RideStatusList}
-        date={DateList}
         onPressdate={selectdDate}
         onPressrideType={selectRideType}
-        onPressseats={selectSeats}
+        onPressseats={item => dispatch(setAvailableSeats(item))}
         onPresstime={selectTime}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
-        selectedTime={time}
-        selectedDate={date}
         selectedStatus={status}
         selectedRideType={ridetype}
-        selectedSeats={seats}
+        selectedSeats={availableSeats}
         onPressReset={resetFilter}
         onApply={() => {
-          filterModalRef.current.close();
-          sortModalRef.current.close();
+          onApplyFilter();
         }}
       />
       <SortModal show={sortModalRef} onPress={getDrivesByOrder} />

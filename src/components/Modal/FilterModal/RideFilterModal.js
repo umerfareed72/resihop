@@ -168,7 +168,7 @@ export const RideFilterModal = ({
   const showSeats = data => {
     return (
       <View style={styles.listContainer}>
-        <Text style={styles.listh1}>{data?.title}</Text>
+        <Text style={styles.listh1}>{'Seats'}</Text>
 
         <FlatList
           data={data}
@@ -199,7 +199,7 @@ export const RideFilterModal = ({
   return (
     <RBSheet
       ref={show}
-      height={691}
+      height={500}
       customStyles={{
         wrapper: {
           backgroundColor: 'rgba(16,16,16,0.5)',
@@ -223,8 +223,6 @@ export const RideFilterModal = ({
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{marginBottom: 30}}>
-          {showTime(time)}
-          {showDates(date)}
           {showStatus(status)}
           {showRideTypes(rideType)}
           {showSeats(seats)}
