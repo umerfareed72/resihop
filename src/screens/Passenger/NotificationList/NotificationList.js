@@ -24,7 +24,7 @@ import {Loader} from '../../../components';
 import BlankField from '../../../components/BlankField';
 import moment from 'moment';
 import {Image} from 'react-native-elements';
-
+import I18n from '../../../utilities/translations';
 const NotificationList = ({navigation}) => {
   //useState here
   const [notifData, setNotifData] = useState();

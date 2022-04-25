@@ -53,6 +53,7 @@ const index = ({navigation}) => {
         navigation?.navigate('CallNow', {
           firstName: item?.user?.firstName,
           lastName: item?.user?.lastName,
+          picture: item?.user?.picture?.url,
         });
       }),
     );

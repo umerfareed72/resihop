@@ -48,6 +48,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {
   getProfileInfo,
+  getUserInfo,
   SwitchDrive,
   updateInfo,
 } from '../../../redux/actions/auth.action';
@@ -126,6 +127,39 @@ const PassengerHome = ({navigation}) => {
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
   const [multiDelete, setmultiDelete] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+
+  useEffect(() => {
+    PushNotification.configure({
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: function (token) {
+        // console.log('TOKEN:', token);
+      },
+      onNotification: function (notification) {
+        let notificationObj = notification.data.data;
+        if (notificationObj) {
+          notificationObj = JSON.parse(notificationObj);
+          if (notificationObj?.type == 'agora') {
+            dispatch(
+              getUserInfo(notificationObj, res => {
+                navigation?.navigate('IncomingCall');
+              }),
+            );
+          }
+        }
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+
+      popInitialNotification: true,
+      requestPermissions: Platform.OS === 'ios' ? true : false,
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+    });
+  }, []);
+
   useEffect(() => {
     if (isFocused) {
       getRides();
@@ -313,27 +347,6 @@ const PassengerHome = ({navigation}) => {
       ]);
     }
   };
-  useEffect(() => {
-    PushNotification.configure({
-      // (optional) Called when Token is generated (iOS and Android)
-      onRegister: function (token) {
-        // console.log('TOKEN:', token);
-      },
-      onNotification: function (notification) {
-        navigation?.navigate('IncomingCall');
-        notification.finish(PushNotificationIOS.FetchResult.NoData);
-      },
-
-      popInitialNotification: true,
-      requestPermissions: Platform.OS === 'ios' ? true : false,
-      // IOS ONLY (optional): default: all - Permissions to register.
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
-    });
-  }, []);
 
   return (
     <>

@@ -142,6 +142,7 @@ const index = ({navigation}) => {
       }),
     );
   };
+
   return (
     <>
       <CustomHeader

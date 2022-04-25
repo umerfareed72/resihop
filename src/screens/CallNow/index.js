@@ -15,7 +15,7 @@ import {TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 
 const index = ({navigation, route}) => {
-  const {firstName, lastName} = route?.params;
+  const {firstName, lastName, picture} = route?.params;
   const [speaker, setSpeaker] = useState(true);
   const [joinsucceed, setJoinSucceed] = useState(false);
   const [peerIds, setPeerIds] = useState([]);
@@ -113,7 +113,11 @@ const index = ({navigation, route}) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.contentContainer}>
           <View style={styles.view1}>
-            <Image style={styles.imageStyle} source={{uri: profileIcon}} />
+            <Image
+              progressiveRenderingEnabled={true}
+              style={styles.imageStyle}
+              source={{uri: picture || profileIcon}}
+            />
             <Text style={styles.username}>
               {firstName} {lastName}
             </Text>

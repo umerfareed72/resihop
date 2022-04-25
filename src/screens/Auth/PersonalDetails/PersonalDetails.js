@@ -42,9 +42,9 @@ const user = {
 };
 
 const gender = {
-  Male: I18n.t('male'),
-  Female: I18n.t('female'),
-  Other: I18n.t('other'),
+  Male: 'Male',
+  Female: 'Female',
+  Other: 'Other',
 };
 const littleChips = [
   {

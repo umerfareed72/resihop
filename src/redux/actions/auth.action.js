@@ -217,3 +217,29 @@ export const getProfileInfo =
       );
     }
   };
+
+export const getUserInfo = (data, callBack) => async dispatch => {
+  try {
+    const response = await get(`users/${data?.by}`);
+    const body = {
+      call_data: data,
+      userData: response?.data,
+    };
+    dispatch({
+      type: Types.Get_User_Info_Success,
+      payload: body,
+    });
+    callBack(response.data);
+  } catch (error) {
+    setIsLoading(false);
+    let status = error?.response?.data?.statusCode;
+    responseValidator(
+      status,
+      error?.response?.data?.message[0]?.messages[0]?.message,
+    );
+    dispatch({
+      type: Types.Get_User_Info_Failure,
+      payload: error,
+    });
+  }
+};

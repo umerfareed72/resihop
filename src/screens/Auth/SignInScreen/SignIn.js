@@ -54,8 +54,6 @@ function signIn(props) {
         const mobilePhone = `%2b${
           country ? country.callingCode : '47'
         }${phoneNum}`;
-        console.log(mobilePhone);
-
         const getUser = await get(`users?mobile=${mobilePhone}`);
         if (getUser?.data?.length > 0) {
           const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;

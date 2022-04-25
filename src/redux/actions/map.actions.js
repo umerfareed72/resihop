@@ -441,6 +441,7 @@ export const get_rides_history = callBack => async dispatch => {
       type: Types.Get_Rides_Failure,
       payload: null,
     });
+    callBack(null);
   }
 };
 ///////////////////////////////////////// Get Drives History ////////////////////////////
@@ -510,6 +511,7 @@ export const BookRide =
       setBookLoading(false);
       callback(response.data);
     } catch (error) {
+      console.log('book ride', error);
       setBookLoading(false);
       let status = error?.response?.data?.statusCode;
       responseValidator(status, error?.response?.data?.message);
@@ -574,6 +576,7 @@ export const get_help = callBack => async dispatch => {
       type: Types.Get_Help_Failure,
       payload: null,
     });
+    callBack(null);
   }
 };
 

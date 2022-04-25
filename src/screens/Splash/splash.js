@@ -44,7 +44,7 @@ function splash(props) {
     //Request Permissions and get Token
     requestPermission();
     //Notification Listner
-    Notification_Listner(dispatch, props);
+    Notification_Listner(dispatch, props?.navigation);
     //On  local Notification
     LocalNotification();
   };

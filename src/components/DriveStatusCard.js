@@ -40,17 +40,18 @@ const DriveStatusCard = ({
       console.log(error?.response?.data);
     }
   };
-  const onCallPress = () => {
+  const onCallPress = item => {
     const requestBody = {
-      channel: driveItem?.idToUpdateDrive?._id,
-      role: 'audience',
-      tokentype: 'uid',
-      uid: JSON.parse(auth?.profile_info?.country?.phone),
+      to: item?.user?._id,
     };
+    console.log(requestBody);
     dispatch(
       create_agoral_channel(requestBody, res => {
-        console.log(res);
-        navigation?.navigate('CallNow');
+        navigation?.navigate('CallNow', {
+          firstName: item?.user?.firstName,
+          lastName: item?.user?.lastName,
+          picture: item?.user?.picture?.url,
+        });
       }),
     );
   };
@@ -137,7 +138,7 @@ const DriveStatusCard = ({
               onPressCard={() => {
                 navigation?.navigate('AddFavourites');
               }}
-              onPressCall={onCallPress}
+              onPressCall={() => onCallPress(item)}
               item={item}
             />
           )}

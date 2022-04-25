@@ -81,6 +81,7 @@ const RideStatusCards = ({
   const cancelRide = async () => {
     dispatch(
       CancelRide(ride._id, 'rides', setIsLoading, response => {
+        console.log(response);
         Alert.alert('Success', 'Ride Cancelled Successfully', [
           {
             text: 'Ok',

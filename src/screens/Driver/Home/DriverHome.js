@@ -47,7 +47,11 @@ import {
   setCity,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {getProfileInfo, updateInfo} from '../../../redux/actions/auth.action';
+import {
+  getProfileInfo,
+  getUserInfo,
+  updateInfo,
+} from '../../../redux/actions/auth.action';
 import {useIsFocused} from '@react-navigation/core';
 import mapTypes from '../../../redux/types/map.types';
 import Geocoder from 'react-native-geocoding';
@@ -132,6 +136,39 @@ const DriverHome = ({navigation}) => {
   const [multiDelete, setmultiDelete] = useState(false);
   const [selectedCard, setSelectedCard] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+
+  useEffect(() => {
+    PushNotification.configure({
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: function (token) {
+        // console.log('TOKEN:', token);
+      },
+      onNotification: function (notification) {
+        let notificationObj = notification.data.data;
+        if (notificationObj) {
+          notificationObj = JSON.parse(notificationObj);
+          if (notificationObj?.type == 'agora') {
+            dispatch(
+              getUserInfo(notificationObj, res => {
+                navigation?.navigate('IncomingCall');
+              }),
+            );
+          }
+        }
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+
+      popInitialNotification: true,
+      requestPermissions: Platform.OS === 'ios' ? true : false,
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+    });
+  }, []);
+
   //Get Data
   useEffect(() => {
     if (isFocus) {
@@ -348,28 +385,6 @@ const DriverHome = ({navigation}) => {
       ]);
     }
   };
-  useEffect(() => {
-    PushNotification.configure({
-      // (optional) Called when Token is generated (iOS and Android)
-      onRegister: function (token) {
-        // console.log('TOKEN:', token);
-      },
-      onNotification: function (notification) {
-        navigation?.navigate('IncomingCall');
-        notification.finish(PushNotificationIOS.FetchResult.NoData);
-      },
-
-      popInitialNotification: true,
-      requestPermissions: Platform.OS === 'ios' ? true : false,
-      // IOS ONLY (optional): default: all - Permissions to register.
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
-    });
-  }, []);
-
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />

@@ -81,21 +81,11 @@ const index = ({navigation, route}) => {
   const getCards = async () => {
     const check = await checkConnected();
     if (check) {
-      if (auth?.profile_info?.stripe_customer?.stripeID || !payment?.move) {
-        dispatch(
-          get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
-            console.log('Cards');
-          }),
-        );
-      } else {
-        Alert.alert('Error', 'Your request is under processing!', [
-          {
-            onPress: () => {
-              navigation?.goBack();
-            },
-          },
-        ]);
-      }
+      dispatch(
+        get_card_list(res => {
+          console.log('Cards');
+        }),
+      );
     }
   };
 
@@ -215,6 +205,7 @@ const index = ({navigation, route}) => {
           bookRide?.drive?._id || bookRide?.pool_match?._id,
           setBookLoading,
           response => {
+            console.log(response);
             navigation?.replace('PassengerHome');
           },
         ),
@@ -321,7 +312,7 @@ const index = ({navigation, route}) => {
               //disabled={!Loading && cardHolderName ? false : true}
               btn={true}
               onCardChange={details => {
-                console.log('Card Added', details);
+                // console.log('Card Added', details);
                 setcardDetail(details);
               }}
               onPressCard={card => {

@@ -29,10 +29,10 @@ export const add_stripe_card = (body, callBack) => async dispatch => {
 
 /////////////////////////////////////////  Get Card   ////////////////////////////
 
-export const get_card_list = (cid, callBack) => async dispatch => {
+export const get_card_list = callBack => async dispatch => {
   try {
     dispatch({type: Types.Payment_Loader, payload: true});
-    const response = await get(`${CARD_CONST}/${cid}`, await header());
+    const response = await get(`${CARD_CONST}`, await header());
     // if (response?.data?.user?.details) {
     dispatch({
       type: Types.Get_Card_Success,

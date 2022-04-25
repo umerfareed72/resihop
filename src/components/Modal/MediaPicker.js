@@ -5,7 +5,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 import {theme} from '../../theme';
-
+import I18n from '../../utilities/translations';
 const MediaPicker = ({show = false, onClosePress, onImageSelected}) => {
   const options = {
     mediaType: 'photo',

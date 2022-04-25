@@ -3,6 +3,7 @@ import PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {set_event_request} from '../../redux/actions';
+import {getUserInfo} from '../../redux/actions/auth.action';
 
 export const registerAppWithFCM = async () => {
   await messaging().registerDeviceForRemoteMessages();
@@ -57,11 +58,24 @@ const getFcmToken = async () => {
 
 export const Notification_Listner = (dispatch, navigation) => {
   messaging().onNotificationOpenedApp(async remoteMessage => {
-    navigation?.navigate('IncomingCall');
+    let notificationObj = remoteMessage.data.data;
+    if (notificationObj) {
+      notificationObj = JSON.parse(notificationObj);
+      if (notificationObj?.type == 'agora') {
+        dispatch(
+          getUserInfo(notificationObj, res => {
+            navigation?.navigate('IncomingCall');
+          }),
+        );
+      }
+    }
   });
   messaging().onMessage(async remoteMessage => {
-    console.log('Remote Notitifcation', remoteMessage);
-    LocalNotification(remoteMessage, 0, dispatch, navigation);
+    let notificationObj = remoteMessage.data.data;
+    if (notificationObj) {
+      notificationObj = JSON.parse(notificationObj);
+      LocalNotification(remoteMessage, notificationObj, dispatch, navigation);
+    }
   });
   messaging().getInitialNotification(async remoteMessage => {
     if (remoteMessage) {
@@ -70,7 +84,12 @@ export const Notification_Listner = (dispatch, navigation) => {
   });
 };
 
-export const LocalNotification = (notify, id, dispatch, navigation) => {
+export const LocalNotification = (
+  notify,
+  notificationObj,
+  dispatch,
+  navigation,
+) => {
   PushNotification.localNotification({
     channelId: 'fcm_fallback_notification_channel',
     title: notify?.notification?.title,
@@ -81,15 +100,23 @@ export const LocalNotification = (notify, id, dispatch, navigation) => {
     vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
     playSound: true, // (optional) default: true
     soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-    invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
+    invokeApp: false, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
   });
+  let type = notificationObj?.type;
+
+  if (type === 'agora') {
+    dispatch(
+      getUserInfo(notificationObj, res => {
+        navigation?.navigate('IncomingCall');
+      }),
+    );
+  }
+
   PushNotification.configure({
     // (optional) Called when Token is generated (iOS and Android)
-    onRegister: function (token) {
-      // console.log('TOKEN:', token);
-    },
+    onRegister: function (token) {},
     onNotification: function (notification) {
-      navigation?.navigate('IncomingCall');
+      // navigation?.navigate('NotificationList');
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
 
@@ -102,7 +129,4 @@ export const LocalNotification = (notify, id, dispatch, navigation) => {
       sound: true,
     },
   });
-};
-const onClickNotification = (id, dispatch, navigation) => {
-  navigation?.navigate('CallNow');
 };
