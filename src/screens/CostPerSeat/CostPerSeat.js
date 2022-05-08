@@ -61,7 +61,7 @@ const CostPerSeat = ({navigation}) => {
           <View style={styles.marginContainer}>
             <TouchableOpacity
               onPress={() => {
-                navigation?.navigate('AvailablePassenger');
+                navigation?.goBack();
               }}
               style={{
                 height: HP('7'),

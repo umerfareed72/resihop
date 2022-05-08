@@ -331,19 +331,12 @@ const index = () => {
           </View>
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt, {marginRight: 23}]}>
-            {I18n.t('need_to_arrive')}
-          </Text>
-          <Text style={[styles.selectTxt, {marginLeft: 8}]}>
+          <Text style={[styles.selectTxt, {width: '55%'}]}>
             {I18n.t('select_date')}
           </Text>
+          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
-          <TouchableOpacity
-            onPress={() => showTimePicker()}
-            style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
             style={[
@@ -356,6 +349,12 @@ const index = () => {
                 : 'Date'}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => showTimePicker()}
+            style={[styles.noLater, {justifyContent: 'center'}]}>
+            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
+          </TouchableOpacity>
+
           <Image
             source={appImages.calendar}
             resizeMode="contain"
@@ -371,7 +370,14 @@ const index = () => {
           />
         </View>
         <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
-        <DropDownPicker
+        <TouchableOpacity
+          onPress={() => {
+            navigation?.navigate('CostPerSeat');
+          }}
+          style={styles.dropBtn}>
+          <Text style={styles.dropText}>Cost Per Seat</Text>
+        </TouchableOpacity>
+        {/* <DropDownPicker
           open={open}
           value={value}
           items={items}
@@ -385,7 +391,7 @@ const index = () => {
             borderColor: colors.greyBorder,
           }}
           dropDownContainerStyle={{width: '90%', alignSelf: 'center'}}
-        />
+        /> */}
         <View style={styles.returnTripWrapper}>
           <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
           <ToggleSwitch

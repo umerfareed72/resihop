@@ -228,4 +228,20 @@ export default StyleSheet.create({
     lineHeight: 24,
     color: colors.txtBlack,
   },
+  dropBtn: {
+    width: '90%',
+    alignSelf: 'center',
+    borderColor: colors.navy_blue,
+    height: 56,
+    borderWidth: 1,
+    backgroundColor: colors.navy_blue,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dropText: {
+    color: colors.white,
+    fontSize: size.normal,
+    fontFamily: family.product_sans_bold,
+  },
 });
