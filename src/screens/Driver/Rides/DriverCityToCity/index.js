@@ -10,7 +10,14 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {colors, appIcons, appImages, mode, APIKEY} from '../../../../utilities';
+import {
+  colors,
+  appIcons,
+  appImages,
+  mode,
+  APIKEY,
+  header,
+} from '../../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -42,6 +49,8 @@ import {Loader} from '../../../../components/Loader/Loader';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import ReturnCalendarSheet from '../../../../components/ReurnCalenderSheet';
 import styles from './styles';
+import {post} from '../../../../services';
+import {Alert} from 'react-native';
 const index = () => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
@@ -56,13 +65,10 @@ const index = () => {
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
   const time = useSelector(state => state.map.time);
 
-  const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
-  const [noLaterTime, setNoLaterTime] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
-  const [screen, setScreen] = useState(false);
   const [favPress, setFavPress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -77,17 +83,7 @@ const index = () => {
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: '20 NOK', value: 20},
-    {label: '30 NOK', value: 30},
-    {label: '40 NOK', value: 40},
-    {label: '50 NOK', value: 50},
-    {label: '60 NOK', value: 60},
-    {label: '70 NOK', value: 70},
-    {label: '80 NOK', value: 80},
-  ]);
+  const [cost, setcost] = useState(null);
 
   // Release Redux States
   useEffect(() => {
@@ -104,6 +100,7 @@ const index = () => {
   }, []);
 
   const handleCreateDrive = async () => {
+    const totalCost = cost + availableSeats * settings?.adminCommission;
     setIsLoading(true);
     if (origin && destinationMap != null) {
       let resp = await fetch(
@@ -121,7 +118,7 @@ const index = () => {
           date: stamp,
           availableSeats: availableSeats,
           path: 0,
-          costPerSeat: value,
+          costPerSeat: totalCost.toFixed(0),
           interCity: true,
           startDes: origin?.description,
           destDes: destinationMap?.description,
@@ -168,6 +165,8 @@ const index = () => {
   };
   //Hanlde Return Drive
   const handleReturnCreateDrive = () => {
+    const totalCost = cost + availableSeats * settings?.adminCommission;
+
     const stamp = moment(
       `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
     ).valueOf();
@@ -180,14 +179,36 @@ const index = () => {
       date: stamp,
       availableSeats: availableSeats,
       path: 0,
-      costPerSeat: value,
-      costPerSeat: value + availableSeats * settings?.adminCommission,
+      costPerSeat: totalCost.toFixed(0),
       startDes: returnOrigin?.description,
       destDes: returnDestinationMap?.description,
       interCity: true,
     };
     dispatch(setReturnRide(body));
     navigation?.navigate('SelectRoute');
+  };
+  const onPressCost = async () => {
+    if (
+      origin?.location?.lat &&
+      origin?.location?.lng &&
+      destinationMap?.location?.lat &&
+      destinationMap?.location?.lng
+    ) {
+      const body = {
+        startLocation: [origin?.location.lat, origin?.location?.lng],
+        destinationLocation: [
+          destinationMap?.location?.lat,
+          destinationMap?.location?.lng,
+        ],
+      };
+      const res = await post(`drives/city`, body, await header());
+      if (res?.data) {
+        setcost(res?.data?.price);
+        navigation?.navigate('CostPerSeat', {data: res.data});
+      }
+    } else {
+      Alert.alert('Error!', 'Please add start and sestination location!');
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -372,7 +393,7 @@ const index = () => {
         <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
         <TouchableOpacity
           onPress={() => {
-            navigation?.navigate('CostPerSeat');
+            onPressCost();
           }}
           style={styles.dropBtn}>
           <Text style={styles.dropText}>Cost Per Seat</Text>
@@ -572,7 +593,7 @@ const index = () => {
                 availableSeats,
                 dateTimeStamp,
                 time,
-                value,
+                cost,
               ),
             },
           ]}
