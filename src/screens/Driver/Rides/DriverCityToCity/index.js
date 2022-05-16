@@ -352,9 +352,7 @@ const index = () => {
           </View>
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt, {width: '55%'}]}>
-            {I18n.t('select_date')}
-          </Text>
+          <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
           <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
@@ -369,18 +367,19 @@ const index = () => {
                 ? moment(dateTimeStamp).format('DD MMM')
                 : 'Date'}
             </Text>
+            <Image
+              source={appImages.calendar}
+              resizeMode="contain"
+              style={styles.calendarIcon}
+            />
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
             <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
           </TouchableOpacity>
 
-          <Image
-            source={appImages.calendar}
-            resizeMode="contain"
-            style={styles.calendarIcon}
-          />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             is24Hour={true}
@@ -390,6 +389,7 @@ const index = () => {
             onCancel={hideTimePicker}
           />
         </View>
+
         <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
         <TouchableOpacity
           onPress={() => {

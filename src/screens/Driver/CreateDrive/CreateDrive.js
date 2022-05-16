@@ -347,19 +347,10 @@ const CreateDrive = () => {
           </View>
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt, {marginRight: 23}]}>
-            {I18n.t('need_to_arrive')}
-          </Text>
-          <Text style={[styles.selectTxt, {marginLeft: 8}]}>
-            {I18n.t('select_date')}
-          </Text>
+          <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
+          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
-          <TouchableOpacity
-            onPress={() => showTimePicker()}
-            style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
             style={[
@@ -371,12 +362,19 @@ const CreateDrive = () => {
                 ? moment(dateTimeStamp).format('DD MMM')
                 : 'Date'}
             </Text>
+            <Image
+              source={appImages.calendar}
+              resizeMode="contain"
+              style={styles.calendarIcon}
+            />
           </TouchableOpacity>
-          <Image
-            source={appImages.calendar}
-            resizeMode="contain"
-            style={styles.calendarIcon}
-          />
+
+          <TouchableOpacity
+            onPress={() => showTimePicker()}
+            style={[styles.noLater, {justifyContent: 'center'}]}>
+            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
+          </TouchableOpacity>
+
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             is24Hour={true}
@@ -752,6 +750,9 @@ const styles = StyleSheet.create({
   },
   selectWrapper: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '78%',
     marginTop: 26,
     marginLeft: 20,
   },

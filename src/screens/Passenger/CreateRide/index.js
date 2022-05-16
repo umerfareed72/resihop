@@ -34,6 +34,7 @@ import {
   setReturnMapDestination,
   setRecurringDates,
   setReturnRecurringDates,
+  setReturnDateTimeStamp,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -55,6 +56,7 @@ const index = () => {
     returnOrigin,
     recurring_dates,
     return_recurring_dates,
+    settings,
   } = useSelector(state => state.map);
 
   const returnTime = useSelector(state => state.map);
@@ -67,7 +69,7 @@ const index = () => {
   const [screen, setScreen] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [normalTime, setNormalTime] = useState('');
+  const [normalTime, setNormalTime] = useState(new Date());
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
 
@@ -85,6 +87,7 @@ const index = () => {
       dispatch(setReturnFirstTime(null));
       dispatch(setRecurringDates([]));
       dispatch(setReturnRecurringDates([]));
+      dispatch(setReturnDateTimeStamp(null));
     };
   }, []);
 
@@ -117,10 +120,17 @@ const index = () => {
   };
 
   const handleCreateRide = () => {
-    const recurring_stamp = recurring_dates.map(item => {
-      return moment(`${item}T${time}`).valueOf();
-    });
-    const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+    let stamp = new Date();
+    let recurring_stamp = [new Date()];
+    if (dateTimeStamp && time) {
+      stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+    }
+    if (recurring_dates != '' && time) {
+      recurring_stamp = recurring_dates.map(item => {
+        return moment(`${item}T${time}`).valueOf();
+      });
+    }
+
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [
@@ -132,6 +142,7 @@ const index = () => {
       startDes: origin.description,
       destDes: destinationMap.description,
     };
+    console.log(body);
     dispatch(
       CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
         if (response.error) {
@@ -149,12 +160,16 @@ const index = () => {
   };
 
   const handleCreateReturnRide = () => {
-    const return_recurring_stamp = return_recurring_dates.map(item => {
-      return moment(`${item}T${returnTime?.returnFirstTime}`).valueOf();
-    });
-    const stamp = moment(
-      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
-    ).valueOf();
+    let stamp = new Date();
+    let return_recurring_stamp = [new Date()];
+    if (dateTimeStamp && time) {
+      stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+    }
+    if (return_recurring_stamp != '' && time) {
+      recurring_stamp = recurring_dates.map(item => {
+        return moment(`${item}T${time}`).valueOf();
+      });
+    }
     const body = {
       startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
       destinationLocation: [
@@ -314,15 +329,10 @@ const index = () => {
           </View>
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
           <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
+          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
-          <TouchableOpacity
-            onPress={() => showTimePicker()}
-            style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => calendarSheetRef.current.open()}
             style={[
@@ -332,24 +342,33 @@ const index = () => {
             <Text style={styles.dateTxt}>
               {dateTimeStamp !== null
                 ? moment(dateTimeStamp).format('DD MMM')
-                : 'Date'}
+                : moment(new Date()).format('DD MMM')}
+            </Text>
+            <Image
+              source={appImages.calendar}
+              resizeMode="contain"
+              style={styles.calendarIcon}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => showTimePicker()}
+            style={[styles.noLater, {justifyContent: 'center'}]}>
+            <Text style={styles.dateTxt}>
+              {time ? time : moment(new Date()).format('hh:mm')}
             </Text>
           </TouchableOpacity>
-          <Image
-            source={appImages.calendar}
-            resizeMode="contain"
-            style={styles.calendarIcon}
-          />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
-            date={normalTime ? new Date(normalTime) : new Date()}
-            is24Hour
+            is24Hour={true}
             locale="en_GB"
             mode="time"
             onConfirm={handleConfirm}
             onCancel={hideTimePicker}
+            date={new Date(normalTime)}
           />
         </View>
+
         <View style={styles.returnTripWrapper}>
           <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
           <ToggleSwitch
@@ -367,7 +386,7 @@ const index = () => {
               return {date: item};
             }),
           }}
-          date={dateTimeStamp}
+          date={dateTimeStamp || new Date()}
           calendarSheetRef={calendarSheetRef}
         />
         {toggleEnabled ? (
@@ -469,7 +488,7 @@ const index = () => {
                 <Text style={styles.dateTxt}>
                   {returnTime?.returnFirstTime != 'Invalid date'
                     ? returnTime?.returnFirstTime
-                    : `XX:XX`}
+                    : moment(new Date()).format('hh:mm')}
                 </Text>
               </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
@@ -478,7 +497,9 @@ const index = () => {
                 <Text style={styles.dateTxt}>
                   {returnTime?.returnSecondTime != 'Invalid date'
                     ? returnTime?.returnSecondTime
-                    : `XX:XX`}
+                    : moment(new Date())
+                        .add(settings?.returnRange, 'minutes')
+                        .format('HH:mm')}
                 </Text>
               </TouchableOpacity>
               <DateTimePickerModal
@@ -505,7 +526,7 @@ const index = () => {
                 <Text style={styles.dateTxt}>
                   {returnDateTimeStamp !== null
                     ? moment(returnDateTimeStamp).format('DD MMM')
-                    : 'Date'}
+                    : moment(new Date()).format('DD MMM')}
                 </Text>
               </TouchableOpacity>
               <Image
@@ -516,13 +537,13 @@ const index = () => {
             </View>
             <ReturnCalendarSheet
               recurring={screen}
-              mindate={dateTimeStamp}
+              mindate={dateTimeStamp || new Date()}
               ride={{
                 next: return_recurring_dates?.map(item => {
                   return {date: item};
                 }),
               }}
-              date={returnDateTimeStamp}
+              date={returnDateTimeStamp || new Date()}
               calendarSheetRef={returnCalendarSheetRef}
             />
           </>
@@ -545,18 +566,10 @@ const index = () => {
                 origin,
                 destinationMap,
                 availableSeats,
-                dateTimeStamp,
-                time,
               ),
             },
           ]}
-          disabled={handleDisable(
-            origin,
-            destinationMap,
-            availableSeats,
-            dateTimeStamp,
-            time,
-          )}
+          disabled={handleDisable(origin, destinationMap, availableSeats)}
           onPress={() => {
             handleCreateRide();
             if (toggleEnabled) {
@@ -570,39 +583,15 @@ const index = () => {
   );
 };
 
-const handleDisable = (
-  origin,
-  destinationMap,
-  availableSeats,
-  dateTimeStamp,
-  time,
-) => {
-  if (
-    !origin ||
-    !dateTimeStamp ||
-    !availableSeats ||
-    !destinationMap ||
-    !time
-  ) {
+const handleDisable = (origin, destinationMap, availableSeats) => {
+  if (!origin || !availableSeats || !destinationMap) {
     return true;
   }
   return false;
 };
 
-const handleColor = (
-  origin,
-  destinationMap,
-  availableSeats,
-  dateTimeStamp,
-  time,
-) => {
-  if (
-    !origin ||
-    !dateTimeStamp ||
-    !availableSeats ||
-    !destinationMap ||
-    !time
-  ) {
+const handleColor = (origin, destinationMap, availableSeats) => {
+  if (!origin || !availableSeats || !destinationMap) {
     return colors.btnGray;
   }
   return colors.green;

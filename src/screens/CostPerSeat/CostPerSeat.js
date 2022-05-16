@@ -40,6 +40,7 @@ const CostPerSeat = ({navigation, route}) => {
                   placeholder={
                     costData?.data?.pricePerKM.toFixed(0) || 'Amount'
                   }
+                  placeholderTextColor={colors.black}
                   editable={false}
                   value={costData?.data?.pricePerKM}
                 />
@@ -57,6 +58,7 @@ const CostPerSeat = ({navigation, route}) => {
               </View>
               <View style={styles.inputTextReplica}>
                 <TextInput
+                  placeholderTextColor={colors.black}
                   placeholder={costData?.data?.price.toFixed(0) || 'Amount'}
                   editable={false}
                   value={costData?.data?.pricePerKM}

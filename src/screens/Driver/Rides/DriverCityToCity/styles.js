@@ -114,6 +114,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginTop: 26,
     marginLeft: 20,
+    width: '78%',
+    justifyContent: 'space-between',
   },
   selectTxt: {
     fontSize: 14,
