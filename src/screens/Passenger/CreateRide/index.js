@@ -120,8 +120,8 @@ const index = () => {
   };
 
   const handleCreateRide = () => {
-    let stamp = new Date();
-    let recurring_stamp = [new Date()];
+    let stamp = new Date().getTime();
+    let recurring_stamp = [new Date().getTime()];
     if (dateTimeStamp && time) {
       stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
     }
@@ -142,7 +142,6 @@ const index = () => {
       startDes: origin.description,
       destDes: destinationMap.description,
     };
-    console.log(body);
     dispatch(
       CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
         if (response.error) {
@@ -160,13 +159,13 @@ const index = () => {
   };
 
   const handleCreateReturnRide = () => {
-    let stamp = new Date();
-    let return_recurring_stamp = [new Date()];
+    let stamp = new Date().getTime();
+    let return_recurring_stamp = [new Date().getTime()];
     if (dateTimeStamp && time) {
       stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
     }
     if (return_recurring_stamp != '' && time) {
-      recurring_stamp = recurring_dates.map(item => {
+      return_recurring_stamp = recurring_dates.map(item => {
         return moment(`${item}T${time}`).valueOf();
       });
     }
@@ -181,7 +180,6 @@ const index = () => {
       startDes: returnOrigin.description,
       destDes: returnDestinationMap.description,
     };
-    console.log(body);
     dispatch(
       CreateRideRequest(body, setIsLoading, null, response => {
         // console.log('Return Create Ride', response);

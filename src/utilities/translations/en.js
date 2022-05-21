@@ -105,7 +105,7 @@ export default {
   create_ride: 'Create Ride',
   recurring_ride: 'My Recurring Rides',
   city_to_city: 'City to City Ride',
-  upcoming_rides: 'My Upcoming Ride',
+  upcoming_rides: 'My Upcoming Rides',
   lorem:
     'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   first_ride: 'Create your First Ride',
@@ -131,8 +131,8 @@ export default {
   edit_card: 'Edit Card',
   remove_card: 'Remove Card',
   set_default_card: 'Set as Default Card',
-  delete_h2: 'Are you sure you want to Remove this card?',
-  delete_h1: 'Remove Card',
+  delete_h2: 'Are you sure you want to cancel this drive?',
+  delete_h1: 'Cancel',
   yes: 'Yes',
   no: 'No',
   save_card: 'Save Card',
@@ -175,7 +175,7 @@ export default {
   city_to_city_drives: 'City to City Drives',
   create_first_drive: 'Create your Frist Drive',
   single_trip: 'Single Trip',
-  recurring_ride: 'Recurring Ride',
+  recurring_ride: 'Recurring Rides',
   start_location: 'Start Location',
   destination: 'Destination',
   book_seat: 'Book Your Seats',
@@ -359,7 +359,7 @@ export default {
   no_driver: 'Currently No More Drivers Available',
   message: 'Message',
   //
-  ride_delete_h2: 'Are you sure you want to Cancel this ride?',
+  ride_delete_h2: 'Are you sure you want to cancel this ride?',
   ride_delete_h1: 'Cancel',
 
   //Connection Error

@@ -84,9 +84,14 @@ const CreateDrive = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
+    {label: '10 NOK', value: 10},
+    {label: '15 NOK', value: 15},
     {label: '20 NOK', value: 20},
+    {label: '25 NOK', value: 25},
     {label: '30 NOK', value: 30},
+    {label: '35 NOK', value: 35},
     {label: '40 NOK', value: 40},
+    {label: '45 NOK', value: 45},
     {label: '50 NOK', value: 50},
     {label: '60 NOK', value: 60},
     {label: '70 NOK', value: 70},
@@ -95,6 +100,7 @@ const CreateDrive = () => {
 
   // Release Redux States
   useEffect(() => {
+    setValue(items[2].value);
     return () => {
       dispatch(setAvailableSeats(0));
       dispatch(setOrigin(null));
@@ -117,10 +123,16 @@ const CreateDrive = () => {
       );
       let respJson = await resp.json();
       if (respJson) {
-        const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
-        const recurring_stamp = recurring_dates.map(item => {
-          return moment(`${item}T${time}`).valueOf();
-        });
+        let stamp = new Date().getTime();
+        let recurring_stamp = [new Date().getTime()];
+        if (dateTimeStamp && time) {
+          stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+        }
+        if (recurring_dates != '' && time) {
+          recurring_stamp = recurring_dates.map(item => {
+            return moment(`${item}T${time}`).valueOf();
+          });
+        }
         const body = {
           startLocation: [origin?.location.lat, origin?.location?.lng],
           destinationLocation: [
@@ -178,12 +190,17 @@ const CreateDrive = () => {
   };
   //Hanlde Return Drive
   const handleReturnCreateDrive = () => {
-    const stamp = moment(
-      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
-    ).valueOf();
-    const return_recurring_stamp = return_recurring_dates.map(item => {
-      return moment(`${item}T${returnTime?.returnFirstTime}`).valueOf();
-    });
+    let stamp = new Date().getTime();
+    let return_recurring_stamp = [new Date().getTime()];
+    if (dateTimeStamp && time) {
+      stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+    }
+    if (return_recurring_stamp != '' && time) {
+      return_recurring_stamp = recurring_dates.map(item => {
+        return moment(`${item}T${time}`).valueOf();
+      });
+    }
+
     const body = {
       startLocation: [returnOrigin?.location.lat, returnOrigin?.location?.lng],
       destinationLocation: [
@@ -360,7 +377,7 @@ const CreateDrive = () => {
             <Text style={styles.dateTxt}>
               {dateTimeStamp !== null
                 ? moment(dateTimeStamp).format('DD MMM')
-                : 'Date'}
+                : moment(new Date()).format('DD MMM')}
             </Text>
             <Image
               source={appImages.calendar}
@@ -372,7 +389,9 @@ const CreateDrive = () => {
           <TouchableOpacity
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
+            <Text style={styles.dateTxt}>
+              {time ? time : moment(new Date()).format('hh:mm')}
+            </Text>
           </TouchableOpacity>
 
           <DateTimePickerModal
@@ -417,7 +436,7 @@ const CreateDrive = () => {
               return {date: item};
             }),
           }}
-          date={dateTimeStamp}
+          date={dateTimeStamp || new Date()}
           calendarSheetRef={calendarSheetRef}
           setDate={setDate}
         />
@@ -520,7 +539,7 @@ const CreateDrive = () => {
                 <Text style={styles.dateTxt}>
                   {returnTime?.returnFirstTime != 'Invalid date'
                     ? returnTime?.returnFirstTime
-                    : `XX:XX`}
+                    : moment(new Date()).format('hh:mm')}
                 </Text>
               </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
@@ -529,7 +548,9 @@ const CreateDrive = () => {
                 <Text style={styles.dateTxt}>
                   {returnTime?.returnSecondTime != 'Invalid date'
                     ? returnTime?.returnSecondTime
-                    : `XX:XX`}
+                    : moment(new Date())
+                        .add(settings?.returnRange, 'minutes')
+                        .format('HH:mm')}
                 </Text>
               </TouchableOpacity>
               <DateTimePickerModal
@@ -556,7 +577,7 @@ const CreateDrive = () => {
                 <Text style={styles.dateTxt}>
                   {returnDateTimeStamp !== null
                     ? moment(returnDateTimeStamp).format('DD MMM')
-                    : 'Date'}
+                    : moment(new Date()).format('DD MMM')}
                 </Text>
               </TouchableOpacity>
               <Image
@@ -573,7 +594,7 @@ const CreateDrive = () => {
                   return {date: item};
                 }),
               }}
-              date={returnDateTimeStamp}
+              date={returnDateTimeStamp || new Date()}
               calendarSheetRef={returnCalendarSheetRef}
             />
           </>
@@ -596,18 +617,11 @@ const CreateDrive = () => {
                 origin,
                 destinationMap,
                 availableSeats,
-                dateTimeStamp,
-                time,
-                value,
               ),
             },
           ]}
           disabled={
-            origin === null ||
-            destination === null ||
-            availableSeats === null ||
-            dateTimeStamp === null ||
-            value == null
+            origin === null || destination === null || availableSeats === null
           }
           onPress={() => {
             handleCreateDrive();
@@ -619,22 +633,8 @@ const CreateDrive = () => {
   );
 };
 
-const handleColor = (
-  origin,
-  destinationMap,
-  availableSeats,
-  dateTimeStamp,
-  time,
-  cost,
-) => {
-  if (
-    origin == null ||
-    dateTimeStamp == null ||
-    availableSeats == null ||
-    destinationMap == null ||
-    time == null ||
-    cost == null
-  ) {
+const handleColor = (origin, destinationMap, availableSeats) => {
+  if (origin == null || availableSeats == null || destinationMap == null) {
     return colors.btnGray;
   }
   return colors.green;

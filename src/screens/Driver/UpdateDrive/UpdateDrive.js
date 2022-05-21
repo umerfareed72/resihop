@@ -29,6 +29,7 @@ import {
   setMapSegment,
   setUpdateDrive,
   setSeats,
+  CreateDriveRequest,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -155,6 +156,10 @@ const UpdateDrive = () => {
   //Hanlde Return Drive
   const handleReturnCreateDrive = () => {
     setIsLoading(true);
+    let stamp = new Date().getTime();
+    if (dateTimeStamp && time) {
+      stamp = moment(`${returnDateTimeStamp}T${time}`).valueOf();
+    }
     try {
       const body = {
         startLocation: [
@@ -165,7 +170,7 @@ const UpdateDrive = () => {
           returnDestinationMap?.location?.lat,
           returnDestinationMap?.location?.lng,
         ],
-        date: returnDateTimeStamp,
+        date: stamp,
         availableSeats: availableSeats,
         path: 0,
         costPerSeat: value + availableSeats * settings?.adminCommission,
@@ -174,9 +179,10 @@ const UpdateDrive = () => {
         destDes: returnDestinationMap?.description,
       };
       dispatch(
-        setUpdateDrive(returnTime?.idToUpdateDrive?.id, body, response => {
-          console.log('return ride  created');
-          setIsLoading(true);
+        CreateDriveRequest(body, setIsLoading, async response => {
+          if (response?.error) {
+            Alert.alert('Failed', response?.message[0]?.messages[0]?.message);
+          }
         }),
       );
     } catch (error) {
@@ -486,7 +492,7 @@ const UpdateDrive = () => {
                 <Text style={styles.dateTxt}>
                   {returnTime?.returnFirstTime != 'Invalid date'
                     ? returnTime?.returnFirstTime
-                    : `XX:XX`}
+                    : moment(new Date()).format('hh:mm')}
                 </Text>
               </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
@@ -495,7 +501,9 @@ const UpdateDrive = () => {
                 <Text style={styles.dateTxt}>
                   {returnTime?.returnSecondTime != 'Invalid date'
                     ? returnTime?.returnSecondTime
-                    : `XX:XX`}
+                    : moment(new Date())
+                        .add(settings?.returnRange, 'minutes')
+                        .format('HH:mm')}
                 </Text>
               </TouchableOpacity>
               <DateTimePickerModal
@@ -522,7 +530,7 @@ const UpdateDrive = () => {
                 <Text style={styles.dateTxt}>
                   {returnDateTimeStamp !== null
                     ? moment(returnDateTimeStamp).format('DD MMM')
-                    : 'Date'}
+                    : moment(new Date()).format('DD MMM')}
                 </Text>
               </TouchableOpacity>
               <Image

@@ -365,7 +365,7 @@ const index = () => {
             <Text style={styles.dateTxt}>
               {dateTimeStamp !== null
                 ? moment(dateTimeStamp).format('DD MMM')
-                : 'Date'}
+                : moment(new Date()).format('DD MMM')}
             </Text>
             <Image
               source={appImages.calendar}
@@ -377,7 +377,9 @@ const index = () => {
           <TouchableOpacity
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
+            <Text style={styles.dateTxt}>
+              {time ? time : moment(new Date()).format('hh:mm')}
+            </Text>
           </TouchableOpacity>
 
           <DateTimePickerModal
@@ -522,7 +524,7 @@ const index = () => {
                 <Text style={styles.dateTxt}>
                   {returnTime?.returnFirstTime != 'Invalid date'
                     ? returnTime?.returnFirstTime
-                    : `XX:XX`}
+                    : moment(new Date()).format('hh:mm')}
                 </Text>
               </TouchableOpacity>
               <Text> {I18n.t('to')}</Text>
@@ -531,7 +533,9 @@ const index = () => {
                 <Text style={styles.dateTxt}>
                   {returnTime?.returnSecondTime != 'Invalid date'
                     ? returnTime?.returnSecondTime
-                    : `XX:XX`}
+                    : moment(new Date())
+                        .add(settings?.returnRange, 'minutes')
+                        .format('HH:mm')}
                 </Text>
               </TouchableOpacity>
               <DateTimePickerModal
@@ -558,7 +562,7 @@ const index = () => {
                 <Text style={styles.dateTxt}>
                   {returnDateTimeStamp !== null
                     ? moment(returnDateTimeStamp).format('DD MMM')
-                    : 'Date'}
+                    : moment(new Date()).format('DD MMM')}
                 </Text>
               </TouchableOpacity>
               <Image
