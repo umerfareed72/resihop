@@ -38,19 +38,24 @@ const Offers = ({navigation}) => {
     }
   };
   const OfferCard = ({data}) => {
-    console.log('data val is   ', data);
     return (
-      <LinearGradient colors={colors.offerCardColor} style={styles.cardStyle}>
-        <View style={styles.cardContent}>
-          <Text style={styles.titleText}>{data?.item?.title}</Text>
-          <Text style={styles.desciptionText}>{data?.item?.description}</Text>
-          <View style={styles.promoStyle}>
-            <Text style={styles.promoText}>
-              {data?.item?.promo != null ? data?.item?.promo : ''}
-            </Text>
-          </View>
-        </View>
-      </LinearGradient>
+      <>
+        {data?.item?.promo != null ? (
+          <LinearGradient
+            colors={colors.offerCardColor}
+            style={styles.cardStyle}>
+            <View style={styles.cardContent}>
+              <Text style={styles.titleText}>{data?.item?.title}</Text>
+              <Text style={styles.desciptionText}>
+                {data?.item?.description}
+              </Text>
+              <View style={styles.promoStyle}>
+                <Text style={styles.promoText}>{data?.item?.promo}</Text>
+              </View>
+            </View>
+          </LinearGradient>
+        ) : null}
+      </>
     );
   };
 

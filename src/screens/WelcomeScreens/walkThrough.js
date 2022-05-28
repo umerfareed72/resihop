@@ -123,10 +123,10 @@ function walkThrough(props) {
           {activeIndex == 0 ? (
             <View style={styles.bottomCon}>
               <Text style={[theme.Text.h1Bold, styles.heading]}>
-                {I18n.t('welcome_to_resihop_msg')}
+                {I18n.t('walktrough_heading')}
               </Text>
               <Text style={[theme.Text.h3Normal, styles.headingSaying]}>
-                {I18n.t('walkthrough_msg_one')}
+                {I18n.t('walkthrough_subtitle')}
               </Text>
             </View>
           ) : (

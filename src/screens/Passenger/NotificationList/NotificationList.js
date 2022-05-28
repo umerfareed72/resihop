@@ -89,7 +89,7 @@ const NotificationList = ({navigation}) => {
     <>
       <CustomHeader
         navigation={navigation}
-        title={'Notifications'}
+        title={I18n.t('notification')}
         backButton={true}
       />
 
@@ -100,7 +100,7 @@ const NotificationList = ({navigation}) => {
             renderItem={item => <NotificationItem data={item} />}
           />
         ) : (
-          <BlankField title={'No Notification Available'} />
+          <BlankField title={I18n.t('no_notification')} />
         )}
       </SafeAreaView>
 

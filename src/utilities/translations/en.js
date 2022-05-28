@@ -6,9 +6,8 @@ export default {
   select_language_title: 'Select Your Language',
   next: 'Next',
   //WalkThrough
-  walktrough_heading: 'Välkommen Till Res ihop',
-  walkthrough_subtitle:
-    'Erbjud tomma platser i bilen på väg till jobbet och få ersättning av de som reser. Oroa dig inte, vi tar hand om alla anslutningar, du anger bara din rutt du anger bara din rutt.',
+  walktrough_heading: 'Welcome To Res ihop',
+  walkthrough_subtitle: `Offer empty places in the car on the way to work and get compensation from those who travel. Don't worry, we take care of all connections, you just input your route`,
   //login page
   login: 'Login',
   sign_up: 'Sign up',
@@ -181,6 +180,8 @@ export default {
   book_seat: 'Book Your Seats',
   need_to_arrive: 'Departure Time',
   select_date: 'Select Date',
+  invite_desc:
+    'Send the below code to your friends and let them join in ride sharing from Res Ihop',
   return_trip: 'Return Trip',
   departure_time: 'Departure Time (Return)',
   departure_time_desc: '(Add a time bracket when you want ride for return)',
@@ -385,4 +386,32 @@ export default {
   no_fav_location: 'No Favourite Location',
   report: 'Report',
   tripDateTime: 'Trip Date & Time:',
+  ride_history: 'Ridehistorie',
+
+  // Drawer Label
+  ride_history: 'Ride History',
+  my_payment_method: 'My Payment Methods',
+  favourites: 'Favourites',
+  reports: 'Reports',
+  offers: 'Offers',
+  invite: 'Invite',
+  my_contribution: 'My Contribution',
+  settings: 'Settings',
+  logout: 'Log out',
+  driver_history: 'Driver History',
+  vehicle_information: 'Vehicle Information',
+  ride_shared: 'Ride(s) Shared',
+  distance_shared: 'Distance Shared',
+  co_reduce: 'CO2 Reduced',
+  notification: 'Notification',
+  no_notification: 'No Notification Available',
+  total_drives: 'Total Drives',
+  total_earnings: 'Total Earning',
+  waiting_for_match: 'Waiting for Match',
+  all_rides: 'All Rides',
+  destination_rides: 'Destination Rides',
+  return_rides: 'Return Rides',
+  edit_profile: 'Edit Profile',
+  my_recurring_drives: 'My Recurring Drives',
+  my_recurring_rides: 'My Recurring Rides',
 };

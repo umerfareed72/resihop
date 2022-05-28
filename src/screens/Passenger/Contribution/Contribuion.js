@@ -25,6 +25,7 @@ import {get, post} from '../../../services';
 import {useSelector} from 'react-redux';
 import {Image} from 'react-native-elements';
 import {Share} from 'react-native';
+import i18n from '../../../utilities/translations';
 const Contribution = ({navigation}) => {
   const [getContribution, setContributions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +62,7 @@ const Contribution = ({navigation}) => {
         barColor={'transparent'}
         backButton={true}
         navigation={navigation}
-        title="My Contribution"
+        title={i18n.t('my_contribution')}
         btnImage1={appIcons.share_icon}
         bg3Color={'transparent'}
         tintColor3={colors?.light_black}
@@ -80,23 +81,22 @@ const Contribution = ({navigation}) => {
             source={{uri: auth?.profile_info?.picture?.url || profileIcon}}
           />
           <Text style={styles.userName}>
-            {auth?.profile_info?.firstName}
-            {auth?.profile_info?.lastName}
+            {auth?.profile_info?.firstName} {auth?.profile_info?.lastName}
           </Text>
         </View>
         <TouchableOpacity style={styles.buttonStyle}>
           <Text style={styles.buttonText}>
-            {getContribution?.saved || 0} KG(s) CO2 Reduced
+            {getContribution?.saved || 0} KG(s) {i18n.t('co_reduce')}
           </Text>
         </TouchableOpacity>
         <View style={styles.aiRow}>
           <ContributionCard
             title={getContribution?.rideShared || 0}
-            description={'Ride(s) Shared'}
+            description={i18n.t('ride_shared')}
           />
           <ContributionCard
             title={getContribution?.distance || 0}
-            description={'Distance Shared'}
+            description={i18n.t('distance_shared')}
           />
         </View>
       </View>

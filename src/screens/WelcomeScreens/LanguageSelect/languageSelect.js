@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, Image, NativeModules} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
@@ -7,14 +8,18 @@ import {Container} from '../../../components/Container';
 import MyStatusBar from '../../../components/Header/statusBar';
 import {LanguageInfo} from '../../../redux/actions/auth.action';
 import {theme} from '../../../theme/theme';
-import {colors} from '../../../utilities';
+import {colors, languageSelector} from '../../../utilities';
 import {appIcons, drawerIcons} from '../../../utilities/images';
 import I18n from '../../../utilities/translations';
 
 function languageSelect(props) {
   const dispatch = useDispatch(null);
-  const [language, setLanguage] = useState('');
+  const [language, setLanguage] = useState('en');
+  const handleLanguage = async lang => {
+    setLanguage(lang);
 
+    I18n.locale = lang;
+  };
   return (
     <>
       <MyStatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
@@ -29,8 +34,11 @@ function languageSelect(props) {
           <View>
             <ChooseLanguage
               onSelected={lang => {
-                setLanguage(lang);
+                handleLanguage(lang);
               }}
+              english={'English'}
+              norway={'Norska'}
+              selectedLang={language}
             />
             <Button
               title={I18n.t('next')}
@@ -39,6 +47,7 @@ function languageSelect(props) {
               onPress={() => {
                 dispatch(
                   LanguageInfo(language, () => {
+                    AsyncStorage.setItem('lang', language);
                     props.navigation.navigate('WalkThrough');
                   }),
                 );

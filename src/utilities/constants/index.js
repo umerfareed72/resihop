@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PermissionsAndroid} from 'react-native';
 import {Dimensions} from 'react-native';
-
+import I18n from '../translations';
 export const Constants = {
   windowWidth: Dimensions.get('window').width,
   windowHeight: Dimensions.get('window').height,
@@ -86,3 +86,32 @@ export const total_seats = [
 ];
 export const profileIcon =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4CRKPij6o2waFROp-89BCE8lEf96jLsndRQ&usqp=CAU';
+export var RideStatusList = {
+  id: 1,
+  title: I18n.t('ride_status'),
+  items: [
+    {id: 1, text: I18n.t('confirmed'), status: false, value: 'CONFIRMED'},
+    {
+      id: 2,
+      text: I18n.t('waiting_for_match'),
+      status: false,
+      value: 'WAITING_FOR_MATCH',
+    },
+    {
+      id: 3,
+      text: I18n.t('matching_done'),
+      status: false,
+      value: 'MATCHING_DONE',
+    },
+  ],
+};
+
+export const rideTypeList = {
+  id: 4,
+  title: I18n.t('ride_type'),
+  items: [
+    {id: 1, text: I18n.t('all_rides'), value: null},
+    {id: 2, text: I18n.t('destination_rides'), value: 'destination'},
+    {id: 3, text: I18n.t('return_rides'), value: 'return'},
+  ],
+};

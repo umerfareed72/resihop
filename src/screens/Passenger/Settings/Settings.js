@@ -50,7 +50,7 @@ const Settings = ({navigation}) => {
       onPress: () => navigation.navigate('BlockedList'),
     },
     {
-      title: I18n.t('set_faq'),
+      title: I18n.t('faq_title'),
       onPress: () => navigation.navigate('Faq'),
     },
     {

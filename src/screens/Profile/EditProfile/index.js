@@ -43,9 +43,9 @@ export const formSchema = Yup.object().shape({
 });
 
 const gender = {
-  Male: 'Male',
-  Female: 'Female',
-  Other: 'Other',
+  Male: I18n.t('male'),
+  Female: I18n.t('female'),
+  Other: I18n.t('other'),
 };
 
 const littleChips = [
@@ -169,7 +169,7 @@ function index(props) {
   return (
     <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
       <CustomHeader
-        title={'Edit Profile'}
+        title={I18n.t('edit_profile')}
         backButton={true}
         navigation={props?.navigation}
       />

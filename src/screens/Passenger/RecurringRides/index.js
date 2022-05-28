@@ -12,7 +12,15 @@ import {
 } from '../../../components';
 import {get, post} from '../../../services';
 import * as Types from '../../../redux/types/map.types';
-import {appIcons, appImages, colors, header, WP} from '../../../utilities';
+import {
+  appIcons,
+  appImages,
+  colors,
+  header,
+  RideStatusList,
+  rideTypeList,
+  WP,
+} from '../../../utilities';
 import BlankField from '../../../components/BlankField';
 import {useIsFocused} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
@@ -28,34 +36,6 @@ import {checkAppPermission} from '../../../utilities/helpers/permissions';
 import {Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
-
-//Data
-
-var RideStatusList = {
-  id: 1,
-  title: 'Ride Status',
-  items: [
-    {id: 1, text: 'Confirmed', status: false, value: 'CONFIRMED'},
-    {
-      id: 2,
-      text: 'Waiting For Match',
-      status: false,
-      value: 'WAITING_FOR_MATCH',
-    },
-    {id: 3, text: 'Matching Done', status: false, value: 'MATCHING_DONE'},
-    {id: 4, text: 'On The Way', status: false, value: 'ON_THE_WAY'},
-  ],
-};
-
-const rideTypeList = {
-  id: 4,
-  title: 'Ride Type',
-  items: [
-    {id: 1, text: 'All Rides', value: null},
-    {id: 2, text: 'Destination Rides', value: 'destination'},
-    {id: 3, text: 'Return Rides', value: 'return'},
-  ],
-};
 
 function index(props) {
   const filterModalRef = useRef(null);
@@ -254,7 +234,7 @@ function index(props) {
           onPressbtnImage1={() => filterModalRef.current.open()}
           btnImage={appIcons.mobiledata}
           btnImage1={appIcons.filter}
-          title={'My Recurring Rides'}
+          title={I18n.t('my_recurring_rides')}
           navigation={props?.navigation}
           backButton={true}
         />

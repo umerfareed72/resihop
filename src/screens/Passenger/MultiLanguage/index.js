@@ -1,17 +1,24 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
 import {CustomHeader} from '../../../components';
-
 import ChooseLanguage from '../../../components/ChooseLanguage';
 import {Container} from '../../../components/Container';
 import {theme} from '../../../theme/theme';
-
 import I18n from '../../../utilities/translations';
+import {StackActions} from '@react-navigation/native';
 
 function MultiLanguage(props) {
   const [language, setLanguage] = useState('');
-
+  const handleLanguage = async lang => {
+    setLanguage(lang);
+    I18n.locale = lang;
+  };
+  const submitLang = async () => {
+    AsyncStorage.setItem('lang', language);
+    props.navigation.dispatch(StackActions.popToTop());
+  };
   return (
     <>
       <CustomHeader
@@ -23,8 +30,11 @@ function MultiLanguage(props) {
         <View>
           <ChooseLanguage
             onSelected={lang => {
-              setLanguage(lang);
+              handleLanguage(lang);
             }}
+            english={'English'}
+            norway={'Norska'}
+            selectedLang={language}
           />
 
           <Button
@@ -32,7 +42,7 @@ function MultiLanguage(props) {
             buttonStyle={theme.Button.buttonStyle}
             titleStyle={theme.Button.titleStyle}
             onPress={() => {
-              props.navigation.navigate('Settings');
+              submitLang();
             }}
             disabled={language === ''}
             disabledStyle={theme.Button.disabledStyle}

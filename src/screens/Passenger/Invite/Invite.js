@@ -70,7 +70,7 @@ const Invite = ({navigation}) => {
           <View style={styles.subContainerOne}>
             <Image source={appImages.inviteImage} />
             <Text style={styles.headingText}>{I18n.t('invite_friend')}</Text>
-            <Text style={styles.descriptionText}>{I18n.t('lorem')}</Text>
+            <Text style={styles.descriptionText}>{I18n.t('invite_desc')}</Text>
             <View style={styles.codeContainer}>
               <Text style={styles.codeText}>{code}</Text>
 

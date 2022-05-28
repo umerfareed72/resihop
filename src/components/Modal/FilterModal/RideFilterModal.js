@@ -168,7 +168,7 @@ export const RideFilterModal = ({
   const showSeats = data => {
     return (
       <View style={styles.listContainer}>
-        <Text style={styles.listh1}>{'Seats'}</Text>
+        <Text style={styles.listh1}>{I18n.t('seats')}</Text>
 
         <FlatList
           data={data}

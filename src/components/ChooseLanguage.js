@@ -6,38 +6,36 @@ import {lang} from '../screens/shared-types';
 
 import {theme} from '../theme';
 
-const ChooseLanguage = ({onSelected}) => {
-  const [selected, setSelected] = useState(lang);
-  const eng = lang.English;
-  const norsk = lang.Norska;
-  const selectedNorsk = selected === norsk;
-  const selectedEnglish = selected === eng;
-
+const ChooseLanguage = ({onSelected, english, norway, selectedLang}) => {
   return (
     <View>
       <TouchableOpacity
-        style={[styles.selectCon, selectedNorsk && styles.selectedCon]}
+        style={[styles.selectCon, selectedLang == 'sw' && styles.selectedCon]}
         onPress={() => {
-          setSelected(norsk);
-          onSelected(norsk);
+          onSelected('sw');
         }}>
         <Text
-          style={[theme.Text.h4Normal, selectedNorsk && styles.selectedText]}>
-          {norsk}
+          style={[
+            theme.Text.h4Normal,
+            selectedLang == 'sw' && styles.selectedText,
+          ]}>
+          {norway}
         </Text>
-        <SvgXml xml={selectedNorsk ? tick_green_bg : norway_flag} />
+        <SvgXml xml={selectedLang == 'sw' ? tick_green_bg : norway_flag} />
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.selectCon, selectedEnglish && styles.selectedCon]}
+        style={[styles.selectCon, selectedLang == 'en' && styles.selectedCon]}
         onPress={() => {
-          setSelected(eng);
-          onSelected(eng);
+          onSelected('en');
         }}>
         <Text
-          style={[theme.Text.h4Normal, selectedEnglish && styles.selectedText]}>
-          {eng}
+          style={[
+            theme.Text.h4Normal,
+            selectedLang == 'en' && styles.selectedText,
+          ]}>
+          {english}
         </Text>
-        <SvgXml xml={selectedEnglish ? tick_green_bg : uk} />
+        <SvgXml xml={selectedLang == 'en' ? tick_green_bg : uk} />
       </TouchableOpacity>
     </View>
   );

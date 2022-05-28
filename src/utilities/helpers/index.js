@@ -71,3 +71,11 @@ export const GeoCoderHelper = (
     })
     .catch(error => console.warn(error));
 };
+
+export const languageSelector = (lang, defaultLang) => {
+  if (lang === 'English') {
+    return 'en';
+  } else {
+    return 'sw';
+  }
+};

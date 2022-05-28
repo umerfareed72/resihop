@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   monthView: {
-    width: 90,
+    paddingHorizontal: 10,
     height: 24,
     backgroundColor: colors.white,
     justifyContent: 'center',

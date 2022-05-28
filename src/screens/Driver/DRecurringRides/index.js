@@ -10,7 +10,15 @@ import {
   SortModal,
 } from '../../../components';
 import {get, post} from '../../../services';
-import {appIcons, appImages, colors, header, WP} from '../../../utilities';
+import {
+  appIcons,
+  appImages,
+  colors,
+  header,
+  RideStatusList,
+  rideTypeList,
+  WP,
+} from '../../../utilities';
 import I18n from '../../../utilities/translations';
 import * as Types from '../../../redux/types/map.types';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,32 +38,6 @@ import Geocoder from 'react-native-geocoding';
 import {DRIVE_CONST} from '../../../utilities/routes';
 
 //Data
-
-var RideStatusList = {
-  id: 1,
-  title: 'Ride Status',
-  items: [
-    {id: 1, text: 'Confirmed', status: false, value: 'CONFIRMED'},
-    {
-      id: 2,
-      text: 'Waiting For Match',
-      status: false,
-      value: 'WAITING_FOR_MATCH',
-    },
-    {id: 3, text: 'Matching Done', status: false, value: 'MATCHING_DONE'},
-    {id: 4, text: 'On The Way', status: false, value: 'ON_THE_WAY'},
-  ],
-};
-
-const rideTypeList = {
-  id: 4,
-  title: 'Ride Type',
-  items: [
-    {id: 1, text: 'All Rides', value: null},
-    {id: 2, text: 'Destination Rides', value: 'destination'},
-    {id: 3, text: 'Return Rides', value: 'return'},
-  ],
-};
 
 function index(props) {
   const filterModalRef = useRef(null);
@@ -248,7 +230,7 @@ function index(props) {
           onPressbtnImage1={() => filterModalRef.current.open()}
           btnImage={appIcons.mobiledata}
           btnImage1={appIcons.filter}
-          title={'My Recurring Drives'}
+          title={I18n.t('my_recurring_drives')}
           navigation={props?.navigation}
           backButton={true}
         />

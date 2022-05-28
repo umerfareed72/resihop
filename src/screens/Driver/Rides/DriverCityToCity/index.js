@@ -398,7 +398,7 @@ const index = () => {
             onPressCost();
           }}
           style={styles.dropBtn}>
-          <Text style={styles.dropText}>Cost Per Seat</Text>
+          <Text style={styles.dropText}>{I18n.t('cost_per_seat')}</Text>
         </TouchableOpacity>
         {/* <DropDownPicker
           open={open}

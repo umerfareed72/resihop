@@ -327,7 +327,9 @@ const index = () => {
           </View>
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
+          <Text style={styles.selectTxt}>
+            {!screen ? I18n.t('select_date') : I18n.t('select_dates')}
+          </Text>
           <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>

@@ -17,6 +17,8 @@ import {
   requestPermission,
   options,
   header,
+  rideTypeList,
+  RideStatusList,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
@@ -70,31 +72,6 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Call_Status} from '../../../redux/actions/app.action';
 
 //Data
-
-var RideStatusList = {
-  id: 1,
-  title: 'Ride Status',
-  items: [
-    {id: 1, text: 'Confirmed', status: false, value: 'CONFIRMED'},
-    {
-      id: 2,
-      text: 'Waiting For Match',
-      status: false,
-      value: 'WAITING_FOR_MATCH',
-    },
-    {id: 3, text: 'Matching Done', status: false, value: 'MATCHING_DONE'},
-  ],
-};
-
-const rideTypeList = {
-  id: 4,
-  title: 'Ride Type',
-  items: [
-    {id: 1, text: 'All Rides', value: null},
-    {id: 2, text: 'Destination Rides', value: 'destination'},
-    {id: 3, text: 'Return Rides', value: 'return'},
-  ],
-};
 
 const PassengerHome = ({navigation}) => {
   let dispatch = useDispatch();
