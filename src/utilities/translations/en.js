@@ -32,6 +32,7 @@ export default {
   vehicle_information: 'Vehicle Information',
   enter_vehicle_information: 'Enter Your Vehicle Information',
   personal_details_text: 'Personal Details',
+  enter_your_personal_details_text: 'Enter Your Personal Detail',
   gender_text: 'Gender',
   upload_profile_picture_text: 'Upload Profile Picture',
   first_name_text: 'First Name',
@@ -210,7 +211,7 @@ export default {
   fav_location: 'Location',
   pickup_time: 'Pickup Time',
   rate_drive: 'Rate your Drive Experience',
-
+  both: 'BOTH',
   //Reports
   report: 'Reports',
   rep_earning: 'Earnings',
@@ -414,4 +415,5 @@ export default {
   edit_profile: 'Edit Profile',
   my_recurring_drives: 'My Recurring Drives',
   my_recurring_rides: 'My Recurring Rides',
+  change_phone: 'Change Mobile Number',
 };

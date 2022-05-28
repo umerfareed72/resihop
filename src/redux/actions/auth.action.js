@@ -172,11 +172,20 @@ export const updateInfo =
       );
     }
   };
-export const LanguageInfo = (lang, callBack) => async dispatch => {
+export const LanguageInfo = (lang, userId, callBack) => async dispatch => {
   dispatch({
     type: Types.Language_Success,
     payload: lang,
   });
+  if (userId) {
+    const responseData = await put(
+      `users/${userId}`,
+      {
+        locale: lang == 'en' ? 'en' : 'nn-NO',
+      },
+      await header(),
+    );
+  }
   callBack();
 };
 export const SwitchDrive = (data, callBack) => async dispatch => {

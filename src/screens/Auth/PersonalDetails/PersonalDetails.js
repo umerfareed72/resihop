@@ -35,31 +35,27 @@ import {GetToken, header} from '../../../utilities/constants';
 import {SwitchDrive, updateInfo} from '../../../redux/actions/auth.action';
 import useAppState from '../../../hooks/useAppState';
 import {get} from '../../../services';
-const user = {
-  Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
-  Driver: 'Driver', // 616e6a8c6fc87c0016b740e8
-  Both: 'Driver/Passenger both', // 616da5478b2d5d45c479591c
-};
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const gender = {
-  Male: 'Male',
-  Female: 'Female',
-  Other: 'Other',
+  Male: I18n.t('male'),
+  Female: I18n.t('female'),
+  Other: I18n.t('other'),
 };
 const littleChips = [
   {
     key: 0,
-    text: user.Driver,
+    text: I18n.t('fav_driver'),
     isSelected: true,
   },
   {
     key: 1,
-    text: user.Passenger,
+    text: I18n.t('fav_passenger'),
     isSelected: false,
   },
   {
     key: 2,
-    text: user.Both,
+    text: I18n.t('both'),
     isSelected: false,
   },
 ];
@@ -91,7 +87,7 @@ function PersonalDetails(props) {
   const [code, setCode] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
-  const [userType, setUserType] = useState(user.Driver);
+  const [userType, setUserType] = useState('Driver');
   const [genderType, setGenderType] = useState(gender.Male);
   const [pic, setPic] = useState(undefined);
   const [bankdIdToken, setBankIdToken] = useState(null);
@@ -144,6 +140,7 @@ function PersonalDetails(props) {
   }, [bankdIdToken]);
   //Add Personal Details
   const userDetailsApi = async inputData => {
+    const lang = await AsyncStorage.getItem('lang');
     const isConnected = await checkConnected();
     if (isConnected) {
       setIsLoading(true);
@@ -173,6 +170,7 @@ function PersonalDetails(props) {
             code: country_data?.code,
           },
           bankID: bankdIdToken,
+          locale: lang == 'en' ? 'en' : 'nn-NO',
         };
         dispatch(
           updateInfo(

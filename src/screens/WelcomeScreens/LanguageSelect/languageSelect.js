@@ -17,9 +17,17 @@ function languageSelect(props) {
   const [language, setLanguage] = useState('en');
   const handleLanguage = async lang => {
     setLanguage(lang);
-
     I18n.locale = lang;
   };
+  useEffect(() => {
+    AsyncStorage.getItem('lang').then(res => {
+      if (res) {
+        setLanguage(res);
+      } else {
+        setLanguage('en');
+      }
+    });
+  }, []);
   return (
     <>
       <MyStatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
@@ -46,7 +54,7 @@ function languageSelect(props) {
               titleStyle={theme.Button.titleStyle}
               onPress={() => {
                 dispatch(
-                  LanguageInfo(language, () => {
+                  LanguageInfo(language, null, () => {
                     AsyncStorage.setItem('lang', language);
                     props.navigation.navigate('WalkThrough');
                   }),

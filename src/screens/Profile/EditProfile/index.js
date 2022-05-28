@@ -316,7 +316,7 @@ function index(props) {
                     }}
                   />
                   <Button
-                    title={'Update'}
+                    title={I18n.t('update')}
                     onPress={handleSubmit}
                     buttonStyle={[theme.Button.buttonStyle]}
                     titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
@@ -328,7 +328,7 @@ function index(props) {
                     }}
                   />
                   <Button
-                    title={'Change Mobile Number'}
+                    title={I18n.t('change_phone')}
                     onPress={() => props.navigation.navigate('ChangePhone')}
                     buttonStyle={[
                       theme.Button.buttonStyle,

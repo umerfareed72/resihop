@@ -38,6 +38,7 @@ export default {
 
   // Personal Info Screen
   personal_info_success: 'Dine personlige opplysninger er lagret',
+  enter_your_personal_details_text: 'Skriv inn dine personlige detaljer',
 
   male: 'mann',
 
@@ -355,7 +356,7 @@ export default {
   fav_driver: 'Sjåfør',
 
   fav_passenger: 'Passasjer',
-
+  both: 'både',
   fav_location: 'Sted',
 
   pickup_time: 'Hentetid',
@@ -614,4 +615,5 @@ export default {
   edit_profile: 'Rediger profil',
   my_recurring_drives: 'Mine gjentakende stasjoner',
   my_recurring_rides: 'Mine gjentakende turer',
+  change_phone: 'endre telefonnummer',
 };

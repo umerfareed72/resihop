@@ -172,7 +172,7 @@ function signIn(props) {
   return (
     <>
       <CustomHeader
-        title={'Change Mobile Number'}
+        title={I18n.t('change_phone')}
         navigation={props?.navigation}
         backButton={true}
       />

@@ -8,16 +8,30 @@ import {Container} from '../../../components/Container';
 import {theme} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
 import {StackActions} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {LanguageInfo} from '../../../redux/actions/auth.action';
 
 function MultiLanguage(props) {
   const [language, setLanguage] = useState('');
+  useEffect(() => {
+    AsyncStorage.getItem('lang').then(res => {
+      setLanguage(res);
+    });
+  }, []);
+  const auth = useSelector(state => state.auth);
+  const dispatch = useDispatch(null);
   const handleLanguage = async lang => {
     setLanguage(lang);
     I18n.locale = lang;
   };
   const submitLang = async () => {
     AsyncStorage.setItem('lang', language);
-    props.navigation.dispatch(StackActions.popToTop());
+    dispatch(
+      LanguageInfo(language, auth?.profile_info?._id, () => {
+        AsyncStorage.setItem('lang', language);
+        props.navigation.dispatch(StackActions.popToTop());
+      }),
+    );
   };
   return (
     <>
