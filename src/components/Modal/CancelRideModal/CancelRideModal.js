@@ -18,7 +18,7 @@ export const CancelRideModal = ({show, onPressCancel, onPressClose}) => {
       <TouchableOpacity
         onPress={onPressClose}
         style={{width: '48%', alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={styles.modalText}>{I18n.t('close_modal')}</Text>
+        <Text style={styles.modalText}>{I18n.t('cancel')}</Text>
       </TouchableOpacity>
     </View>
   );

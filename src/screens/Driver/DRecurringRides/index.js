@@ -10,15 +10,7 @@ import {
   SortModal,
 } from '../../../components';
 import {get, post} from '../../../services';
-import {
-  appIcons,
-  appImages,
-  colors,
-  header,
-  RideStatusList,
-  rideTypeList,
-  WP,
-} from '../../../utilities';
+import {appIcons, appImages, colors, header, WP} from '../../../utilities';
 import I18n from '../../../utilities/translations';
 import * as Types from '../../../redux/types/map.types';
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,8 +28,6 @@ import {checkAppPermission} from '../../../utilities/helpers/permissions';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
 import {DRIVE_CONST} from '../../../utilities/routes';
-
-//Data
 
 function index(props) {
   const filterModalRef = useRef(null);
@@ -278,12 +268,8 @@ function index(props) {
       </SafeAreaView>
       <RideFilterModal
         seats={seats}
-        rideType={rideTypeList}
-        status={RideStatusList}
-        onPressdate={selectdDate}
         onPressrideType={selectRideType}
         onPressseats={item => dispatch(setAvailableSeats(item))}
-        onPresstime={selectTime}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
         selectedStatus={status}

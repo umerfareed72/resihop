@@ -21,6 +21,7 @@ import {CopyRideModal, Loader} from '../../../components';
 import CalendarSheet from '../../CalendarSheet';
 import {post, remove} from '../../../services';
 import {Alert} from 'react-native';
+import AppHeader from '../../../components/Header/AppHeader';
 
 const RideStatus = ({route}) => {
   const {item} = route.params;
@@ -169,18 +170,12 @@ const RideStatus = ({route}) => {
       <MapViewComponent
       // startRide={item.status == 'CONFIRMED' && true}
       />
-      <TouchableOpacity
-        style={styles.arrowBackCircle}
-        onPress={() => navigation.goBack()}>
-        {/* <View style={{flexDirection: 'row', alignItems: 'center'}}> */}
-        <Image
-          source={appIcons.backArrow}
-          resizeMode="contain"
-          style={styles.arrowBack}
-        />
-        {/* <Text style={styles.driver}>{I18n.t('ride')}</Text> */}
-        {/* </View> */}
-      </TouchableOpacity>
+      <AppHeader
+        onPress={() => {
+          navigation?.goBack();
+        }}
+        title={I18n.t('passenger_home')}
+      />
       <RideStatusCards
         statusType={item.status}
         ride={item}

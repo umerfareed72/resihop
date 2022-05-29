@@ -171,14 +171,11 @@ const index = ({navigation}) => {
         )}
       </View>
       <DRideFilterModal
-        time={TimeList}
         seats={seatsList}
         rideType={rideTypeList}
         onPressrideType={selectRideType}
         onPressseats={selectSeats}
-        onPresstime={selectTime}
         show={filterModalRef}
-        selectedTime={time}
         selectedRideType={ridetype}
         selectedSeats={seats}
         onPressReset={resetFilter}

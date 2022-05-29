@@ -12,15 +12,7 @@ import {
 } from '../../../components';
 import {get, post} from '../../../services';
 import * as Types from '../../../redux/types/map.types';
-import {
-  appIcons,
-  appImages,
-  colors,
-  header,
-  RideStatusList,
-  rideTypeList,
-  WP,
-} from '../../../utilities';
+import {appIcons, appImages, colors, header, WP} from '../../../utilities';
 import BlankField from '../../../components/BlankField';
 import {useIsFocused} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
@@ -285,8 +277,6 @@ function index(props) {
       {isLoading && <Loader />}
       <RideFilterModal
         seats={seats}
-        rideType={rideTypeList}
-        status={RideStatusList}
         onPressdate={selectdDate}
         onPressrideType={selectRideType}
         onPressseats={item => dispatch(setAvailableSeats(item))}

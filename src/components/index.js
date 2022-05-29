@@ -2,6 +2,7 @@ export * from './Header/Header';
 export * from './Header/CustomHeader';
 export * from './Loading';
 export * from './Loader/Loader';
+export * from './Header/AppHeader';
 
 //Titles
 export * from './Titles/PaymentHistory';

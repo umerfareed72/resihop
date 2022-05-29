@@ -616,4 +616,6 @@ export default {
   my_recurring_drives: 'Mine gjentakende stasjoner',
   my_recurring_rides: 'Mine gjentakende turer',
   change_phone: 'endre telefonnummer',
+  driver_home: 'Sjåfør hjem',
+  passenger_home: 'Passasjer hjem',
 };

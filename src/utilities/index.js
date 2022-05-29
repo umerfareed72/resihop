@@ -24,8 +24,6 @@ export {
   mode,
   total_seats,
   profileIcon,
-  rideTypeList,
-  RideStatusList,
 } from './constants';
 export {
   registerAppWithFCM,

@@ -17,8 +17,6 @@ import {
   requestPermission,
   options,
   header,
-  rideTypeList,
-  RideStatusList,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
@@ -79,8 +77,6 @@ const PassengerHome = ({navigation}) => {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   //States
-  const [time, settime] = useState('');
-  const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
@@ -514,12 +510,8 @@ const PassengerHome = ({navigation}) => {
       </SafeAreaView>
       <RideFilterModal
         seats={seats}
-        rideType={rideTypeList}
-        status={RideStatusList}
-        onPressdate={selectdDate}
         onPressrideType={selectRideType}
         onPressseats={item => dispatch(setAvailableSeats(item))}
-        onPresstime={selectTime}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
         selectedStatus={status}
@@ -602,10 +594,11 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   ellipses: {
-    height: 25,
-    width: 25,
+    height: 30,
+    width: 30,
     borderRadius: 25,
-    marginRight: 5,
+    marginRight: 10,
+    resizeMode: 'contain',
   },
   upcomingRidesMainContainer: {
     flexDirection: 'row',

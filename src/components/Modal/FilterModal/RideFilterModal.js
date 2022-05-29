@@ -26,85 +26,45 @@ export const RideFilterModal = ({
   h2,
   show,
   onApply,
-  time,
-  status,
-  date,
-  rideType,
   seats,
-  onPresstime,
   onPressstatus,
-  onPressdate,
   onPressrideType,
   onPressseats,
-  selectedTime,
-  selectedDate,
   selectedStatus,
   selectedSeats,
   selectedRideType,
   onPressReset,
 }) => {
-  const showTime = data => {
-    return (
-      <View style={styles.listContainer}>
-        <Text style={styles.listh1}>{data?.title}</Text>
-        <FlatList
-          data={data?.items}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({item}) => {
-            return (
-              <>
-                <TouchableOpacity
-                  onPress={() => {
-                    onPresstime(item);
-                  }}
-                  style={[
-                    styles.listbtnContainer,
-                    {
-                      backgroundColor:
-                        item === selectedTime ? colors.green : colors.g1,
-                    },
-                  ]}>
-                  <Text style={styles.listbtnText}>{item?.text}</Text>
-                </TouchableOpacity>
-              </>
-            );
-          }}
-        />
-      </View>
-    );
+  var RideStatusList = {
+    id: 1,
+    title: I18n.t('ride_status'),
+    items: [
+      {id: 1, text: I18n.t('confirmed'), status: false, value: 'CONFIRMED'},
+      {
+        id: 2,
+        text: I18n.t('waiting_for_match'),
+        status: false,
+        value: 'WAITING_FOR_MATCH',
+      },
+      {
+        id: 3,
+        text: I18n.t('matching_done'),
+        status: false,
+        value: 'MATCHING_DONE',
+      },
+    ],
   };
-  const showDates = data => {
-    return (
-      <View style={styles.listContainer}>
-        <Text style={styles.listh1}>{data?.title}</Text>
-        <FlatList
-          data={data?.items}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({item}) => {
-            return (
-              <>
-                <TouchableOpacity
-                  onPress={() => {
-                    onPressdate(item);
-                  }}
-                  style={[
-                    styles.listbtnContainer,
-                    {
-                      backgroundColor:
-                        item === selectedDate ? colors.green : colors.g1,
-                    },
-                  ]}>
-                  <Text style={styles.listbtnText}>{item?.text}</Text>
-                </TouchableOpacity>
-              </>
-            );
-          }}
-        />
-      </View>
-    );
+
+  const rideTypeList = {
+    id: 4,
+    title: I18n.t('ride_type'),
+    items: [
+      {id: 1, text: I18n.t('all_rides'), value: null},
+      {id: 2, text: I18n.t('destination_rides'), value: 'destination'},
+      {id: 3, text: I18n.t('return_rides'), value: 'return'},
+    ],
   };
+
   const showStatus = data => {
     return (
       <View style={styles.listContainer}>
@@ -122,7 +82,9 @@ export const RideFilterModal = ({
                     styles.listbtnContainer,
                     {
                       backgroundColor:
-                        item === selectedStatus ? colors.green : colors.g1,
+                        item.id === selectedStatus.id
+                          ? colors.green
+                          : colors.g1,
                     },
                   ]}>
                   <Text style={styles.listbtnText}>{item?.text}</Text>
@@ -153,7 +115,9 @@ export const RideFilterModal = ({
                     styles.listbtnContainer,
                     {
                       backgroundColor:
-                        item === selectedRideType ? colors.green : colors.g1,
+                        item.id === selectedRideType.id
+                          ? colors.green
+                          : colors.g1,
                     },
                   ]}>
                   <Text style={styles.listbtnText}>{item?.text}</Text>
@@ -223,14 +187,14 @@ export const RideFilterModal = ({
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{marginBottom: 30}}>
-          {showStatus(status)}
-          {showRideTypes(rideType)}
+          {showStatus(RideStatusList)}
+          {showRideTypes(rideTypeList)}
           {showSeats(seats)}
 
           <View style={{padding: 20}}>
             <PaymentButtons
               onPress={onApply}
-              title={'Apply'}
+              title={I18n.t('apply')}
               bgColor={colors.green}
               txtColor={colors.white}
             />

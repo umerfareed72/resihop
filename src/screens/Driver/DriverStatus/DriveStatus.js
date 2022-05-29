@@ -26,6 +26,7 @@ import {Alert} from 'react-native';
 import CalendarSheet from '../../CalendarSheet';
 import moment from 'moment';
 import CreateDrive from '../CreateDrive/CreateDrive';
+import AppHeader from '../../../components/Header/AppHeader';
 
 const DriveStatus = ({route}) => {
   let navigation = useNavigation();
@@ -157,18 +158,12 @@ const DriveStatus = ({route}) => {
             calendarSheetRef?.current?.open();
           }}
         />
-        <TouchableOpacity
-          style={styles.arrowBackCircle}
-          onPress={() => navigation.goBack()}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={appIcons.backArrow}
-              resizeMode="contain"
-              style={styles.arrowBack}
-            />
-            <Text style={styles.driver}>{I18n.t('drivers')}</Text>
-          </View>
-        </TouchableOpacity>
+        <AppHeader
+          onPress={() => {
+            navigation?.goBack();
+          }}
+          title={I18n.t('driver_home')}
+        />
       </View>
       {show && (
         <DeleteCardModal

@@ -19,8 +19,6 @@ import {
   family,
   requestPermission,
   header,
-  rideTypeList,
-  RideStatusList,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
@@ -67,8 +65,6 @@ import {DRIVE_CONST} from '../../../utilities/routes';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Call_Status} from '../../../redux/actions/app.action';
-
-//Data
 
 const DriverHome = ({navigation}) => {
   const filterModalRef = useRef(null);
@@ -502,12 +498,8 @@ const DriverHome = ({navigation}) => {
       </SafeAreaView>
       <RideFilterModal
         seats={seats}
-        rideType={rideTypeList}
-        status={RideStatusList}
-        onPressdate={selectdDate}
         onPressrideType={selectRideType}
         onPressseats={item => dispatch(setAvailableSeats(item))}
-        onPresstime={selectTime}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
         selectedStatus={status}
@@ -589,10 +581,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   ellipses: {
-    height: 25,
-    width: 25,
+    height: 30,
+    width: 30,
     borderRadius: 25,
-    marginRight: 5,
+    marginRight: 10,
   },
   upcomingRidesMainContainer: {
     flexDirection: 'row',
