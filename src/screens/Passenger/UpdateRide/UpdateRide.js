@@ -9,13 +9,18 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Image,
+  Alert,
 } from 'react-native';
 import {colors, appIcons, appImages} from '../../../utilities';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../FavouriteLocations';
-import {CustomHeader, Loader} from '../../../components';
-import CalendarSheet from '../../CalendarSheet';
+import {
+  CustomHeader,
+  Loader,
+  CalendarSheet,
+  ReturnCalendarSheet,
+} from '../../../components';
 import {useNavigation} from '@react-navigation/core';
 import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
@@ -31,8 +36,6 @@ import {
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import HeartFilled from 'react-native-vector-icons/Foundation';
-import ReturnCalendarSheet from '../../../components/ReurnCalenderSheet';
-import {Alert} from 'react-native';
 
 const UpdateRide = ({route}) => {
   let navigation = useNavigation();

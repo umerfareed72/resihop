@@ -1,9 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, Keyboard, Alert} from 'react-native';
-import {CustomHeader, NetInfoModal, Loader} from '../../../components';
+import {
+  CustomHeader,
+  NetInfoModal,
+  Loader,
+  OtpValidator,
+} from '../../../components';
 import _ from 'lodash/string';
 import {theme} from '../../../theme';
-import OtpValidator from '../../../components/OtpValidator';
 import I18n from '../../../utilities/translations';
 import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';

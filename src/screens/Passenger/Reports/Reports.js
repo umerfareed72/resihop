@@ -23,7 +23,6 @@ import {
   size,
 } from '../../../utilities';
 import {DRIVE_CONST, RIDES_CONST} from '../../../utilities/routes';
-import CalendarSheet from '../../CalendarSheet';
 import ReportsEarning from './ReportsEarning';
 import ReportsSpending from './ReportsSpending';
 

@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import {CustomHeader} from '../../../components/Header/CustomHeader';
+import {CustomHeader, BlankField} from '../../../components';
 import {
   appImages,
   colors,
@@ -21,7 +21,6 @@ import {Divider} from 'react-native-elements/dist/divider/Divider';
 import {GET_NOTIFICATION_LIST} from '../../../utilities/routes';
 import {get} from '../../../services';
 import {Loader} from '../../../components';
-import BlankField from '../../../components/BlankField';
 import moment from 'moment';
 import {Image} from 'react-native-elements';
 import I18n from '../../../utilities/translations';

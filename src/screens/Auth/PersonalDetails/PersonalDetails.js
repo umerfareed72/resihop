@@ -14,10 +14,7 @@ import * as Yup from 'yup';
 import {theme} from '../../../theme';
 import _ from 'lodash/string';
 import {Button, Icon, Input, Text} from 'react-native-elements';
-import Chips from '../../../components/Chips';
-import GenderChips from '../../../components/GenderChips';
-import UploadImage from '../../../components/UploadImage';
-import SigninViaBankID from '../../../components/SigninViaBankID';
+
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {
   CustomHeader,
@@ -25,6 +22,10 @@ import {
   IncorrectRefCode,
   Loader,
   NetInfoModal,
+  Chips,
+  GenderChips,
+  UploadImage,
+  SigninViaBankID,
 } from '../../../components';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';

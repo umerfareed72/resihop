@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import {colors, appIcons, appImages, family, size} from '../../../../utilities';
 import {useNavigation} from '@react-navigation/core';
@@ -16,9 +17,12 @@ import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import HeartFilled from 'react-native-vector-icons/Foundation';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../../FavouriteLocations';
-import {CustomHeader, Loader} from '../../../../components';
-import CalendarSheet from '../../../CalendarSheet';
-import ReturnCalendarSheet from '../../../../components/ReurnCalenderSheet';
+import {
+  CustomHeader,
+  Loader,
+  CalendarSheet,
+  ReturnCalendarSheet,
+} from '../../../../components';
 import I18n from '../../../../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -37,8 +41,6 @@ import {
   setReturnDateTimeStamp,
 } from '../../../../redux/actions/map.actions';
 import moment from 'moment';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {Alert} from 'react-native';
 import styles from './styles';
 const index = () => {
   let navigation = useNavigation();

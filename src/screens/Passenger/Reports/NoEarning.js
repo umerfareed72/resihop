@@ -12,10 +12,8 @@ import {
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {CustomHeader} from '../../../components/Header/CustomHeader';
 import {colors, family, HP, size} from '../../../utilities';
 import {appImages, appIcons} from '../../../utilities';
-import CalendarSheet from '../../CalendarSheet';
 
 const NoEarning = () => {
   return (

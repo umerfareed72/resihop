@@ -11,13 +11,20 @@ import {
 } from 'react-native';
 import {colors, appIcons, appImages} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
-import HeartIcon from 'react-native-vector-icons/EvilIcons';
-import HeartFilled from 'react-native-vector-icons/Foundation';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../FavouriteLocations';
-import {CustomHeader, Loader} from '../../../components';
-import CalendarSheet from '../../CalendarSheet';
-import ReturnCalendarSheet from '../../../components/ReurnCalenderSheet';
+import {
+  CustomHeader,
+  Loader,
+  CalendarSheet,
+  ReturnCalendarSheet,
+  ChooseRide,
+  AppButton,
+  LocationInput,
+  DateTimePickerCard,
+  ReturnLocationInput,
+  ReturnDateTimerPicker,
+} from '../../../components';
 import I18n from '../../../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -122,15 +129,24 @@ const index = () => {
   const handleCreateRide = () => {
     let stamp = new Date().getTime();
     let recurring_stamp = [new Date().getTime()];
-    if (dateTimeStamp && time) {
-      stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+    if (dateTimeStamp) {
+      if (time) {
+        stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+      } else {
+        const currentTime = moment(new Date()).format('HH:mm');
+        stamp = moment(`${dateTimeStamp}T${currentTime}`).valueOf();
+      }
+    } else {
+      if (time) {
+        const currentDate = moment(new Date().toString()).format('YYYY-MM-DD');
+        stamp = moment(`${currentDate}T${time}`).valueOf();
+      }
     }
     if (recurring_dates != '' && time) {
       recurring_stamp = recurring_dates.map(item => {
         return moment(`${item}T${time}`).valueOf();
       });
     }
-
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [
@@ -142,6 +158,7 @@ const index = () => {
       startDes: origin.description,
       destDes: destinationMap.description,
     };
+    console.log(recurring_stamp);
     dispatch(
       CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
         if (response.error) {
@@ -161,12 +178,23 @@ const index = () => {
   const handleCreateReturnRide = () => {
     let stamp = new Date().getTime();
     let return_recurring_stamp = [new Date().getTime()];
-    if (dateTimeStamp && time) {
-      stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+    const {returnFirstTime} = returnTime;
+    if (returnDateTimeStamp) {
+      if (returnFirstTime) {
+        stamp = moment(`${returnDateTimeStamp}T${returnFirstTime}`).valueOf();
+      } else {
+        const currentTime = moment(new Date()).format('HH:mm');
+        stamp = moment(`${returnDateTimeStamp}T${currentTime}`).valueOf();
+      }
+    } else {
+      if (returnFirstTime) {
+        const currentDate = moment(new Date().toString()).format('YYYY-MM-DD');
+        stamp = moment(`${currentDate}T${returnFirstTime}`).valueOf();
+      }
     }
-    if (return_recurring_stamp != '' && time) {
-      return_recurring_stamp = recurring_dates.map(item => {
-        return moment(`${item}T${time}`).valueOf();
+    if (return_recurring_dates != '' && returnFirstTime) {
+      return_recurring_stamp = return_recurring_dates.map(item => {
+        return moment(`${item}T${returnFirstTime}`).valueOf();
       });
     }
     const body = {
@@ -180,6 +208,7 @@ const index = () => {
       startDes: returnOrigin.description,
       destDes: returnDestinationMap.description,
     };
+
     dispatch(
       CreateRideRequest(body, setIsLoading, null, response => {
         // console.log('Return Create Ride', response);
@@ -195,109 +224,54 @@ const index = () => {
         title={I18n.t('create_ride')}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.tripBtnWrapper}>
-          <TouchableOpacity
-            onPress={() => {
-              setScreen(false);
-              dispatch(setRecurringDates([]));
-              dispatch(setReturnRecurringDates([]));
-            }}
-            style={[
-              styles.tripBtnContainer,
-              {backgroundColor: screen ? colors.btnGray : colors.green},
-            ]}>
-            <Text style={styles.btnTxt}>{I18n.t('single_trip')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setScreen(true);
-            }}
-            style={[
-              styles.tripBtnContainer,
-              {backgroundColor: screen ? colors.green : colors.btnGray},
-            ]}>
-            <Text style={styles.btnTxt}>{I18n.t('recurring_ride')}</Text>
-          </TouchableOpacity>
-        </View>
+        <ChooseRide
+          onPressS={() => {
+            setScreen(false);
+            dispatch(setRecurringDates([]));
+            dispatch(setReturnRecurringDates([]));
+          }}
+          onPressR={() => {
+            setScreen(true);
+          }}
+          screen={screen}
+          title1={I18n.t('single_trip')}
+          title2={I18n.t('recurring_ride')}
+        />
 
-        <View style={styles.locationMainWrapper}>
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('StartLocation', {
-                  modalName: 'startLocation',
-                })
-              }
-              style={[styles.txtInput, {marginBottom: 20}]}>
-              <Text style={styles.startTxt}>
-                {origin !== null
-                  ? origin.description
-                  : I18n.t('start_location')}
-              </Text>
-              <View style={styles.startDot} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('StartLocation', {
-                  modalName: 'destination',
-                  recurring: screen,
-                })
-              }
-              style={styles.txtInput}>
-              <Text style={styles.startTxt}>
-                {destinationMap !== null
-                  ? destinationMap.description
-                  : I18n.t('destination')}
-              </Text>
-              <View style={styles.destSquare} />
-            </TouchableOpacity>
-          </View>
+        <LocationInput
+          onPressStart={() =>
+            navigation.navigate('StartLocation', {
+              type: 'startLocation',
+            })
+          }
+          titleStart={
+            origin !== null ? origin.description : I18n.t('start_location')
+          }
+          onPressDes={() =>
+            navigation.navigate('StartLocation', {
+              type: 'destination',
+              recurring: screen,
+            })
+          }
+          titleDes={
+            destinationMap !== null
+              ? destinationMap.description
+              : I18n.t('destination')
+          }
+          onPressFavStart={() => {
+            setFavPress('startLocation');
+            favourteLocationRef.current.open();
+          }}
+          onPressFavDes={() => {
+            setFavPress('destination');
+            favourteLocationRef.current.open();
+          }}
+          onFavPress={() => {
+            favourteLocationRef.current.open();
+          }}
+          favPress={favPress}
+        />
 
-          <View style={styles.switchWrapper}>
-            {favPress === 'startLocation' ? (
-              <HeartFilled
-                name="heart"
-                size={24}
-                color={'red'}
-                onPress={() => {
-                  favourteLocationRef.current.open();
-                }}
-              />
-            ) : (
-              <HeartIcon
-                name="heart"
-                size={30}
-                color={colors.btnGray}
-                onPress={() => {
-                  setFavPress('startLocation');
-                  favourteLocationRef.current.open();
-                }}
-              />
-            )}
-
-            <Image source={appIcons.mobiledata} style={styles.locationSwitch} />
-            {favPress === 'destination' ? (
-              <HeartFilled
-                name="heart"
-                size={24}
-                color={'red'}
-                onPress={() => {
-                  favourteLocationRef.current.open();
-                }}
-              />
-            ) : (
-              <HeartIcon
-                onPress={() => {
-                  setFavPress('destination');
-                  favourteLocationRef.current.open();
-                }}
-                name="heart"
-                size={30}
-                color={colors.btnGray}
-              />
-            )}
-          </View>
-        </View>
         <Text style={styles.bookSeatsTxt}>{I18n.t('book_seat')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
@@ -326,48 +300,28 @@ const index = () => {
             </Text>
           </View>
         </View>
-        <View style={styles.selectWrapper}>
-          <Text style={styles.selectTxt}>
-            {!screen ? I18n.t('select_date') : I18n.t('select_dates')}
-          </Text>
-          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
-        </View>
-        <View style={styles.selectionInputWrapper}>
-          <TouchableOpacity
-            onPress={() => calendarSheetRef.current.open()}
-            style={[
-              styles.noLater,
-              {justifyContent: 'center', marginRight: 11},
-            ]}>
-            <Text style={styles.dateTxt}>
-              {dateTimeStamp !== null
-                ? moment(dateTimeStamp).format('DD MMM')
-                : moment(new Date()).format('DD MMM')}
-            </Text>
-            <Image
-              source={appImages.calendar}
-              resizeMode="contain"
-              style={styles.calendarIcon}
-            />
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => showTimePicker()}
-            style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>
-              {time ? time : moment(new Date()).format('hh:mm')}
-            </Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            is24Hour={true}
-            locale="en_GB"
-            mode="time"
-            onConfirm={handleConfirm}
-            onCancel={hideTimePicker}
-            date={new Date(normalTime)}
-          />
-        </View>
+        <DateTimePickerCard
+          datetitle={!screen ? I18n.t('select_date') : I18n.t('select_dates')}
+          timeTitle={I18n.t('need_to_arrive')}
+          onPressDate={() => calendarSheetRef.current.open()}
+          dateText={
+            dateTimeStamp !== null
+              ? moment(dateTimeStamp).format('DD MMM')
+              : moment(new Date()).format('DD MMM')
+          }
+          onPressTime={() => showTimePicker()}
+          timeText={time ? time : moment(new Date()).format('hh:mm')}
+        />
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          is24Hour={true}
+          locale="en_GB"
+          mode="time"
+          onConfirm={handleConfirm}
+          onCancel={hideTimePicker}
+          date={new Date(normalTime)}
+        />
 
         <View style={styles.returnTripWrapper}>
           <Text style={styles.returnTxt}>{I18n.t('return_trip')}</Text>
@@ -391,150 +345,80 @@ const index = () => {
         />
         {toggleEnabled ? (
           <>
-            <View style={styles.locationMainWrapper}>
-              <View>
-                <TouchableOpacity
-                  onPress={() => {
-                    dispatch(setMapSegment('returnTrip'));
-                    navigation.navigate('StartLocation', {
-                      modalName: 'returnTrip',
-                    });
-                  }}
-                  style={[styles.txtInput, {marginBottom: 20}]}>
-                  <Text style={styles.startTxt}>
-                    {returnOrigin
-                      ? returnOrigin.description
-                      : I18n.t('start_location')}
-                  </Text>
-                  <View style={styles.startDot} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    dispatch(setMapSegment('returnTrip'));
-                    navigation.navigate('StartLocation', {
-                      modalName: 'returnTrip',
-                      recurring: screen,
-                    });
-                  }}
-                  style={styles.txtInput}>
-                  <Text style={styles.startTxt}>
-                    {returnDestinationMap
-                      ? returnDestinationMap.description
-                      : I18n.t('destination')}
-                  </Text>
-                  <View style={styles.destSquare} />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.switchWrapper}>
-                {favPress === 'returnstartLocation' ? (
-                  <HeartFilled
-                    name="heart"
-                    size={24}
-                    color={'red'}
-                    onPress={() => {
-                      favourteLocationRef.current.open();
-                    }}
-                  />
-                ) : (
-                  <HeartIcon
-                    name="heart"
-                    size={30}
-                    color={colors.btnGray}
-                    onPress={() => {
-                      setFavPress('returnstartLocation');
-                      favourteLocationRef.current.open();
-                    }}
-                  />
-                )}
-                <Image
-                  source={appIcons.mobiledata}
-                  style={styles.locationSwitch}
-                />
-
-                {favPress === 'returndestination' ? (
-                  <HeartFilled
-                    name="heart"
-                    size={24}
-                    color={'red'}
-                    onPress={() => {
-                      favourteLocationRef.current.open();
-                    }}
-                  />
-                ) : (
-                  <HeartIcon
-                    onPress={() => {
-                      setFavPress('returndestination');
-                      favourteLocationRef.current.open();
-                    }}
-                    name="heart"
-                    size={30}
-                    color={colors.btnGray}
-                  />
-                )}
-              </View>
-            </View>
-            <View style={{marginLeft: 26}}>
-              <Text style={styles.returntimeTxt}>
-                {I18n.t('departure_time')}
-              </Text>
-              <Text style={styles.timeBracketTxt}>
-                {I18n.t('departure_time_desc')}
-              </Text>
-            </View>
-            <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
-              <TouchableOpacity
-                onPress={() => showFirstReturnTimePicker()}
-                style={[styles.noLater, {justifyContent: 'center'}]}>
-                <Text style={styles.dateTxt}>
-                  {returnTime?.returnFirstTime != 'Invalid date'
-                    ? returnTime?.returnFirstTime
-                    : moment(new Date()).format('hh:mm')}
-                </Text>
-              </TouchableOpacity>
-              <Text> {I18n.t('to')}</Text>
-              <TouchableOpacity
-                style={[styles.noLater, {justifyContent: 'center'}]}>
-                <Text style={styles.dateTxt}>
-                  {returnTime?.returnSecondTime != 'Invalid date'
-                    ? returnTime?.returnSecondTime
-                    : moment(new Date())
-                        .add(settings?.returnRange, 'minutes')
-                        .format('HH:mm')}
-                </Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={firstReturnTimePicker}
-                date={
-                  normalFirstReturnTime
-                    ? new Date(normalFirstReturnTime)
-                    : new Date()
-                }
-                mode="time"
-                is24Hour={true}
-                locale="en_GB"
-                onConfirm={handleConfirmFirstReturnTime}
-                onCancel={hideFirstReturnTimePicker}
-              />
-            </View>
-            <View style={{marginBottom: 20}}>
-              <TouchableOpacity
-                onPress={() => returnCalendarSheetRef.current.open()}
-                style={[
-                  styles.noLater,
-                  {justifyContent: 'center', width: '90%', alignSelf: 'center'},
-                ]}>
-                <Text style={styles.dateTxt}>
-                  {returnDateTimeStamp !== null
-                    ? moment(returnDateTimeStamp).format('DD MMM')
-                    : moment(new Date()).format('DD MMM')}
-                </Text>
-              </TouchableOpacity>
-              <Image
-                source={appImages.calendar}
-                resizeMode="contain"
-                style={[styles.calendarIcon, {right: 30}]}
-              />
-            </View>
+            <ReturnLocationInput
+              onPressStart={() => {
+                dispatch(setMapSegment('returnTrip'));
+                navigation.navigate('StartLocation', {
+                  type: 'returnTrip',
+                });
+              }}
+              titleStart={
+                returnOrigin
+                  ? returnOrigin.description
+                  : I18n.t('start_location')
+              }
+              onPressDes={() => {
+                dispatch(setMapSegment('returnTrip'));
+                navigation.navigate('StartLocation', {
+                  type: 'returnTrip',
+                  recurring: screen,
+                });
+              }}
+              titleDes={
+                returnDestinationMap
+                  ? returnDestinationMap.description
+                  : I18n.t('destination')
+              }
+              onFavPress={() => {
+                favourteLocationRef.current.open();
+              }}
+              onPressFavStart={() => {
+                setFavPress('returnstartLocation');
+                favourteLocationRef.current.open();
+              }}
+              onPressFavDes={() => {
+                setFavPress('returndestination');
+                favourteLocationRef.current.open();
+              }}
+              favPress={favPress}
+            />
+            <ReturnDateTimerPicker
+              timeTitle={I18n.t('departure_time')}
+              timeDesc={I18n.t('departure_time_desc')}
+              onPressDate={() => returnCalendarSheetRef.current.open()}
+              onPressStartTime={() => showFirstReturnTimePicker()}
+              startTime={
+                normalFirstReturnTime
+                  ? moment(normalFirstReturnTime).format('HH:mm')
+                  : moment(new Date()).format('HH:mm')
+              }
+              endTime={
+                returnTime?.returnSecondTime ||
+                moment(new Date())
+                  .add(returnTime?.settings?.returnRange, 'minutes')
+                  .format('HH:mm')
+              }
+              dateText={
+                returnDateTimeStamp !== null
+                  ? moment(returnDateTimeStamp).format('DD MMM')
+                  : moment(dateTimeStamp).format('DD MMM') != 'Invalid date'
+                  ? moment(dateTimeStamp).format('DD MMM')
+                  : moment(new Date()).format('DD MMM')
+              }
+            />
+            <DateTimePickerModal
+              isVisible={firstReturnTimePicker}
+              date={
+                normalFirstReturnTime
+                  ? new Date(normalFirstReturnTime)
+                  : new Date()
+              }
+              mode="time"
+              is24Hour={true}
+              locale="en_GB"
+              onConfirm={handleConfirmFirstReturnTime}
+              onCancel={hideFirstReturnTimePicker}
+            />
             <ReturnCalendarSheet
               recurring={screen}
               mindate={dateTimeStamp || new Date()}
@@ -543,7 +427,7 @@ const index = () => {
                   return {date: item};
                 }),
               }}
-              date={returnDateTimeStamp || new Date()}
+              date={returnDateTimeStamp || returnDateTimeStamp || new Date()}
               calendarSheetRef={returnCalendarSheetRef}
             />
           </>
@@ -558,26 +442,17 @@ const index = () => {
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableOpacity
-          style={[
-            styles.nextBtnContainer,
-            {
-              backgroundColor: handleColor(
-                origin,
-                destinationMap,
-                availableSeats,
-              ),
-            },
-          ]}
+        <AppButton
+          title={I18n.t('next')}
+          bgColor={handleColor(origin, destinationMap, availableSeats)}
           disabled={handleDisable(origin, destinationMap, availableSeats)}
           onPress={() => {
             handleCreateRide();
             if (toggleEnabled) {
               handleCreateReturnRide();
             }
-          }}>
-          <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
-        </TouchableOpacity>
+          }}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

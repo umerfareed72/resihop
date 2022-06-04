@@ -29,9 +29,9 @@ import {
   Loader,
   RideFilterModal,
   SortModal,
+  UpcomingRideCards,
 } from '../../../components';
 import I18n from '../../../utilities/translations';
-import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -318,7 +318,7 @@ const DriverHome = ({navigation}) => {
       if (res.data) {
         setisLoading(false);
         console.log(res.data);
-        Alert.alert('Success', 'Rides deleted successfully', [
+        Alert.alert('Success', 'Drive deleted successfully', [
           {
             text: 'OK',
             onPress: () => {
@@ -332,7 +332,7 @@ const DriverHome = ({navigation}) => {
     } catch (error) {
       console.log(error);
       setisLoading(false);
-      Alert.alert('Failed', 'Unable to delete rides', [
+      Alert.alert('Failed', 'Unable to delete Drives', [
         {
           text: 'OK',
           onPress: () => {

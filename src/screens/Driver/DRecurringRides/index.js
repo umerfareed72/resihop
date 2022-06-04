@@ -8,13 +8,13 @@ import {
   RecurringRideCard,
   RideFilterModal,
   SortModal,
+  BlankField,
 } from '../../../components';
 import {get, post} from '../../../services';
 import {appIcons, appImages, colors, header, WP} from '../../../utilities';
 import I18n from '../../../utilities/translations';
 import * as Types from '../../../redux/types/map.types';
 import {useDispatch, useSelector} from 'react-redux';
-import BlankField from '../../../components/BlankField';
 import {
   MyDrivesFiltering,
   MyRidesSortOrder,

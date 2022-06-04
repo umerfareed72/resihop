@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/core';
 import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import MyStatusBar from '../components/Header/statusBar';
-import MapViewComponent from '../components/MapViewComponent';
+import {MapViewComponent} from '../components';
 import {appIcons, colors} from '../utilities';
 import {useSelector, useDispatch} from 'react-redux';
 import {SearchDrives} from '../redux/actions/map.actions';
@@ -61,16 +61,6 @@ const StartMatching = props => {
           style={styles.arrowBack}
         />
       </TouchableOpacity>
-      {/* {!nearestDriver ? (
-        <StartMatchingSheet setNearestDriver={setNearestDriver} />
-      ) : availableDrivers ? (
-        <AvailableDriversCard
-          setAvailableDrivers={setAvailableDrivers}
-          setNearestDriver={setNearestDriver}
-        />
-      ) : (
-        <NearestDriverCard setAvailableDrivers={setAvailableDrivers} />
-      )} */}
     </View>
   );
 };

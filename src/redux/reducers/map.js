@@ -18,8 +18,8 @@ const initialState = {
   nearestDriver: null,
   returnOrigin: null,
   returnDestination: null,
-  returnFirstTime: 'XX:XX',
-  returnSecondTime: 'XX:XX',
+  returnFirstTime: null,
+  returnSecondTime: null,
   mapSegment: null,
   ride_history: [],
   selected_ride_history: null,
@@ -160,10 +160,11 @@ export default (state = initialState, action = {}) => {
       const secondTime = moment(payload)
         .add(state?.settings?.returnRange, 'minutes')
         .format('HH:mm');
+      const currentTime = moment(new Date()).format('HH:mm');
       return {
         ...state,
         returnFirstTime: firstTime,
-        returnSecondTime: secondTime,
+        returnSecondTime: payload != null ? secondTime : currentTime,
       };
     case Types.mapSegment:
       return {

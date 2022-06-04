@@ -7,7 +7,7 @@ import {
   Text,
 } from 'react-native';
 
-import {CustomHeader} from '../../../components';
+import {CustomHeader, BlankField} from '../../../components';
 import {
   colors,
   family,
@@ -20,7 +20,6 @@ import {FavDriver, FavPassenger, FavLocation} from '../../../components';
 import I18n from 'i18n-js';
 import {get} from '../../../services';
 import {useIsFocused} from '@react-navigation/native';
-import BlankField from '../../../components/BlankField';
 import {Dimensions} from 'react-native';
 
 const Favourites = ({navigation}) => {

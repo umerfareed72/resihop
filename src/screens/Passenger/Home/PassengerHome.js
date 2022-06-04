@@ -12,10 +12,8 @@ import {
 import {
   colors,
   appIcons,
-  appImages,
   family,
   requestPermission,
-  options,
   header,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
@@ -27,8 +25,8 @@ import {
   SortModal,
   CancelRideModal,
   Loader,
+  UpcomingRideCards,
 } from '../../../components';
-import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import I18n from '../../../utilities/translations';
 
@@ -58,10 +56,7 @@ import {move_from_drawer} from '../../../redux/actions/payment.action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
-import {
-  checkAppPermission,
-  requestAppPermission,
-} from '../../../utilities/helpers/permissions';
+import {checkAppPermission} from '../../../utilities/helpers/permissions';
 import {Alert} from 'react-native';
 import {post} from '../../../services';
 import {RIDES_CONST} from '../../../utilities/routes';
@@ -219,20 +214,12 @@ const PassengerHome = ({navigation}) => {
     });
   }, []);
 
-  const selectTime = val => {
-    settime(val);
-  };
-
   const selectRideStatus = val => {
     setStatus(val);
   };
 
   const selectRideType = val => {
     setRideType(val);
-  };
-
-  const selectdDate = val => {
-    setdate(val);
   };
 
   const resetFilter = () => {

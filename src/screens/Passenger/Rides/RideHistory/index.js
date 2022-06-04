@@ -6,6 +6,7 @@ import {
   RideFilterModal,
   RideHistoryCard,
   SortModal,
+  BlankField,
 } from '../../../../components';
 import {appIcons, appImages, colors} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
@@ -19,7 +20,6 @@ import {
   select_ride_history,
 } from '../../../../redux/actions/map.actions';
 import mapTypes from '../../../../redux/types/map.types';
-import BlankField from '../../../../components/BlankField';
 
 const seatsList = {
   id: 5,

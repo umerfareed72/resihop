@@ -20,28 +20,7 @@ export default StyleSheet.create({
     fontSize: 20,
     lineHeight: 24,
   },
-  tripBtnContainer: {
-    height: 39,
-    width: 145,
-    backgroundColor: colors.btnGray,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tripBtnWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    justifyContent: 'space-between',
-    width: '85%',
-    alignSelf: 'center',
-  },
-  btnTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.white,
-    fontFamily: fonts.regular,
-  },
+
   txtInput: {
     height: 44,
     width: 291,
@@ -175,22 +154,7 @@ export default StyleSheet.create({
     color: colors.btnGray,
     fontFamily: fonts.regular,
   },
-  nextBtnContainer: {
-    height: 56,
-    backgroundColor: colors.green,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '80%',
-    borderRadius: 15,
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  nextTxt: {
-    fontSize: 16,
-    lineHeight: 26,
-    color: colors.white,
-    fontFamily: fonts.bold,
-  },
+
   dateTxt: {
     fontSize: 16,
     lineHeight: 24,

@@ -13,7 +13,6 @@ import {
   size,
 } from '../../../utilities';
 import {get} from '../../../services';
-import Loading from '../../../components/Loading';
 
 const Offers = ({navigation}) => {
   const [offers, setoffers] = useState([]);

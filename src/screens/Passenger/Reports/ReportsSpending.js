@@ -24,8 +24,6 @@ import {
   size,
 } from '../../../utilities';
 import {appImages, appIcons} from '../../../utilities';
-import {DRIVE_CONST} from '../../../utilities/routes';
-import CalendarSheet from '../../CalendarSheet';
 
 const ReportEarning = ({
   onPressYear,

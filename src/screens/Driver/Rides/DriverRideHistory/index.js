@@ -13,11 +13,8 @@ import {
   DRideFilterModal,
   DRideHistoryCard,
   Loader,
-  PaymentFilterModal,
-  RideFilterModal,
-  RideHistoryCard,
   SortModal,
-  TransHistoryCard,
+  BlankField,
 } from '../../../../components';
 import {appIcons, appImages, colors} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
@@ -29,21 +26,7 @@ import {
   MyRidesHistorySortOrder,
   select_drive_history,
 } from '../../../../redux/actions/map.actions';
-import BlankField from '../../../../components/BlankField';
 import mapTypes from '../../../../redux/types/map.types';
-
-//Data
-var TimeList = {
-  id: 1,
-  title: 'Timeframe',
-  items: [
-    {id: 1, text: 'Today', status: false},
-    {id: 2, text: 'This Week', status: false},
-    {id: 3, text: 'This Month', status: false},
-    {id: 3, text: 'This Month', status: false},
-    {id: 3, text: 'This Year', status: false},
-  ],
-};
 
 const rideTypeList = {
   id: 2,

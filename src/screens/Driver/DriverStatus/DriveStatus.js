@@ -1,10 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
 import {colors, appIcons} from '../../../utilities';
-import MapViewComponent from '../../../components/MapViewComponent';
 import {fonts} from '../../../theme';
 import {useNavigation} from '@react-navigation/core';
-import {CopyRideModal, DeleteCardModal} from '../../../components';
+import {
+  CopyRideModal,
+  DeleteCardModal,
+  CalendarSheet,
+  MapViewComponent,
+} from '../../../components';
 import I18n from '../../../utilities/translations';
 import {
   setOrigin,
@@ -22,10 +26,7 @@ import {
   setCostPerSeat,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
-import {Alert} from 'react-native';
-import CalendarSheet from '../../CalendarSheet';
 import moment from 'moment';
-import CreateDrive from '../CreateDrive/CreateDrive';
 import AppHeader from '../../../components/Header/AppHeader';
 
 const DriveStatus = ({route}) => {

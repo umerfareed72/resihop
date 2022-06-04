@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {Container} from '../../../components/Container';
 import _ from 'lodash/string';
 import {theme} from '../../../theme';
-import {CustomHeader, NetInfoModal} from '../../../components';
-import OtpValidator from '../../../components/OtpValidator';
+import {
+  CustomHeader,
+  NetInfoModal,
+  Loader,
+  OtpValidator,
+  Container,
+} from '../../../components';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
-import Loader from '../../../components/Loader/Loader';
 import {checkConnected} from '../../../utilities';
 import {get} from '../../../services';
 import {Keyboard} from 'react-native';

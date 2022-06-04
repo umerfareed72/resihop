@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-import MapViewComponent from '../../../components/MapViewComponent';
+import {MapViewComponent} from '../../../components';
 import {colors, appIcons} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 

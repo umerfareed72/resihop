@@ -1,8 +1,7 @@
 import {useNavigation} from '@react-navigation/core';
 import React, {useRef} from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import AddressCards from '../../../components/AddressCards';
-import MapViewComponent from '../../../components/MapViewComponent';
+import {AddressCards, MapViewComponent} from '../../../components';
 import AddFavrouteLocation from '../../AddFavrouteLocation';
 import {colors} from '../../../utilities';
 

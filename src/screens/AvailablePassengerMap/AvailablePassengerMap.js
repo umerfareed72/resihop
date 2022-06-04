@@ -8,12 +8,12 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {CustomHeader} from '../../components';
-import MyStatusBar from '../../components/Header/statusBar';
-import MapViewComponent from '../../components/MapViewComponent';
-import NearestDriverCard from '../../components/NearestDriverCard';
+import {
+  CustomHeader,
+  MapViewComponent,
+  AvailableDrivers,
+} from '../../components';
 import {colors, family, HP, size} from '../../utilities';
-import AvailableDrivers from '../../components/AvailableDriversCard';
 const AvailablePassengerMap = () => {
   return (
     <SafeAreaView style={styles.container}>

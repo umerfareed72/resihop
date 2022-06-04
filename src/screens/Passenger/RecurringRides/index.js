@@ -9,11 +9,11 @@ import {
   RecurringRideCard,
   RideFilterModal,
   SortModal,
+  BlankField,
 } from '../../../components';
 import {get, post} from '../../../services';
 import * as Types from '../../../redux/types/map.types';
 import {appIcons, appImages, colors, header, WP} from '../../../utilities';
-import BlankField from '../../../components/BlankField';
 import {useIsFocused} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
 import {

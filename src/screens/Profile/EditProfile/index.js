@@ -21,8 +21,7 @@ import {
   profileIcon,
 } from '../../../utilities';
 import {theme} from '../../../theme';
-import UploadImage from '../../../components/UploadImage';
-import GenderChips from '../../../components/GenderChips';
+import {UploadImage, GenderChips} from '../../../components';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';

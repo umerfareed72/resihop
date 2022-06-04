@@ -1,9 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
 import {colors, appIcons, header} from '../../../utilities';
-import MapViewComponent from '../../../components/MapViewComponent';
 import {fonts} from '../../../theme';
-import RideStatusCards from '../../../components/RideStatusCards';
 import {useNavigation} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,10 +15,13 @@ import {
   setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
-import {CopyRideModal, Loader} from '../../../components';
-import CalendarSheet from '../../CalendarSheet';
+import {
+  CopyRideModal,
+  CalendarSheet,
+  MapViewComponent,
+  RideStatusCards,
+} from '../../../components';
 import {post, remove} from '../../../services';
-import {Alert} from 'react-native';
 import AppHeader from '../../../components/Header/AppHeader';
 
 const RideStatus = ({route}) => {

@@ -8,18 +8,17 @@ import {
   Linking,
   TouchableOpacity,
   View,
+  Alert,
   Platform,
 } from 'react-native';
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
-import {CustomHeader, Loader} from '../../../components';
+import {CustomHeader, Loader, SigninViaBankID} from '../../../components';
 import * as Yup from 'yup';
 import {theme} from '../../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {axios, get, post} from '../../../services';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
-import {Alert} from 'react-native';
-import SigninViaBankID from '../../../components/SigninViaBankID';
 import useAppState from '../../../hooks/useAppState';
 import {header} from '../../../utilities';
 import xml2js from 'react-native-xml2js';

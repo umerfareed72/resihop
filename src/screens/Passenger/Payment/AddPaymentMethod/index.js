@@ -17,6 +17,7 @@ import {
   PaymentCard,
   PaymentHistory,
   Loader,
+  BlankField,
 } from '../../../../components';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
@@ -35,7 +36,6 @@ import {
 } from '../../../../redux/actions/payment.action';
 import {BookRide} from '../../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
-import BlankField from '../../../../components/BlankField';
 
 const index = ({navigation, route}) => {
   const [cardScreen, setCardScreen] = useState(false);

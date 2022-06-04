@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {colors, appIcons} from '../../../utilities';
-import MapViewComponent from '../../../components/MapViewComponent';
+import {MapViewComponent} from '../../../components';
 import {fonts} from '../../../theme';
 
 const PickUpInfo = ({navigation}) => {

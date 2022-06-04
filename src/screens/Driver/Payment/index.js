@@ -16,6 +16,7 @@ import {
   PaymentCard,
   PaymentHistory,
   Loader,
+  BlankField,
 } from '../../../components';
 import I18n from '../../../utilities/translations';
 import styles from './styles';
@@ -35,7 +36,6 @@ import {
 import {BookRide} from '../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
 import {FlatList} from 'react-native';
-import BlankField from '../../../components/BlankField';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {LinkHelper} from '../../../utilities/helpers/LinkHelper';
 import {post} from '../../../services';

@@ -104,6 +104,7 @@ export default {
   switch_driver: 'Switch to driver',
   create_ride: 'Create ride',
   recurring_ride: 'My recurring rides',
+
   city_to_city: 'City to city ride',
   upcoming_rides: 'My upcoming tide',
   lorem:
