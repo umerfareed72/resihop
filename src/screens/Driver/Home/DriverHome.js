@@ -143,6 +143,7 @@ const DriverHome = ({navigation}) => {
   const getDrives = async () => {
     dispatch(
       MyRidesSortOrder('drives?', 'date', res => {
+        console.log(res);
         dispatch({
           type: mapTypes.myDrives,
           payload: res,
@@ -220,9 +221,6 @@ const DriverHome = ({navigation}) => {
     });
   }, []);
 
-  const selectTime = val => {
-    settime(val);
-  };
   const selectRideStatus = val => {
     setStatus(val);
   };
@@ -230,9 +228,6 @@ const DriverHome = ({navigation}) => {
     setRideType(val);
   };
 
-  const selectdDate = val => {
-    setdate(val);
-  };
   const resetFilter = () => {
     setRideType('');
     dispatch(setAvailableSeats(0));

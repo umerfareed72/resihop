@@ -223,7 +223,6 @@ const PassengerHome = ({navigation}) => {
   };
 
   const resetFilter = () => {
-    settime('');
     setdate('');
     setRideType('');
     dispatch(setAvailableSeats(0));

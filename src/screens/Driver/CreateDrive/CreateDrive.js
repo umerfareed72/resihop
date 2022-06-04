@@ -147,10 +147,17 @@ const CreateDrive = () => {
             stamp = moment(`${currentDate}T${time}`).valueOf();
           }
         }
-        if (recurring_dates != '' && time) {
-          recurring_stamp = recurring_dates.map(item => {
-            return moment(`${item}T${time}`).valueOf();
-          });
+        if (recurring_dates) {
+          if (time) {
+            recurring_stamp = recurring_dates.map(item => {
+              return moment(`${item}T${time}`).valueOf();
+            });
+          } else {
+            const currentTime = moment(new Date()).format('HH:mm');
+            recurring_stamp = recurring_dates.map(item => {
+              return moment(`${item}T${currentTime}`).valueOf();
+            });
+          }
         }
         const body = {
           startLocation: [origin?.location.lat, origin?.location?.lng],
@@ -224,10 +231,17 @@ const CreateDrive = () => {
         stamp = moment(`${currentDate}T${returnFirstTime}`).valueOf();
       }
     }
-    if (return_recurring_dates != '' && returnFirstTime) {
-      recurring_stamp = return_recurring_dates.map(item => {
-        return moment(`${item}T${returnFirstTime}`).valueOf();
-      });
+    if (return_recurring_dates) {
+      if (time) {
+        return_recurring_stamp = return_recurring_dates.map(item => {
+          return moment(`${item}T${returnFirstTime}`).valueOf();
+        });
+      } else {
+        const currentTime = moment(new Date()).format('HH:mm');
+        return_recurring_stamp = return_recurring_dates.map(item => {
+          return moment(`${item}T${currentTime}`).valueOf();
+        });
+      }
     }
 
     const body = {
