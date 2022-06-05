@@ -104,14 +104,52 @@ const UpdateDrive = () => {
   }, []);
   //Handle Update Drive
   const handleCreateDrive = () => {
+    setIsLoading(true);
+    const date = moment(dateTimeStamp).format('YYYY-MM-DD');
+    try {
+      const body = {
+        startLocation: {
+          latitude: origin?.location.lat,
+          longitude: origin?.location?.lng,
+        },
+        destinationLocation: {
+          latitude: destinationMap?.location?.lat,
+          longitude: destinationMap?.location?.lng,
+        },
+        date: moment(`${date}T${time}`).valueOf(),
+        availableSeats: availableSeats,
+        path: 0,
+        costPerSeat: value + settings?.adminCommission,
+        startDes: origin?.description,
+        destDes: destinationMap?.description,
+      };
+      dispatch(
+        setUpdateDrive(returnTime?.idToUpdateDrive?.id, body, response => {
+          Alert.alert('Success', 'Ride Updated Successfully', [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.navigate('DriverHome');
+                setIsLoading(false);
+                setcost(0);
+              },
+            },
+          ]);
+        }),
+      );
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCreateCityDrive = () => {
     if (costConfirmation) {
       let totalCost;
       if (cost != returnTime?.idToUpdateDrive?.costPerSeat) {
-        totalCost = cost + availableSeats * settings?.adminCommission;
+        totalCost = cost + settings?.adminCommission;
       } else {
         totalCost = cost;
       }
-
       setIsLoading(true);
       const date = moment(dateTimeStamp).format('YYYY-MM-DD');
       try {
@@ -127,9 +165,8 @@ const UpdateDrive = () => {
           date: moment(`${date}T${time}`).valueOf(),
           availableSeats: availableSeats,
           path: 0,
-          costPerSeat: returnTime?.idToUpdateDrive?.interCity
-            ? totalCost.toFixed(0)
-            : value,
+          costPerSeat: totalCost.toFixed(0),
+
           startDes: origin?.description,
           destDes: destinationMap?.description,
         };
@@ -154,6 +191,7 @@ const UpdateDrive = () => {
       Alert.alert('Message!', 'Please confirm total cost per seat!');
     }
   };
+
   const showTimePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -337,8 +375,6 @@ const UpdateDrive = () => {
             destinationMap,
             availableSeats,
             dateTimeStamp,
-            time,
-            value,
           )}
           disabled={
             origin === null ||
@@ -348,10 +384,11 @@ const UpdateDrive = () => {
           }
           title={I18n.t('update')}
           onPress={() => {
-            if (toggleEnabled) {
-              handleReturnCreateDrive();
+            if (returnTime?.idToUpdateDrive?.interCity) {
+              handleCreateCityDrive();
+            } else {
+              handleCreateDrive();
             }
-            handleCreateDrive();
           }}
         />
       </KeyboardAvoidingView>
@@ -359,22 +396,8 @@ const UpdateDrive = () => {
   );
 };
 
-const handleColor = (
-  origin,
-  destinationMap,
-  availableSeats,
-  dateTimeStamp,
-  time,
-  cost,
-) => {
-  if (
-    !origin ||
-    !dateTimeStamp ||
-    !availableSeats ||
-    !destinationMap ||
-    !time ||
-    !cost
-  ) {
+const handleColor = (origin, destinationMap, availableSeats, dateTimeStamp) => {
+  if (!origin || !dateTimeStamp || !availableSeats || !destinationMap) {
     return colors.btnGray;
   }
   return colors.green;

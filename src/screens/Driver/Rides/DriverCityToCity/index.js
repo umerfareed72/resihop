@@ -109,7 +109,7 @@ const index = () => {
   }, []);
 
   const handleCreateDrive = async () => {
-    const totalCost = cost + availableSeats * settings?.adminCommission;
+    const totalCost = cost + settings?.adminCommission;
     setIsLoading(true);
     if (origin && destinationMap != null) {
       let resp = await fetch(
@@ -175,7 +175,7 @@ const index = () => {
   };
   //Hanlde Return Drive
   const handleReturnCreateDrive = () => {
-    const totalCost = cost + availableSeats * settings?.adminCommission;
+    const totalCost = cost + settings?.adminCommission;
     const {returnFirstTime} = returnTime;
     const stamp = returnDateConvertor(returnDateTimeStamp, returnFirstTime);
     const body = {

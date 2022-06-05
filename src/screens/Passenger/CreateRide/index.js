@@ -157,7 +157,10 @@ const index = () => {
       dispatch(
         CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
           if (response.error) {
-            Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+            Alert.alert(
+              'Error',
+              response?.message || response?.message[0]?.messages[0]?.message,
+            );
           } else {
             navigation.navigate('StartMatching', {
               modalName: 'startMatching',
