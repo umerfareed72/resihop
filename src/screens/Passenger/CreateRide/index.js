@@ -9,7 +9,15 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import {colors, appIcons, appImages} from '../../../utilities';
+import {
+  colors,
+  appIcons,
+  appImages,
+  dateConvertor,
+  recurringDateConvertor,
+  returnDateConvertor,
+  returnRecurringDateConvertor,
+} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../FavouriteLocations';
@@ -109,6 +117,9 @@ const index = () => {
   const handleConfirm = date => {
     setNormalTime(moment(date).format());
     dispatch(setTime(moment(date).format('HH:mm')));
+    setNormalFirstReturnTime(moment(date).format());
+    dispatch(setReturnFirstTime(date));
+
     hideTimePicker();
   };
 
@@ -127,33 +138,8 @@ const index = () => {
   };
 
   const handleCreateRide = () => {
-    let stamp = new Date().getTime();
-    let recurring_stamp = [new Date().getTime()];
-    if (dateTimeStamp) {
-      if (time) {
-        stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
-      } else {
-        const currentTime = moment(new Date()).format('HH:mm');
-        stamp = moment(`${dateTimeStamp}T${currentTime}`).valueOf();
-      }
-    } else {
-      if (time) {
-        const currentDate = moment(new Date().toString()).format('YYYY-MM-DD');
-        stamp = moment(`${currentDate}T${time}`).valueOf();
-      }
-    }
-    if (recurring_dates) {
-      if (time) {
-        recurring_stamp = recurring_dates.map(item => {
-          return moment(`${item}T${time}`).valueOf();
-        });
-      } else {
-        const currentTime = moment(new Date()).format('HH:mm');
-        recurring_stamp = recurring_dates.map(item => {
-          return moment(`${item}T${currentTime}`).valueOf();
-        });
-      }
-    }
+    let stamp = dateConvertor(dateTimeStamp, time);
+    let recurring_stamp = recurringDateConvertor(recurring_dates, time);
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [
@@ -165,51 +151,33 @@ const index = () => {
       startDes: origin.description,
       destDes: destinationMap.description,
     };
-    dispatch(
-      CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
-        if (response.error) {
-          Alert.alert('Error', response?.message[0]?.messages[0]?.message);
-        } else {
-          navigation.navigate('StartMatching', {
-            modalName: 'startMatching',
-            dateTimeStamp: stamp,
-          });
-          dispatch(setRecurringDates([]));
-          dispatch(setReturnRecurringDates([]));
-        }
-      }),
-    );
+    if (screen && recurring_stamp == '') {
+      Alert.alert('Error', 'Please select dates');
+    } else {
+      dispatch(
+        CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
+          if (response.error) {
+            Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+          } else {
+            navigation.navigate('StartMatching', {
+              modalName: 'startMatching',
+              dateTimeStamp: stamp,
+            });
+            dispatch(setRecurringDates([]));
+            dispatch(setReturnRecurringDates([]));
+          }
+        }),
+      );
+    }
   };
 
   const handleCreateReturnRide = () => {
-    let stamp = new Date().getTime();
-    let return_recurring_stamp = [new Date().getTime()];
     const {returnFirstTime} = returnTime;
-    if (returnDateTimeStamp) {
-      if (returnFirstTime) {
-        stamp = moment(`${returnDateTimeStamp}T${returnFirstTime}`).valueOf();
-      } else {
-        const currentTime = moment(new Date()).format('HH:mm');
-        stamp = moment(`${returnDateTimeStamp}T${currentTime}`).valueOf();
-      }
-    } else {
-      if (returnFirstTime) {
-        const currentDate = moment(new Date().toString()).format('YYYY-MM-DD');
-        stamp = moment(`${currentDate}T${returnFirstTime}`).valueOf();
-      }
-    }
-    if (return_recurring_dates) {
-      if (returnFirstTime) {
-        return_recurring_stamp = return_recurring_dates.map(item => {
-          return moment(`${item}T${returnFirstTime}`).valueOf();
-        });
-      } else {
-        const currentTime = moment(new Date()).format('HH:mm');
-        return_recurring_stamp = return_recurring_dates.map(item => {
-          return moment(`${item}T${currentTime}`).valueOf();
-        });
-      }
-    }
+    let stamp = returnDateConvertor(returnDateTimeStamp, returnFirstTime);
+    let return_recurring_stamp = returnRecurringDateConvertor(
+      return_recurring_dates,
+      returnFirstTime,
+    );
     const body = {
       startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
       destinationLocation: [
@@ -221,12 +189,15 @@ const index = () => {
       startDes: returnOrigin.description,
       destDes: returnDestinationMap.description,
     };
-
-    dispatch(
-      CreateRideRequest(body, setIsLoading, null, response => {
-        // console.log('Return Create Ride', response);
-      }),
-    );
+    if (screen && return_recurring_stamp == '') {
+      Alert.alert('Error', 'Please select return dates');
+    } else {
+      dispatch(
+        CreateRideRequest(body, setIsLoading, null, response => {
+          // console.log('Return Create Ride', response);
+        }),
+      );
+    }
   };
 
   return (
@@ -254,7 +225,7 @@ const index = () => {
         <LocationInput
           onPressStart={() =>
             navigation.navigate('StartLocation', {
-              type: 'startLocation',
+              modalName: 'startLocation',
             })
           }
           titleStart={
@@ -262,7 +233,7 @@ const index = () => {
           }
           onPressDes={() =>
             navigation.navigate('StartLocation', {
-              type: 'destination',
+              modalName: 'destination',
               recurring: screen,
             })
           }
@@ -321,10 +292,12 @@ const index = () => {
           dateText={
             dateTimeStamp !== null
               ? moment(dateTimeStamp).format('DD MMM')
-              : moment(new Date()).format('DD MMM')
+              : !screen
+              ? moment(new Date()).format('DD MMM')
+              : 'XX:XX'
           }
           onPressTime={() => showTimePicker()}
-          timeText={time ? time : moment(new Date()).format('hh:mm')}
+          timeText={time ? time : moment(new Date()).format('HH:mm')}
         />
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
@@ -362,7 +335,7 @@ const index = () => {
               onPressStart={() => {
                 dispatch(setMapSegment('returnTrip'));
                 navigation.navigate('StartLocation', {
-                  type: 'returnTrip',
+                  modalName: 'returnTrip',
                 });
               }}
               titleStart={
@@ -373,7 +346,7 @@ const index = () => {
               onPressDes={() => {
                 dispatch(setMapSegment('returnTrip'));
                 navigation.navigate('StartLocation', {
-                  type: 'returnTrip',
+                  modalName: 'returnTrip',
                   recurring: screen,
                 });
               }}
@@ -406,17 +379,22 @@ const index = () => {
                   : moment(new Date()).format('HH:mm')
               }
               endTime={
-                returnTime?.returnSecondTime ||
-                moment(new Date())
-                  .add(returnTime?.settings?.returnRange, 'minutes')
-                  .format('HH:mm')
+                returnTime?.returnSecondTime !=
+                moment(new Date()).format('HH:mm')
+                  ? returnTime?.returnSecondTime
+                  : moment(new Date())
+                      .add(returnTime?.settings?.returnRange, 'minutes')
+                      .format('HH:mm')
               }
               dateText={
                 returnDateTimeStamp !== null
                   ? moment(returnDateTimeStamp).format('DD MMM')
-                  : moment(dateTimeStamp).format('DD MMM') != 'Invalid date'
-                  ? moment(dateTimeStamp).format('DD MMM')
-                  : moment(new Date()).format('DD MMM')
+                  : moment(returnDateTimeStamp).format('DD MMM') !=
+                    'Invalid date'
+                  ? moment(returnDateTimeStamp).format('DD MMM')
+                  : !screen
+                  ? moment(new Date()).format('DD MMM')
+                  : 'XX:XX'
               }
             />
             <DateTimePickerModal
@@ -440,7 +418,7 @@ const index = () => {
                   return {date: item};
                 }),
               }}
-              date={returnDateTimeStamp || returnDateTimeStamp || new Date()}
+              date={returnDateTimeStamp || dateTimeStamp || new Date()}
               calendarSheetRef={returnCalendarSheetRef}
             />
           </>

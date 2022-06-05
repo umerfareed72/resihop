@@ -1,4 +1,3 @@
-import I18n from 'i18n-js';
 import React, {useEffect, useRef, useState} from 'react';
 import {Alert} from 'react-native';
 import {
@@ -24,6 +23,7 @@ import {
   size,
 } from '../../../utilities';
 import {appImages, appIcons} from '../../../utilities';
+import I18n from '../../../utilities/translations';
 
 const ReportEarning = ({
   onPressYear,

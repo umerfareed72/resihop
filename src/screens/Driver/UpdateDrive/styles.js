@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {fonts} from '../../../../theme';
-import {colors, family, size} from '../../../../utilities';
+import {fonts} from '../../../theme';
+import {colors, family, size} from '../../../utilities';
 
 export default StyleSheet.create({
   container: {
@@ -114,8 +114,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginTop: 26,
     marginLeft: 20,
-    width: '78%',
-    justifyContent: 'space-between',
   },
   selectTxt: {
     fontSize: 14,

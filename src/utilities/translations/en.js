@@ -224,6 +224,8 @@ export default {
   rep_year: 'This year',
   rep_total_rides: 'Total rides',
   rep_total_spending: 'Total spending',
+  rep_total_drives: 'Total Drives',
+  rep_total_earning: 'Total Earning',
   rep_download_rep: 'Download reports',
   rep_last_month: 'Last month',
   rep_last_6month: 'Last 6 months',

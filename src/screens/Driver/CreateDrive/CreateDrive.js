@@ -9,7 +9,17 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {colors, appIcons, appImages, mode, APIKEY} from '../../../utilities';
+import {
+  colors,
+  appIcons,
+  appImages,
+  mode,
+  APIKEY,
+  dateConvertor,
+  recurringDateConvertor,
+  returnRecurringDateConvertor,
+  returnDateConvertor,
+} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -45,11 +55,13 @@ import {
   setReturnRide,
   setRecurringDates,
   setReturnRecurringDates,
+  setReturnDateTimeStamp,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import styles from './styles';
+import {Alert} from 'react-native';
 const CreateDrive = () => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
@@ -117,6 +129,7 @@ const CreateDrive = () => {
       dispatch(setReturnOrigin(null));
       dispatch(setReturnMapDestination(null));
       dispatch(setReturnFirstTime(null));
+      dispatch(setReturnDateTimeStamp(null));
       dispatch(setRecurringDates([]));
       dispatch(setReturnRecurringDates([]));
     };
@@ -124,41 +137,16 @@ const CreateDrive = () => {
 
   const handleCreateDrive = async () => {
     setIsLoading(true);
+
     if (origin && destinationMap != null) {
       let resp = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?alternatives=true&origin=${origin?.description}&destination=${destinationMap?.description}&key=${APIKEY}&mode=${mode}`,
       );
       let respJson = await resp.json();
       if (respJson) {
-        let stamp = new Date().getTime();
-        let recurring_stamp = [new Date().getTime()];
-        if (dateTimeStamp) {
-          if (time) {
-            stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
-          } else {
-            const currentTime = moment(new Date()).format('HH:mm');
-            stamp = moment(`${dateTimeStamp}T${currentTime}`).valueOf();
-          }
-        } else {
-          if (time) {
-            const currentDate = moment(new Date().toString()).format(
-              'YYYY-MM-DD',
-            );
-            stamp = moment(`${currentDate}T${time}`).valueOf();
-          }
-        }
-        if (recurring_dates) {
-          if (time) {
-            recurring_stamp = recurring_dates.map(item => {
-              return moment(`${item}T${time}`).valueOf();
-            });
-          } else {
-            const currentTime = moment(new Date()).format('HH:mm');
-            recurring_stamp = recurring_dates.map(item => {
-              return moment(`${item}T${currentTime}`).valueOf();
-            });
-          }
-        }
+        let stamp = dateConvertor(dateTimeStamp, time);
+        let recurring_stamp = recurringDateConvertor(recurring_dates, time);
+
         const body = {
           startLocation: [origin?.location.lat, origin?.location?.lng],
           destinationLocation: [
@@ -174,12 +162,17 @@ const CreateDrive = () => {
           destDes: destinationMap?.description,
           selectedRoutes: respJson?.routes,
         };
-        dispatch(setRoutes(body));
-        setIsLoading(false);
-        if (toggleEnabled) {
-          handleReturnCreateDrive();
+        if (screen && recurring_stamp == '') {
+          Alert.alert('Error', 'Please select dates');
+          setIsLoading(false);
         } else {
-          navigation?.navigate('SelectRoute');
+          dispatch(setRoutes(body));
+          setIsLoading(false);
+          if (toggleEnabled) {
+            handleReturnCreateDrive();
+          } else {
+            navigation?.navigate('SelectRoute');
+          }
         }
       }
     }
@@ -196,6 +189,8 @@ const CreateDrive = () => {
   const handleConfirm = date => {
     setnormalTime(moment(date).format());
     dispatch(setTime(moment(date).format('HH:mm')));
+    setNormalFirstReturnTime(moment(date).format());
+    dispatch(setReturnFirstTime(date));
     hideTimePicker();
   };
 
@@ -215,34 +210,12 @@ const CreateDrive = () => {
   };
   //Hanlde Return Drive
   const handleReturnCreateDrive = () => {
-    let stamp = new Date().getTime();
-    let return_recurring_stamp = [new Date().getTime()];
     const {returnFirstTime} = returnTime;
-    if (returnDateTimeStamp) {
-      if (returnFirstTime) {
-        stamp = moment(`${returnDateTimeStamp}T${returnFirstTime}`).valueOf();
-      } else {
-        const currentTime = moment(new Date()).format('HH:mm');
-        stamp = moment(`${returnDateTimeStamp}T${currentTime}`).valueOf();
-      }
-    } else {
-      if (returnFirstTime) {
-        const currentDate = moment(new Date().toString()).format('YYYY-MM-DD');
-        stamp = moment(`${currentDate}T${returnFirstTime}`).valueOf();
-      }
-    }
-    if (return_recurring_dates) {
-      if (time) {
-        return_recurring_stamp = return_recurring_dates.map(item => {
-          return moment(`${item}T${returnFirstTime}`).valueOf();
-        });
-      } else {
-        const currentTime = moment(new Date()).format('HH:mm');
-        return_recurring_stamp = return_recurring_dates.map(item => {
-          return moment(`${item}T${currentTime}`).valueOf();
-        });
-      }
-    }
+    let stamp = returnDateConvertor(returnDateTimeStamp, returnFirstTime);
+    let return_recurring_stamp = returnRecurringDateConvertor(
+      return_recurring_dates,
+      returnFirstTime,
+    );
 
     const body = {
       startLocation: [returnOrigin?.location.lat, returnOrigin?.location?.lng],
@@ -258,8 +231,12 @@ const CreateDrive = () => {
       startDes: returnOrigin?.description,
       destDes: returnDestinationMap?.description,
     };
-    dispatch(setReturnRide(body));
-    navigation?.navigate('SelectRoute');
+    if (screen && return_recurring_stamp == '') {
+      Alert.alert('Error', 'Please select return dates');
+    } else {
+      dispatch(setReturnRide(body));
+      navigation?.navigate('SelectRoute');
+    }
   };
 
   return (
@@ -352,10 +329,12 @@ const CreateDrive = () => {
           dateText={
             dateTimeStamp !== null
               ? moment(dateTimeStamp).format('DD MMM')
-              : moment(new Date()).format('DD MMM')
+              : !screen
+              ? moment(new Date()).format('DD MMM')
+              : 'XX:XX'
           }
           onPressTime={() => showTimePicker()}
-          timeText={time ? time : moment(new Date()).format('hh:mm')}
+          timeText={time ? time : moment(new Date()).format('HH:mm')}
         />
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
@@ -454,17 +433,22 @@ const CreateDrive = () => {
                   : moment(new Date()).format('HH:mm')
               }
               endTime={
-                returnTime?.returnSecondTime ||
-                moment(new Date())
-                  .add(returnTime?.settings?.returnRange, 'minutes')
-                  .format('HH:mm')
+                returnTime?.returnSecondTime !=
+                moment(new Date()).format('HH:mm')
+                  ? returnTime?.returnSecondTime
+                  : moment(new Date())
+                      .add(returnTime?.settings?.returnRange, 'minutes')
+                      .format('HH:mm')
               }
               dateText={
                 returnDateTimeStamp !== null
                   ? moment(returnDateTimeStamp).format('DD MMM')
-                  : moment(dateTimeStamp).format('DD MMM') != 'Invalid date'
-                  ? moment(dateTimeStamp).format('DD MMM')
-                  : moment(new Date()).format('DD MMM')
+                  : moment(returnDateTimeStamp).format('DD MMM') !=
+                    'Invalid date'
+                  ? moment(returnDateTimeStamp).format('DD MMM')
+                  : !screen
+                  ? moment(new Date()).format('DD MMM')
+                  : 'XX:XX'
               }
             />
 
@@ -505,7 +489,7 @@ const CreateDrive = () => {
         <AppButton
           bgColor={handleColor(origin, destinationMap, availableSeats)}
           disabled={
-            origin === null || destination === null || availableSeats === null
+            origin === null || destination === null || availableSeats === 0
           }
           onPress={() => {
             handleCreateDrive();
@@ -518,7 +502,7 @@ const CreateDrive = () => {
 };
 
 const handleColor = (origin, destinationMap, availableSeats) => {
-  if (origin == null || availableSeats == null || destinationMap == null) {
+  if (origin == null || availableSeats == 0 || destinationMap == null) {
     return colors.btnGray;
   }
   return colors.green;

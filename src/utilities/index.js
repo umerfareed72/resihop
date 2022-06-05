@@ -38,4 +38,8 @@ export {
   GeoCoderHelper,
   capitalizeFirstLetter,
   languageSelector,
+  dateConvertor,
+  returnDateConvertor,
+  returnRecurringDateConvertor,
+  recurringDateConvertor,
 } from './helpers/index';

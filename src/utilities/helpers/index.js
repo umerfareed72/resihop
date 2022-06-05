@@ -6,6 +6,7 @@ import {
   setOrigin,
   setReturnMapDestination,
 } from '../../redux/actions/map.actions';
+import moment from 'moment';
 
 export const responseValidator = (code, msg) => {
   Alert.alert(
@@ -78,4 +79,74 @@ export const languageSelector = (lang, defaultLang) => {
   } else {
     return 'sw';
   }
+};
+
+export const dateConvertor = (dateTimeStamp, time) => {
+  let stamp = new Date().getTime();
+  if (dateTimeStamp) {
+    if (time) {
+      return (stamp = moment(`${dateTimeStamp}T${time}`).valueOf());
+    } else {
+      const currentTime = moment(new Date()).format('HH:mm');
+      return (stamp = moment(`${dateTimeStamp}T${currentTime}`).valueOf());
+    }
+  } else {
+    if (time) {
+      const currentDate = moment(new Date().toString()).format('YYYY-MM-DD');
+      return (stamp = moment(`${currentDate}T${time}`).valueOf());
+    }
+  }
+  return stamp;
+};
+
+export const returnDateConvertor = (returnDateTimeStamp, time) => {
+  let stamp = new Date().getTime();
+  if (returnDateTimeStamp) {
+    if (time != 'Invalid date') {
+      return (stamp = moment(`${returnDateTimeStamp}T${time}`).valueOf());
+    } else {
+      const currentTime = moment(new Date()).format('HH:mm');
+      return (stamp = moment(
+        `${returnDateTimeStamp}T${currentTime}`,
+      ).valueOf());
+    }
+  }
+  return stamp;
+};
+
+export const recurringDateConvertor = (recurring_dates, time) => {
+  let recurring_stamp = [new Date().getTime()];
+  if (recurring_dates) {
+    if (time) {
+      return (recurring_stamp = recurring_dates.map(item => {
+        return moment(`${item}T${time}`).valueOf();
+      }));
+    } else {
+      const currentTime = moment(new Date()).format('HH:mm');
+      return (recurring_stamp = recurring_dates.map(item => {
+        return moment(`${item}T${currentTime}`).valueOf();
+      }));
+    }
+  }
+  return recurring_stamp;
+};
+
+export const returnRecurringDateConvertor = (
+  return_recurring_dates,
+  returnFirstTime,
+) => {
+  let return_recurring_stamp = [new Date().getTime()];
+  if (return_recurring_dates) {
+    if (returnFirstTime != 'Invalid date') {
+      return (return_recurring_stamp = return_recurring_dates.map(item => {
+        return moment(`${item}T${returnFirstTime}`).valueOf();
+      }));
+    } else {
+      const currentTime = moment(new Date()).format('HH:mm');
+      return (return_recurring_stamp = return_recurring_dates.map(item => {
+        return moment(`${item}T${currentTime}`).valueOf();
+      }));
+    }
+  }
+  return return_recurring_stamp;
 };

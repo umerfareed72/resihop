@@ -365,42 +365,38 @@ export const MapViewComponent = ({
       startDes: routes?.startDes,
       destDes: routes?.destDes,
     };
-    if (returnRide) {
-      const returnBody = {
-        startLocation: returnRide?.startLocation,
-        destinationLocation: returnRide?.destinationLocation,
-        date: returnRide?.date,
-        availableSeats: returnRide?.availableSeats,
-        path: selectedPath,
-        costPerSeat: returnRide?.costPerSeat,
-        interCity: returnRide?.interCity,
-        startDes: returnRide?.startDes,
-        destDes: returnRide?.destDes,
-      };
-      console.log(returnBody);
-      dispatch(
-        CreateDriveRequest(returnBody, setIsLoading, async response => {
-          if (response?.error) {
-            Alert.alert('Failed', response?.message[0]?.messages[0]?.message);
-          } else {
-            navigation.navigate('DriverHome');
-          }
-        }),
-      );
-    }
-    console.log(body);
     dispatch(
       CreateDriveRequest(body, setIsLoading, async response => {
         if (response?.error) {
-          console.log(
-            response?.message || response?.message[0]?.messages[0]?.message,
-          );
-          Alert.alert(
-            'Failed',
-            response?.message || response?.message[0]?.messages[0]?.message,
-          );
+          Alert.alert('Error', response?.message[0]?.messages[0]?.message);
         } else {
-          navigation.navigate('DriverHome');
+          if (returnRide) {
+            const returnBody = {
+              startLocation: returnRide?.startLocation,
+              destinationLocation: returnRide?.destinationLocation,
+              date: returnRide?.date,
+              availableSeats: returnRide?.availableSeats,
+              path: selectedPath,
+              costPerSeat: returnRide?.costPerSeat,
+              interCity: returnRide?.interCity,
+              startDes: returnRide?.startDes,
+              destDes: returnRide?.destDes,
+            };
+            dispatch(
+              CreateDriveRequest(returnBody, setIsLoading, async response => {
+                if (response?.error) {
+                  Alert.alert(
+                    'Error',
+                    response?.message[0]?.messages[0]?.message,
+                  );
+                } else {
+                  navigation.navigate('DriverHome');
+                }
+              }),
+            );
+          } else {
+            navigation.navigate('DriverHome');
+          }
         }
       }),
     );

@@ -30,7 +30,6 @@ export const DriveStatusCard = ({
   let navigation = useNavigation();
   const startDrive = async () => {
     try {
-      console.log(`${DRIVE_CONST}/start/${driveItem?.idToUpdateDrive?.id}`);
       const startDriveResponse = await get(
         `${DRIVE_CONST}/start/${driveItem?.idToUpdateDrive?.id}`,
         await header(),
