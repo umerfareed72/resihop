@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import {colors} from '../utilities';
-import MapViewComponent from '../components/MapViewComponent';
+import {MapViewComponent} from '../components';
 import {useNavigation} from '@react-navigation/core';
-import AddressCards from '../components/AddressCards';
+import {AddressCards} from '../components';
 
 const BookReturnTrip = () => {
   let navigation = useNavigation();

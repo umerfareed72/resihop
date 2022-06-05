@@ -34,7 +34,7 @@ const DriverDrawerComponent = ({navigation}) => {
   const list = [
     {
       icon: drawerIcons.rides_history,
-      label: 'Drive History',
+      label: I18n.t('driver_history'),
       onPress: () => {
         navigation?.navigate('DriverRideHistory');
         navigation.closeDrawer();
@@ -42,7 +42,7 @@ const DriverDrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.my_payment_methods,
-      label: 'My Payment Methods',
+      label: I18n.t('my_payment_method'),
       onPress: () => {
         navigation.push('DriverPayment', {
           routeName: 'DriverPayment',
@@ -52,27 +52,27 @@ const DriverDrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.Favourites,
-      label: 'Favourites',
+      label: I18n.t('favourites'),
       onPress: () => {
-        navigation.push('AddFavourites', {
-          routeName: 'AddFavourites',
+        navigation.push('Favourites', {
+          routeName: 'Favourites',
         });
         navigation.closeDrawer();
       },
     },
     {
       icon: appImages.green_car2,
-      label: 'Vehicle Information',
+      label: I18n.t('vehicle_information'),
       onPress: () => {
-        // navigation.push('VehicleInformation', {
-        //   routeName: 'VehicleInformation',
-        // });
+        navigation.push('VehicleInformation', {
+          routeName: 'VehicleInformation',
+        });
         navigation.closeDrawer();
       },
     },
     {
       icon: drawerIcons.reports,
-      label: 'Reports',
+      label: I18n.t('reports'),
       onPress: () => {
         navigation.push('Reports', {
           routeName: 'Reports',
@@ -82,7 +82,7 @@ const DriverDrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.offers,
-      label: 'Offers',
+      label: I18n.t('offers'),
       onPress: () => {
         navigation.push('Offers', {
           routeName: 'Offers',
@@ -92,7 +92,7 @@ const DriverDrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.invite,
-      label: 'Invite',
+      label: I18n.t('invite'),
       onPress: () => {
         navigation.push('Invite', {
           routeName: 'Invite',
@@ -102,7 +102,7 @@ const DriverDrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.my_contribution,
-      label: 'My Contribution',
+      label: I18n.t('my_contribution'),
       onPress: () => {
         navigation.push('Contribution', {
           routeName: 'Contribution',
@@ -112,14 +112,14 @@ const DriverDrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.settings,
-      label: 'Settings',
+      label: I18n.t('settings'),
       onPress: () => {
         navigation.navigate('Settings');
       },
     },
     {
       icon: drawerIcons.logout,
-      label: 'Log out',
+      label: I18n.t('logout'),
       onPress: () => {
         navigation.closeDrawer();
         modalRef?.current?.open();
@@ -183,24 +183,32 @@ const DriverDrawerComponent = ({navigation}) => {
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableOpacity style={styles.buttonContainer}>
-                <Text style={styles.passengerStyle}>Passenger</Text>
+                <Text style={styles.passengerStyle}>
+                  {I18n.t('fav_passenger')}
+                </Text>
                 <Icon
                   name={'star'}
                   type={'entypo'}
                   color={colors.white}
                   size={15}
                 />
-                <Text style={styles.passengerStyle}>4.5</Text>
+                <Text style={styles.passengerStyle}>
+                  {Userdata?.profile_info?.rating_r}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.buttonContainer2}>
-                <Text style={styles.passengerStyle}>Driver</Text>
+                <Text style={styles.passengerStyle}>
+                  {I18n.t('fav_driver')}
+                </Text>
                 <Icon
                   name={'star'}
                   type={'entypo'}
                   color={colors.white}
                   size={15}
                 />
-                <Text style={styles.passengerStyle}>4.5</Text>
+                <Text style={styles.passengerStyle}>
+                  {Userdata?.profile_info?.rating_d}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

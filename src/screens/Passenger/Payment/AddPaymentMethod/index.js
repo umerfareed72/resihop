@@ -6,6 +6,7 @@ import {
   Image,
   Dimensions,
   Linking,
+  FlatList,
 } from 'react-native';
 import {
   AddWalletModal,
@@ -16,6 +17,7 @@ import {
   PaymentCard,
   PaymentHistory,
   Loader,
+  BlankField,
 } from '../../../../components';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
@@ -34,10 +36,6 @@ import {
 } from '../../../../redux/actions/payment.action';
 import {BookRide} from '../../../../redux/actions/map.actions';
 import {Alert} from 'react-native';
-import {FlatList} from 'react-native';
-import BlankField from '../../../../components/BlankField';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {LinkHelper} from '../../../../utilities/helpers/LinkHelper';
 
 const index = ({navigation, route}) => {
   const [cardScreen, setCardScreen] = useState(false);
@@ -48,6 +46,7 @@ const index = ({navigation, route}) => {
   const [addMoney, onAddMoney] = useState(false);
   const [cardDetail, setcardDetail] = useState('');
   const [Loading, setLoading] = useState(false);
+  const [errorMsg, seterrorMsg] = useState('');
   const [bookLoading, setBookLoading] = useState(false);
   const modalRef = useRef(null);
   const isFocus = useIsFocused();
@@ -83,8 +82,8 @@ const index = ({navigation, route}) => {
     const check = await checkConnected();
     if (check) {
       dispatch(
-        get_card_list(auth?.profile_info?.stripe_customer?.stripeID, res => {
-          console.log('Cards', res);
+        get_card_list(res => {
+          console.log('Cards');
         }),
       );
     }
@@ -106,21 +105,15 @@ const index = ({navigation, route}) => {
         };
         dispatch(
           add_stripe_card(requestBody, res => {
-            Alert.alert(
-              'Success',
-              'Card Added Successfully',
-              [
-                {
-                  text: 'Ok',
-                  onPress: () => {
-                    setLoading(false);
-                    setCardScreen(!cardScreen);
-                    getCards();
-                  },
+            Alert.alert('Success', 'Add card request send successfully!', [
+              {
+                onPress: () => {
+                  setLoading(false);
+                  setCardScreen(false);
+                  getCards();
                 },
-              ],
-              {cancelable: false},
-            );
+              },
+            ]);
           }),
         );
       }
@@ -148,10 +141,9 @@ const index = ({navigation, route}) => {
         bookRide?.drive?.costPerSeat * createRideRequest?.requiredSeats ||
         bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats,
     };
-    console.log(requestBody);
     dispatch(
       checkout_current_card(requestBody, res => {
-        console.log('Checkout', res, requestBody);
+        seterrorMsg(res?.msg);
         if (res?.msg == 'Payment is confirmed, capture or cancel payment') {
           modalRef.current.open();
           setpaymentSuccessonSuccess(true);
@@ -202,19 +194,28 @@ const index = ({navigation, route}) => {
   };
 
   const handleBookRide = () => {
-    const body = {
-      ride: createRideRequest?._id || bookRide?._id,
-    };
-    dispatch(
-      BookRide(
-        body,
-        bookRide?.drive?._id || bookRide?.pool_match?._id,
-        setBookLoading,
-        response => {
-          navigation?.replace('PassengerHome');
-        },
-      ),
-    );
+    try {
+      const body = {
+        ride: createRideRequest?._id || bookRide?._id,
+        amountPayable:
+          bookRide?.drive?.costPerSeat * createRideRequest?.requiredSeats ||
+          bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats,
+      };
+      dispatch(
+        BookRide(
+          body,
+          bookRide?.totalDistance || createRideRequest?.totalDistance,
+          bookRide?.drive?._id || bookRide?.pool_match?._id,
+          setBookLoading,
+          response => {
+            console.log(response);
+            navigation?.replace('PassengerHome');
+          },
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -268,8 +269,8 @@ const index = ({navigation, route}) => {
           /> */}
           {payment?.card_list != '' ? (
             <FlatList
-              numColumns={2}
               data={payment?.card_list}
+              numColumns={2}
               renderItem={({item}) => {
                 return (
                   <BankCard
@@ -314,7 +315,7 @@ const index = ({navigation, route}) => {
               //disabled={!Loading && cardHolderName ? false : true}
               btn={true}
               onCardChange={details => {
-                console.log('Card Added', details);
+                // console.log('Card Added', details);
                 setcardDetail(details);
               }}
               onPressCard={card => {
@@ -374,7 +375,7 @@ const index = ({navigation, route}) => {
         icon={paymentSuccess ? appIcons.tickBg : appIcons.cancel}
         h1={
           paymentFailed
-            ? I18n.t('failed_payment')
+            ? errorMsg
             : '' || paymentSuccess
             ? I18n.t('success_payment')
             : ''

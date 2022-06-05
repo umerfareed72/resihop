@@ -13,7 +13,8 @@ import {CustomHeader} from '../../components';
 import MyStatusBar from '../../components/Header/statusBar';
 import {colors, family, HP, size} from '../../utilities';
 
-const CostPerSeat = ({navigation}) => {
+const CostPerSeat = ({navigation, route}) => {
+  const costData = route?.params;
   return (
     <>
       <CustomHeader
@@ -26,14 +27,23 @@ const CostPerSeat = ({navigation}) => {
           <View style={styles.marginContainer}>
             <View style={styles.headingTextContainer}>
               <Text style={styles.headingText}>Total Cost of Trip</Text>
-              <Text style={styles.headingText}>600 KM</Text>
+              <Text style={styles.headingText}>
+                {costData?.data?.distance.toFixed(0)} KM
+              </Text>
             </View>
             <View style={styles.inputContainer}>
               <View style={styles.inputText}>
                 <Text style={styles.sekText}>NOK</Text>
               </View>
               <View style={styles.inputTextReplica}>
-                <TextInput placeholder={'Amount'} />
+                <TextInput
+                  placeholder={
+                    costData?.data?.pricePerKM.toFixed(0) || 'Amount'
+                  }
+                  placeholderTextColor={colors.black}
+                  editable={false}
+                  value={costData?.data?.pricePerKM}
+                />
               </View>
             </View>
             <Text style={styles.reasonText}>
@@ -47,7 +57,12 @@ const CostPerSeat = ({navigation}) => {
                 <Text style={styles.sekText}>NOK</Text>
               </View>
               <View style={styles.inputTextReplica}>
-                <TextInput placeholder={'Amount'} />
+                <TextInput
+                  placeholderTextColor={colors.black}
+                  placeholder={costData?.data?.price.toFixed(0) || 'Amount'}
+                  editable={false}
+                  value={costData?.data?.pricePerKM}
+                />
               </View>
             </View>
           </View>
@@ -61,7 +76,7 @@ const CostPerSeat = ({navigation}) => {
           <View style={styles.marginContainer}>
             <TouchableOpacity
               onPress={() => {
-                navigation?.navigate('AvailablePassenger');
+                navigation?.goBack();
               }}
               style={{
                 height: HP('7'),

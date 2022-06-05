@@ -21,8 +21,7 @@ import {
   profileIcon,
 } from '../../../utilities';
 import {theme} from '../../../theme';
-import UploadImage from '../../../components/UploadImage';
-import GenderChips from '../../../components/GenderChips';
+import {UploadImage, GenderChips} from '../../../components';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
@@ -43,9 +42,9 @@ export const formSchema = Yup.object().shape({
 });
 
 const gender = {
-  Male: 'Male',
-  Female: 'Female',
-  Other: 'Other',
+  Male: I18n.t('male'),
+  Female: I18n.t('female'),
+  Other: I18n.t('other'),
 };
 
 const littleChips = [
@@ -169,7 +168,7 @@ function index(props) {
   return (
     <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
       <CustomHeader
-        title={'Edit Profile'}
+        title={I18n.t('edit_profile')}
         backButton={true}
         navigation={props?.navigation}
       />
@@ -287,7 +286,7 @@ function index(props) {
                     errorMessage={errors.lastName}
                   />
                   <Input
-                    editable={false}
+                    editable={true}
                     ref={refEmail}
                     keyboardAppearance="light"
                     onChangeText={handleChange('email')}
@@ -316,7 +315,7 @@ function index(props) {
                     }}
                   />
                   <Button
-                    title={'Update'}
+                    title={I18n.t('update')}
                     onPress={handleSubmit}
                     buttonStyle={[theme.Button.buttonStyle]}
                     titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
@@ -328,7 +327,7 @@ function index(props) {
                     }}
                   />
                   <Button
-                    title={'Change Mobile Number'}
+                    title={I18n.t('change_phone')}
                     onPress={() => props.navigation.navigate('ChangePhone')}
                     buttonStyle={[
                       theme.Button.buttonStyle,

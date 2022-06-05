@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,13 +7,39 @@ import {
   Text,
 } from 'react-native';
 
-import {CustomHeader} from '../../../components';
-import {colors, family, HP, size} from '../../../utilities';
+import {CustomHeader, BlankField} from '../../../components';
+import {
+  colors,
+  family,
+  HP,
+  size,
+  FAVOURITES_CONST,
+  header,
+} from '../../../utilities';
 import {FavDriver, FavPassenger, FavLocation} from '../../../components';
 import I18n from 'i18n-js';
+import {get} from '../../../services';
+import {useIsFocused} from '@react-navigation/native';
+import {Dimensions} from 'react-native';
 
 const Favourites = ({navigation}) => {
   const [selected, setSelected] = useState(1);
+  const [fav, setFav] = useState(null);
+  const isFocus = useIsFocused();
+  const getFavourites = async fav => {
+    try {
+      setFav(null);
+      const res = await get(`${FAVOURITES_CONST}?type=${fav}`, await header());
+      setFav(res?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (isFocus) {
+      getFavourites('DRIVER');
+    }
+  }, [isFocus]);
   return (
     <>
       <CustomHeader
@@ -25,7 +51,10 @@ const Favourites = ({navigation}) => {
         <View style={styles.marginContainer}>
           <View style={styles.tabContainer}>
             <TouchableOpacity
-              onPress={() => setSelected(1)}
+              onPress={() => {
+                getFavourites('DRIVER');
+                setSelected(1);
+              }}
               style={styles.driverTab}>
               <Text
                 style={[
@@ -36,7 +65,10 @@ const Favourites = ({navigation}) => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setSelected(2)}
+              onPress={() => {
+                setSelected(2);
+                getFavourites('PASSENGER');
+              }}
               style={styles.driverTab}>
               <Text
                 style={[
@@ -47,7 +79,10 @@ const Favourites = ({navigation}) => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => setSelected(3)}
+              onPress={() => {
+                getFavourites('LOCATION');
+                setSelected(3);
+              }}
               style={styles.locationTab}>
               <Text
                 style={[
@@ -59,11 +94,44 @@ const Favourites = ({navigation}) => {
             </TouchableOpacity>
           </View>
           {selected === 1 ? (
-            <FavDriver />
+            <>
+              {fav != '' ? (
+                <FavDriver data={fav} />
+              ) : (
+                <View
+                  style={{
+                    height: Dimensions.get('screen').height / 1.5,
+                  }}>
+                  <BlankField title={'No Favourite Driver Found'} />
+                </View>
+              )}
+            </>
           ) : selected === 2 ? (
-            <FavPassenger />
+            <>
+              {fav != '' ? (
+                <FavPassenger data={fav} />
+              ) : (
+                <View
+                  style={{
+                    height: Dimensions.get('screen').height / 1.5,
+                  }}>
+                  <BlankField title={'No Favourite Passenger Found'} />
+                </View>
+              )}
+            </>
           ) : (
-            <FavLocation />
+            <>
+              {fav != '' ? (
+                <FavLocation data={fav} />
+              ) : (
+                <View
+                  style={{
+                    height: Dimensions.get('screen').height / 1.5,
+                  }}>
+                  <BlankField title={'No Favourite Location Found'} />
+                </View>
+              )}
+            </>
           )}
         </View>
       </SafeAreaView>

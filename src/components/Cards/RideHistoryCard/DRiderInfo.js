@@ -5,8 +5,13 @@ import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, family, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
-
-export const DRiderInfo = ({passenger_info, cost_per_seat}) => {
+import i18n from '../../../utilities/translations';
+export const DRiderInfo = ({
+  passenger_info,
+  cost_per_seat,
+  block,
+  onPressBlock,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -46,8 +51,10 @@ export const DRiderInfo = ({passenger_info, cost_per_seat}) => {
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.rectangleStyle} />
-            <Text style={{color: colors.g4, fontSize: size.xxsmall}}>
-              {passenger_info?.destDes} .....
+            <Text
+              numberOfLines={2}
+              style={{color: colors.g4, fontSize: size.xxsmall}}>
+              {passenger_info?.destDes}
             </Text>
           </View>
         </View>
@@ -59,16 +66,18 @@ export const DRiderInfo = ({passenger_info, cost_per_seat}) => {
               fontFamily: family.product_sans_regular,
               fontSize: size.xsmall,
             }}>
-            Your Rate
+            {i18n.t('your_rate')}
           </Text>
           <StarRating
-            disabled={false}
+            disabled={true}
             maxStars={5}
-            rating={4}
+            rating={passenger_info?.user?.rating_r}
             emptyStar={appIcons.empty_star}
+            fullStarColor={appIcons.full_star}
             starSize={19}
             starStyle={{paddingHorizontal: 3}}
             fullStar={appIcons.full_star}
+            fullStarColor={colors.green}
             selectedStar={rating => console.log(rating)}
           />
           <View>
@@ -85,8 +94,10 @@ export const DRiderInfo = ({passenger_info, cost_per_seat}) => {
               }}
             />
           </View>
-          <TouchableOpacity style={styles.btnContainer}>
-            <Text style={styles.btnText}>Block</Text>
+          <TouchableOpacity onPress={onPressBlock} style={styles.btnContainer}>
+            <Text style={styles.btnText}>
+              {block ? i18n.t('unblock') : i18n.t('block')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

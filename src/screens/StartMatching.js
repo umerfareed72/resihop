@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/core';
 import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import MyStatusBar from '../components/Header/statusBar';
-import MapViewComponent from '../components/MapViewComponent';
+import {MapViewComponent} from '../components';
 import {appIcons, colors} from '../utilities';
 import {useSelector, useDispatch} from 'react-redux';
 import {SearchDrives} from '../redux/actions/map.actions';
@@ -17,7 +17,7 @@ const StartMatching = props => {
   const destinationMap = useSelector(state => state?.map?.destination);
   const availableSeats = useSelector(state => state?.map?.availableSeats);
 
-  const {dateTimeStamp} = props.route.params;
+  const {dateTimeStamp} = props?.route?.params;
 
   useEffect(() => {
     if (isFocus) {
@@ -26,10 +26,10 @@ const StartMatching = props => {
       } else {
         dispatch(
           SearchDrives({
-            startLocation: [origin.location.lat, origin.location.lng],
+            startLocation: [origin?.location?.lat, origin?.location?.lng],
             destinationLocation: [
-              destinationMap.location.lat,
-              destinationMap.location.lng,
+              destinationMap?.location?.lat,
+              destinationMap?.location?.lng,
             ],
             time: dateTimeStamp,
             seats: availableSeats,
@@ -61,16 +61,6 @@ const StartMatching = props => {
           style={styles.arrowBack}
         />
       </TouchableOpacity>
-      {/* {!nearestDriver ? (
-        <StartMatchingSheet setNearestDriver={setNearestDriver} />
-      ) : availableDrivers ? (
-        <AvailableDriversCard
-          setAvailableDrivers={setAvailableDrivers}
-          setNearestDriver={setNearestDriver}
-        />
-      ) : (
-        <NearestDriverCard setAvailableDrivers={setAvailableDrivers} />
-      )} */}
     </View>
   );
 };

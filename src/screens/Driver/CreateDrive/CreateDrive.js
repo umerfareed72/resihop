@@ -6,17 +6,36 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {colors, appIcons, appImages, mode, APIKEY} from '../../../utilities';
+import {
+  colors,
+  appIcons,
+  appImages,
+  mode,
+  APIKEY,
+  dateConvertor,
+  recurringDateConvertor,
+  returnRecurringDateConvertor,
+  returnDateConvertor,
+} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../FavouriteLocations';
-import {CustomHeader} from '../../../components';
-import CalendarSheet from '../../CalendarSheet';
+import {
+  CustomHeader,
+  CalendarSheet,
+  ReturnCalendarSheet,
+  Loader,
+  ChooseRide,
+  LocationInput,
+  AppButton,
+  ReturnLocationInput,
+  DateTimePickerCard,
+  ReturnDateTimerPicker,
+} from '../../../components';
 import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
 import HeartFilled from 'react-native-vector-icons/Foundation';
@@ -25,7 +44,6 @@ import {
   setAvailableSeats,
   setOrigin,
   setMapDestination,
-  CreateDriveRequest,
   setDateTimeStamp,
   setTime,
   SetRidesResponse,
@@ -37,13 +55,13 @@ import {
   setReturnRide,
   setRecurringDates,
   setReturnRecurringDates,
+  setReturnDateTimeStamp,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {Loader} from '../../../components/Loader/Loader';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import ReturnCalendarSheet from '../../../components/ReurnCalenderSheet';
-
+import styles from './styles';
+import {Alert} from 'react-native';
 const CreateDrive = () => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
@@ -66,14 +84,14 @@ const CreateDrive = () => {
   const destinationMap = useSelector(state => state.map.destination);
 
   const [destination, setDestination] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(new Date());
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [screen, setScreen] = useState(false);
   const [favPress, setFavPress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [normalTime, setnormalTime] = useState();
+  const [normalTime, setnormalTime] = useState(new Date());
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
 
@@ -84,9 +102,14 @@ const CreateDrive = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
+    {label: '10 NOK', value: 10},
+    {label: '15 NOK', value: 15},
     {label: '20 NOK', value: 20},
+    {label: '25 NOK', value: 25},
     {label: '30 NOK', value: 30},
+    {label: '35 NOK', value: 35},
     {label: '40 NOK', value: 40},
+    {label: '45 NOK', value: 45},
     {label: '50 NOK', value: 50},
     {label: '60 NOK', value: 60},
     {label: '70 NOK', value: 70},
@@ -95,15 +118,18 @@ const CreateDrive = () => {
 
   // Release Redux States
   useEffect(() => {
+    setValue(items[2].value);
     return () => {
       dispatch(setAvailableSeats(0));
       dispatch(setOrigin(null));
       dispatch(setMapDestination(null));
       dispatch(setDateTimeStamp(null));
       dispatch(SetRidesResponse(null));
+      dispatch(setTime(null));
       dispatch(setReturnOrigin(null));
       dispatch(setReturnMapDestination(null));
       dispatch(setReturnFirstTime(null));
+      dispatch(setReturnDateTimeStamp(null));
       dispatch(setRecurringDates([]));
       dispatch(setReturnRecurringDates([]));
     };
@@ -111,16 +137,16 @@ const CreateDrive = () => {
 
   const handleCreateDrive = async () => {
     setIsLoading(true);
+
     if (origin && destinationMap != null) {
       let resp = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?alternatives=true&origin=${origin?.description}&destination=${destinationMap?.description}&key=${APIKEY}&mode=${mode}`,
       );
       let respJson = await resp.json();
       if (respJson) {
-        const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
-        const recurring_stamp = recurring_dates.map(item => {
-          return moment(`${item}T${time}`).valueOf();
-        });
+        let stamp = dateConvertor(dateTimeStamp, time);
+        let recurring_stamp = recurringDateConvertor(recurring_dates, time);
+
         const body = {
           startLocation: [origin?.location.lat, origin?.location?.lng],
           destinationLocation: [
@@ -130,20 +156,24 @@ const CreateDrive = () => {
           date: screen ? recurring_stamp : stamp,
           availableSeats: availableSeats,
           path: 0,
-          costPerSeat: value + availableSeats * settings?.adminCommission,
+          costPerSeat: value + settings?.adminCommission,
           interCity: false,
           startDes: origin?.description,
           destDes: destinationMap?.description,
           selectedRoutes: respJson?.routes,
         };
-        dispatch(setRoutes(body));
-        setIsLoading(false);
-        if (toggleEnabled) {
-          handleReturnCreateDrive();
+        if (screen && recurring_stamp == '') {
+          Alert.alert('Error', 'Please select dates');
+          setIsLoading(false);
         } else {
-          navigation?.navigate('SelectRoute');
+          dispatch(setRoutes(body));
+          setIsLoading(false);
+          if (toggleEnabled) {
+            handleReturnCreateDrive();
+          } else {
+            navigation?.navigate('SelectRoute');
+          }
         }
-        console.log(body);
       }
     }
   };
@@ -157,8 +187,10 @@ const CreateDrive = () => {
   };
 
   const handleConfirm = date => {
+    setnormalTime(moment(date).format());
     dispatch(setTime(moment(date).format('HH:mm')));
-    setnormalTime(moment(date).format('hh:mm a'));
+    setNormalFirstReturnTime(moment(date).format());
+    dispatch(setReturnFirstTime(date));
     hideTimePicker();
   };
 
@@ -178,12 +210,13 @@ const CreateDrive = () => {
   };
   //Hanlde Return Drive
   const handleReturnCreateDrive = () => {
-    const stamp = moment(
-      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
-    ).valueOf();
-    const return_recurring_stamp = return_recurring_dates.map(item => {
-      return moment(`${item}T${returnTime?.returnFirstTime}`).valueOf();
-    });
+    const {returnFirstTime} = returnTime;
+    let stamp = returnDateConvertor(returnDateTimeStamp, returnFirstTime);
+    let return_recurring_stamp = returnRecurringDateConvertor(
+      return_recurring_dates,
+      returnFirstTime,
+    );
+
     const body = {
       startLocation: [returnOrigin?.location.lat, returnOrigin?.location?.lng],
       destinationLocation: [
@@ -193,13 +226,17 @@ const CreateDrive = () => {
       date: screen ? return_recurring_stamp : stamp,
       availableSeats: availableSeats,
       path: 0,
-      costPerSeat: value,
+      costPerSeat: value + settings?.adminCommission,
       interCity: false,
       startDes: returnOrigin?.description,
       destDes: returnDestinationMap?.description,
     };
-    dispatch(setReturnRide(body));
-    navigation?.navigate('SelectRoute');
+    if (screen && return_recurring_stamp == '') {
+      Alert.alert('Error', 'Please select return dates');
+    } else {
+      dispatch(setReturnRide(body));
+      navigation?.navigate('SelectRoute');
+    }
   };
 
   return (
@@ -210,114 +247,53 @@ const CreateDrive = () => {
         title={I18n.t('create_drive')}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.tripBtnWrapper}>
-          <TouchableOpacity
-            onPress={() => {
-              setScreen(false);
-              dispatch(setRecurringDates([]));
-              dispatch(setReturnRecurringDates([]));
-            }}
-            style={[
-              styles.tripBtnContainer,
-              {backgroundColor: screen ? colors.btnGray : colors.green},
-            ]}>
-            <Text style={styles.btnTxt}>{I18n.t('single_trip')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setScreen(true);
-              // navigation?.navigate('DRecurringRides');
-            }}
-            style={[
-              styles.tripBtnContainer,
-              {backgroundColor: screen ? colors.green : colors.btnGray},
-            ]}>
-            <Text style={styles.btnTxt}>{I18n.t('recurring_ride')}</Text>
-          </TouchableOpacity>
-        </View>
+        <ChooseRide
+          onPressS={() => {
+            setScreen(false);
+            dispatch(setRecurringDates([]));
+            dispatch(setReturnRecurringDates([]));
+          }}
+          onPressR={() => {
+            setScreen(true);
+          }}
+          screen={screen}
+          title1={I18n.t('single_trip')}
+          title2={I18n.t('recurring_ride')}
+        />
+        <LocationInput
+          onPressStart={() =>
+            navigation.navigate('StartLocationDriver', {
+              type: 'startLocation',
+            })
+          }
+          titleStart={
+            origin !== null ? origin.description : I18n.t('start_location')
+          }
+          onPressDes={() =>
+            navigation.navigate('StartLocationDriver', {
+              type: 'destination',
+              recurring: screen,
+            })
+          }
+          titleDes={
+            destinationMap !== null
+              ? destinationMap.description
+              : I18n.t('destination')
+          }
+          onPressFavStart={() => {
+            setFavPress('startLocation');
+            favourteLocationRef.current.open();
+          }}
+          onPressFavDes={() => {
+            setFavPress('destination');
+            favourteLocationRef.current.open();
+          }}
+          onFavPress={() => {
+            favourteLocationRef.current.open();
+          }}
+          favPress={favPress}
+        />
 
-        <View style={styles.locationMainWrapper}>
-          <View>
-            <View style={{marginBottom: 20}}>
-              <TouchableOpacity
-                style={styles.txtInput}
-                onPress={() =>
-                  navigation.navigate('StartLocationDriver', {
-                    type: 'startLocation',
-                  })
-                }>
-                <Text style={styles.locationTxt}>
-                  {origin !== null
-                    ? origin.description
-                    : I18n.t('start_location')}
-                </Text>
-              </TouchableOpacity>
-              <View style={styles.startDot} />
-            </View>
-            <View>
-              <TouchableOpacity
-                style={styles.txtInput}
-                onPress={() =>
-                  navigation.navigate('StartLocationDriver', {
-                    type: 'destination',
-                    recurring: screen,
-                  })
-                }>
-                <Text style={styles.locationTxt}>
-                  {destinationMap !== null
-                    ? destinationMap.description
-                    : I18n.t('destination')}
-                </Text>
-              </TouchableOpacity>
-              <View style={styles.destSquare} />
-            </View>
-          </View>
-          <View style={styles.switchWrapper}>
-            {favPress === 'startLocation' ? (
-              <HeartFilled
-                name="heart"
-                size={24}
-                color={'red'}
-                onPress={() => {
-                  favourteLocationRef.current.open();
-                }}
-              />
-            ) : (
-              <HeartIcon
-                name="heart"
-                size={30}
-                color={colors.btnGray}
-                onPress={() => {
-                  setFavPress('startLocation');
-                  favourteLocationRef.current.open();
-                }}
-              />
-            )}
-
-            <Image source={appIcons.mobiledata} style={styles.locationSwitch} />
-
-            {favPress === 'destination' ? (
-              <HeartFilled
-                name="heart"
-                size={24}
-                color={'red'}
-                onPress={() => {
-                  favourteLocationRef.current.open();
-                }}
-              />
-            ) : (
-              <HeartIcon
-                name="heart"
-                size={30}
-                color={colors.btnGray}
-                onPress={() => {
-                  setFavPress('destination');
-                  favourteLocationRef.current.open();
-                }}
-              />
-            )}
-          </View>
-        </View>
         <Text style={styles.bookSeatsTxt}>{I18n.t('availableSeats')}</Text>
         <View style={styles.seatsWrapper}>
           {seats.map(seat => (
@@ -346,46 +322,30 @@ const CreateDrive = () => {
             </Text>
           </View>
         </View>
-        <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt, {marginRight: 23}]}>
-            {I18n.t('need_to_arrive')}
-          </Text>
-          <Text style={[styles.selectTxt, {marginLeft: 8}]}>
-            {I18n.t('select_date')}
-          </Text>
-        </View>
-        <View style={styles.selectionInputWrapper}>
-          <TouchableOpacity
-            onPress={() => showTimePicker()}
-            style={[styles.noLater, {justifyContent: 'center'}]}>
-            <Text style={styles.dateTxt}>{time ? time : `XX:XX`}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => calendarSheetRef.current.open()}
-            style={[
-              styles.noLater,
-              {justifyContent: 'center', marginRight: 11},
-            ]}>
-            <Text style={styles.dateTxt}>
-              {dateTimeStamp !== null
-                ? moment(dateTimeStamp).format('DD MMM')
-                : 'Date'}
-            </Text>
-          </TouchableOpacity>
-          <Image
-            source={appImages.calendar}
-            resizeMode="contain"
-            style={styles.calendarIcon}
-          />
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            is24Hour={true}
-            locale="en_GB"
-            mode="time"
-            onConfirm={handleConfirm}
-            onCancel={hideTimePicker}
-          />
-        </View>
+        <DateTimePickerCard
+          datetitle={!screen ? I18n.t('select_date') : I18n.t('select_dates')}
+          timeTitle={I18n.t('need_to_arrive')}
+          onPressDate={() => calendarSheetRef.current.open()}
+          dateText={
+            dateTimeStamp !== null
+              ? moment(dateTimeStamp).format('DD MMM')
+              : !screen
+              ? moment(new Date()).format('DD MMM')
+              : 'XX:XX'
+          }
+          onPressTime={() => showTimePicker()}
+          timeText={time ? time : moment(new Date()).format('HH:mm')}
+        />
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          is24Hour={true}
+          locale="en_GB"
+          mode="time"
+          onConfirm={handleConfirm}
+          onCancel={hideTimePicker}
+          date={new Date(normalTime)}
+        />
+
         <Text style={styles.presetTxt}>{I18n.t('cost_percentage')}</Text>
         <DropDownPicker
           open={open}
@@ -419,163 +379,88 @@ const CreateDrive = () => {
               return {date: item};
             }),
           }}
-          date={dateTimeStamp}
+          date={dateTimeStamp || new Date()}
           calendarSheetRef={calendarSheetRef}
           setDate={setDate}
         />
         {toggleEnabled ? (
           <>
-            <View style={styles.locationMainWrapper}>
-              <View>
-                <TouchableOpacity
-                  onPress={() => {
-                    dispatch(setMapSegment('returnTrip'));
-                    navigation.navigate('StartLocationDriver', {
-                      type: 'returnTrip',
-                    });
-                  }}
-                  style={[styles.txtInput, {marginBottom: 20}]}>
-                  <Text style={styles.startTxt}>
-                    {returnOrigin
-                      ? returnOrigin.description
-                      : I18n.t('start_location')}
-                  </Text>
-                  <View style={styles.startDot} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    dispatch(setMapSegment('returnTrip'));
-                    navigation.navigate('StartLocationDriver', {
-                      type: 'returnTrip',
-                      recurring: screen,
-                    });
-                  }}
-                  style={styles.txtInput}>
-                  <Text style={styles.startTxt}>
-                    {returnDestinationMap
-                      ? returnDestinationMap.description
-                      : I18n.t('destination')}
-                  </Text>
-                  <View style={styles.destSquare} />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.switchWrapper}>
-                {favPress === 'returnstartLocation' ? (
-                  <HeartFilled
-                    name="heart"
-                    size={24}
-                    color={'red'}
-                    onPress={() => {
-                      favourteLocationRef.current.open();
-                    }}
-                  />
-                ) : (
-                  <HeartIcon
-                    name="heart"
-                    size={30}
-                    color={colors.btnGray}
-                    onPress={() => {
-                      setFavPress('returnstartLocation');
-                      favourteLocationRef.current.open();
-                    }}
-                  />
-                )}
-                <Image
-                  source={appIcons.mobiledata}
-                  style={styles.locationSwitch}
-                />
+            <ReturnLocationInput
+              onPressStart={() => {
+                dispatch(setMapSegment('returnTrip'));
+                navigation.navigate('StartLocationDriver', {
+                  type: 'returnTrip',
+                });
+              }}
+              titleStart={
+                returnOrigin
+                  ? returnOrigin.description
+                  : I18n.t('start_location')
+              }
+              onPressDes={() => {
+                dispatch(setMapSegment('returnTrip'));
+                navigation.navigate('StartLocationDriver', {
+                  type: 'returnTrip',
+                  recurring: screen,
+                });
+              }}
+              titleDes={
+                returnDestinationMap
+                  ? returnDestinationMap.description
+                  : I18n.t('destination')
+              }
+              onFavPress={() => {
+                favourteLocationRef.current.open();
+              }}
+              onPressFavStart={() => {
+                setFavPress('returnstartLocation');
+                favourteLocationRef.current.open();
+              }}
+              onPressFavDes={() => {
+                setFavPress('returndestination');
+                favourteLocationRef.current.open();
+              }}
+              favPress={favPress}
+            />
+            <ReturnDateTimerPicker
+              timeTitle={I18n.t('departure_time')}
+              timeDesc={I18n.t('departure_time_desc')}
+              onPressDate={() => returnCalendarSheetRef.current.open()}
+              onPressStartTime={() => showFirstReturnTimePicker()}
+              startTime={
+                normalFirstReturnTime
+                  ? moment(normalFirstReturnTime).format('HH:mm')
+                  : moment(new Date()).format('HH:mm')
+              }
+              endTime={
+                returnTime?.returnSecondTime !=
+                moment(new Date()).format('HH:mm')
+                  ? returnTime?.returnSecondTime
+                  : moment(new Date())
+                      .add(returnTime?.settings?.returnRange, 'minutes')
+                      .format('HH:mm')
+              }
+              dateText={
+                returnDateTimeStamp !== null
+                  ? moment(returnDateTimeStamp).format('DD MMM')
+                  : moment(returnDateTimeStamp).format('DD MMM') !=
+                    'Invalid date'
+                  ? moment(returnDateTimeStamp).format('DD MMM')
+                  : !screen
+                  ? moment(new Date()).format('DD MMM')
+                  : 'XX:XX'
+              }
+            />
 
-                {favPress === 'returndestination' ? (
-                  <HeartFilled
-                    name="heart"
-                    size={24}
-                    color={'red'}
-                    onPress={() => {
-                      favourteLocationRef.current.open();
-                    }}
-                  />
-                ) : (
-                  <HeartIcon
-                    onPress={() => {
-                      setFavPress('returndestination');
-                      favourteLocationRef.current.open();
-                    }}
-                    name="heart"
-                    size={30}
-                    color={colors.btnGray}
-                  />
-                )}
-              </View>
-            </View>
-            <View style={{marginLeft: 26}}>
-              <Text style={styles.returntimeTxt}>
-                {I18n.t('departure_time')}
-              </Text>
-              <Text style={styles.timeBracketTxt}>
-                {I18n.t('departure_time_desc')}
-              </Text>
-            </View>
-            <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
-              <TouchableOpacity
-                onPress={() => showFirstReturnTimePicker()}
-                style={[styles.noLater, {justifyContent: 'center'}]}>
-                <Text style={styles.dateTxt}>
-                  {returnTime?.returnFirstTime != 'Invalid date'
-                    ? returnTime?.returnFirstTime
-                    : `XX:XX`}
-                </Text>
-              </TouchableOpacity>
-              <Text> {I18n.t('to')}</Text>
-              <TouchableOpacity
-                style={[styles.noLater, {justifyContent: 'center'}]}>
-                <Text style={styles.dateTxt}>
-                  {returnTime?.returnSecondTime != 'Invalid date'
-                    ? returnTime?.returnSecondTime
-                    : `XX:XX`}
-                </Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={firstReturnTimePicker}
-                date={
-                  normalFirstReturnTime
-                    ? new Date(normalFirstReturnTime)
-                    : new Date()
-                }
-                mode="time"
-                is24Hour={true}
-                locale="en_GB"
-                onConfirm={handleConfirmFirstReturnTime}
-                onCancel={hideFirstReturnTimePicker}
-              />
-            </View>
-            <View style={{marginBottom: 20}}>
-              <TouchableOpacity
-                onPress={() => returnCalendarSheetRef.current.open()}
-                style={[
-                  styles.noLater,
-                  {justifyContent: 'center', width: '90%', alignSelf: 'center'},
-                ]}>
-                <Text style={styles.dateTxt}>
-                  {returnDateTimeStamp !== null
-                    ? moment(returnDateTimeStamp).format('DD MMM')
-                    : 'Date'}
-                </Text>
-              </TouchableOpacity>
-              <Image
-                source={appImages.calendar}
-                resizeMode="contain"
-                style={[styles.calendarIcon, {right: 30}]}
-              />
-            </View>
             <ReturnCalendarSheet
               recurring={screen}
-              mindate={dateTimeStamp}
+              mindate={dateTimeStamp || new Date()}
               ride={{
                 next: return_recurring_dates?.map(item => {
                   return {date: item};
                 }),
               }}
-              date={returnDateTimeStamp}
+              date={returnDateTimeStamp || dateTimeStamp || new Date()}
               calendarSheetRef={returnCalendarSheetRef}
             />
           </>
@@ -585,289 +470,42 @@ const CreateDrive = () => {
           favPress={favPress}
           setFavPress={setFavPress}
         />
+        <DateTimePickerModal
+          isVisible={firstReturnTimePicker}
+          date={
+            normalFirstReturnTime ? new Date(normalFirstReturnTime) : new Date()
+          }
+          mode="time"
+          is24Hour={true}
+          locale="en_GB"
+          onConfirm={handleConfirmFirstReturnTime}
+          onCancel={hideFirstReturnTimePicker}
+        />
         {isLoading ? <Loader /> : null}
       </ScrollView>
       <KeyboardAvoidingView
         //keyboardVerticalOffset={15}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableOpacity
-          style={[
-            styles.nextBtnContainer,
-            {
-              backgroundColor: handleColor(
-                origin,
-                destinationMap,
-                availableSeats,
-                dateTimeStamp,
-                time,
-                value,
-              ),
-            },
-          ]}
+        <AppButton
+          bgColor={handleColor(origin, destinationMap, availableSeats)}
           disabled={
-            origin === null ||
-            destination === null ||
-            availableSeats === null ||
-            dateTimeStamp === null ||
-            value == null
+            origin === null || destination === null || availableSeats === 0
           }
           onPress={() => {
             handleCreateDrive();
-          }}>
-          <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
-        </TouchableOpacity>
+          }}
+          title={I18n.t('next')}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
-const handleColor = (
-  origin,
-  destinationMap,
-  availableSeats,
-  dateTimeStamp,
-  time,
-  cost,
-) => {
-  if (
-    origin == null ||
-    dateTimeStamp == null ||
-    availableSeats == null ||
-    destinationMap == null ||
-    time == null ||
-    cost == null
-  ) {
+const handleColor = (origin, destinationMap, availableSeats) => {
+  if (origin == null || availableSeats == 0 || destinationMap == null) {
     return colors.btnGray;
   }
   return colors.green;
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  backArrow: {
-    height: 15,
-    width: 20,
-    marginRight: 19,
-  },
-  createHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 21,
-  },
-  rideTxt: {
-    fontSize: 20,
-    lineHeight: 24,
-  },
-  tripBtnContainer: {
-    height: 39,
-    width: 145,
-    backgroundColor: colors.btnGray,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tripBtnWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    justifyContent: 'space-between',
-    width: '85%',
-    alignSelf: 'center',
-  },
-  btnTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.white,
-    fontFamily: fonts.regular,
-  },
-  txtInput: {
-    height: 44,
-    width: 291,
-    borderWidth: 1,
-    borderColor: colors.greyBorder,
-    borderRadius: 10,
-    paddingLeft: 45,
-    color: colors.inputTxtGray,
-    justifyContent: 'center',
-    fontFamily: fonts.regular,
-  },
-  startDot: {
-    height: 16,
-    width: 16,
-    borderRadius: 16 / 2,
-    backgroundColor: colors.green,
-    position: 'absolute',
-    top: 14,
-    left: 15,
-  },
-  destSquare: {
-    height: 16,
-    width: 16,
-    backgroundColor: colors.blue,
-    position: 'absolute',
-    top: 14,
-    left: 15,
-    borderRadius: 4,
-  },
-  locationSwitch: {
-    height: 25,
-    width: 25,
-    backgroundColor: colors.green,
-    borderRadius: 25 / 2,
-    marginVertical: 11,
-  },
-  switchWrapper: {
-    alignItems: 'center',
-  },
-  locationMainWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 19,
-    justifyContent: 'space-between',
-    width: '90%',
-    alignSelf: 'center',
-  },
-  bookSeatsTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    marginTop: 37,
-    color: colors.txtBlack,
-    marginLeft: 21,
-    fontFamily: fonts.regular,
-  },
-  seat: {
-    height: 31,
-    width: 24,
-    marginRight: 20,
-  },
-  seatsWrapper: {
-    flexDirection: 'row',
-    marginLeft: 21,
-    marginTop: 25,
-    alignItems: 'center',
-  },
-  selectWrapper: {
-    flexDirection: 'row',
-    marginTop: 26,
-    marginLeft: 20,
-  },
-  selectTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.txtBlack,
-    fontFamily: fonts.regular,
-  },
-  noLater: {
-    height: 44,
-    width: 140,
-    borderWidth: 1,
-    borderColor: colors.greyBorder,
-    borderRadius: 10,
-    paddingLeft: 16,
-    fontSize: 16,
-    lineHeight: 24,
-    color: colors.inputTxtGray,
-    fontFamily: fonts.regular,
-  },
-  calendarIcon: {
-    height: 18,
-    width: 18,
-    position: 'absolute',
-    right: 22,
-    top: 13,
-  },
-  selectionInputWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    alignSelf: 'center',
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  returnTxt: {
-    fontSize: 16,
-    lineHeight: 29,
-    color: colors.txtBlack,
-    fontFamily: fonts.regular,
-  },
-  returnTripWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 31,
-    width: '87%',
-    alignSelf: 'center',
-  },
-  returntimeTxt: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.txtBlack,
-    marginTop: 20,
-    fontFamily: fonts.regular,
-  },
-  timeBracketTxt: {
-    fontSize: 12,
-    lineHeight: 24,
-    color: colors.btnGray,
-    fontFamily: fonts.regular,
-  },
-  nextBtnContainer: {
-    height: 56,
-    backgroundColor: colors.green,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '80%',
-    borderRadius: 15,
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  nextTxt: {
-    fontSize: 16,
-    lineHeight: 26,
-    color: colors.white,
-    fontFamily: fonts.bold,
-  },
-  dateTxt: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: colors.g1,
-    fontFamily: fonts.regular,
-  },
-  presetCostContainer: {
-    height: 44,
-    width: '90%',
-    borderWidth: 1,
-    borderColor: colors.greyBorder,
-    borderRadius: 10,
-    alignSelf: 'center',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingHorizontal: 15,
-  },
-  presetTxt: {
-    fontFamily: fonts.regular,
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.black,
-    marginVertical: 25,
-    marginHorizontal: 22,
-  },
-  locationTxt: {
-    fontFamily: fonts.regular,
-    fontSize: 13,
-    lineHeight: 20,
-    color: colors.g4,
-  },
-  to: {
-    fontFamily: fonts.regular,
-    fontSize: 14,
-    lineHeight: 24,
-    color: colors.txtBlack,
-  },
-});
 
 export default CreateDrive;

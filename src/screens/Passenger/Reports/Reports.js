@@ -1,5 +1,5 @@
 import I18n from 'i18n-js';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
   SafeAreaView,
@@ -11,20 +11,146 @@ import {
   View,
 } from 'react-native';
 
-import LinearGradient from 'react-native-linear-gradient';
-import {CalendarYear} from '../../../components';
+import {CalendarYear, DatePicker} from '../../../components';
 import {CustomHeader} from '../../../components/Header/CustomHeader';
-import {colors, family, HP, size} from '../../../utilities';
-import {appImages, appIcons} from '../../../utilities';
-import CalendarSheet from '../../CalendarSheet';
+import {post} from '../../../services';
+import {
+  checkConnected,
+  colors,
+  family,
+  header,
+  HP,
+  size,
+} from '../../../utilities';
+import {DRIVE_CONST, RIDES_CONST} from '../../../utilities/routes';
 import ReportsEarning from './ReportsEarning';
 import ReportsSpending from './ReportsSpending';
 
 const Reports = ({navigation}) => {
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(null);
+  const [endDate, setendDate] = useState(null);
   const [selected, setSelected] = useState(1);
   const yearSheetRef = useRef(null);
+  const calendarSheetRef = useRef(null);
+  const endcalendarSheetRef = useRef(null);
+  const [year, setyear] = useState(null);
+  const [data, setdata] = useState(null);
+  const [spendings, setSpendings] = useState(null);
 
+  const [showMessage, setshowMessage] = useState(false);
+
+  useEffect(() => {
+    getEarning();
+  }, []);
+
+  const getEarning = async () => {
+    const checkInternet = await checkConnected();
+    if (checkInternet) {
+      const requestBody = {
+        thisMonth: false,
+        thisYear: false,
+      };
+      const res = await post(
+        `${DRIVE_CONST}/earnings`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setdata(res?.data);
+      }
+    } else {
+      Alert.alert('Error', 'Check your internet connectivity!');
+    }
+  };
+
+  const getSpendings = async () => {
+    const checkInternet = await checkConnected();
+    if (checkInternet) {
+      const requestBody = {
+        thisMonth: false,
+        thisYear: false,
+      };
+      const res = await post(
+        `${RIDES_CONST}/spendings`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        console.log(res.data);
+        setSpendings(res?.data);
+      }
+    } else {
+      Alert.alert('Error', 'Check your internet connectivity!');
+    }
+  };
+  const getPeriodEarning = async period => {
+    const checkInternet = await checkConnected();
+    if (checkInternet) {
+      const requestBody = {
+        thisMonth: period == 'month' ? true : false,
+        thisYear: period == 'year' ? true : false,
+      };
+      const res = await post(
+        `${selected == 1 ? DRIVE_CONST : RIDES_CONST}/${
+          selected == 1 ? 'earnings' : 'spendings'
+        }`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        console.log(res?.data);
+        setdata(res?.data);
+      }
+    } else {
+      Alert.alert('Error', 'Check your internet connectivity!');
+    }
+  };
+  const download_period_Report = async period => {
+    const checkInternet = await checkConnected();
+    if (checkInternet) {
+      const requestBody = {
+        lastMonth: period == 'month' ? true : false,
+        last6Months: period == '6month' ? true : false,
+        lastYear: period == 'year' ? true : false,
+      };
+      const res = await post(
+        `${selected == 1 ? DRIVE_CONST : RIDES_CONST}/payments`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setshowMessage(true);
+        setTimeout(() => {
+          setshowMessage(false);
+        }, 3000);
+      }
+    } else {
+      Alert.alert('Error', 'Check your internet connectivity!');
+    }
+  };
+  const download_Report = async () => {
+    const checkInternet = await checkConnected();
+    if (checkInternet) {
+      const requestBody = {
+        Year: year,
+        start: date,
+        end: endDate,
+      };
+      const res = await post(
+        `${selected == 1 ? DRIVE_CONST : RIDES_CONST}/payments`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setshowMessage(true);
+        setTimeout(() => {
+          setshowMessage(false);
+        }, 3000);
+      }
+    } else {
+      Alert.alert('Error', 'Check your internet connectivity!');
+    }
+  };
   return (
     <>
       <CustomHeader
@@ -37,7 +163,10 @@ const Reports = ({navigation}) => {
           <View style={styles.containerOne}>
             <View style={styles.tabContainer}>
               <TouchableOpacity
-                onPress={() => setSelected(1)}
+                onPress={() => {
+                  getEarning();
+                  setSelected(1);
+                }}
                 style={styles.leftTabStyle}>
                 <Text
                   style={[
@@ -48,7 +177,10 @@ const Reports = ({navigation}) => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => setSelected(2)}
+                onPress={() => {
+                  getSpendings();
+                  setSelected(2);
+                }}
                 style={styles.rightTabStyle}>
                 <Text
                   style={[
@@ -61,17 +193,66 @@ const Reports = ({navigation}) => {
             </View>
             {selected === 2 ? (
               <ReportsSpending
+                year={year}
+                data={spendings}
+                showMessage={showMessage}
+                onPressCurrentPeriod={res => getPeriodEarning(res)}
+                onPressPeriodReport={res => download_period_Report(res)}
                 onPressYear={() => {
-                  yearSheetRef.current.open();
+                  yearSheetRef?.current?.open();
                 }}
+                onPressStartDate={() => {
+                  calendarSheetRef?.current?.open();
+                }}
+                onPressEndDate={() => {
+                  endcalendarSheetRef?.current?.open();
+                }}
+                startDate={date}
+                endDate={endDate}
+                onPressDownload={download_Report}
               />
             ) : (
-              <ReportsEarning />
+              <ReportsEarning
+                year={year}
+                data={data}
+                showMessage={showMessage}
+                onPressCurrentPeriod={res => getPeriodEarning(res)}
+                onPressPeriodReport={res => download_period_Report(res)}
+                onPressYear={() => {
+                  yearSheetRef?.current?.open();
+                }}
+                onPressStartDate={() => {
+                  calendarSheetRef?.current?.open();
+                }}
+                onPressEndDate={() => {
+                  endcalendarSheetRef?.current?.open();
+                }}
+                startDate={date}
+                endDate={endDate}
+                onPressDownload={download_Report}
+              />
             )}
           </View>
         </View>
       </SafeAreaView>
-      <CalendarYear show={yearSheetRef} />
+      <DatePicker
+        onPress={() => {
+          calendarSheetRef?.current?.close();
+        }}
+        calendarSheetRef={calendarSheetRef}
+        setDate={setDate}
+        date={date}
+      />
+      <DatePicker
+        onPress={() => {
+          endcalendarSheetRef?.current?.close();
+        }}
+        calendarSheetRef={endcalendarSheetRef}
+        setDate={setendDate}
+        date={endDate}
+        minDate={date}
+      />
+      <CalendarYear setYear={setyear} current_year={year} show={yearSheetRef} />
     </>
   );
 };

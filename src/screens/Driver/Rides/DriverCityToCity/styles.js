@@ -114,6 +114,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     marginTop: 26,
     marginLeft: 20,
+    width: '78%',
+    justifyContent: 'space-between',
   },
   selectTxt: {
     fontSize: 14,
@@ -227,5 +229,19 @@ export default StyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: colors.txtBlack,
+  },
+  dropBtn: {
+    width: '90%',
+    alignSelf: 'center',
+    height: 56,
+    backgroundColor: colors.navy_blue,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dropText: {
+    color: colors.white,
+    fontSize: size.normal,
+    fontFamily: family.product_sans_bold,
   },
 });

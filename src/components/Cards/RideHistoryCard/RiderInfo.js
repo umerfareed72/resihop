@@ -1,12 +1,14 @@
 import React from 'react';
-import {Image, Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import {appIcons, colors, family, size} from '../../../utilities';
+import {appIcons, colors, family, profileIcon, size} from '../../../utilities';
 import {appImages} from '../../../utilities/images';
 import StarRating from 'react-native-star-rating';
-
-export const RiderInfo = ({driverInfo}) => {
+import {Image} from 'react-native-elements';
+import I18n from '../../../utilities/translations';
+import i18n from '../../../utilities/translations';
+export const RiderInfo = ({driverInfo, block, onPressBlock}) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -16,9 +18,13 @@ export const RiderInfo = ({driverInfo}) => {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Image source={appImages.user} style={styles.icon42} />
+            <Image
+              progressiveRenderingEnabled={true}
+              source={{uri: driverInfo?.picture?.url || profileIcon}}
+              style={styles.icon42}
+            />
             <Text style={styles.textStyle}>
-              {driverInfo?.firstName || 'Jon'} {driverInfo?.lastName || 'Due'}
+              {driverInfo?.firstName || ''} {driverInfo?.lastName || ''}
             </Text>
           </View>
           <Image source={appIcons.redHeart} style={styles.imageStyle} />
@@ -30,20 +36,24 @@ export const RiderInfo = ({driverInfo}) => {
               fontFamily: family.product_sans_regular,
               fontSize: size.xsmall,
             }}>
-            Your Rate
+            {i18n.t('your_rate')}
           </Text>
           <StarRating
-            disabled={false}
+            disabled={true}
             maxStars={5}
-            rating={5}
+            rating={driverInfo?.rating_d}
             starSize={19}
+            emptyStar={appIcons.empty_star}
+            fullStarColor={appIcons.full_star}
             starStyle={{paddingHorizontal: 2}}
             fullStarColor={colors.green}
             selectedStar={rating => console.log(rating)}
           />
           <View />
-          <TouchableOpacity style={styles.btnContainer}>
-            <Text style={styles.btnText}>Block</Text>
+          <TouchableOpacity onPress={onPressBlock} style={styles.btnContainer}>
+            <Text style={styles.btnText}>
+              {block ? I18n.t('unblock') : I18n.t('block')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

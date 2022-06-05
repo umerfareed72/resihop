@@ -10,6 +10,7 @@ export const MY_CONTRIBUTION = 'my-contributions';
 export const CARD_CONST = 'cards';
 export const RIDES_CONST = 'rides';
 export const DRIVE_CONST = 'drives';
-
+export const FAVOURITES_CONST = 'favorites';
 export const AGORA_CONST = 'agora';
 export const PAYMENT_CONST = 'payments';
+export const REFERRAL_CONST = 'referrals';

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   ImageBackground,
-  Image,
   Text,
   StyleSheet,
   View,
@@ -19,14 +18,18 @@ import {
   MY_CONTRIBUTION,
   responseValidator,
   header,
+  profileIcon,
 } from '../../../utilities';
 import {ContributionCard} from '../../../components';
-import {get} from '../../../services';
-
+import {get, post} from '../../../services';
+import {useSelector} from 'react-redux';
+import {Image} from 'react-native-elements';
+import {Share} from 'react-native';
+import i18n from '../../../utilities/translations';
 const Contribution = ({navigation}) => {
   const [getContribution, setContributions] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const auth = useSelector(state => state.auth);
   useEffect(() => {
     getContributions();
   }, []);
@@ -42,6 +45,16 @@ const Contribution = ({navigation}) => {
       responseValidator(status, msg);
     }
   };
+  const sharedContribution = async () => {
+    const result = await Share.share({
+      title: 'RES IHOP',
+      message: `Your vehicle reduced ${
+        getContribution?.saved || 0
+      } KG(s) CO2 in ${getContribution?.rideShared || 0} rides with distance ${
+        getContribution?.distance || 0
+      } KM`,
+    });
+  };
   return (
     <ImageBackground style={{flex: 1}} source={appImages.tree}>
       <CustomHeader
@@ -49,31 +62,43 @@ const Contribution = ({navigation}) => {
         barColor={'transparent'}
         backButton={true}
         navigation={navigation}
-        title="My Contribution"
+        title={i18n.t('my_contribution')}
         btnImage1={appIcons.share_icon}
         bg3Color={'transparent'}
         tintColor3={colors?.light_black}
         height3={25}
         width3={25}
+        onPressbtnImage1={() => {
+          sharedContribution();
+        }}
       />
       <View style={styles.viewContainer}>
         <View style={styles.imgContainer}>
           <Image
-            resizeMode={'contain'}
+            progressiveRenderingEnabled={true}
+            resizeMode={'cover'}
             style={styles.imgStyle}
-            source={appImages.app_logo}
+            source={{uri: auth?.profile_info?.picture?.url || profileIcon}}
           />
-          <Text style={styles.userName}>John Doe</Text>
+          <Text style={styles.userName}>
+            {auth?.profile_info?.firstName} {auth?.profile_info?.lastName}
+          </Text>
         </View>
         <TouchableOpacity style={styles.buttonStyle}>
-          <Text style={styles.buttonText}>100 KG(s) CO2 Reduced</Text>
+          <Text style={styles.buttonText}>
+            {getContribution?.saved || 0} KG(s) {i18n.t('co_reduce')}
+          </Text>
         </TouchableOpacity>
-        <FlatList
-          data={getContribution}
-          contentContainerStyle={{marginVertical: HP('4')}}
-          numColumns="2"
-          renderItem={item => <ContributionCard data={item} />}
-        />
+        <View style={styles.aiRow}>
+          <ContributionCard
+            title={getContribution?.rideShared || 0}
+            description={i18n.t('ride_shared')}
+          />
+          <ContributionCard
+            title={getContribution?.distance || 0}
+            description={i18n.t('distance_shared')}
+          />
+        </View>
       </View>
     </ImageBackground>
   );
@@ -93,6 +118,7 @@ const styles = StyleSheet.create({
     width: HP('12'),
     height: HP('12'),
     borderRadius: 100,
+    marginBottom: 10,
   },
   imgContainer: {
     marginVertical: HP('2'),
@@ -115,6 +141,13 @@ const styles = StyleSheet.create({
     fontSize: size.h5,
     fontFamily: family.product_sans_bold,
     color: colors.white,
+  },
+  aiRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 5,
   },
 });
 export default Contribution;

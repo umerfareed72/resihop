@@ -36,7 +36,7 @@ const DrawerComponent = ({navigation}) => {
   const list = [
     {
       icon: drawerIcons.rides_history,
-      label: 'Rides History',
+      label: I18n.t('ride_history'),
       onPress: () => {
         navigation?.navigate('RideHistory');
         navigation.closeDrawer();
@@ -44,7 +44,7 @@ const DrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.my_payment_methods,
-      label: 'My Payment Methods',
+      label: I18n.t('my_payment_method'),
       onPress: () => {
         navigation.push('Payment', {
           routeName: 'Payment',
@@ -55,7 +55,7 @@ const DrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.Favourites,
-      label: 'Favourites',
+      label: I18n.t('favourites'),
       onPress: () => {
         navigation.push('Favourites', {
           routeName: 'Favourites',
@@ -66,7 +66,7 @@ const DrawerComponent = ({navigation}) => {
 
     {
       icon: drawerIcons.reports,
-      label: 'Reports',
+      label: I18n.t('reports'),
       onPress: () => {
         navigation.push('Reports', {
           routeName: 'Reports',
@@ -76,7 +76,7 @@ const DrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.offers,
-      label: 'Offers',
+      label: I18n.t('offers'),
       onPress: () => {
         navigation.push('Offers', {
           routeName: 'Offers',
@@ -86,7 +86,7 @@ const DrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.invite,
-      label: 'Invite',
+      label: I18n.t('invite'),
       onPress: () => {
         navigation.push('Invite', {
           routeName: 'Invite',
@@ -96,7 +96,7 @@ const DrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.my_contribution,
-      label: 'My Contribution',
+      label: I18n.t('my_contribution'),
       onPress: () => {
         navigation.push('Contribution', {
           routeName: 'Contribution',
@@ -106,14 +106,14 @@ const DrawerComponent = ({navigation}) => {
     },
     {
       icon: drawerIcons.settings,
-      label: 'Settings',
+      label: I18n.t('settings'),
       onPress: () => {
         navigation.navigate('Settings');
       },
     },
     {
       icon: drawerIcons.logout,
-      label: 'Log out',
+      label: I18n.t('logout'),
       onPress: () => {
         navigation.closeDrawer();
         modalRef?.current?.open();
@@ -138,6 +138,7 @@ const DrawerComponent = ({navigation}) => {
       Alert.alert('Internet Error', 'Check your internet connection');
     }
   }
+
   return (
     <>
       <MyStatusBar
@@ -173,14 +174,18 @@ const DrawerComponent = ({navigation}) => {
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {}} style={styles.buttonContainer}>
-              <Text style={styles.passengerStyle}>Passenger</Text>
+              <Text style={styles.passengerStyle}>
+                {I18n.t('fav_passenger')}
+              </Text>
               <Icon
                 name={'star'}
                 type={'entypo'}
                 color={colors.white}
                 size={15}
               />
-              <Text style={styles.passengerStyle}>4.5</Text>
+              <Text style={styles.passengerStyle}>
+                {Userdata?.profile_info?.rating_r}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

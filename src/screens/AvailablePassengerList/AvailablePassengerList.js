@@ -12,7 +12,7 @@ import {
 import {CustomHeader} from '../../components/Header/CustomHeader';
 import {appImages, colors, HP} from '../../utilities';
 import StarIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ReturnBookSheet from '../../components/ReturnBookSheet';
+import {ReturnBookSheet} from '../../components';
 
 const AvailablePassengerList = () => {
   let navigation = useNavigation();

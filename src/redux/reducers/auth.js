@@ -12,6 +12,7 @@ const initialState = {
   is_vehicle: false,
   profile_info: {},
   country_info: {},
+  calling_user: {},
 };
 export default (state = initialState, action = {}) => {
   const {type, payload} = action;
@@ -112,6 +113,23 @@ export default (state = initialState, action = {}) => {
         failure: true,
         pwd_data: payload,
       };
+    case Types.Get_User_Info_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        calling_user: payload,
+      };
+    case Types.Get_User_Info_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        calling_user: payload,
+      };
+
     case Types.Info_Success:
       return {
         ...state,

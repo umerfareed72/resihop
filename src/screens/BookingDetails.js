@@ -67,7 +67,7 @@ const BookingDetails = () => {
               createRideRequest?.requiredSeats ||
               bookRide?.drive?.requiredSeats ||
               bookRide?.requiredSeats
-            } Seat`}</Text>
+            } ${I18n.t('seats')}`}</Text>
           </View>
         </View>
         <View style={styles?.driverInfoContainer}>
@@ -137,7 +137,7 @@ const BookingDetails = () => {
             <Text style={styles.seatNum}>{`${
               bookRide?.drive?.availableSeats ||
               bookRide?.pool_match?.availableSeats
-            } Seat Available`}</Text>
+            } ${I18n.t('availableSeats')}`}</Text>
           </View>
           <View style={styles.carDetailsTxt}>
             <Text style={styles.carDetails}>

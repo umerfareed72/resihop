@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Modal, ActivityIndicator, Text} from 'react-native';
 import {colors, family} from '../../utilities';
-
+import I18n from '../../utilities/translations';
 export const Loader = () => {
   return (
     <>
@@ -15,7 +15,7 @@ export const Loader = () => {
           <View style={styles.activityIndicatorWrapper}>
             <Text
               style={{fontSize: 20, fontFamily: family.product_sans_regular}}>
-              Loading...
+              {I18n.t('loading')}...
             </Text>
             <ActivityIndicator
               size={'large'}

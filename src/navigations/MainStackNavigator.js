@@ -7,7 +7,7 @@ import UserDetailStack from './stacks/UserDetailStack';
 import {DrawerNavigator} from './PassengerDrawerNav';
 import {DriverDrawerNavigator} from './DriverDraweNavigator';
 import VehcileStack from './stacks/VehcileStack';
-
+import IncomingCall from '../screens/IncomingCall';
 const Stack = createStackNavigator();
 const PassengerNavigator = () => {
   return (
@@ -62,6 +62,11 @@ function MainStackNavigator() {
           options={{headerShown: false}}
           name="VehicleStack"
           component={VehcileStack}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="IncomingCall"
+          component={IncomingCall}
         />
       </Stack.Navigator>
     </NavigationContainer>

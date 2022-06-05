@@ -16,7 +16,7 @@ export default StyleSheet.create({
   btnContainer: {
     backgroundColor: colors.green,
     height: 28,
-    width: 94,
+    paddingHorizontal: 10,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',

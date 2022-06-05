@@ -2,8 +2,7 @@ import {useNavigation} from '@react-navigation/core';
 import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import {colors} from 'react-native-elements';
-import AddressCards from '../components/AddressCards';
-import MapViewComponent from '../components/MapViewComponent';
+import {AddressCards, MapViewComponent} from '../components';
 import AddFavrouteLocation from './AddFavrouteLocation';
 
 const StartLocation = props => {

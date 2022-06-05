@@ -13,11 +13,8 @@ import {
   DRideFilterModal,
   DRideHistoryCard,
   Loader,
-  PaymentFilterModal,
-  RideFilterModal,
-  RideHistoryCard,
   SortModal,
-  TransHistoryCard,
+  BlankField,
 } from '../../../../components';
 import {appIcons, appImages, colors} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
@@ -29,21 +26,7 @@ import {
   MyRidesHistorySortOrder,
   select_drive_history,
 } from '../../../../redux/actions/map.actions';
-import BlankField from '../../../../components/BlankField';
 import mapTypes from '../../../../redux/types/map.types';
-
-//Data
-var TimeList = {
-  id: 1,
-  title: 'Timeframe',
-  items: [
-    {id: 1, text: 'Today', status: false},
-    {id: 2, text: 'This Week', status: false},
-    {id: 3, text: 'This Month', status: false},
-    {id: 3, text: 'This Month', status: false},
-    {id: 3, text: 'This Year', status: false},
-  ],
-};
 
 const rideTypeList = {
   id: 2,
@@ -96,17 +79,7 @@ const index = ({navigation}) => {
   //Get Drives
   useEffect(() => {
     if (isFocus) {
-      setisLoading(true);
-      try {
-        dispatch(
-          get_drives_history(res => {
-            setisLoading(false);
-          }),
-        );
-      } catch (error) {
-        console.log(error);
-        setisLoading(false);
-      }
+      getRides();
     }
   }, [isFocus]);
   const getRidesByOrder = item => {
@@ -119,18 +92,32 @@ const index = ({navigation}) => {
       }),
     );
   };
+  const getRides = () => {
+    setisLoading(true);
+    try {
+      dispatch(
+        get_drives_history(res => {
+          setisLoading(false);
+        }),
+      );
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+    }
+  };
+
   return (
     <>
       <CustomHeader
         backButton={true}
         title={I18n.t('driver_ride_history')}
         navigation={navigation}
-        btnImage1={appIcons.filter}
+        // btnImage1={appIcons.filter}
         height3={25}
         width3={25}
-        onPressbtnImage1={() => {
-          filterModalRef.current.open();
-        }}
+        // onPressbtnImage1={() => {
+        //   filterModalRef.current.open();
+        // }}
         onPressbtnImage={() => {
           sortModalRef.current.open();
         }}
@@ -163,19 +150,15 @@ const index = ({navigation}) => {
             />
           </View>
         ) : (
-          false
+          <BlankField title={'No Drive Completed Yet.'} />
         )}
-        <BlankField title={'No Drive Completed Yet.'} />
       </View>
       <DRideFilterModal
-        time={TimeList}
         seats={seatsList}
         rideType={rideTypeList}
         onPressrideType={selectRideType}
         onPressseats={selectSeats}
-        onPresstime={selectTime}
         show={filterModalRef}
-        selectedTime={time}
         selectedRideType={ridetype}
         selectedSeats={seats}
         onPressReset={resetFilter}

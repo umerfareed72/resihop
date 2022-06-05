@@ -1,14 +1,25 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
+import {useSelector} from 'react-redux';
 import {
   CustomHeader,
   PaymentFilterModal,
   SortModal,
   TransHistoryCard,
 } from '../../../../components';
-import {appIcons, appImages} from '../../../../utilities';
+import {
+  appIcons,
+  appImages,
+  baseURL,
+  checkConnected,
+  header,
+} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './style';
+import {useIsFocused} from '@react-navigation/native';
+import {get} from '../../../../services';
+import {FlatList} from 'react-native';
+
 //Data
 var TimeFrame = {
   id: 1,
@@ -47,7 +58,10 @@ const index = ({navigation}) => {
   const [time, settime] = useState('');
   const [cost, setCost] = useState('');
   const [transactiontype, setTransactionType] = useState('');
-
+  const [transactions, settransactions] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
+  const isFocus = useIsFocused(null);
+  const auth = useSelector(state => state.auth);
   const selectTime = val => {
     settime(val);
   };
@@ -64,18 +78,43 @@ const index = ({navigation}) => {
     setTransactionType('');
   };
 
+  useEffect(() => {
+    if (isFocus) {
+      getTransactions();
+    }
+  }, [isFocus]);
+  const getTransactions = async () => {
+    try {
+      setisLoading(true);
+      const check = await checkConnected();
+      if (check) {
+        const res = await get(
+          `${baseURL}transactions?user=${auth?.profile_info?.id}`,
+          await header(),
+        );
+        if (res?.data) {
+          settransactions(res?.data);
+          setisLoading(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+    }
+  };
+
   return (
     <>
       <CustomHeader
         backButton={true}
         title={I18n.t('trnsaction_history')}
         navigation={navigation}
-        btnImage1={appIcons.filter}
+        // btnImage1={appIcons.filter}
         height3={25}
         width3={25}
-        onPressbtnImage1={() => {
-          filterModalRef.current.open();
-        }}
+        // onPressbtnImage1={() => {
+        //   filterModalRef.current.open();
+        // }}
         onPressbtnImage={() => {
           sortModalRef.current.open();
         }}
@@ -84,10 +123,15 @@ const index = ({navigation}) => {
 
       <View style={styles.container}>
         <View style={styles.contentContainer}>
-          <TransHistoryCard />
+          <FlatList
+            data={transactions}
+            renderItem={({item}) => {
+              return <TransHistoryCard item={item?.payment} />;
+            }}
+          />
         </View>
       </View>
-      <PaymentFilterModal
+      {/* <PaymentFilterModal
         time={TimeFrame}
         cost={Cost}
         transactionType={TransactionType}
@@ -99,7 +143,7 @@ const index = ({navigation}) => {
         selectedTransType={transactiontype}
         selectedCost={cost}
         onPressReset={resetFilter}
-      />
+      /> */}
       <SortModal show={sortModalRef} />
     </>
   );

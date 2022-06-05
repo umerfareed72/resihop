@@ -12,10 +12,9 @@ import {
 import {
   colors,
   appIcons,
-  appImages,
   family,
   requestPermission,
-  options,
+  header,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
@@ -25,8 +24,9 @@ import {
   RideFilterModal,
   SortModal,
   CancelRideModal,
+  Loader,
+  UpcomingRideCards,
 } from '../../../components';
-import UpcomingRideCards from '../../../components/UpcomingRideCards';
 import {fonts} from '../../../theme';
 import I18n from '../../../utilities/translations';
 
@@ -40,11 +40,14 @@ import {
   setReturnMapDestination,
   get_settings,
   setCity,
+  setAvailableSeats,
+  MyRidesFiltering,
 } from '../../../redux/actions/map.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {
   getProfileInfo,
+  getUserInfo,
   SwitchDrive,
   updateInfo,
 } from '../../../redux/actions/auth.action';
@@ -53,101 +56,98 @@ import {move_from_drawer} from '../../../redux/actions/payment.action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
-import {
-  checkAppPermission,
-  requestAppPermission,
-} from '../../../utilities/helpers/permissions';
+import {checkAppPermission} from '../../../utilities/helpers/permissions';
 import {Alert} from 'react-native';
+import {post} from '../../../services';
+import {RIDES_CONST} from '../../../utilities/routes';
+import PushNotification from 'react-native-push-notification';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import {Call_Status} from '../../../redux/actions/app.action';
 
 //Data
-var TimeList = {
-  id: 1,
-  title: 'Time',
-  items: [
-    {id: 1, text: '08:00 to 12:00', status: false},
-    {id: 2, text: '08:00 to 12:00', status: false},
-    {id: 3, text: '08:00 to 12:00', status: false},
-  ],
-};
 
-var RideStatusList = {
-  id: 1,
-  title: 'Ride Status',
-  items: [
-    {id: 1, text: 'Confirmed', status: false},
-    {id: 2, text: 'Waiting for Match', status: false},
-    {id: 3, text: 'Matching Done', status: false},
-  ],
-};
-
-const rideTypeList = {
-  id: 4,
-  title: 'Ride Type',
-  items: [
-    {id: 1, text: 'All Rides'},
-    {id: 2, text: 'Destination Rides'},
-    {id: 3, text: 'Return Rides'},
-  ],
-};
-
-const DateList = {
-  id: 1,
-  title: 'Date',
-  items: [
-    {id: 1, text: '12 June'},
-    {id: 2, text: '13 June'},
-    {id: 3, text: '14 June'},
-    {id: 4, text: '15 June'},
-    {id: 5, text: '16 June'},
-  ],
-};
-
-const seatsList = {
-  id: 5,
-  title: 'Seat',
-  items: [
-    {id: 1, icon: appImages.seatBlue},
-    {id: 2, icon: appImages.seatBlue},
-    {id: 3, icon: appImages.seatBlue},
-    {id: 4, icon: appImages.seatBlue},
-    {id: 5, icon: appImages.seatBlue},
-    {id: 6, icon: appImages.seatBlue},
-  ],
-};
 const PassengerHome = ({navigation}) => {
   let dispatch = useDispatch();
   let isFocused = useIsFocused();
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
   //States
-  const [time, settime] = useState('');
-  const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
-  const [seats, setSeats] = useState('');
+  const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [selectedCard, setSelectedCard] = useState([]);
   const auth = useSelector(state => state.auth);
-  const myRidesData = useSelector(state => state.map.myRidesData);
+  const {myRidesData, availableSeats} = useSelector(state => state.map);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
   const [multiDelete, setmultiDelete] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
+
+  useEffect(() => {
+    PushNotification.configure({
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: function (token) {
+        // console.log('TOKEN:', token);
+      },
+      onNotification: function (notification) {
+        let notificationObj = notification.data.data;
+        if (notificationObj) {
+          notificationObj = JSON.parse(notificationObj);
+          if (notification?.notification?.title == 'Agora Call') {
+            dispatch(
+              getUserInfo(notificationObj, res => {
+                navigation?.navigate('IncomingCall');
+              }),
+            );
+          }
+          if (notification?.notification?.title == 'Agora Call Accept') {
+            dispatch(Call_Status('answered', () => {}));
+          }
+          if (notification?.notification?.title == 'Agora Call Reject') {
+            dispatch(
+              Call_Status('deny', () => {
+                navigation?.goBack();
+              }),
+            );
+          }
+        }
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+
+      popInitialNotification: true,
+      requestPermissions: Platform.OS === 'ios' ? true : false,
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+    });
+  }, []);
+
   useEffect(() => {
     if (isFocused) {
-      dispatch(
-        MyRidesSortOrder('rides', 'tripDate', res => {
-          dispatch({
-            type: mapTypes.myRides,
-            payload: res,
-          });
-        }),
-      );
+      getRides();
       getUserdata();
       dispatch(move_from_drawer(true, () => {}));
       dispatch(get_settings());
     }
+    return () => {
+      dispatch(setAvailableSeats(0));
+    };
   }, [isFocused]);
-
+  const getRides = async () => {
+    dispatch(
+      MyRidesSortOrder('rides?', 'tripDate', res => {
+        dispatch({
+          type: mapTypes.myRides,
+          payload: res,
+        });
+      }),
+    );
+  };
   // Get Location
   const getLocation = async route => {
+    setisLoading(true);
     dispatch(setCity(false));
     const permission = await checkAppPermission('location');
     if (permission) {
@@ -169,17 +169,23 @@ const PassengerHome = ({navigation}) => {
                   description: addressComponent,
                 }),
               );
+              setisLoading(false);
               navigation?.navigate(route);
             })
-            .catch(error => console.warn(error));
+            .catch(error => {
+              setisLoading(false);
+              console.warn(error);
+            });
         },
         error => {
+          setisLoading(false);
           // See error code charts below.
           console.log(error.code, error.message);
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     } else {
+      setisLoading(false);
       Alert.alert('Error', 'Location Permission Denied', [
         {
           onPress: () => {
@@ -208,10 +214,6 @@ const PassengerHome = ({navigation}) => {
     });
   }, []);
 
-  const selectTime = val => {
-    settime(val);
-  };
-
   const selectRideStatus = val => {
     setStatus(val);
   };
@@ -220,24 +222,38 @@ const PassengerHome = ({navigation}) => {
     setRideType(val);
   };
 
-  const selectSeats = val => {
-    setSeats(val);
-  };
-
-  const selectdDate = val => {
-    setdate(val);
-  };
-
   const resetFilter = () => {
-    settime('');
     setdate('');
     setRideType('');
-    setSeats('');
+    dispatch(setAvailableSeats(0));
     setStatus('');
+  };
+  const onApplyFilter = () => {
+    dispatch(
+      MyRidesFiltering(
+        'rides?',
+        ridetype?.value,
+        availableSeats,
+        status?.value,
+        res => {
+          console.log(res);
+          filterModalRef.current.close();
+          sortModalRef.current.close();
+          dispatch({
+            type: mapTypes.myRides,
+            payload: res,
+          });
+        },
+      ),
+    );
   };
 
   const onPress = item => {
-    navigation.navigate('RideStatus', {item: item});
+    if (item?.status === 'DISPUTED') {
+    } else if (item?.status === 'COMPLETED' && item?.rated_drive) {
+    } else {
+      navigation.navigate('RideStatus', {item: item});
+    }
   };
 
   const getUserdata = async () => {
@@ -256,7 +272,7 @@ const PassengerHome = ({navigation}) => {
 
   const getRidesByOrder = item => {
     dispatch(
-      MyRidesSortOrder('rides', item?.value, res => {
+      MyRidesSortOrder('rides?', item?.value, res => {
         dispatch({
           type: mapTypes.myRides,
           payload: res,
@@ -264,12 +280,48 @@ const PassengerHome = ({navigation}) => {
       }),
     );
   };
-  const onPressCancel = () => {
-    console.log(selectedCard);
-    setmultiDelete(false);
-    setSelectedCard([]);
-    alert('coming soon');
+  const onPressCancel = async () => {
+    try {
+      setisLoading(true);
+
+      let uniqueItems = [...new Set(selectedCard)];
+      const requestBody = {
+        rides: uniqueItems,
+      };
+      const res = await post(
+        `${RIDES_CONST}/cancel`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setisLoading(false);
+        console.log(res.data);
+        Alert.alert('Success', 'Rides deleted successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setmultiDelete(false);
+              setSelectedCard([]);
+              getRides();
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+      Alert.alert('Failed', 'Unable to delete rides', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          },
+        },
+      ]);
+    }
   };
+
   return (
     <>
       <MyStatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
@@ -443,26 +495,17 @@ const PassengerHome = ({navigation}) => {
         )}
       </SafeAreaView>
       <RideFilterModal
-        time={TimeList}
-        seats={seatsList}
-        rideType={rideTypeList}
-        status={RideStatusList}
-        date={DateList}
-        onPressdate={selectdDate}
+        seats={seats}
         onPressrideType={selectRideType}
-        onPressseats={selectSeats}
-        onPresstime={selectTime}
+        onPressseats={item => dispatch(setAvailableSeats(item))}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
-        selectedTime={time}
-        selectedDate={date}
         selectedStatus={status}
         selectedRideType={ridetype}
-        selectedSeats={seats}
+        selectedSeats={availableSeats}
         onPressReset={resetFilter}
         onApply={() => {
-          filterModalRef.current.close();
-          sortModalRef.current.close();
+          onApplyFilter();
         }}
       />
       <SortModal show={sortModalRef} onPress={getRidesByOrder} />
@@ -478,6 +521,7 @@ const PassengerHome = ({navigation}) => {
           show={multiDelete}
         />
       )}
+      {isLoading && <Loader />}
     </>
   );
 };
@@ -526,6 +570,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     marginTop: 8,
     fontFamily: fonts.regular,
+    width: '80%',
   },
   cardMainContainer: {
     flexDirection: 'row',
@@ -535,10 +580,11 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   ellipses: {
-    height: 25,
-    width: 25,
+    height: 30,
+    width: 30,
     borderRadius: 25,
-    marginRight: 5,
+    marginRight: 10,
+    resizeMode: 'contain',
   },
   upcomingRidesMainContainer: {
     flexDirection: 'row',

@@ -7,6 +7,7 @@ import TermsView from '../../../components/TermsView/TermsView';
 import {colors, header, HP, responseValidator} from '../../../utilities';
 import {get} from '../../../services';
 import {GET_PRIVACY_POLICY} from '../../../utilities/routes';
+import {Loader} from '../../../components';
 
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNmRhNWE3OGIyZDVkNDVjNDc5NWEwNCIsImlhdCI6MTYzOTMzMzc1MSwiZXhwIjoxNjQxOTI1NzUxfQ.3t0ZKd2y1UvTA9KvMdrdPhdiJEoYocOZalA114Fqdk4';
@@ -26,11 +27,11 @@ const Privacy = ({navigation}) => {
   const getPrivacyPolicy = async () => {
     setLoading(true);
     try {
-      const response = await get(`${GET_PRIVACY_POLICY}`, await header);
+      const response = await get(`${GET_PRIVACY_POLICY}`, await header());
       if (response) {
         console.log('DATA ===>   ', response);
-        setPrivacyData(response?.description);
-        setloading(false);
+        setPrivacyData(response?.data?.description);
+        setLoading(false);
       }
     } catch (error) {
       console.log('ERROR   ==> ', error);
@@ -41,7 +42,6 @@ const Privacy = ({navigation}) => {
     }
   };
 
-  let description = I18n.t('lorem');
   return (
     <>
       <CustomHeader
@@ -49,10 +49,8 @@ const Privacy = ({navigation}) => {
         title={I18n.t('privacy_title')}
         backButton={true}
       />
-      {loading === true ? (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="large" color={colors.green} />
-        </View>
+      {loading ? (
+        <Loader />
       ) : (
         <SafeAreaView style={styles.container}>
           <ScrollView>

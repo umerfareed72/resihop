@@ -9,14 +9,19 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import {colors, appIcons, appImages, total_seats} from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../FavouriteLocations';
-import {CustomHeader} from '../../../components';
-import CalendarSheet from '../../CalendarSheet';
+import {
+  CustomHeader,
+  CalendarSheet,
+  ReturnCalendarSheet,
+  Loader,
+} from '../../../components';
 import {fonts} from '../../../theme/theme';
 import I18n from '../../../utilities/translations';
 import HeartFilled from 'react-native-vector-icons/Foundation';
@@ -38,10 +43,7 @@ import {
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {Loader} from '../../../components/Loader/Loader';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import ReturnCalendarSheet from '../../../components/ReurnCalenderSheet';
-import {Alert} from 'react-native';
 
 const DRecurringDetail = ({route}) => {
   let navigation = useNavigation();
@@ -163,7 +165,7 @@ const DRecurringDetail = ({route}) => {
             : recurring_stamp,
         availableSeats: availableSeats,
         path: 0,
-        costPerSeat: value + availableSeats * settings?.adminCommission,
+        costPerSeat: value + settings?.adminCommission,
         interCity: false,
         startDes: origin?.description,
         destDes: destinationMap?.description,
@@ -232,7 +234,7 @@ const DRecurringDetail = ({route}) => {
         date: recurring_stamp,
         availableSeats: availableSeats,
         path: 0,
-        costPerSeat: value,
+        costPerSeat: value + settings?.adminCommission,
         interCity: false,
         startDes: returnOrigin?.description,
         destDes: returnDestinationMap?.description,
@@ -634,14 +636,14 @@ const DRecurringDetail = ({route}) => {
             }
             handleCreateDrive();
           }}>
-          <Text style={styles.nextTxt}>Update</Text>
+          <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.nextBtnContainer, {backgroundColor: colors.black}]}
           onPress={() => {
             handleCancelDrive();
           }}>
-          <Text style={styles.nextTxt}>Delete Drives</Text>
+          <Text style={styles.nextTxt}>{I18n.t('delete_drives')}</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>

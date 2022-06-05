@@ -1,9 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-import {colors, appIcons} from '../../../utilities';
-import MapViewComponent from '../../../components/MapViewComponent';
+import {StyleSheet, Text, View, TouchableOpacity, Alert} from 'react-native';
+import {colors, appIcons, header} from '../../../utilities';
 import {fonts} from '../../../theme';
-import RideStatusCards from '../../../components/RideStatusCards';
 import {useNavigation} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,8 +15,14 @@ import {
   setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
-import {CopyRideModal, Loader} from '../../../components';
-import CalendarSheet from '../../CalendarSheet';
+import {
+  CopyRideModal,
+  CalendarSheet,
+  MapViewComponent,
+  RideStatusCards,
+} from '../../../components';
+import {post, remove} from '../../../services';
+import AppHeader from '../../../components/Header/AppHeader';
 
 const RideStatus = ({route}) => {
   const {item} = route.params;
@@ -29,10 +33,11 @@ const RideStatus = ({route}) => {
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
   const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
-
+  const auth = useSelector(state => state.auth);
+  const [fav, setFav] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [favId, setfavId] = useState('');
   useEffect(() => {
     dispatch(
       setOrigin({
@@ -110,28 +115,75 @@ const RideStatus = ({route}) => {
       }),
     );
   };
-
+  //On Add Rating
+  const onPressAddRating = async rating => {
+    try {
+      const requestBody = {
+        type: 'Drive',
+        drive: item?.drive?._id,
+        rating: rating,
+        by: auth?.profile_info?._id,
+        for: item?.drive?.user?._id,
+        ride: item?._id,
+      };
+      const res = await post(`ratings`, requestBody, await header());
+      if (res.data) {
+        Alert.alert('Success', 'Ride rated successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation?.navigate('PassengerHome');
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //On Add Favourite
+  const onPressAddFav = async () => {
+    try {
+      setFav(!fav);
+      if (!fav) {
+        const requestBody = {
+          type: 'DRIVER',
+          user: auth?.profile_info?.id,
+          driver_passenger: item?.drive?.user?._id,
+        };
+        const res = await post(`favorites`, requestBody, await header());
+        if (res.data) {
+          setfavId(res?.data?.id);
+          console.log('Favourite');
+        }
+      } else {
+        if (favId != '') {
+          const res = await remove(`favorites/${favId}`, await header());
+          console.log('UNFAVOURITE');
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <MapViewComponent
       // startRide={item.status == 'CONFIRMED' && true}
       />
-      <TouchableOpacity
-        style={styles.arrowBackCircle}
-        onPress={() => navigation.goBack()}>
-        {/* <View style={{flexDirection: 'row', alignItems: 'center'}}> */}
-        <Image
-          source={appIcons.backArrow}
-          resizeMode="contain"
-          style={styles.arrowBack}
-        />
-        {/* <Text style={styles.driver}>{I18n.t('ride')}</Text> */}
-        {/* </View> */}
-      </TouchableOpacity>
+      <AppHeader
+        onPress={() => {
+          navigation?.goBack();
+        }}
+        title={I18n.t('passenger_home')}
+      />
       <RideStatusCards
         statusType={item.status}
         ride={item}
         calendarSheetRef={calendarSheetRef}
+        onPressAddFav={onPressAddFav}
+        onPressAddRating={onPressAddRating}
+        fav={fav}
       />
       <CalendarSheet
         calendarSheetRef={calendarSheetRef}

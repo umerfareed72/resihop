@@ -8,18 +8,17 @@ import {
   Linking,
   TouchableOpacity,
   View,
+  Alert,
   Platform,
 } from 'react-native';
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
-import {CustomHeader, Loader} from '../../../components';
+import {CustomHeader, Loader, SigninViaBankID} from '../../../components';
 import * as Yup from 'yup';
 import {theme} from '../../../theme';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {axios, get, post} from '../../../services';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
-import {Alert} from 'react-native';
-import SigninViaBankID from '../../../components/SigninViaBankID';
 import useAppState from '../../../hooks/useAppState';
 import {header} from '../../../utilities';
 import xml2js from 'react-native-xml2js';
@@ -53,15 +52,18 @@ function index(props) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'NOK 10', value: 10},
-    {label: 'NOK 15', value: 15},
-    {label: 'NOK 20', value: 20},
-    {label: 'NOK 25', value: 25},
-    {label: 'NOK 30', value: 30},
-    {label: 'NOK 35', value: 35},
-    {label: 'NOK 40', value: 40},
-    {label: 'NOK 45', value: 45},
-    {label: 'NOK 50', value: 50},
+    {label: '10 NOK', value: 10},
+    {label: '15 NOK', value: 15},
+    {label: '20 NOK', value: 20},
+    {label: '25 NOK', value: 25},
+    {label: '30 NOK', value: 30},
+    {label: '35 NOK', value: 35},
+    {label: '40 NOK', value: 40},
+    {label: '45 NOK', value: 45},
+    {label: '50 NOK', value: 50},
+    {label: '60 NOK', value: 60},
+    {label: '70 NOK', value: 70},
+    {label: '80 NOK', value: 80},
   ]);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
   const [bankdIdToken, setBankIdToken] = useState(null);
@@ -69,44 +71,44 @@ function index(props) {
   const licencePlate = React.useRef();
   const carCompany = React.useRef();
   const modelName = React.useRef();
-  // const bank_url = React.useRef();
-  // const dispatch = useDispatch(null);
-  // const acr = 'urn:grn:authn:se:bankid:same-device';
-  // const appState = useAppState(async () => {
-  //   if (acr === 'urn:grn:authn:se:bankid:same-device') {
-  //     const result = await fetch(bank_url?.current).then(response => {
-  //       return response;
-  //     });
-  //     const token = result?.url.split('id_token=');
-  //     if (token) {
-  //       setBankIdToken(token[1]);
-  //     } else {
-  //       setIsLoading(false);
-  //     }
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // });
-  // const openBankId = async () => {
-  //   setIsLoading(true);
-  //   const result = await axios.get(
-  //     `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
-  //       Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
-  //     }`,
-  //   );
-  //   if (result?.data) {
-  //     bank_url.current = result?.data?.completeUrl;
-  //     Linking.openURL(result?.data?.launchLinks?.universalLink);
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // };
+  const bank_url = React.useRef();
+  const dispatch = useDispatch(null);
+  const acr = 'urn:grn:authn:se:bankid:same-device';
+  const appState = useAppState(async () => {
+    if (acr === 'urn:grn:authn:se:bankid:same-device') {
+      const result = await fetch(bank_url?.current).then(response => {
+        return response;
+      });
+      const token = result?.url.split('id_token=');
+      if (token) {
+        setBankIdToken(token[1]);
+      } else {
+        setIsLoading(false);
+      }
+    } else {
+      setIsLoading(false);
+    }
+  });
+  const openBankId = async () => {
+    setIsLoading(true);
+    const result = await axios.get(
+      `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+        Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+      }`,
+    );
+    if (result?.data) {
+      bank_url.current = result?.data?.completeUrl;
+      Linking.openURL(result?.data?.launchLinks?.universalLink);
+    } else {
+      setIsLoading(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (bankdIdToken) {
-  //     addVehicelInfo();
-  //   }
-  // }, [bankdIdToken]);
+  useEffect(() => {
+    if (bankdIdToken) {
+      addVehicelInfo();
+    }
+  }, [bankdIdToken]);
   //Get Latest Car Detail
   const getVahicleDetail = () => {
     if (licencePlateNumber != '') {
@@ -174,7 +176,7 @@ function index(props) {
       vehicleCompanyName: carMakerCompany,
       CO2Emissions: engineSize,
       presetCostPerPassenger: value,
-      // bankID: bankdIdToken,
+      bankID: bankdIdToken,
     };
     try {
       const response = await post(`vehicles`, requestBody, await header());
@@ -183,7 +185,7 @@ function index(props) {
           setIsLoading(false);
           Alert.alert(
             'Success',
-            'Vehicle Info Added Successfully',
+            I18n.t('vehicle_info_success'),
             [
               {
                 text: 'OK',
@@ -417,8 +419,7 @@ function index(props) {
                     <SigninViaBankID
                       disabled={value != null && next ? false : true}
                       onBankIdPress={() => {
-                        // openBankId();
-                        addVehicelInfo();
+                        openBankId();
                       }}
                       onPressTerms={() => {
                         props.navigation.navigate('Terms');

@@ -1,9 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Text, Keyboard, Alert} from 'react-native';
-import {CustomHeader, NetInfoModal, Loader} from '../../../components';
+import {
+  CustomHeader,
+  NetInfoModal,
+  Loader,
+  OtpValidator,
+} from '../../../components';
 import _ from 'lodash/string';
 import {theme} from '../../../theme';
-import OtpValidator from '../../../components/OtpValidator';
 import I18n from '../../../utilities/translations';
 import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
@@ -33,10 +37,10 @@ function signIn(props) {
   function validate() {
     setPhoneError('');
     if (phoneNum.length == 0) {
-      return setPhoneError('Please Enter Valid Phone Number');
+      return setPhoneError(I18n.t('invalid_phone_msg'));
     }
     if (isNaN(phoneNum)) {
-      return setPhoneError('Your Phone Number is not valid');
+      return setPhoneError(I18n.t('invalid_otp_msg'));
     }
     return true;
   }
@@ -54,8 +58,6 @@ function signIn(props) {
         const mobilePhone = `%2b${
           country ? country.callingCode : '47'
         }${phoneNum}`;
-        console.log(mobilePhone);
-
         const getUser = await get(`users?mobile=${mobilePhone}`);
         if (getUser?.data?.length > 0) {
           const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
@@ -70,7 +72,7 @@ function signIn(props) {
 
           Alert.alert(
             'Failed',
-            'User not exists',
+            I18n.t('user_not_exists'),
             [
               {
                 text: 'ok',

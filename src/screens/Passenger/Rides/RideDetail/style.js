@@ -22,19 +22,4 @@ export default StyleSheet.create({
     color: colors.blue,
     marginVertical: HP('1'),
   },
-  itemView: {
-    marginVertical: HP('2'),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  titleText: {
-    fontSize: size.normal,
-    fontFamily: family.product_sans_regular,
-    color: colors.light_black,
-  },
-  descriptionText: {
-    fontSize: size.xxsmall,
-    fontFamily: family.product_sans_regular,
-    color: colors.gray_shade,
-  },
 });

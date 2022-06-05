@@ -9,14 +9,17 @@ import {
   RecurringRideCard,
   RideFilterModal,
   SortModal,
+  BlankField,
 } from '../../../components';
-import {get} from '../../../services';
+import {get, post} from '../../../services';
 import * as Types from '../../../redux/types/map.types';
 import {appIcons, appImages, colors, header, WP} from '../../../utilities';
-import BlankField from '../../../components/BlankField';
 import {useIsFocused} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
 import {
+  MyRidesFiltering,
+  MyRidesSortOrder,
+  setAvailableSeats,
   setCity,
   setOrigin,
   setReturnMapDestination,
@@ -26,61 +29,6 @@ import {Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
 
-var TimeList = {
-  id: 1,
-  title: 'Time',
-  items: [
-    {id: 1, text: '08:00 to 12:00', status: false},
-    {id: 2, text: '08:00 to 12:00', status: false},
-    {id: 3, text: '08:00 to 12:00', status: false},
-  ],
-};
-
-var RideStatusList = {
-  id: 1,
-  title: 'Ride Status',
-  items: [
-    {id: 1, text: 'Confirmed', status: false},
-    {id: 2, text: 'Waiting for Match', status: false},
-    {id: 3, text: 'Matching Done', status: false},
-  ],
-};
-
-const rideTypeList = {
-  id: 4,
-  title: 'Ride Type',
-  items: [
-    {id: 1, text: 'All Rides'},
-    {id: 2, text: 'Destination Rides'},
-    {id: 3, text: 'Return Rides'},
-  ],
-};
-
-const DateList = {
-  id: 1,
-  title: 'Date',
-  items: [
-    {id: 1, text: '12 June'},
-    {id: 2, text: '13 June'},
-    {id: 3, text: '14 June'},
-    {id: 4, text: '15 June'},
-    {id: 5, text: '16 June'},
-  ],
-};
-
-const seatsList = {
-  id: 5,
-  title: 'Seat',
-  items: [
-    {id: 1, icon: appImages.seatBlue},
-    {id: 2, icon: appImages.seatBlue},
-    {id: 3, icon: appImages.seatBlue},
-    {id: 4, icon: appImages.seatBlue},
-    {id: 5, icon: appImages.seatBlue},
-    {id: 6, icon: appImages.seatBlue},
-  ],
-};
-
 function index(props) {
   const filterModalRef = useRef(null);
   const sortModalRef = useRef(null);
@@ -88,8 +36,8 @@ function index(props) {
   const [date, setdate] = useState('');
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
-  const [seats, setSeats] = useState('');
-  const {recurring_ride} = useSelector(state => state.map);
+  const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const {recurring_ride, availableSeats} = useSelector(state => state.map);
   const [isLoading, setisLoading] = useState(false);
   const [multiDelete, setmultiDelete] = useState(false);
   const [selectedCard, setSelectedCard] = useState([]);
@@ -116,8 +64,36 @@ function index(props) {
     settime('');
     setdate('');
     setRideType('');
-    setSeats('');
+    dispatch(setAvailableSeats(0));
     setStatus('');
+  };
+  const onApplyFilter = () => {
+    dispatch(
+      MyRidesFiltering(
+        'rides?recurring=true&',
+        ridetype?.value,
+        availableSeats,
+        status?.value,
+        res => {
+          filterModalRef.current.close();
+          sortModalRef.current.close();
+          dispatch({
+            type: Types.Get_Reccuring_Rides_Success,
+            payload: res,
+          });
+        },
+      ),
+    );
+  };
+  const getRidesByOrder = item => {
+    dispatch(
+      MyRidesSortOrder('rides?recurring=true&', item?.value, res => {
+        dispatch({
+          type: Types.Get_Reccuring_Rides_Success,
+          payload: res,
+        });
+      }),
+    );
   };
   const onPressCardItem = item => {
     props?.navigation?.navigate('RecurringRideDetail', {
@@ -128,6 +104,9 @@ function index(props) {
     if (isFocus) {
       get_recurring_rides();
     }
+    return () => {
+      dispatch(setAvailableSeats(0));
+    };
   }, [isFocus]);
 
   // Get Location
@@ -197,11 +176,46 @@ function index(props) {
       });
     }
   };
-  const onPressCancel = () => {
-    console.log(selectedCard);
-    setmultiDelete(false);
-    setSelectedCard([]);
-    alert('coming soon');
+  const onPressCancel = async () => {
+    try {
+      setisLoading(true);
+
+      let uniqueItems = [...new Set(selectedCard)];
+      const requestBody = {
+        rides: uniqueItems,
+      };
+      const res = await post(
+        `${RIDES_CONST}/cancel`,
+        requestBody,
+        await header(),
+      );
+      if (res.data) {
+        setisLoading(false);
+        console.log(res.data);
+        Alert.alert('Success', 'Rides deleted successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              setmultiDelete(false);
+              setSelectedCard([]);
+              get_recurring_rides();
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+      Alert.alert('Failed', 'Unable to delete rides', [
+        {
+          text: 'OK',
+          onPress: () => {
+            setmultiDelete(false);
+            setSelectedCard([]);
+          },
+        },
+      ]);
+    }
   };
 
   return (
@@ -212,7 +226,7 @@ function index(props) {
           onPressbtnImage1={() => filterModalRef.current.open()}
           btnImage={appIcons.mobiledata}
           btnImage1={appIcons.filter}
-          title={'My Recurring Rides'}
+          title={I18n.t('my_recurring_rides')}
           navigation={props?.navigation}
           backButton={true}
         />
@@ -262,30 +276,22 @@ function index(props) {
       </SafeAreaView>
       {isLoading && <Loader />}
       <RideFilterModal
-        time={TimeList}
-        seats={seatsList}
-        rideType={rideTypeList}
-        status={RideStatusList}
-        date={DateList}
+        seats={seats}
         onPressdate={selectdDate}
         onPressrideType={selectRideType}
-        onPressseats={selectSeats}
+        onPressseats={item => dispatch(setAvailableSeats(item))}
         onPresstime={selectTime}
         onPressstatus={selectRideStatus}
         show={filterModalRef}
-        selectedTime={time}
-        selectedDate={date}
         selectedStatus={status}
         selectedRideType={ridetype}
-        selectedSeats={seats}
+        selectedSeats={availableSeats}
         onPressReset={resetFilter}
         onApply={() => {
-          filterModalRef.current.close();
-          sortModalRef.current.close();
-          props.navigation.navigate('RecurringRideDetail');
+          onApplyFilter();
         }}
       />
-      <SortModal show={sortModalRef} />
+      <SortModal show={sortModalRef} onPress={getRidesByOrder} />
       {multiDelete && (
         <CancelRideModal
           onPressCancel={() => {

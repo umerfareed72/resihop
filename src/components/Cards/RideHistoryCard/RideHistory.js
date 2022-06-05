@@ -118,16 +118,16 @@ export const RideHistoryCard = ({
               <Image source={appIcons.car_left} style={styles.icon50} />
               <Text
                 style={[styles.h2Text, {fontWeight: '500', color: colors.g5}]}>
-                {vehicleInfo?.vehicleCompanyName || 'Ford, Focus' + ' '}
+                {vehicleInfo?.vehicleCompanyName || '' + ' '}
                 <Text
                   style={[
                     styles.h2Text,
                     {fontWeight: 'bold', color: colors.light_black},
                   ]}>
                   {' '}
-                  {vehicleInfo?.color || 'White'}
+                  {vehicleInfo?.color || ''}
                   {', '}
-                  {vehicleInfo?.licencePlateNumber || 'XT32TTU8'}
+                  {vehicleInfo?.licencePlateNumber || ''}
                 </Text>
               </Text>
               {profilePic ? (

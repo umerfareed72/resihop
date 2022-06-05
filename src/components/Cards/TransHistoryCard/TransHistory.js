@@ -1,10 +1,11 @@
+import moment from 'moment';
 import React from 'react';
 import {Image, Platform, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {appIcons, colors, size} from '../../../utilities';
 import {drawerIcons} from '../../../utilities/images';
 
-export const TransHistoryCard = () => {
+export const TransHistoryCard = ({item}) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
@@ -12,7 +13,7 @@ export const TransHistoryCard = () => {
       </View>
       <View style={styles.centerContainer}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={styles.h2}>Refund</Text>
+          <Text style={styles.h2}>{item?.status}</Text>
           <Image
             style={{
               height: 12,
@@ -24,10 +25,12 @@ export const TransHistoryCard = () => {
           />
         </View>
 
-        <Text style={styles.h3}>18:00, 12 June 2020</Text>
+        <Text style={styles.h3}>
+          {moment(item?.createdAt).format('HH:MM, DD MMMM YYYY')}
+        </Text>
       </View>
       <View style={styles.rightContainer}>
-        <Text style={styles.h1}>100 NOK</Text>
+        <Text style={styles.h1}>{item?.amountPayable} NOK</Text>
       </View>
     </View>
   );

@@ -3,12 +3,11 @@ import {
   SafeAreaView,
   View,
   StyleSheet,
-  Image,
   Text,
   ActivityIndicator,
 } from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import {CustomHeader} from '../../../components/Header/CustomHeader';
+import {CustomHeader, BlankField} from '../../../components';
 import {
   appImages,
   colors,
@@ -22,9 +21,9 @@ import {Divider} from 'react-native-elements/dist/divider/Divider';
 import {GET_NOTIFICATION_LIST} from '../../../utilities/routes';
 import {get} from '../../../services';
 import {Loader} from '../../../components';
-import BlankField from '../../../components/BlankField';
 import moment from 'moment';
-
+import {Image} from 'react-native-elements';
+import I18n from '../../../utilities/translations';
 const NotificationList = ({navigation}) => {
   //useState here
   const [notifData, setNotifData] = useState();
@@ -44,7 +43,6 @@ const NotificationList = ({navigation}) => {
       if (response.data) {
         setNotifData(response.data);
         setLoading(false);
-        console.log(response?.data);
       }
     } catch (error) {
       setLoading(false);
@@ -59,6 +57,7 @@ const NotificationList = ({navigation}) => {
       <View style={styles.notifyItem}>
         <View style={styles.imageContainer}>
           <Image
+            progressiveRenderingEnabled={true}
             style={styles.imageStyle}
             source={{
               uri: data?.item?.user?.picture?.url || profileIcon,
@@ -68,7 +67,7 @@ const NotificationList = ({navigation}) => {
         <View style={styles.contentContainer}>
           <Text style={styles.titleTextStyle}>{data?.item?.title}</Text>
           <Text numberOfLines={1} style={[styles.descriptionTextStyle]}>
-            {`Trip Date & Time: ${moment(
+            {`${I18n.t('tripDateTime')} ${moment(
               data?.item?.data?.ride?.tripDate,
             ).format('DD MMM YYYY')}`}
 
@@ -89,7 +88,7 @@ const NotificationList = ({navigation}) => {
     <>
       <CustomHeader
         navigation={navigation}
-        title={'Notifications'}
+        title={I18n.t('notification')}
         backButton={true}
       />
 
@@ -100,7 +99,7 @@ const NotificationList = ({navigation}) => {
             renderItem={item => <NotificationItem data={item} />}
           />
         ) : (
-          <BlankField title={'No Notification Available'} />
+          <BlankField title={I18n.t('no_notification')} />
         )}
       </SafeAreaView>
 

@@ -6,7 +6,7 @@ import {CustomHeader} from '../../../components/Header/CustomHeader';
 import TermsView from '../../../components/TermsView/TermsView';
 import {colors, GET_ABOUT_US, HP, responseValidator} from '../../../utilities';
 import {get} from '../../../services';
-import Loading from '../../../components/Loading';
+import {Loader} from '../../../components';
 
 const AboutUs = ({navigation}) => {
   const [description, setDescription] = useState('');
@@ -51,7 +51,7 @@ const AboutUs = ({navigation}) => {
           </SafeAreaView>
         </>
       ) : (
-        <Loading />
+        <Loader />
       )}
     </>
   );

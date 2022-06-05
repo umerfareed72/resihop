@@ -18,7 +18,6 @@ import AboutUs from '../../screens/Passenger/AboutUs/AboutUs';
 import RideHistory from '../../screens/Passenger/Rides/RideHistory';
 import RideDetail from '../../screens/Passenger/Rides/RideDetail';
 import UpdateRide from '../../screens/Passenger/UpdateRide/UpdateRide';
-
 import Faq from '../../screens/Passenger/Faq/Faq';
 import Contribution from '../../screens/Passenger/Contribution/Contribuion';
 import Invite from '../../screens/Passenger/Invite/Invite';
@@ -43,6 +42,7 @@ import VehcileStack from './VehcileStack';
 import ChangePhone from '../../screens/Profile/ChangePhone';
 import EditProfile from '../../screens/Profile/EditProfile';
 import CallNow from '../../screens/CallNow';
+import IncomingCall from '../../screens/IncomingCall';
 
 const Stack = createStackNavigator();
 function PassengerStack(props) {
@@ -118,6 +118,11 @@ function PassengerStack(props) {
         options={{headerShown: false}}
         name="CallNow"
         component={CallNow}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="IncomingCall"
+        component={IncomingCall}
       />
       <Stack.Screen
         options={{headerShown: false}}

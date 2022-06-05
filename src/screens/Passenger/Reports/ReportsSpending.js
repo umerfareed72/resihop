@@ -1,5 +1,5 @@
-import I18n from 'i18n-js';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {Alert} from 'react-native';
 import {
   Image,
   SafeAreaView,
@@ -13,13 +13,31 @@ import {
 
 import LinearGradient from 'react-native-linear-gradient';
 import {CustomHeader} from '../../../components/Header/CustomHeader';
-import {colors, family, HP, size} from '../../../utilities';
+import {post} from '../../../services';
+import {
+  checkConnected,
+  colors,
+  family,
+  header,
+  HP,
+  size,
+} from '../../../utilities';
 import {appImages, appIcons} from '../../../utilities';
-import CalendarSheet from '../../CalendarSheet';
+import I18n from '../../../utilities/translations';
 
-const ReportsSpending = ({onPressYear}) => {
-  const calendarSheetRef = useRef(null);
-  const [date, setDate] = useState();
+const ReportEarning = ({
+  onPressYear,
+  onPressStartDate,
+  onPressEndDate,
+  onPressDownload,
+  onPressCurrentPeriod,
+  onPressPeriodReport,
+  data,
+  showMessage,
+  startDate,
+  endDate,
+  year,
+}) => {
   return (
     <View style={{flex: 1}}>
       <View style={styles.containerOne}>
@@ -31,10 +49,18 @@ const ReportsSpending = ({onPressYear}) => {
               <Image source={appIcons.car_icon} />
             </View>
             <View style={styles.monthContainer}>
-              <TouchableOpacity style={styles.monthView}>
+              <TouchableOpacity
+                onPress={() => {
+                  onPressCurrentPeriod('month');
+                }}
+                style={styles.monthView}>
                 <Text style={styles.monthText}>{I18n.t('rep_month')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.monthView}>
+              <TouchableOpacity
+                onPress={() => {
+                  onPressCurrentPeriod('year');
+                }}
+                style={styles.monthView}>
                 <Text style={styles.monthText}>{I18n.t('rep_year')}</Text>
               </TouchableOpacity>
             </View>
@@ -42,29 +68,43 @@ const ReportsSpending = ({onPressYear}) => {
           <View style={styles.secondContainer}>
             <View style={styles.leftRideContainer}>
               <Text style={styles.promoStyle}>{I18n.t('rep_total_rides')}</Text>
-              <Text style={styles.promoText}>120</Text>
+              <Text style={styles.promoText}>{data?.rides || 0}</Text>
             </View>
             <View style={styles.rightRideContainer}>
               <Text style={styles.promoStyle}>
                 {I18n.t('rep_total_spending')}
               </Text>
-              <Text style={styles.promoText}>NOK 2500</Text>
+              <Text style={styles.promoText}>
+                NOK {data?.totalSpending || 0}
+              </Text>
             </View>
           </View>
         </LinearGradient>
         <Text style={styles.downloadReport}>{I18n.t('rep_download_rep')}</Text>
         <View style={styles.monthButtonContainer}>
-          <TouchableOpacity style={styles.buttonMonthStyle}>
+          <TouchableOpacity
+            onPress={() => {
+              onPressPeriodReport('month');
+            }}
+            style={styles.buttonMonthStyle}>
             <Text style={styles.buttonMonthText}>
               {I18n.t('rep_last_month')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonMonthStyle}>
+          <TouchableOpacity
+            onPress={() => {
+              onPressPeriodReport('6month');
+            }}
+            style={styles.buttonMonthStyle}>
             <Text style={styles.buttonMonthText}>
               {I18n.t('rep_last_6month')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonMonthStyle}>
+          <TouchableOpacity
+            onPress={() => {
+              onPressPeriodReport('year');
+            }}
+            style={styles.buttonMonthStyle}>
             <Text style={styles.buttonMonthText}>
               {I18n.t('rep_last_year')}
             </Text>
@@ -87,45 +127,45 @@ const ReportsSpending = ({onPressYear}) => {
               alignItems: 'center',
             }}>
             <Text style={styles.promoStyleReplica}>
-              {I18n.t('rep_select_calendar')}
+              {year || I18n.t('rep_select_calendar')}
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <>
-            <TextInput
-              placeholder="Start Date"
-              placeholderTextColor={colors.btnGray}
-              value={date}
-              editable={false}
-              onChangeText={setDate}
-              onPressOut={() => calendarSheetRef.current.open()}
-              onPressIn={() => Keyboard.dismiss()}
-              style={[styles.noLater, {marginRight: 11}]}
-            />
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity onPress={onPressStartDate} style={styles.noLater}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: colors.inputTxtGray,
+              }}>
+              {startDate || 'Start Date'}
+            </Text>
             <Image
               source={appImages.calendar}
               resizeMode="contain"
               style={styles.calendarIcon}
             />
-          </>
-          <>
-            <TextInput
-              placeholder="End Date"
-              placeholderTextColor={colors.btnGray}
-              value={date}
-              editable={false}
-              onChangeText={setDate}
-              onPressOut={() => calendarSheetRef.current.open()}
-              onPressIn={() => Keyboard.dismiss()}
-              style={[styles.noLater, {marginRight: 11}]}
-            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onPressEndDate} style={styles.noLater}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: colors.inputTxtGray,
+              }}>
+              {endDate || 'End Date'}
+            </Text>
+
             <Image
               source={appImages.calendar}
               resizeMode="contain"
               style={styles.calendarIcon}
             />
-          </>
+          </TouchableOpacity>
         </View>
         <Text
           style={{
@@ -136,29 +176,32 @@ const ReportsSpending = ({onPressYear}) => {
           }}>
           {I18n.t('rep_condition')}
         </Text>
-        <View
-          style={{
-            marginHorizontal: HP('2'),
-            marginVertical: HP('2'),
-            borderRadius: 13,
-            backgroundColor: '#E9FFD9',
-          }}>
-          <Text
+        {showMessage && (
+          <View
             style={{
-              fontSize: size.tiny,
-              fontFamily: family.product_sans_regular,
-              color: colors.light_black,
-              textAlign: 'center',
-              marginHorizontal: HP('1'),
+              marginHorizontal: HP('2'),
               marginVertical: HP('2'),
+              borderRadius: 13,
+              backgroundColor: '#E9FFD9',
             }}>
-            Your Earning/Spending Report has been successfully sent to your
-            registered email address.
-          </Text>
-        </View>
+            <Text
+              style={{
+                fontSize: size.tiny,
+                fontFamily: family.product_sans_regular,
+                color: colors.light_black,
+                textAlign: 'center',
+                marginHorizontal: HP('1'),
+                marginVertical: HP('2'),
+              }}>
+              Your Earning/Spending Report has been successfully sent to your
+              registered email address.
+            </Text>
+          </View>
+        )}
       </View>
       <View style={styles.containerTwo}>
         <TouchableOpacity
+          onPress={onPressDownload}
           style={{
             borderRadius: 15,
             height: HP('7'),
@@ -177,7 +220,6 @@ const ReportsSpending = ({onPressYear}) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <CalendarSheet calendarSheetRef={calendarSheetRef} setDate={setDate} />
     </View>
   );
 };
@@ -187,19 +229,18 @@ const styles = StyleSheet.create({
     height: 18,
     //   width: 18,
     position: 'relative',
-    right: 60,
-    top: 13,
+    // right: 60,
+    // top: 13,
   },
   noLater: {
-    height: 44,
-    width: 140,
     borderWidth: 1,
     borderColor: colors.greyBorder,
     borderRadius: 10,
-    paddingLeft: 16,
-    fontSize: 16,
-    lineHeight: 24,
-    color: colors.inputTxtGray,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    padding: 8,
+    width: '46%',
   },
   downloadReport: {
     marginVertical: HP('2'),
@@ -307,7 +348,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   monthView: {
-    width: 90,
+    paddingHorizontal: 10,
     height: 24,
     backgroundColor: colors.white,
     justifyContent: 'center',
@@ -370,4 +411,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReportsSpending;
+export default ReportEarning;

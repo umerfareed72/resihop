@@ -20,91 +20,51 @@ import {
   appIcons,
 } from '../../../utilities';
 import {PaymentButtons} from '../../Buttons/Payment/PaymentButtons';
-
+import I18n from '../../../utilities/translations';
 export const RideFilterModal = ({
   h1,
   h2,
   show,
   onApply,
-  time,
-  status,
-  date,
-  rideType,
   seats,
-  onPresstime,
   onPressstatus,
-  onPressdate,
   onPressrideType,
   onPressseats,
-  selectedTime,
-  selectedDate,
   selectedStatus,
   selectedSeats,
   selectedRideType,
   onPressReset,
 }) => {
-  const showTime = data => {
-    return (
-      <View style={styles.listContainer}>
-        <Text style={styles.listh1}>{data?.title}</Text>
-        <FlatList
-          data={data?.items}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({item}) => {
-            return (
-              <>
-                <TouchableOpacity
-                  onPress={() => {
-                    onPresstime(item);
-                  }}
-                  style={[
-                    styles.listbtnContainer,
-                    {
-                      backgroundColor:
-                        item === selectedTime ? colors.green : colors.g1,
-                    },
-                  ]}>
-                  <Text style={styles.listbtnText}>{item?.text}</Text>
-                </TouchableOpacity>
-              </>
-            );
-          }}
-        />
-      </View>
-    );
+  var RideStatusList = {
+    id: 1,
+    title: I18n.t('ride_status'),
+    items: [
+      {id: 1, text: I18n.t('confirmed'), status: false, value: 'CONFIRMED'},
+      {
+        id: 2,
+        text: I18n.t('waiting_for_match'),
+        status: false,
+        value: 'WAITING_FOR_MATCH',
+      },
+      {
+        id: 3,
+        text: I18n.t('matching_done'),
+        status: false,
+        value: 'MATCHING_DONE',
+      },
+    ],
   };
-  const showDates = data => {
-    return (
-      <View style={styles.listContainer}>
-        <Text style={styles.listh1}>{data?.title}</Text>
-        <FlatList
-          data={data?.items}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({item}) => {
-            return (
-              <>
-                <TouchableOpacity
-                  onPress={() => {
-                    onPressdate(item);
-                  }}
-                  style={[
-                    styles.listbtnContainer,
-                    {
-                      backgroundColor:
-                        item === selectedDate ? colors.green : colors.g1,
-                    },
-                  ]}>
-                  <Text style={styles.listbtnText}>{item?.text}</Text>
-                </TouchableOpacity>
-              </>
-            );
-          }}
-        />
-      </View>
-    );
+
+  const rideTypeList = {
+    id: 4,
+    title: I18n.t('ride_type'),
+    items: [
+      {id: 1, text: I18n.t('all_rides'), value: null},
+      {id: 2, text: I18n.t('destination_rides'), value: 'destination'},
+      {id: 3, text: I18n.t('return_rides'), value: 'return'},
+    ],
   };
+
   const showStatus = data => {
     return (
       <View style={styles.listContainer}>
@@ -122,7 +82,9 @@ export const RideFilterModal = ({
                     styles.listbtnContainer,
                     {
                       backgroundColor:
-                        item === selectedStatus ? colors.green : colors.g1,
+                        item.id === selectedStatus.id
+                          ? colors.green
+                          : colors.g1,
                     },
                   ]}>
                   <Text style={styles.listbtnText}>{item?.text}</Text>
@@ -153,7 +115,9 @@ export const RideFilterModal = ({
                     styles.listbtnContainer,
                     {
                       backgroundColor:
-                        item === selectedRideType ? colors.green : colors.g1,
+                        item.id === selectedRideType.id
+                          ? colors.green
+                          : colors.g1,
                     },
                   ]}>
                   <Text style={styles.listbtnText}>{item?.text}</Text>
@@ -168,31 +132,28 @@ export const RideFilterModal = ({
   const showSeats = data => {
     return (
       <View style={styles.listContainer}>
-        <Text style={styles.listh1}>{data?.title}</Text>
+        <Text style={styles.listh1}>{I18n.t('seats')}</Text>
+
         <FlatList
-          data={data?.items}
+          data={data}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           renderItem={({item}) => {
             return (
-              <>
-                <TouchableOpacity
-                  style={styles.itemImageContainer}
-                  onPress={() => {
-                    onPressseats(item);
-                  }}>
-                  <Image
-                    style={[
-                      styles.itemImageStyle,
-                      {
-                        tintColor:
-                          item === selectedSeats ? colors.green : colors.blue,
-                      },
-                    ]}
-                    source={item?.icon}
-                  />
-                </TouchableOpacity>
-              </>
+              <TouchableOpacity
+                style={styles.itemImageContainer}
+                key={item}
+                onPress={() => onPressseats(item)}>
+                <Image
+                  source={
+                    item <= selectedSeats
+                      ? appImages.seatGreen
+                      : appImages.seatBlue
+                  }
+                  resizeMode="contain"
+                  style={[styles.itemImageStyle]}
+                />
+              </TouchableOpacity>
             );
           }}
         />
@@ -202,7 +163,7 @@ export const RideFilterModal = ({
   return (
     <RBSheet
       ref={show}
-      height={691}
+      height={500}
       customStyles={{
         wrapper: {
           backgroundColor: 'rgba(16,16,16,0.5)',
@@ -214,24 +175,26 @@ export const RideFilterModal = ({
       }}>
       <View style={styles.container}>
         <View style={styles.alignRow}>
-          <Text style={styles.h1}>{h1}Filters</Text>
+          <Text style={styles.h1}>
+            {h1} {I18n.t('filter')}
+          </Text>
           <TouchableOpacity onPress={onPressReset}>
-            <Text style={styles.h2}>{h2}Reset</Text>
+            <Text style={styles.h2}>
+              {h2} {I18n.t('reset')}
+            </Text>
           </TouchableOpacity>
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{marginBottom: 30}}>
-          {showTime(time)}
-          {showDates(date)}
-          {showStatus(status)}
-          {showRideTypes(rideType)}
+          {showStatus(RideStatusList)}
+          {showRideTypes(rideTypeList)}
           {showSeats(seats)}
 
           <View style={{padding: 20}}>
             <PaymentButtons
               onPress={onApply}
-              title={'Apply'}
+              title={I18n.t('apply')}
               bgColor={colors.green}
               txtColor={colors.white}
             />

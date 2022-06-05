@@ -142,7 +142,7 @@ const FavouriteLocations = ({favourteLocationRef, favPress, setFavPress}) => {
           )}
         />
       ) : (
-        <Text style={styles.nofavLocation}>No Favourite Location</Text>
+        <Text style={styles.nofavLocation}>{I18n.t('no_fav_location')}</Text>
       )}
 
       <TouchableOpacity

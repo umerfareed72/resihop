@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {CustomHeader} from '../../../components';
+import {CustomHeader, Loader} from '../../../components';
 import {
   colors,
   family,
@@ -13,7 +13,6 @@ import {
   size,
 } from '../../../utilities';
 import {get} from '../../../services';
-import Loading from '../../../components/Loading';
 
 const Offers = ({navigation}) => {
   const [offers, setoffers] = useState([]);
@@ -38,19 +37,24 @@ const Offers = ({navigation}) => {
     }
   };
   const OfferCard = ({data}) => {
-    console.log('data val is   ', data);
     return (
-      <LinearGradient colors={colors.offerCardColor} style={styles.cardStyle}>
-        <View style={styles.cardContent}>
-          <Text style={styles.titleText}>{data?.item?.title}</Text>
-          <Text style={styles.desciptionText}>{data?.item?.description}</Text>
-          <View style={styles.promoStyle}>
-            <Text style={styles.promoText}>
-              {data?.item?.promo != null ? data?.item?.promo : 'PM01234'}
-            </Text>
-          </View>
-        </View>
-      </LinearGradient>
+      <>
+        {data?.item?.promo != null ? (
+          <LinearGradient
+            colors={colors.offerCardColor}
+            style={styles.cardStyle}>
+            <View style={styles.cardContent}>
+              <Text style={styles.titleText}>{data?.item?.title}</Text>
+              <Text style={styles.desciptionText}>
+                {data?.item?.description}
+              </Text>
+              <View style={styles.promoStyle}>
+                <Text style={styles.promoText}>{data?.item?.promo}</Text>
+              </View>
+            </View>
+          </LinearGradient>
+        ) : null}
+      </>
     );
   };
 
@@ -71,7 +75,7 @@ const Offers = ({navigation}) => {
           </SafeAreaView>
         </>
       ) : (
-        <Loading />
+        <Loader />
       )}
     </>
   );

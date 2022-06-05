@@ -1,52 +1,56 @@
+import moment from 'moment';
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList} from 'react-native';
 import {Text, TouchableOpacity, View, ScrollView} from 'react-native';
+import {useSelector} from 'react-redux';
 import {
   CustomHeader,
   FavDriverCard,
   PaymentButtons,
 } from '../../../../components';
+import {post, remove} from '../../../../services';
 import {
   appIcons,
   appImages,
   colors,
   family,
+  header,
   HP,
   size,
 } from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import styles from './styles';
-let data = [
-  {
-    id: 0,
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-  {
-    id: 2,
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-  {
-    id: 3,
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-];
 
 const index = ({navigation}) => {
   const [addFavourite, setaddFavourite] = useState(false);
-  const [selectStar, setSelectedStar] = useState(0);
+  const driveItem = useSelector(state => state.map);
+  const auth = useSelector(state => state.auth);
+  const [favId, setfavId] = useState('');
 
+  const onPressAddFav = async item => {
+    try {
+      setaddFavourite(!addFavourite);
+      if (!addFavourite) {
+        const requestBody = {
+          type: 'PASSENGER',
+          user: auth?.profile_info?.id,
+          driver_passenger: item?.user?._id,
+        };
+        const res = await post(`favorites`, requestBody, await header());
+        if (res.data) {
+          setfavId(res?.data?.id);
+          console.log('Favourite');
+        }
+      } else {
+        if (favId != '') {
+          const res = await remove(`favorites/${favId}`, await header());
+          console.log('UNFAVOURITE');
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <CustomHeader
@@ -60,16 +64,15 @@ const index = ({navigation}) => {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <FlatList
-            data={data}
+            data={driveItem?.idToUpdateDrive.rides}
             renderItem={({item, index}) => {
               return (
                 <FavDriverCard
-                  onselectStar={star => {
-                    setSelectedStar(star);
-                  }}
                   favourite={addFavourite}
-                  addFavourite={() => setaddFavourite(!addFavourite)}
-                  selectedStar={selectStar}
+                  name={item?.user?.firstName + ' ' + item?.user?.lastName}
+                  pickupInfo={moment(item?.tripDate).format('hh:mm')}
+                  addFavourite={() => onPressAddFav(item)}
+                  selectedStar={item?.user?.rating_r}
                 />
               );
             }}

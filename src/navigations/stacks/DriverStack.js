@@ -43,6 +43,9 @@ import DRecurringRideDetail from '../../screens/Driver/DRecurringRideDetail';
 import ChangePhone from '../../screens/Profile/ChangePhone';
 import EditProfile from '../../screens/Profile/EditProfile';
 import CallNow from '../../screens/CallNow';
+import IncomingCall from '../../screens/IncomingCall';
+
+import VehicleInformation from '../../screens/Driver/VehicleInformation/VehcileInformation';
 
 const Stack = createStackNavigator();
 function DriverStack(props) {
@@ -82,6 +85,11 @@ function DriverStack(props) {
         component={Favourites}
       />
 
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="VehicleInformation"
+        component={VehicleInformation}
+      />
       <Stack.Screen
         options={{headerShown: false}}
         name="DriverPayment"
@@ -135,6 +143,12 @@ function DriverStack(props) {
         name="CallNow"
         component={CallNow}
       />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="IncomingCall"
+        component={IncomingCall}
+      />
+
       <Stack.Screen
         options={{headerShown: false}}
         name="Help"

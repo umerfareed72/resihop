@@ -18,8 +18,8 @@ const initialState = {
   nearestDriver: null,
   returnOrigin: null,
   returnDestination: null,
-  returnFirstTime: 'XX:XX',
-  returnSecondTime: 'XX:XX',
+  returnFirstTime: null,
+  returnSecondTime: null,
   mapSegment: null,
   ride_history: [],
   selected_ride_history: null,
@@ -38,6 +38,7 @@ const initialState = {
   recurring_dates: [],
   return_recurring_dates: [],
   city_ride: false,
+  get_helps: [],
 };
 
 export default (state = initialState, action = {}) => {
@@ -102,7 +103,7 @@ export default (state = initialState, action = {}) => {
       return {
         ...state,
         myDrivesData: payload?.filter(item => {
-          return item.status != 'NO_MATCH' && item.status != 'CANCELLED';
+          return item?.status != 'NO_MATCH' && item?.status != 'CANCELLED';
         }),
       };
     case Types.idToUpdateDrive:
@@ -113,7 +114,7 @@ export default (state = initialState, action = {}) => {
     case Types.myRides:
       return {
         ...state,
-        myRidesData: payload.filter(item => {
+        myRidesData: payload?.filter(item => {
           return item?.status != 'NO_MATCH' && item?.status != 'CANCELLED';
         }),
       };
@@ -159,10 +160,11 @@ export default (state = initialState, action = {}) => {
       const secondTime = moment(payload)
         .add(state?.settings?.returnRange, 'minutes')
         .format('HH:mm');
+      const currentTime = moment(new Date()).format('HH:mm');
       return {
         ...state,
         returnFirstTime: firstTime,
-        returnSecondTime: secondTime,
+        returnSecondTime: payload != null ? secondTime : currentTime,
       };
     case Types.mapSegment:
       return {
@@ -201,7 +203,7 @@ export default (state = initialState, action = {}) => {
         loading: false,
         success: false,
         failure: true,
-        drive_history: payload,
+        drive_history: state?.drive_history,
       };
 
     case Types.Select_Drive_Success:
@@ -291,6 +293,24 @@ export default (state = initialState, action = {}) => {
         failure: true,
         recurring_drive: state.recurring_ride,
       };
+
+    case Types.Get_Help_Success:
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        failure: false,
+        get_helps: payload,
+      };
+    case Types.Get_Help_Failure:
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: true,
+        get_helps: state.recurring_ride,
+      };
+
     case Types.Set_Recurring_Dates:
       return {
         ...state,

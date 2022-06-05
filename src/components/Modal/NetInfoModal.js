@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
-
+import I18n from '../../utilities/translations';
 export const NetInfoModal = ({show, onRetry, isRetrying}) => {
   const Button = ({children, ...props}) => (
     <TouchableOpacity style={styles.button} {...props}>
@@ -12,12 +12,10 @@ export const NetInfoModal = ({show, onRetry, isRetrying}) => {
   return (
     <Modal isVisible={show} style={styles.modal} animationInTiming={600}>
       <View style={styles.modalContainer}>
-        <Text style={styles.modalTitle}>Connection Error</Text>
-        <Text style={styles.modalText}>
-          Oops! Looks like your device is not connected to the Internet.
-        </Text>
+        <Text style={styles.modalTitle}>{I18n.t('connection_error')}</Text>
+        <Text style={styles.modalText}>{I18n.t('error_description')}</Text>
         <Button onPress={onRetry} disabled={isRetrying}>
-          Try Again
+          {I18n.t('try_again')}
         </Button>
       </View>
     </Modal>

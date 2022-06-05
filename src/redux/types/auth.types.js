@@ -20,6 +20,10 @@ module.exports = {
   //Profile
   Get_Profile_Success: 'Get_Profile_Success',
   Get_Profile_Failure: 'Get_Profile_Failure',
+  //Get User Info
+  Get_User_Info_Success: 'Get_User_Info_Success',
+  Get_User_Info_Failure: 'Get_User_Info_Failure',
+
   //Logout
   Logout_Success: 'Logout_Success',
   Logout_Failure: 'Logout_Failure',

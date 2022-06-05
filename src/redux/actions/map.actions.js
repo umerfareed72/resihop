@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as Types from '../types/map.types';
 import {GetToken, baseURL} from '../../utilities';
-import {get, put} from '../../services';
+import {get, post, put} from '../../services';
 import {responseValidator} from '../../utilities/helpers';
 import {RIDES_CONST, DRIVE_CONST} from '../../utilities/routes';
 import {header} from '../../utilities';
@@ -379,7 +379,7 @@ export const CancelRide =
 export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
   let Token = await GetToken();
   try {
-    const response = await fetch(`${baseURL}${route}?_sort=${data}`, {
+    const response = await fetch(`${baseURL}${route}_sort=${data}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -393,6 +393,59 @@ export const MyRidesSortOrder = (route, data, callBack) => async dispatch => {
     console.log(error);
   }
 };
+
+export const MyRidesFiltering =
+  (route, type, seats, status, callBack) => async dispatch => {
+    console.log(type, seats, status);
+    let Token = await GetToken();
+    try {
+      const url_with_type = `${baseURL}${route}requiredSeats=${seats}&status=${status}&type=${type}`;
+      const url_without_type = `${baseURL}${route}requiredSeats=${seats}&status=${status}`;
+
+      const response = await fetch(
+        `${type != null ? url_with_type : url_without_type}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Token}`,
+          },
+        },
+      );
+
+      const responseJson = await response.json();
+      callBack(responseJson);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const MyDrivesFiltering =
+  (route, type, seats, status, callBack) => async dispatch => {
+    console.log(type, seats, status);
+    let Token = await GetToken();
+    try {
+      const url_with_type = `${baseURL}${route}availableSeats=${seats}&status=${status}&type=${type}`;
+      const url_without_type = `${baseURL}${route}availableSeats=${seats}&status=${status}`;
+
+      const response = await fetch(
+        `${type != null ? url_with_type : url_without_type}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${Token}`,
+          },
+        },
+      );
+
+      const responseJson = await response.json();
+      callBack(responseJson);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 export const MyRidesHistorySortOrder =
   (route, data, callBack) => async dispatch => {
     let Token = await GetToken();
@@ -441,6 +494,7 @@ export const get_rides_history = callBack => async dispatch => {
       type: Types.Get_Rides_Failure,
       payload: null,
     });
+    callBack(null);
   }
 };
 ///////////////////////////////////////// Get Drives History ////////////////////////////
@@ -449,7 +503,7 @@ export const get_drives_history = callBack => async dispatch => {
   try {
     dispatch({type: Types.Rides_Loader, payload: true});
     const response = await get(
-      `${DRIVE_CONST}?_sort=tripDate:desc&status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
+      `${DRIVE_CONST}?_sort=date:desc&status_in=COMPLETED&status_in=CLOSE_WITH_REFUND&status_in=CLOSE_WITH_PARTIALLY_REFUND&status_in=CLOSE_WITH_SUCCESS&status_in=NO_MATCH&status_in=CANCELLED`,
       await header(),
     );
     // if (response?.data?.user?.details) {
@@ -461,10 +515,7 @@ export const get_drives_history = callBack => async dispatch => {
   } catch (error) {
     console.log('Unable to load drives', error);
     let status = error?.response?.data?.statusCode;
-    responseValidator(
-      status,
-      error?.response?.data?.message[0]?.messages[0]?.message,
-    );
+    responseValidator(status, 'Something went wrong!');
     dispatch({
       type: Types.Get_Drives_Failure,
       payload: null,
@@ -506,15 +557,21 @@ export const select_ride_history = (data, callBack) => async dispatch => {
 };
 
 export const BookRide =
-  (body, id, setBookLoading, callback) => async dispatch => {
+  (body, distance, id, setBookLoading, callback) => async dispatch => {
     setBookLoading(true);
     try {
-      const response = await put(`drives/book/${id}`, body, await header());
+      const response = await put(
+        `drives/book/${id}?totalDistance=${distance}`,
+        body,
+        await header(),
+      );
       setBookLoading(false);
       callback(response.data);
     } catch (error) {
+      console.log('book ride', error?.response?.data);
       setBookLoading(false);
-      console.log('Book Ride', error.response.data);
+      let status = error?.response?.data?.statusCode;
+      responseValidator(status, error?.response?.data?.message);
     }
   };
 
@@ -551,5 +608,49 @@ export const setReturnRecurringDates = data => async dispatch => {
     });
   } catch (error) {
     console.log('Settings', error);
+  }
+};
+
+///////////////////////////////////////// Get help////////////////////////////
+
+export const get_help = callBack => async dispatch => {
+  try {
+    dispatch({type: Types.Rides_Loader, payload: true});
+    const response = await get(`questions`, await header());
+    for (let i = 0; i < response?.data.length; i++) {
+      response.data[i]['expanded'] = false;
+      response.data[i]['description'] = '';
+    }
+    dispatch({
+      type: Types.Get_Help_Success,
+      payload: response.data,
+    });
+    callBack(response.data);
+  } catch (error) {
+    let status = error?.response?.data?.statusCode;
+    responseValidator(status, '');
+    dispatch({
+      type: Types.Get_Help_Failure,
+      payload: null,
+    });
+    callBack(null);
+  }
+};
+
+export const create_ticket = (data, callBack) => async dispatch => {
+  try {
+    const response = await post(`help-supports`, data, await header());
+    dispatch({
+      type: Types.Create_Ticket_Success,
+      payload: response.data,
+    });
+    callBack(response.data);
+  } catch (error) {
+    let status = error?.response?.data?.statusCode;
+    responseValidator(status, 'Something went wrong!');
+    dispatch({
+      type: Types.Create_Ticket_Failure,
+      payload: null,
+    });
   }
 };

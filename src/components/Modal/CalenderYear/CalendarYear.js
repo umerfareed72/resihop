@@ -19,92 +19,33 @@ import {
   appIcons,
   HP,
 } from '../../../utilities';
+import I18n from '../../../utilities/translations';
 
-export const CalendarYear = ({show, onPress}) => {
-  useEffect(() => {
-    console.log('items in useEffect is  ', items);
-  }, [items]);
-
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      title: '2020',
-      selected: false,
-      //   onPress: () => {
-      //     show?.current?.close();
-      //   },
-    },
-    {
-      id: 2,
-      title: '2019',
-      selected: false,
-
-      //   onPress: () => {
-      //     show?.current?.close();
-      //   },
-    },
-    {
-      id: 3,
-      title: '2018',
-      selected: false,
-
-      //   onPress: () => {
-      //     show?.current?.close();
-      //   },
-    },
-    {
-      id: 4,
-      title: '2017',
-      selected: false,
-
-      //   onPress: () => {
-      //     // show?.current?.close();
-      //   },
-    },
-  ]);
-
-  const onYearPress = id => {
-    console.log('enter in year ', id);
-    setItems(
-      items.map(data => {
-        if (data.id === id) {
-          return {
-            ...data,
-            selected: !data?.selected,
-          };
-        } else {
-          return {
-            ...data,
-            selected: false,
-          };
-        }
-      }),
-    );
-    console.log('items is  ', items);
+export const CalendarYear = ({show, onPress, current_year, setYear}) => {
+  const onYearPress = year => {
+    setYear(year);
   };
 
   const renderItems = ({item}) => {
-    console.log('enter in render Item', item);
     return (
       <TouchableOpacity
-        onPress={() => onYearPress(item?.id)}
+        onPress={() => onYearPress(item)}
         style={[
           styles.itemContainer,
           {
-            backgroundColor:
-              item.selected === true ? colors.blue : colors.white,
+            backgroundColor: item === current_year ? colors.blue : colors.white,
           },
         ]}>
         <Text
           style={
             ([styles.itemText],
             {
-              color: item.selected === true ? colors.white : colors.light_black,
+              color: item === current_year ? colors.white : colors.light_black,
               fontSize: size.xxlarge,
               fontFamily: family.product_sans_bold,
             })
           }>
-          {item?.title}
+          {item}
         </Text>
       </TouchableOpacity>
     );
@@ -125,17 +66,24 @@ export const CalendarYear = ({show, onPress}) => {
       }}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerStyle}>Select Calendar Year</Text>
+          <Text style={styles.headerStyle}>
+            {I18n.t('select_calender_year')}
+          </Text>
         </View>
         <FlatList
+          style={{height: 250}}
           //   contentContainerStyle={{width: '100%', flex: 1}}
-          data={items}
+          data={Array.from(Array(new Date().getFullYear() - 1999), (_, i) =>
+            (i + 2000).toString(),
+          )}
           renderItem={renderItems}
+          inverted={true}
         />
+
         <TouchableOpacity
           onPress={() => show?.current?.close()}
           style={styles.button}>
-          <Text style={styles.buttonText}>OK</Text>
+          <Text style={styles.buttonText}>{I18n.t('ok')}</Text>
         </TouchableOpacity>
       </View>
     </RBSheet>

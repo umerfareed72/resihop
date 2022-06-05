@@ -1,19 +1,14 @@
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from 'react-native-tiny-toast';
-import RNCallKeep from 'react-native-callkeep';
-import {options} from '../constants';
-import {Alert} from 'react-native';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import {set_event_request} from '../../redux/actions';
+import {getUserInfo} from '../../redux/actions/auth.action';
+import {Call_Status} from '../../redux/actions/app.action';
 
-// import {
-//   read_Notifications,
-//   save_Notification_Info,
-// } from '../../Redux/actions/notification.action';
-
-export async function registerAppWithFCM() {
+export const registerAppWithFCM = async () => {
   await messaging().registerDeviceForRemoteMessages();
-}
+};
 export async function requestPermission() {
   try {
     const authStatus = await messaging().requestPermission();
@@ -22,7 +17,6 @@ export async function requestPermission() {
       authStatus == messaging.AuthorizationStatus.PROVISIONAL;
     if (enabled) {
       let token = await getFcmToken();
-      console.log('TOKEN', token);
       return token;
     }
   } catch (error) {
@@ -62,35 +56,98 @@ const getFcmToken = async () => {
     return oldToken;
   }
 };
-// Currently iOS only
 
-export const Notification_Listner = (dispatch, props) => {
-  messaging().onNotificationOpenedApp(async remoteMessage => {});
+export const Notification_Listner = (dispatch, navigation) => {
+  messaging().onNotificationOpenedApp(async remoteMessage => {
+    console.log(remoteMessage);
+    let notificationObj = remoteMessage.data.data;
+    if (notificationObj) {
+      notificationObj = JSON.parse(notificationObj);
+      if (remoteMessage?.notification?.title == 'Agora Call') {
+        dispatch(
+          getUserInfo(notificationObj, res => {
+            navigation?.navigate('IncomingCall');
+          }),
+        );
+      }
+      if (remoteMessage?.notification?.title == 'Agora Call Accept') {
+        dispatch(Call_Status('answered', () => {}));
+      }
+      if (remoteMessage?.notification?.title == 'Agora Call Reject') {
+        dispatch(
+          Call_Status('deny', () => {
+            navigation?.goBack();
+          }),
+        );
+      }
+    }
+  });
   messaging().onMessage(async remoteMessage => {
-    console.log('remote Meessage', remoteMessage);
-    Alert.alert(
-      remoteMessage?.notification?.title,
-      remoteMessage?.notification?.body,
-    );
+    console.log(remoteMessage);
+    let notificationObj = remoteMessage.data.data;
+    if (notificationObj) {
+      notificationObj = JSON.parse(notificationObj);
+      LocalNotification(remoteMessage, notificationObj, dispatch, navigation);
+    }
   });
   messaging().getInitialNotification(async remoteMessage => {
     if (remoteMessage) {
-      console.log('Initial Notification', remoteMessage);
+      console.log('Initial Notification', remoteMessage.notification);
     }
   });
 };
 
-export const LocalNotification = () => {
+export const LocalNotification = (
+  notify,
+  notificationObj,
+  dispatch,
+  navigation,
+) => {
+  PushNotification.localNotification({
+    channelId: 'fcm_fallback_notification_channel',
+    title: notify?.notification?.title,
+    smallIcon: 'ic_notification',
+    largeIcon: 'ic_launcher',
+    message: notify?.notification?.body,
+    vibrate: true, // (optional) default: true
+    vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+    playSound: true, // (optional) default: true
+    soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+    invokeApp: false, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
+  });
+
+  if (notify?.notification?.title == 'Agora Call') {
+    dispatch(
+      getUserInfo(notificationObj, res => {
+        navigation?.navigate('IncomingCall');
+      }),
+    );
+  }
+  if (notify?.notification?.title == 'Agora Call Accept') {
+    dispatch(Call_Status('answered', () => {}));
+  }
+  if (notify?.notification?.title == 'Agora Call Reject') {
+    dispatch(
+      Call_Status('deny', () => {
+        navigation?.goBack();
+      }),
+    );
+  }
   PushNotification.configure({
-    // (required) Called when a remote or local notification is opened or received
-    onNotification: notification => {
-      console.log(notification?.notification);
-      // Toast.show(notification?.data?.body, {
-      //   position: Toast.position.TOP,
-      // });
-      // alert(notification?.notification?.body);
+    // (optional) Called when Token is generated (iOS and Android)
+    onRegister: function (token) {},
+    onNotification: function (notification) {
+      // navigation?.navigate('NotificationList');
+      notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
+
     popInitialNotification: true,
-    requestPermissions: true,
+    requestPermissions: Platform.OS === 'ios' ? true : false,
+    // IOS ONLY (optional): default: all - Permissions to register.
+    permissions: {
+      alert: true,
+      badge: true,
+      sound: true,
+    },
   });
 };

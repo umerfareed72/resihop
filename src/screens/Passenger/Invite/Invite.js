@@ -1,5 +1,5 @@
 import I18n from 'i18n-js';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,14 +10,31 @@ import {
   Share,
 } from 'react-native';
 import {CustomHeader} from '../../../components';
-import {colors, appImages, HP, size, family} from '../../../utilities';
+import {
+  colors,
+  appImages,
+  HP,
+  size,
+  family,
+  REFERRAL_CONST,
+  header,
+} from '../../../utilities';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'react-native-tiny-toast';
+import {get} from '../../../services';
 
 const Invite = ({navigation}) => {
+  const [code, setcode] = useState(null);
   const copyToClipboard = text => {
     Clipboard.setString(text);
     alert('Code copied');
+  };
+  useEffect(() => {
+    getReferrals();
+  }, []);
+  const getReferrals = async () => {
+    const res = await get(`${REFERRAL_CONST}`, await header());
+    setcode(res?.data?.code);
   };
   const onInviteFriend = async () => {
     try {
@@ -25,8 +42,8 @@ const Invite = ({navigation}) => {
         title: 'Pawtai',
         message:
           Platform.OS == 'android'
-            ? `Link to Download Application from PlayStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`
-            : ` Link to Download Application from AppStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`,
+            ? `Your Referral Code is ${code} Link to Download Application from PlayStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en `
+            : `Your Referral Code is ${code} Link to Download Application from AppStore https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -53,13 +70,13 @@ const Invite = ({navigation}) => {
           <View style={styles.subContainerOne}>
             <Image source={appImages.inviteImage} />
             <Text style={styles.headingText}>{I18n.t('invite_friend')}</Text>
-            <Text style={styles.descriptionText}>{I18n.t('lorem')}</Text>
+            <Text style={styles.descriptionText}>{I18n.t('invite_desc')}</Text>
             <View style={styles.codeContainer}>
-              <Text style={styles.codeText}>ABCD1234</Text>
+              <Text style={styles.codeText}>{code}</Text>
 
               <Text
                 onPress={() => {
-                  copyToClipboard('ABCD1234');
+                  copyToClipboard(code);
                 }}
                 style={styles.copyText}>
                 {I18n.t('invite_copy_code')}

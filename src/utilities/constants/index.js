@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PermissionsAndroid} from 'react-native';
 import {Dimensions} from 'react-native';
-
+import I18n from '../translations';
 export const Constants = {
   windowWidth: Dimensions.get('window').width,
   windowHeight: Dimensions.get('window').height,
@@ -35,7 +35,7 @@ export const mode = 'driving';
 
 export const options = {
   ios: {
-    appName: 'My app name',
+    appName: 'com.resihop',
   },
   android: {
     alertTitle: 'Permissions required',

@@ -142,9 +142,15 @@ export const PaymentFilterModal = ({
       }}>
       <View style={styles.container}>
         <View style={styles.alignRow}>
-          <Text style={styles.h1}>{h1}Filters</Text>
+          <Text style={styles.h1}>
+            {h1}
+            {I18n.t('filter')}
+          </Text>
           <TouchableOpacity onPress={onPressReset}>
-            <Text style={styles.h2}>{h2}Reset</Text>
+            <Text style={styles.h2}>
+              {h2}
+              {I18n.t('reset')}
+            </Text>
           </TouchableOpacity>
         </View>
         <ScrollView

@@ -8,8 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import MapViewComponent from '../../components/MapViewComponent';
-import NearestDriverCard from '../../components/NearestDriverCard';
+import {MapViewComponent, NearestDriverCard} from '../../components';
 import {colors, family, HP, size} from '../../utilities';
 
 const SelectRoute = () => {

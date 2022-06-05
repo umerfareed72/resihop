@@ -14,10 +14,7 @@ import * as Yup from 'yup';
 import {theme} from '../../../theme';
 import _ from 'lodash/string';
 import {Button, Icon, Input, Text} from 'react-native-elements';
-import Chips from '../../../components/Chips';
-import GenderChips from '../../../components/GenderChips';
-import UploadImage from '../../../components/UploadImage';
-import SigninViaBankID from '../../../components/SigninViaBankID';
+
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {
   CustomHeader,
@@ -25,51 +22,73 @@ import {
   IncorrectRefCode,
   Loader,
   NetInfoModal,
+  Chips,
+  GenderChips,
+  UploadImage,
+  SigninViaBankID,
 } from '../../../components';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 import {baseURL, checkConnected, colors} from '../../../utilities';
-import {GetToken} from '../../../utilities/constants';
+import {GetToken, header} from '../../../utilities/constants';
 
 import {SwitchDrive, updateInfo} from '../../../redux/actions/auth.action';
 import useAppState from '../../../hooks/useAppState';
-const user = {
-  Passenger: 'Passenger', // 616e6aae6fc87c0016b7413f
-  Driver: 'Driver', // 616e6a8c6fc87c0016b740e8
-  Both: 'Driver/Passenger both', // 616da5478b2d5d45c479591c
-};
+import {get} from '../../../services';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const gender = {
-  Male: 'male',
-  Female: 'female',
-  Other: 'other',
+  Male: I18n.t('male'),
+  Female: I18n.t('female'),
+  Other: I18n.t('other'),
 };
 const littleChips = [
   {
     key: 0,
-    text: user.Driver,
+    text: I18n.t('fav_driver'),
     isSelected: true,
   },
   {
     key: 1,
-    text: user.Passenger,
+    text: I18n.t('fav_passenger'),
     isSelected: false,
   },
   {
     key: 2,
-    text: user.Both,
+    text: I18n.t('both'),
     isSelected: false,
   },
 ];
+
+const littleChips2 = [
+  {
+    key: 0,
+    text: gender.Male,
+    isSelected: false,
+  },
+  {
+    key: 1,
+    text: gender.Female,
+    isSelected: false,
+  },
+  {
+    key: 2,
+    text: gender.Other,
+    isSelected: false,
+  },
+];
+
 function PersonalDetails(props) {
   const dispatch = useDispatch(null);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
   const country_data = useSelector(state => state.auth?.country_info);
 
   const [codeId, setCodeId] = useState('');
+  const [code, setCode] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
-  const [userType, setUserType] = useState(user.Driver);
+  const [userType, setUserType] = useState('Driver');
   const [genderType, setGenderType] = useState(gender.Male);
   const [pic, setPic] = useState(undefined);
   const [bankdIdToken, setBankIdToken] = useState(null);
@@ -83,45 +102,46 @@ function PersonalDetails(props) {
   const bank_url = useRef();
   const acr = 'urn:grn:authn:se:bankid:same-device';
 
-  // const appState = useAppState(async () => {
-  //   if (acr === 'urn:grn:authn:se:bankid:same-device') {
-  //     const result = await fetch(bank_url?.current).then(response => {
-  //       return response;
-  //     });
-  //     const token = result?.url.split('id_token=');
-  //     if (token) {
-  //       setBankIdToken(token[1]);
-  //     } else {
-  //       setIsLoading(false);
-  //     }
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // });
-  // const openBankId = async values => {
-  //   setUserDetail(values);
-  //   setIsLoading(true);
-  //   const result = await axios.get(
-  //     `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
-  //       Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
-  //     }`,
-  //   );
-  //   if (result?.data) {
-  //     console.log(result?.data);
-  //     bank_url.current = result?.data?.completeUrl;
-  //     Linking.openURL(result?.data?.launchLinks?.universalLink);
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // };
+  const appState = useAppState(async () => {
+    if (acr === 'urn:grn:authn:se:bankid:same-device') {
+      const result = await fetch(bank_url?.current).then(response => {
+        return response;
+      });
+      const token = result?.url.split('id_token=');
+      if (token) {
+        setBankIdToken(token[1]);
+      } else {
+        setIsLoading(false);
+      }
+    } else {
+      setIsLoading(false);
+    }
+  });
+  const openBankId = async values => {
+    setUserDetail(values);
+    setIsLoading(true);
+    const result = await axios.get(
+      `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+        Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+      }`,
+    );
+    if (result?.data) {
+      console.log(result?.data);
+      bank_url.current = result?.data?.completeUrl;
+      Linking.openURL(result?.data?.launchLinks?.universalLink);
+    } else {
+      setIsLoading(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (bankdIdToken) {
-  //     userDetailsApi(userDetail);
-  //   }
-  // }, [bankdIdToken]);
+  useEffect(() => {
+    if (bankdIdToken) {
+      userDetailsApi(userDetail);
+    }
+  }, [bankdIdToken]);
   //Add Personal Details
   const userDetailsApi = async inputData => {
+    const lang = await AsyncStorage.getItem('lang');
     const isConnected = await checkConnected();
     if (isConnected) {
       setIsLoading(true);
@@ -142,14 +162,7 @@ function PersonalDetails(props) {
           isDriverAndPassenger:
             userType === 'Driver/Passenger both' ? true : false,
           gender: genderType,
-          referral:
-            codeId != ''
-              ? {
-                  _id: codeId,
-                }
-              : {
-                  _id: null,
-                },
+          referral: codeId != '' ? codeId : null,
           type: user,
           details: true,
           country: {
@@ -157,7 +170,8 @@ function PersonalDetails(props) {
             cca2: country_data?.cca2,
             code: country_data?.code,
           },
-          // bankID: bankdIdToken,
+          bankID: bankdIdToken,
+          locale: lang == 'en' ? 'en' : 'nn-NO',
         };
         dispatch(
           updateInfo(
@@ -168,7 +182,7 @@ function PersonalDetails(props) {
               console.log(res);
               Alert.alert(
                 'Success',
-                'Your personal details successfuly saved',
+                I18n.t('personal_info_success'),
                 [
                   {
                     text: 'OK',
@@ -213,14 +227,7 @@ function PersonalDetails(props) {
               isDriverAndPassenger:
                 userType === 'Driver/Passenger both' ? true : false,
               gender: genderType,
-              referral:
-                codeId != ''
-                  ? {
-                      _id: codeId,
-                    }
-                  : {
-                      _id: null,
-                    },
+              referral: codeId != '' ? codeId : null,
               type: user,
               details: true,
               country: {
@@ -238,7 +245,7 @@ function PersonalDetails(props) {
                   setIsLoading(false);
                   Alert.alert(
                     'Success',
-                    'Your personal details successfuly saved',
+                    I18n.t('personal_info_success'),
                     [
                       {
                         text: 'OK',
@@ -313,11 +320,11 @@ function PersonalDetails(props) {
             validationSchema={personalFormSchema}
             onSubmit={values => {
               Keyboard.dismiss();
-              // if (userType === 'Passenger') {
-              //   openBankId(values);
-              // } else {
-              userDetailsApi(values);
-              // }
+              if (userType === 'Passenger') {
+                openBankId(values);
+              } else {
+                userDetailsApi(values);
+              }
             }}>
             {({
               handleChange,
@@ -328,22 +335,25 @@ function PersonalDetails(props) {
               setFieldValue,
               handleBlur,
             }) => {
-              const getReferalCode = code => {
+              const getReferalCode = async () => {
                 setIsLoading(true);
-                fetch(`${baseURL}referrals?code=${code}`, {
-                  method: 'GET',
-                })
-                  .then(response => response.json())
-                  .then(responseData => {
-                    if (responseData.length > 0) {
-                      setIsLoading(false);
-                    } else {
-                      setIsLoading(false);
-                      setCodeId('');
-                      refCodeSheet?.current?.open();
-                    }
-                  })
-                  .done();
+
+                try {
+                  setIsLoading(true);
+                  const res = await get(`referrals`, await header());
+                  if (res?.data?.code == code) {
+                    setIsLoading(false);
+                    setCodeId(res?.data?._id);
+                  } else {
+                    setIsLoading(false);
+                    setCodeId('');
+                    setCode('');
+                    refCodeSheet?.current?.open();
+                    console.log(res.data);
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
               };
               return (
                 <>
@@ -375,6 +385,7 @@ function PersonalDetails(props) {
                           : I18n.t('first_name_driver_text')
                       }
                       autoFocus={false}
+                      value={values?.firstName}
                       autoCapitalize="none"
                       style={theme.Input.inputStyle}
                       autoCorrect={false}
@@ -399,6 +410,7 @@ function PersonalDetails(props) {
                           ? I18n.t('last_name_text')
                           : I18n.t('last_name_driver_text')
                       }
+                      value={values?.lastName}
                       autoFocus={false}
                       autoCapitalize="none"
                       autoCorrect={false}
@@ -414,15 +426,11 @@ function PersonalDetails(props) {
                       errorMessage={errors.lastName}
                     />
                     <Input
-                      maxLength={4}
                       ref={refReferral}
                       onChangeText={val => {
-                        setCodeId(val);
-                        if (val.length == 4) {
-                          getReferalCode(val);
-                        }
+                        setCode(val);
                       }}
-                      value={codeId}
+                      value={code}
                       keyboardAppearance="light"
                       placeholder={I18n.t('referral_code_opt_text')}
                       style={theme.Input.inputStyle}
@@ -431,6 +439,7 @@ function PersonalDetails(props) {
                       autoCorrect={false}
                       returnKeyType="next"
                       onSubmitEditing={() => {
+                        getReferalCode();
                         refEmail.current.focus();
                       }}
                       inputContainerStyle={
@@ -470,6 +479,7 @@ function PersonalDetails(props) {
                       onChipPress={chips => {
                         setGenderType(chips[0].text);
                       }}
+                      genderArray={littleChips2}
                     />
                     <UploadImage
                       profile_url={''}

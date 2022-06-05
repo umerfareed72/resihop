@@ -8,18 +8,24 @@ import {
   ImageStore,
   TextInput,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {
   CustomHeader,
+  Loader,
   PaymentButtons,
   RideHistoryCard,
   RiderInfo,
+  SupportCard,
 } from '../../../../components';
 import {
   appIcons,
   appImages,
+  baseURL,
+  checkConnected,
   colors,
   family,
+  header,
   HP,
   size,
 } from '../../../../utilities';
@@ -28,6 +34,9 @@ import styles from './style';
 import {Divider, Icon} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {create_agoral_channel} from '../../../../redux/actions/app.action';
+import {useIsFocused} from '@react-navigation/core';
+import {create_ticket, get_help} from '../../../../redux/actions/map.actions';
+import {post, remove} from '../../../../services';
 const index = ({navigation, route}) => {
   //Redux States
   const dispatch = useDispatch(null);
@@ -35,63 +44,52 @@ const index = ({navigation, route}) => {
   const rides = useSelector(state => state.map);
 
   //useState here
-  const [data, setData] = useState([
-    {
-      id: 1,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 2,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 3,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 4,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 5,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 6,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-    {
-      id: 7,
-      title: 'Lorem ipsum dolor sit amet, consetetur',
-      expanded: false,
-      descripion:
-        'Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur. Lorem ipsum dolor sit amet, consetetur',
-    },
-  ]);
+  const [data, setData] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
+  const [block, setblock] = useState(false);
+  const isFocus = useIsFocused(null);
 
+  const createAgoraChannel = () => {
+    const requestBody = {
+      to: rides?.selected_ride_history?.drive?.user?._id,
+    };
+    dispatch(
+      create_agoral_channel(requestBody, res => {
+        navigation?.navigate('CallNow', {
+          firstName: rides?.selected_ride_history?.drive?.user?.firstName,
+          lastName: rides?.selected_ride_history?.drive?.user?.lastName,
+          picture: rides?.selected_ride_history?.drive?.user?.picture?.url,
+        });
+      }),
+    );
+  };
+
+  useEffect(() => {
+    if (isFocus) {
+      getHelps();
+      setblock(rides?.selected_ride_history?.drive?.user?.blocked);
+    }
+  }, [isFocus]);
+
+  const getHelps = async () => {
+    const check = await checkConnected();
+    if (check) {
+      setisLoading(true);
+      dispatch(
+        get_help(res => {
+          setData(res);
+          setisLoading(false);
+        }),
+      );
+    } else {
+      Alert.alert('Error', 'Check Internet Connection!');
+    }
+  };
   //methods here
-  const updateData = ({id}) => {
+  const updateData = myItem => {
     setData(
       data.map(item => {
-        if (item?.id === id) {
+        if (item?.id === myItem?.id) {
           return {
             ...item,
             expanded: !item.expanded,
@@ -105,74 +103,81 @@ const index = ({navigation, route}) => {
       }),
     );
   };
-  const createAgoraChannel = () => {
-    const requestBody = {
-      channel: rides?.selected_ride_history?._id,
-      role: 'audience',
-      tokentype: 'uid',
-      uid: JSON.parse(auth?.profile_info?.country?.phone),
-    };
-    dispatch(
-      create_agoral_channel(requestBody, res => {
-        navigation?.navigate('CallNow');
-      }),
-    );
+  const createTicket = async item => {
+    const check = await checkConnected();
+    if (check) {
+      setisLoading(true);
+      const requestBody = {
+        user: auth?.userInfo?.id,
+        customerQuery: item?.description,
+        question: item?.id,
+      };
+      dispatch(
+        create_ticket(requestBody, res => {
+          setisLoading(false);
+          Alert.alert('Success', 'Query submitted successfully', [
+            {
+              text: 'Ok',
+              onPress: () => {
+                navigation?.navigate('PassengerHome');
+              },
+            },
+          ]);
+        }),
+      );
+    } else {
+      Alert.alert('Error', 'Check Internet Connection!');
+    }
   };
   //component here
-  const ItemView = ({data}) => {
+  const ItemView = ({item, index}) => {
     return (
-      <>
-        <View style={styles.itemView}>
-          <Text style={styles.titleText}>{data?.title}</Text>
-          <TouchableOpacity onPress={() => updateData(data)}>
-            <Icon
-              name={data?.expanded ? 'up' : 'right'}
-              color={colors.light_black}
-              size={22}
-              type={'antdesign'}
-            />
-          </TouchableOpacity>
-        </View>
-        {data?.expanded && (
-          <View>
-            <Text style={styles.descriptionText}>{data?.descripion}</Text>
-            <TextInput
-              style={{
-                height: HP('12'),
-                marginVertical: HP('2'),
-                borderRadius: 14,
-                borderColor: colors.gray_shade,
-                borderWidth: 1,
-                paddingHorizontal: 10,
-              }}
-              placeholder="Please tell us your issue."
-              placeholderTextColor={colors.gray_shade}
-              color={colors.lightGray}
-            />
-
-            <TouchableOpacity
-              style={{
-                borderRadius: 15,
-                height: HP('7'),
-                backgroundColor: colors.green,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: HP('2'),
-              }}>
-              <Text
-                style={{
-                  fontSize: size.normal,
-                  fontFamily: family.product_sans_bold,
-                  color: colors.white,
-                }}>
-                Generate Ticket
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        <Divider />
-      </>
+      <SupportCard
+        item={item}
+        onChangeText={text => {
+          item.description = text;
+        }}
+        onCreateTicket={() => {
+          createTicket(item);
+        }}
+        onPressCard={() => updateData(item)}
+      />
     );
+  };
+  const onPressBlock = async () => {
+    try {
+      const check = await checkConnected();
+      if (check) {
+        setisLoading(true);
+        setblock(!block);
+        if (!block) {
+          const requestBody = {
+            user: rides?.selected_ride_history?.drive?.user?._id,
+          };
+          const res = await post(
+            `${baseURL}blocked`,
+            requestBody,
+            await header(),
+          );
+          if (res?.data) {
+            Alert.alert('Success', 'User successfully blocked!');
+            setisLoading(false);
+          }
+        } else {
+          const res = await remove(
+            `${baseURL}blocked/${rides?.selected_ride_history?.drive?.user?._id}`,
+            await header(),
+          );
+          if (res?.data) {
+            Alert.alert('Success', 'User successfully unblocked!');
+            setisLoading(false);
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setisLoading(false);
+    }
   };
   return (
     <>
@@ -181,7 +186,9 @@ const index = ({navigation, route}) => {
         title={I18n.t('ride_detail')}
         navigation={navigation}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{backgroundColor: 'white'}}>
         <View style={styles.container}>
           <View style={styles.contentContainer}>
             <RideHistoryCard
@@ -198,30 +205,41 @@ const index = ({navigation, route}) => {
             />
           </View>
           <View style={styles.separator} />
-          <View style={styles.contentContainer}>
-            <RiderInfo driverInfo={rides?.selected_ride_history?.drive?.user} />
-          </View>
-          <View style={styles.separator} />
-          <View style={[styles.contentContainer, {margin: 20}]}>
-            <PaymentButtons
-              bgColor={colors.green}
-              title={'Call Now'}
-              txtColor={colors.white}
-              fontFamily={family.product_sans_bold}
-              image={appIcons.call}
-              onPress={() => {
-                createAgoraChannel();
-              }}
-            />
-          </View>
-          <View style={[styles.contentContainer]}>
-            <Text style={styles.reportText}>Report</Text>
-            {data.map(item => (
-              <ItemView data={item} />
-            ))}
-          </View>
+          {rides?.selected_ride_history?.status == 'COMPLETED' ? (
+            <>
+              <View style={styles.contentContainer}>
+                <RiderInfo
+                  block={block}
+                  onPressBlock={onPressBlock}
+                  driverInfo={rides?.selected_ride_history?.drive?.user}
+                />
+              </View>
+              <View style={styles.separator} />
+              <View style={[styles.contentContainer, {margin: 20}]}>
+                <PaymentButtons
+                  bgColor={colors.green}
+                  title={'Call Now'}
+                  txtColor={colors.white}
+                  fontFamily={family.product_sans_bold}
+                  image={appIcons.call}
+                  onPress={() => {
+                    createAgoraChannel();
+                  }}
+                />
+              </View>
+              {data != '' ? (
+                <View style={[styles.contentContainer]}>
+                  <Text style={styles.reportText}>{I18n.t('report')}</Text>
+                  {data?.map(item => (
+                    <ItemView item={item} />
+                  ))}
+                </View>
+              ) : null}
+            </>
+          ) : null}
         </View>
       </ScrollView>
+      {isLoading && <Loader />}
     </>
   );
 };

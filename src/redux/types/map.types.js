@@ -53,6 +53,13 @@ module.exports = {
   Get_Reccuring_Drives_Success: 'Get_Reccuring_Drives_Success',
   Get_Reccuring_Drives_Failure: 'Get_Reccuring_Drives_Failure',
 
+  //Get Help
+  Get_Help_Success: 'Get_Help_Success',
+  Get_Help_Failure: 'Get_Help_Failure',
+  // Create Ticket
+  Create_Ticket_Success: 'Create_Ticket_Success',
+  Create_Ticket_Failure: 'Create_Ticket_Failure',
+
   //Get Rides
   Rides_Loader: 'Rides_Loader',
 };

@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import {colors, appIcons, appImages, family, size} from '../../../../utilities';
 import {useNavigation} from '@react-navigation/core';
@@ -16,9 +17,12 @@ import HeartIcon from 'react-native-vector-icons/EvilIcons';
 import HeartFilled from 'react-native-vector-icons/Foundation';
 import ToggleSwitch from 'toggle-switch-react-native';
 import FavouriteLocations from '../../../FavouriteLocations';
-import {CustomHeader, Loader} from '../../../../components';
-import CalendarSheet from '../../../CalendarSheet';
-import ReturnCalendarSheet from '../../../../components/ReurnCalenderSheet';
+import {
+  CustomHeader,
+  Loader,
+  CalendarSheet,
+  ReturnCalendarSheet,
+} from '../../../../components';
 import I18n from '../../../../utilities/translations';
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -34,10 +38,9 @@ import {
   setReturnOrigin,
   setReturnMapDestination,
   get_settings,
+  setReturnDateTimeStamp,
 } from '../../../../redux/actions/map.actions';
 import moment from 'moment';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {Alert} from 'react-native';
 import styles from './styles';
 const index = () => {
   let navigation = useNavigation();
@@ -62,12 +65,7 @@ const index = () => {
   const [favPress, setFavPress] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
-  const [screen, setScreen] = useState(false);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [normalTime, setNormalTime] = useState('');
-  const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
-  const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
 
   useEffect(() => {
     dispatch(setTime(moment().format('HH:mm')));
@@ -81,25 +79,17 @@ const index = () => {
       dispatch(setReturnOrigin(null));
       dispatch(setReturnMapDestination(null));
       dispatch(setReturnFirstTime(null));
+      dispatch(setReturnDateTimeStamp(null));
     };
   }, []);
 
-  const showFirstReturnTimePicker = () => {
-    setFirstReturnTimePicker(true);
-  };
-
-  const hideFirstReturnTimePicker = () => {
-    setFirstReturnTimePicker(false);
-  };
-
-  const handleConfirmFirstReturnTime = date => {
-    setNormalFirstReturnTime(moment(date).format());
-    dispatch(setReturnFirstTime(date));
-    hideFirstReturnTimePicker();
-  };
-
   const handleCreateRide = () => {
-    const stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+    let stamp = moment(
+      `${moment(new Date()).format('YYYY-MM-DD')}T${time}`,
+    ).valueOf();
+    if (dateTimeStamp) {
+      stamp = moment(`${dateTimeStamp}T${time}`).valueOf();
+    }
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [
@@ -112,7 +102,6 @@ const index = () => {
       destDes: destinationMap.description,
       interCity: true,
     };
-
     dispatch(
       CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
         if (response.error) {
@@ -128,9 +117,22 @@ const index = () => {
   };
 
   const handleCreateReturnRide = () => {
-    const stamp = moment(
-      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
+    let stamp = moment(
+      `${moment(new Date()).format('YYYY-MM-DD')}T${
+        returnTime?.returnFirstTime == 'Invalid date'
+          ? moment(new Date()).format('hh:mm')
+          : returnTime?.returnFirstTime
+      }`,
     ).valueOf();
+    if (returnDateTimeStamp) {
+      stamp = moment(
+        `${returnDateTimeStamp}T${
+          returnTime?.returnFirstTime == 'Invalid date'
+            ? moment(new Date()).format('hh:mm')
+            : returnTime?.returnFirstTime
+        }`,
+      ).valueOf();
+    }
     const body = {
       startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
       destinationLocation: [
@@ -286,7 +288,6 @@ const index = () => {
           </View>
         </View>
         <View style={styles.selectWrapper}>
-          <Text style={[styles.selectTxt]}>{I18n.t('need_to_arrive')}</Text>
           <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
         </View>
         <View style={styles.selectionInputWrapper}>
@@ -299,7 +300,7 @@ const index = () => {
             <Text style={styles.dateTxt}>
               {dateTimeStamp !== null
                 ? moment(dateTimeStamp).format('DD MMM')
-                : 'Date'}
+                : moment(new Date()).format('DD MMM')}{' '}
             </Text>
           </TouchableOpacity>
           <Image
@@ -415,7 +416,7 @@ const index = () => {
                 <Text style={styles.dateTxt}>
                   {returnDateTimeStamp !== null
                     ? moment(returnDateTimeStamp).format('DD MMM')
-                    : 'Date'}
+                    : moment(new Date()).format('DD MMM')}
                 </Text>
               </TouchableOpacity>
               <Image
@@ -425,8 +426,9 @@ const index = () => {
               />
             </View>
             <ReturnCalendarSheet
-              mindate={dateTimeStamp}
+              mindate={dateTimeStamp || new Date()}
               calendarSheetRef={returnCalendarSheetRef}
+              date={returnDateTimeStamp || new Date()}
             />
           </>
         ) : null}
@@ -473,32 +475,15 @@ const index = () => {
   );
 };
 
-const handleDisable = (
-  origin,
-  destinationMap,
-  availableSeats,
-  dateTimeStamp,
-) => {
-  if (!origin || !dateTimeStamp || !availableSeats || !destinationMap) {
+const handleDisable = (origin, destinationMap, availableSeats) => {
+  if (!origin || !availableSeats || !destinationMap) {
     return true;
   }
   return false;
 };
 
-const handleColor = (
-  origin,
-  destinationMap,
-  availableSeats,
-  dateTimeStamp,
-  time,
-) => {
-  if (
-    !origin ||
-    !dateTimeStamp ||
-    !availableSeats ||
-    !destinationMap ||
-    !time
-  ) {
+const handleColor = (origin, destinationMap, availableSeats) => {
+  if (!origin || !availableSeats || !destinationMap) {
     return colors.btnGray;
   }
   return colors.green;

@@ -7,10 +7,9 @@ import {
   ToastAndroid,
   Alert,
 } from 'react-native';
-import {CustomHeader, Loader} from '../../../components';
+import {CustomHeader, Loader, OtpValidator} from '../../../components';
 import _ from 'lodash/string';
 import {theme} from '../../../theme';
-import OtpValidator from '../../../components/OtpValidator';
 import I18n from '../../../utilities/translations';
 import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
@@ -39,10 +38,10 @@ function SignUp(props) {
   function validate() {
     setPhoneError('');
     if (phoneNum.length == 0) {
-      return setPhoneError('Please Enter Valid Phone Number');
+      return setPhoneError(I18n.t('invalid_phone_msg'));
     }
     if (isNaN(phoneNum)) {
-      return setPhoneError('Your Phone Number is not valid');
+      return setPhoneError(I18n.t('invalid_otp_msg'));
     }
     return true;
   }
@@ -77,7 +76,7 @@ function SignUp(props) {
 
         Alert.alert(
           'Failed',
-          'User Alredy Registered',
+          I18n.t('signup_error'),
           [
             {
               text: 'ok',
@@ -107,7 +106,7 @@ function SignUp(props) {
     } catch (error) {
       console.log('Error:-', error);
       setIsLoading(false);
-      alert('Invalid code.');
+      alert(I18n.t('otp_inavlid'));
     }
   }
 
@@ -139,7 +138,7 @@ function SignUp(props) {
           setIsLoading(false);
           Alert.alert(
             'Success',
-            'User Registered Successfully',
+            I18n.t('signup_success'),
             [
               {
                 text: 'ok',

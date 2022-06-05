@@ -9,7 +9,7 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
-import {CustomHeader} from '../../../components';
+import {CustomHeader, Loader} from '../../../components';
 import {
   colors,
   family,
@@ -32,14 +32,12 @@ const Faq = ({navigation}) => {
     try {
       const response = await get(`${GET_FAQS}`);
       if (response.data) {
-        console.log('DATA ===>   ', response.data);
         let faqData = response?.data.map(data => {
           return {
             ...data,
             expanded: false,
           };
         });
-        console.log('FAQ DAta ===>   ', faqData);
         setFaqs(faqData);
         setLoading(false);
       }
@@ -73,7 +71,6 @@ const Faq = ({navigation}) => {
 
   //component here
   const ItemView = ({data}) => {
-    console.log('ItemView  =>  ', data);
     return (
       <>
         <View style={styles.itemView}>
@@ -104,10 +101,8 @@ const Faq = ({navigation}) => {
         title={I18n.t('faq_title')}
         backButton={true}
       />
-      {loading === true ? (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <ActivityIndicator size="large" color={colors.green} />
-        </View>
+      {loading ? (
+        <Loader />
       ) : (
         <SafeAreaView style={styles.container}>
           <ScrollView>

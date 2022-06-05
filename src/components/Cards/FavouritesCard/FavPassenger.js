@@ -16,46 +16,27 @@ import {
   HP,
   appIcons,
   header,
+  profileIcon,
 } from '../../../utilities';
 import CheckBox from '@react-native-community/checkbox';
 import {Icon} from 'react-native-elements';
 import {height} from 'dom-helpers';
 
-let data = [
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: '123 abc apartment abc street abc...',
-  },
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: '123 abc apartment abc street abc...',
-  },
-  {
-    image: appImages.user,
-    name: 'John Deo',
-    price: 'NOK 20',
-    rating: '4.5',
-    description: 'Ford, Focus, White, XT32TTU8',
-  },
-];
-
-export const FavPassenger = () => {
+export const FavPassenger = ({data}) => {
   const DriverCard = ({data}) => {
-    console.log('DATA ===========>    ', data);
     return (
       <View style={styles.container}>
         <View style={styles.leftContainer}>
           <View style={styles.userImageContainer}>
-            <Image style={styles.userImage} source={data?.image} />
+            <Image
+              style={styles.userImage}
+              source={{uri: data?.user?.picture?.url || profileIcon}}
+            />
             <View>
               <View style={styles.userNameView}>
-                <Text style={styles.userName}>{data?.name}</Text>
+                <Text style={styles.userName}>
+                  {data?.user?.firstName} {data?.user?.lastName}
+                </Text>
                 <Icon
                   name={'heart'}
                   type={'antdesign'}
@@ -107,7 +88,12 @@ export const FavPassenger = () => {
   };
 
   return (
-    <FlatList data={data} renderItem={({item}) => <DriverCard data={item} />} />
+    <FlatList
+      style={{marginBottom: 80}}
+      showsVerticalScrollIndicator={false}
+      data={data}
+      renderItem={({item}) => <DriverCard data={item} />}
+    />
   );
 };
 
