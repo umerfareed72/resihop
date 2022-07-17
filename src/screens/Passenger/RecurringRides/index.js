@@ -28,6 +28,7 @@ import {checkAppPermission} from '../../../utilities/helpers/permissions';
 import {Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
+import {RIDES_CONST} from '../../../utilities/routes';
 
 function index(props) {
   const filterModalRef = useRef(null);
@@ -54,9 +55,7 @@ function index(props) {
   const selectRideType = val => {
     setRideType(val);
   };
-  const selectSeats = val => {
-    setSeats(val);
-  };
+
   const selectdDate = val => {
     setdate(val);
   };
@@ -104,9 +103,6 @@ function index(props) {
     if (isFocus) {
       get_recurring_rides();
     }
-    return () => {
-      dispatch(setAvailableSeats(0));
-    };
   }, [isFocus]);
 
   // Get Location
@@ -132,7 +128,9 @@ function index(props) {
                   description: addressComponent,
                 }),
               );
-              props?.navigation?.navigate(route);
+              props?.navigation?.navigate(route, {
+                recurring: true,
+              });
             })
             .catch(error => console.warn(error));
         },
@@ -179,11 +177,11 @@ function index(props) {
   const onPressCancel = async () => {
     try {
       setisLoading(true);
-
-      let uniqueItems = [...new Set(selectedCard)];
+      let uniqueitems = [...new Set(selectedCard)];
       const requestBody = {
-        rides: uniqueItems,
+        rides: [].concat(...uniqueitems?.map(item => item?.rides_)),
       };
+      console.log(requestBody);
       const res = await post(
         `${RIDES_CONST}/cancel`,
         requestBody,
@@ -191,7 +189,6 @@ function index(props) {
       );
       if (res.data) {
         setisLoading(false);
-        console.log(res.data);
         Alert.alert('Success', 'Rides deleted successfully', [
           {
             text: 'OK',
@@ -243,7 +240,7 @@ function index(props) {
                     ride={item}
                     onPressCard={() => {
                       if (multiDelete) {
-                        setSelectedCard(item?.id);
+                        setSelectedCard(item);
                       } else {
                         onPressCardItem(item);
                       }

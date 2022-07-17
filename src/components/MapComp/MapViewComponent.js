@@ -13,15 +13,7 @@ import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import Geolocation, {
   getCurrentPosition,
 } from 'react-native-geolocation-service';
-import {
-  appImages,
-  colors,
-  appIcons,
-  GeoCoderHelper,
-  APIKEY,
-  mode,
-  profileIcon,
-} from '../../utilities';
+import {appImages, colors, appIcons, profileIcon} from '../../utilities';
 
 import MapViewDirections from 'react-native-maps-directions';
 import {useSelector, useDispatch} from 'react-redux';
@@ -41,7 +33,6 @@ import {
   StartMatchingSheet,
   NearestDriverCard,
   AvailableDriversCard,
-  RideStatusCards,
   SelectRouteCard,
   AvailablePassengersCard,
   DriveStatusCard,
@@ -368,7 +359,11 @@ export const MapViewComponent = ({
     dispatch(
       CreateDriveRequest(body, setIsLoading, async response => {
         if (response?.error) {
-          Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+          if (response?.message) {
+            Alert.alert('Error', response?.message);
+          } else {
+            Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+          }
         } else {
           if (returnRide) {
             const returnBody = {
@@ -385,10 +380,14 @@ export const MapViewComponent = ({
             dispatch(
               CreateDriveRequest(returnBody, setIsLoading, async response => {
                 if (response?.error) {
-                  Alert.alert(
-                    'Error',
-                    response?.message[0]?.messages[0]?.message,
-                  );
+                  if (response?.message) {
+                    Alert.alert('Error', response?.message);
+                  } else {
+                    Alert.alert(
+                      'Error',
+                      response?.message[0]?.messages[0]?.message,
+                    );
+                  }
                 } else {
                   navigation.navigate('DriverHome');
                 }
@@ -478,25 +477,27 @@ export const MapViewComponent = ({
         )}
 
         {routes?.selectedRoutes &&
-          routes?.selectedRoutes?.map((item, index) => {
-            return (
-              <Polyline
-                key={index}
-                strokeWidth={4}
-                tappable={true}
-                onPress={() => handlePathChange(item, index)}
-                strokeColor={selectedPath == index ? 'green' : 'grey'}
-                coordinates={polyline
-                  .decode(item?.overview_polyline.points)
-                  .map(data => {
-                    return {
-                      latitude: data[0],
-                      longitude: data[1],
-                    };
-                  })}
-              />
-            );
-          })}
+          routes?.selectedRoutes
+            ?.sort(index => index == selectedPath)
+            .map((item, index) => {
+              return (
+                <Polyline
+                  key={index}
+                  strokeWidth={4}
+                  tappable={true}
+                  onPress={() => handlePathChange(item, index)}
+                  strokeColor={selectedPath == index ? 'green' : 'grey'}
+                  coordinates={polyline
+                    .decode(item?.overview_polyline.points)
+                    .map(data => {
+                      return {
+                        latitude: data[0],
+                        longitude: data[1],
+                      };
+                    })}
+                />
+              );
+            })}
         {!startRide ? (
           <Marker
             identifier="currentPosition"

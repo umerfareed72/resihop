@@ -20,7 +20,7 @@ import {axios, get, post} from '../../../services';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import useAppState from '../../../hooks/useAppState';
-import {header} from '../../../utilities';
+import {cost_list, header} from '../../../utilities';
 import xml2js from 'react-native-xml2js';
 const vahicleFormFields = {
   licencePlate: '',
@@ -51,20 +51,7 @@ function index(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: '10 NOK', value: 10},
-    {label: '15 NOK', value: 15},
-    {label: '20 NOK', value: 20},
-    {label: '25 NOK', value: 25},
-    {label: '30 NOK', value: 30},
-    {label: '35 NOK', value: 35},
-    {label: '40 NOK', value: 40},
-    {label: '45 NOK', value: 45},
-    {label: '50 NOK', value: 50},
-    {label: '60 NOK', value: 60},
-    {label: '70 NOK', value: 70},
-    {label: '80 NOK', value: 80},
-  ]);
+  const [items, setItems] = useState(cost_list);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
   const [bankdIdToken, setBankIdToken] = useState(null);
   const [next, setNext] = React.useState(false);
@@ -208,7 +195,7 @@ function index(props) {
     }
   };
   useEffect(() => {
-    setValue(items[2].value);
+    setValue(items[0].value);
   }, []);
   return (
     <>

@@ -9,13 +9,12 @@ import {
 } from 'react-native';
 import {Button, Text} from 'react-native-elements';
 import {theme} from '../../theme';
-
-import {appIcons, colors} from '../../utilities';
+import {appIcons, colors, WP} from '../../utilities';
 import I18n from '../../utilities/translations';
 
 function landingUser({navigation}) {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+    <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image source={appIcons.landing_user_img} style={styles.imgCon} />
         <Text style={[theme.Text.h1Bold, styles.heading]}>
@@ -71,16 +70,21 @@ function landingUser({navigation}) {
 export default landingUser;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   backIcon: {
     width: '10%',
   },
   imgCon: {
     width: '100%',
-    height: 340,
+    height: WP('80'),
+    resizeMode: 'cover',
   },
   heading: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
   sayingText: {
     color: theme.colors.grey,

@@ -561,8 +561,9 @@ export default {
   no_driver: 'For øyeblikket ingen sjåfører tilgjenglige',
   message: 'Melding',
   //
-  ride_delete_h2: 'Er du sikker på at du vil slette denne reisen?',
+  ride_delete_h2: 'Vill du avbryta Ride?',
   ride_delete_h1: 'Avbryt',
+  drive_delete_h2: 'Vill du avbryta Drive?',
 
   //Connection Error
   connection_error: 'Tilkobling mislyktes',
@@ -603,7 +604,7 @@ export default {
   co_reduce: 'CO2 Redusert',
   notification: 'melding',
   no_notification: 'Ingen varsling tilgjengelig',
-
+  recurring_drive: 'tilbakevendende kjøring',
   rep_total_drives: 'Totalt antall stasjoner',
   rep_total_earning: 'Total inntjening',
   invite_desc:

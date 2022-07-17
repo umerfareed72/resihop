@@ -19,6 +19,7 @@ import {
   family,
   requestPermission,
   header,
+  sortItemsDriver,
 } from '../../../utilities';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
@@ -143,7 +144,6 @@ const DriverHome = ({navigation}) => {
   const getDrives = async () => {
     dispatch(
       MyRidesSortOrder('drives?', 'date', res => {
-        console.log(res);
         dispatch({
           type: mapTypes.myDrives,
           payload: res,
@@ -242,7 +242,6 @@ const DriverHome = ({navigation}) => {
         availableSeats,
         status?.value,
         res => {
-          console.log(res);
           filterModalRef.current.close();
           sortModalRef.current.close();
           dispatch({
@@ -288,6 +287,7 @@ const DriverHome = ({navigation}) => {
     );
   };
   const getDrivesByOrder = item => {
+    console.log(item?.value);
     dispatch(
       MyRidesSortOrder('drives?', item?.value, res => {
         dispatch({
@@ -312,7 +312,6 @@ const DriverHome = ({navigation}) => {
       );
       if (res.data) {
         setisLoading(false);
-        console.log(res.data);
         Alert.alert('Success', 'Drive deleted successfully', [
           {
             text: 'OK',
@@ -505,7 +504,11 @@ const DriverHome = ({navigation}) => {
           onApplyFilter();
         }}
       />
-      <SortModal show={sortModalRef} onPress={getDrivesByOrder} />
+      <SortModal
+        show={sortModalRef}
+        onPress={getDrivesByOrder}
+        sortItems={sortItemsDriver}
+      />
       {multiDelete && (
         <CancelRideModal
           onPressCancel={() => {

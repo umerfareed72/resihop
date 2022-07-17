@@ -125,6 +125,7 @@ export const ReturnCalendarSheet = ({
       }}>
       <Text style={styles.slectDateTxt}>{I18n.t('select_date')}</Text>
       <Calendar
+        firstDay={1}
         onDayPress={handleDayPress}
         markedDates={markedDate}
         hideExtraDays={true}

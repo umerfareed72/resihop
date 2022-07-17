@@ -140,7 +140,6 @@ function index(props) {
           type: data?.type,
           uri: data?.uri,
         });
-        console.log(data);
         axios
           .post(`${baseURL}upload`, form, {
             headers: {

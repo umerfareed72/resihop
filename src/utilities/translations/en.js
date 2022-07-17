@@ -106,7 +106,7 @@ export default {
   recurring_ride: 'My recurring rides',
 
   city_to_city: 'City to city ride',
-  upcoming_rides: 'My upcoming tide',
+  upcoming_rides: 'My Upcoming rides',
   lorem:
     'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   first_ride: 'Create your First Ride',
@@ -173,6 +173,7 @@ export default {
   create_drive: 'Create drive',
   switch_passenger: 'Switch to passenger',
   recurring_drives: 'My recurring drives',
+  recurring_drive: 'Recurring drive',
   city_to_city_drives: 'City to city drives',
   create_first_drive: 'Create your first drive',
   single_trip: 'Single trip',
@@ -361,8 +362,9 @@ export default {
   no_driver: 'Currently no more drivers available',
   message: 'Message',
   //
-  ride_delete_h2: 'Are you sure you want to cancel this ride?',
+  ride_delete_h2: 'do you want to cancel Ride?',
   ride_delete_h1: 'Cancel',
+  drive_delete_h2: 'Do you want to cancel Drive?',
 
   //Connection Error
   connection_error: 'Connection error',

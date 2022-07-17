@@ -58,7 +58,6 @@ function signIn(props) {
       setIsLoading(true);
       try {
         const mobilePhone = `%2b${countryCode ? countryCode : '47'}${phoneNum}`;
-        console.log(mobilePhone);
 
         const getUser = await get(`users?mobile=${mobilePhone}`);
         if (getUser?.data?.length === 0) {
@@ -170,7 +169,6 @@ function signIn(props) {
     setPhoneNum(Userdata?.profile_info?.country?.phone);
     setCountryCode(Userdata?.profile_info?.country?.code);
     setcca2(Userdata?.profile_info?.country?.cca2);
-    console.log(Userdata?.profile_info);
   }, []);
   return (
     <>

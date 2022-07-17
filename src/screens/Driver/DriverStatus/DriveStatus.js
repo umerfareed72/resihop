@@ -50,7 +50,7 @@ const DriveStatus = ({route}) => {
     bookedSeats,
   } = route.params;
   const [isLoading, setisLoading] = useState(false);
-  const {dateTimeStamp} = useSelector(state => state.map);
+  const {dateTimeStamp, settings} = useSelector(state => state.map);
 
   useEffect(() => {
     dispatch(
@@ -132,12 +132,12 @@ const DriveStatus = ({route}) => {
       date: stamp,
       availableSeats: availableSeats + bookedSeats,
       path: 0,
-      costPerSeat: cost,
+      costPerSeat: parseInt(cost) + parseInt(settings?.adminCommission),
+
       interCity: false,
       startDes: startDes,
       destDes: destDes,
     };
-    console.log(body);
     dispatch(
       CreateDriveRequest(body, setisLoading, response => {
         navigation?.navigate('DriverHome');
@@ -173,8 +173,8 @@ const DriveStatus = ({route}) => {
             setshow(false);
           }}
           selected={selected}
-          h1={I18n.t('delete_h1')}
-          h2={I18n.t('delete_h2')}
+          h1={I18n.t('cancel')}
+          h2={I18n.t('drive_delete_h2')}
           btn1Text={I18n.t('yes')}
           btn2Text={I18n.t('no')}
           show={show}

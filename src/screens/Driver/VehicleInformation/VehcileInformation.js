@@ -19,7 +19,7 @@ import {axios, get, post, put} from '../../../services';
 import I18n from '../../../utilities/translations';
 import {useDispatch, useSelector} from 'react-redux';
 import {Alert} from 'react-native';
-import {header} from '../../../utilities';
+import {cost_list, header} from '../../../utilities';
 import xml2js from 'react-native-xml2js';
 const vahicleFormFields = {
   licencePlate: '',
@@ -49,17 +49,7 @@ function VehicleInformation(props) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
 
-  const [items, setItems] = useState([
-    {label: 'NOK 10', value: 10},
-    {label: 'NOK 15', value: 15},
-    {label: 'NOK 20', value: 20},
-    {label: 'NOK 25', value: 25},
-    {label: 'NOK 30', value: 30},
-    {label: 'NOK 35', value: 35},
-    {label: 'NOK 40', value: 40},
-    {label: 'NOK 45', value: 45},
-    {label: 'NOK 50', value: 50},
-  ]);
+  const [items, setItems] = useState(cost_list);
   const [getDetailsBtn, setgetDetailsBtn] = React.useState(true);
   const [next, setNext] = React.useState(false);
   const licencePlate = React.useRef();
@@ -157,7 +147,7 @@ function VehicleInformation(props) {
     }
   };
   useEffect(() => {
-    setValue(items[2].value);
+    setValue(items[0].value);
   }, []);
   return (
     <>

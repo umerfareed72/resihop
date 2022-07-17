@@ -236,7 +236,6 @@ const PassengerHome = ({navigation}) => {
         availableSeats,
         status?.value,
         res => {
-          console.log(res);
           filterModalRef.current.close();
           sortModalRef.current.close();
           dispatch({
@@ -295,7 +294,6 @@ const PassengerHome = ({navigation}) => {
       );
       if (res.data) {
         setisLoading(false);
-        console.log(res.data);
         Alert.alert('Success', 'Rides deleted successfully', [
           {
             text: 'OK',

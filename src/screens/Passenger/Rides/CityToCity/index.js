@@ -96,7 +96,7 @@ const index = () => {
         destinationMap.location.lat,
         destinationMap.location.lng,
       ],
-      date: stamp,
+      date: [stamp],
       requiredSeats: availableSeats,
       startDes: origin.description,
       destDes: destinationMap.description,
@@ -139,18 +139,14 @@ const index = () => {
         returnDestinationMap.location.lat,
         returnDestinationMap.location.lng,
       ],
-      date: stamp,
+      date: [stamp],
       requiredSeats: availableSeats,
       startDes: returnOrigin.description,
       destDes: returnDestinationMap.description,
       interCity: true,
     };
 
-    dispatch(
-      CreateRideRequest(body, setIsLoading, null, response => {
-        console.log('Return Create Ride', response);
-      }),
-    );
+    dispatch(CreateRideRequest(body, setIsLoading, null, response => {}));
   };
   return (
     <SafeAreaView style={styles.container}>

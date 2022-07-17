@@ -39,6 +39,8 @@ const initialState = {
   return_recurring_dates: [],
   city_ride: false,
   get_helps: [],
+  orignalreturnFirstTime: null,
+  cityCost: null,
 };
 
 export default (state = initialState, action = {}) => {
@@ -163,6 +165,7 @@ export default (state = initialState, action = {}) => {
       const currentTime = moment(new Date()).format('HH:mm');
       return {
         ...state,
+        orignalreturnFirstTime: payload,
         returnFirstTime: firstTime,
         returnSecondTime: payload != null ? secondTime : currentTime,
       };
@@ -310,7 +313,11 @@ export default (state = initialState, action = {}) => {
         failure: true,
         get_helps: state.recurring_ride,
       };
-
+    case Types.SET_CITY_COST:
+      return {
+        ...state,
+        cityCost: payload,
+      };
     case Types.Set_Recurring_Dates:
       return {
         ...state,

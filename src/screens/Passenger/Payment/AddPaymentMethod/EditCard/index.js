@@ -32,7 +32,6 @@ const index = ({navigation}) => {
       };
       dispatch(
         edit_stripe_card(payment?.current_card?.id, requestBody, res => {
-          console.log(res);
           Alert.alert(
             'Success',
             'Card Edited Successfully',

@@ -62,4 +62,5 @@ module.exports = {
 
   //Get Rides
   Rides_Loader: 'Rides_Loader',
+  SET_CITY_COST: 'SET_CITY_COST',
 };

@@ -53,6 +53,8 @@ import {
   setReturnOrigin,
   setRoutes,
   setReturnRide,
+  setCostPerSeat,
+  setCityCostPerSeat,
 } from '../../../../redux/actions/map.actions';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -66,12 +68,19 @@ const index = () => {
   const calendarSheetRef = useRef(null);
   const returnCalendarSheetRef = useRef(null);
 
-  const {origin, settings} = useSelector(state => state.map);
+  const {
+    origin,
+    settings,
+    cityCost,
+    returnSecondTime,
+    returnOrigin,
+    time,
+    availableSeats,
+    dateTimeStamp,
+    returnDateTimeStamp,
+    returnFirstTime,
+  } = useSelector(state => state.map);
   const destinationMap = useSelector(state => state.map.destination);
-  const availableSeats = useSelector(state => state.map.availableSeats);
-  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
-  const time = useSelector(state => state.map.time);
-
   const [destination, setDestination] = useState('');
   const [date, setDate] = useState('');
   const [toggleEnabled, setToggleEnabled] = useState(false);
@@ -79,20 +88,18 @@ const index = () => {
   const [favPress, setFavPress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  //Time States
+
   const [normalTime, setnormalTime] = useState(new Date());
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState(
     new Date(),
   );
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
-  const returnDateTimeStamp = useSelector(
-    state => state.map.returnDateTimeStamp,
-  );
-  const returnTime = useSelector(state => state.map);
-  const returnOrigin = useSelector(state => state.map.returnOrigin);
+
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
-  const [cost, setcost] = useState(null);
 
   // Release Redux States
   useEffect(() => {
@@ -105,11 +112,15 @@ const index = () => {
       dispatch(setReturnOrigin(null));
       dispatch(setReturnMapDestination(null));
       dispatch(setReturnFirstTime(null));
+      dispatch(setCityCostPerSeat(null));
+      dispatch(setTime(null));
+      setnormalTime(new Date());
     };
   }, []);
 
   const handleCreateDrive = async () => {
-    const totalCost = cost + settings?.adminCommission;
+    const totalCost =
+      parseInt(cityCost?.price) + parseInt(settings?.adminCommission);
     setIsLoading(true);
     if (origin && destinationMap != null) {
       let resp = await fetch(
@@ -125,10 +136,10 @@ const index = () => {
             destinationMap.location.lat,
             destinationMap.location.lng,
           ],
-          date: stamp,
+          date: [stamp],
           availableSeats: availableSeats,
           path: 0,
-          costPerSeat: totalCost.toFixed(0),
+          costPerSeat: totalCost,
           interCity: true,
           startDes: origin?.description,
           destDes: destinationMap?.description,
@@ -156,6 +167,8 @@ const index = () => {
   const handleConfirm = date => {
     dispatch(setTime(moment(date).format('HH:mm')));
     setnormalTime(date);
+    setNormalFirstReturnTime(moment(date).format());
+    dispatch(setReturnFirstTime(date));
     hideTimePicker();
   };
 
@@ -175,8 +188,9 @@ const index = () => {
   };
   //Hanlde Return Drive
   const handleReturnCreateDrive = () => {
-    const totalCost = cost + settings?.adminCommission;
-    const {returnFirstTime} = returnTime;
+    const totalCost =
+      parseInt(cityCost?.price) + parseInt(settings?.adminCommission);
+
     const stamp = returnDateConvertor(returnDateTimeStamp, returnFirstTime);
     const body = {
       startLocation: [returnOrigin?.location.lat, returnOrigin?.location?.lng],
@@ -184,10 +198,10 @@ const index = () => {
         returnDestinationMap.location.lat,
         returnDestinationMap.location.lng,
       ],
-      date: stamp,
+      date: [stamp],
       availableSeats: availableSeats,
       path: 0,
-      costPerSeat: totalCost.toFixed(0),
+      costPerSeat: totalCost,
       startDes: returnOrigin?.description,
       destDes: returnDestinationMap?.description,
       interCity: true,
@@ -211,8 +225,15 @@ const index = () => {
       };
       const res = await post(`drives/city`, body, await header());
       if (res?.data) {
-        setcost(res?.data?.price);
-        navigation?.navigate('CostPerSeat', {data: res.data});
+        if (!cityCost) {
+          dispatch(
+            setCityCostPerSeat(res.data, () => {
+              navigation?.navigate('CostPerSeat');
+            }),
+          );
+        } else {
+          navigation?.navigate('CostPerSeat');
+        }
       }
     } else {
       Alert.alert('Error!', 'Please add start and sestination location!');
@@ -313,7 +334,7 @@ const index = () => {
             onPress={() => showTimePicker()}
             style={[styles.noLater, {justifyContent: 'center'}]}>
             <Text style={styles.dateTxt}>
-              {time ? time : moment(new Date()).format('hh:mm')}
+              {time ? time : moment(new Date()).format('HH:mm')}
             </Text>
           </TouchableOpacity>
 
@@ -335,10 +356,12 @@ const index = () => {
           }}
           style={[
             styles.dropBtn,
-            {backgroundColor: cost ? colors.navy_blue : colors.g1},
+            {
+              backgroundColor: cityCost ? colors.navy_blue : colors.g1,
+            },
           ]}>
           <Text style={styles.dropText}>
-            {cost ? `${cost.toFixed(0)} NOK` : I18n.t('cost_per_seat')}
+            {cityCost ? `${cityCost?.pricePerKM} NOK` : I18n.t('cost_per_seat')}
           </Text>
         </TouchableOpacity>
 
@@ -402,11 +425,10 @@ const index = () => {
                   : moment(new Date()).format('HH:mm')
               }
               endTime={
-                returnTime?.returnSecondTime !=
-                moment(new Date()).format('HH:mm')
-                  ? returnTime?.returnSecondTime
+                returnSecondTime != moment(new Date()).format('HH:mm')
+                  ? returnSecondTime
                   : moment(new Date())
-                      .add(returnTime?.settings?.returnRange, 'minutes')
+                      .add(settings?.returnRange, 'minutes')
                       .format('HH:mm')
               }
               dateText={
@@ -450,9 +472,17 @@ const index = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <AppButton
           title={I18n.t('next')}
-          bgColor={handleColor(origin, destinationMap, availableSeats, cost)}
+          bgColor={handleColor(
+            origin,
+            destinationMap,
+            availableSeats,
+            cityCost,
+          )}
           disabled={
-            origin === null || destination === null || availableSeats === null
+            origin === null ||
+            destination === null ||
+            availableSeats === 0 ||
+            cityCost == null
           }
           onPress={() => {
             handleCreateDrive();
@@ -463,8 +493,8 @@ const index = () => {
   );
 };
 
-const handleColor = (origin, destinationMap, availableSeats, cost) => {
-  if (!origin || !availableSeats || !destinationMap || !cost) {
+const handleColor = (origin, destinationMap, availableSeats, cityCost) => {
+  if (!origin || availableSeats == 0 || !destinationMap || !cityCost) {
     return colors.btnGray;
   }
   return colors.green;

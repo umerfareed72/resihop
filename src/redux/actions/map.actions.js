@@ -12,6 +12,7 @@ export const setCity = data => async dispatch => {
     payload: data,
   });
 };
+
 export const setRoutes = data => async dispatch => {
   dispatch({
     type: Types.selectRoutes,
@@ -63,6 +64,15 @@ export const setCostPerSeat = data => async dispatch => {
     payload: data,
   });
 };
+
+export const setCityCostPerSeat = (data, callBack) => async dispatch => {
+  dispatch({
+    type: Types.SET_CITY_COST,
+    payload: data,
+  });
+  callBack();
+};
+
 export const setDistanceAndTime = data => async dispatch => {
   dispatch({
     type: Types.distanceAndTime,
@@ -590,7 +600,6 @@ export const get_settings = () => async dispatch => {
 
 export const setRecurringDates = data => async dispatch => {
   try {
-    console.log(data);
     dispatch({
       type: Types.Set_Recurring_Dates,
       payload: data,

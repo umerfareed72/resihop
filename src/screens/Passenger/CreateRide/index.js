@@ -54,7 +54,7 @@ import {
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import styles from './styles';
-const index = () => {
+const index = props => {
   let navigation = useNavigation();
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
@@ -89,6 +89,8 @@ const index = () => {
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
 
   useEffect(() => {
+    setScreen(props?.route?.params?.recurring);
+
     // dispatch(setTime(moment().format('HH:mm')));
     return () => {
       dispatch(setAvailableSeats(null));
@@ -146,7 +148,7 @@ const index = () => {
         destinationMap.location.lat,
         destinationMap.location.lng,
       ],
-      date: screen ? recurring_stamp : stamp,
+      date: screen ? recurring_stamp : [stamp],
       requiredSeats: availableSeats,
       startDes: origin.description,
       destDes: destinationMap.description,
@@ -187,7 +189,7 @@ const index = () => {
         returnDestinationMap.location.lat,
         returnDestinationMap.location.lng,
       ],
-      date: screen ? return_recurring_stamp : stamp,
+      date: screen ? return_recurring_stamp : [stamp],
       requiredSeats: availableSeats,
       startDes: returnOrigin.description,
       destDes: returnDestinationMap.description,

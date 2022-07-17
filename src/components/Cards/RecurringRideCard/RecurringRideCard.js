@@ -40,10 +40,10 @@ export const RecurringRideCard = ({
       setSeats(requiredSeats);
     }
   }, [recurring_ride, recurring_drive]);
-  const CardSelect = id => {
-    if (selectedCard?.includes(ride?.id)) {
-      setSelectedCard(selectedCard.filter(card => card !== id));
-    } else setSelectedCard([id, ...selectedCard]);
+  const CardSelect = item => {
+    if (selectedCard?.includes(ride)) {
+      setSelectedCard(selectedCard.filter(card => card !== item));
+    } else setSelectedCard([item, ...selectedCard]);
   };
   return (
     <>
@@ -51,12 +51,12 @@ export const RecurringRideCard = ({
         style={styles.container}
         onPress={() => {
           if (multiDelete) {
-            CardSelect(ride?.id);
+            CardSelect(ride);
           } else {
             onPressCard();
           }
         }}
-        onLongPress={() => CardSelect(ride.id)}>
+        onLongPress={() => CardSelect(ride)}>
         <View style={styles.cardStyle}>
           <View style={[styles.alignRow]}>
             <View
@@ -138,16 +138,18 @@ export const RecurringRideCard = ({
                 </Text>
               </View>
 
-              <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                NOK{' '}
-                {ride?.amountPayable * ride?.requiredSeats ||
-                  ride?.costPerSeat * ride?.availableSeats}
-              </Text>
+              {ride?.status !== 'WAITING_FOR_MATCH' && (
+                <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                  NOK{' '}
+                  {ride?.amountPayable * ride?.requiredSeats ||
+                    ride?.costPerSeat * ride?.availableSeats}
+                </Text>
+              )}
             </>
           </View>
         </View>
       </TouchableOpacity>
-      {selectedCard?.includes(ride.id) ? (
+      {selectedCard?.includes(ride) ? (
         <>
           <TouchableOpacity
             style={{
@@ -160,7 +162,7 @@ export const RecurringRideCard = ({
               alignSelf: 'center',
               position: 'absolute',
             }}
-            onPress={() => CardSelect(ride.id)}
+            onPress={() => CardSelect(ride)}
           />
           <Image
             source={appImages.tickMark}

@@ -90,13 +90,14 @@ const UpdateRide = ({route}) => {
 
   const handleUpDateRide = () => {
     const date = moment(dateTimeStamp).format('YYYY-MM-DD');
+    const stamp = moment(`${date}T${time}`).valueOf();
     const body = {
       startLocation: [origin.location.lat, origin.location.lng],
       destinationLocation: [
         destinationMap.location.lat,
         destinationMap.location.lng,
       ],
-      tripDate: moment(`${date}T${time}`).valueOf(),
+      tripDate: stamp,
       requiredSeats: availableSeats,
       startDes: origin.description,
       destDes: destinationMap.description,
@@ -115,28 +116,6 @@ const UpdateRide = ({route}) => {
     );
   };
 
-  const handleCreateReturnRide = () => {
-    const stamp = moment(
-      `${returnDateTimeStamp}T${returnTime?.returnFirstTime}`,
-    ).valueOf();
-    const body = {
-      startLocation: [returnOrigin.location.lat, returnOrigin.location.lng],
-      destinationLocation: [
-        returnDestinationMap.location.lat,
-        returnDestinationMap.location.lng,
-      ],
-      date: stamp,
-      requiredSeats: availableSeats,
-      startDes: returnOrigin.description,
-      destDes: returnDestinationMap.description,
-    };
-
-    dispatch(
-      CreateRideRequest(body, setIsLoading, null, response => {
-        console.log('Return Create Ride', response);
-      }),
-    );
-  };
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
@@ -247,9 +226,6 @@ const UpdateRide = ({route}) => {
           style={styles.nextBtnContainer}
           onPress={() => {
             handleUpDateRide();
-            // if (toggleEnabled) {
-            //   handleCreateReturnRide();
-            // }
           }}>
           <Text style={styles.nextTxt}>{I18n.t('update')}</Text>
         </TouchableOpacity>

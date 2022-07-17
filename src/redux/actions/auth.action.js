@@ -9,7 +9,6 @@ import {header} from '../../utilities';
 
 export const userEmailLogin =
   (body, mydata, setIsLoading, callBack) => async dispatch => {
-    console.log('BODY', body);
     try {
       dispatch({type: Types.Set_loader, payload: true});
       const response = await post(`auth/local`, body);
@@ -131,7 +130,6 @@ export const resetPassword = (user, callBack) => async dispatch => {
     dispatch({type: Types.Set_loader, payload: true});
     const response = await post(AUTH_PW_CONST + 'reset', user);
     callBack();
-    // console.log(response.data);
     dispatch({
       type: Types.Reset_Password_Success,
       payload: response.data.result,

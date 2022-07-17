@@ -19,34 +19,32 @@ import {
   appIcons,
 } from '../../../utilities';
 import I18n from '../../../utilities/translations';
+const items = [
+  {
+    id: 1,
+    title: I18n.t('sort_by_date_as'),
+    value: 'tripDate:asc',
+  },
+  {
+    id: 2,
+    title: I18n.t('sort_by_date_ds'),
+    value: 'tripDate:desc',
+  },
+  {
+    id: 3,
+    title: I18n.t('sort_by_date_ao'),
+    value: 'destDes:asc',
+  },
+  {
+    id: 4,
+    title: I18n.t('sort_by_date_oa'),
+    value: 'destDes:desc',
+  },
+];
 
-export const SortModal = ({show, onPress}) => {
-  const items = [
-    {
-      id: 1,
-      title: I18n.t('sort_by_date_as'),
-      value: 'tripDate:asc',
-    },
-    {
-      id: 2,
-      title: I18n.t('sort_by_date_ds'),
-      value: 'tripDate:desc',
-    },
-    {
-      id: 3,
-      title: I18n.t('sort_by_date_ao'),
-      value: 'destDes:asc',
-    },
-    {
-      id: 4,
-      title: I18n.t('sort_by_date_oa'),
-      value: 'destDes:desc',
-    },
-  ];
-
+export const SortModal = ({show, onPress, sortItems = items}) => {
   //Onpress Sort Order Item
   const onItemPress = item => {
-    console.log(item);
     onPress(item);
     show?.current?.close();
   };
@@ -79,7 +77,7 @@ export const SortModal = ({show, onPress}) => {
         <View style={styles.headerContainer}>
           <Text style={styles.headerStyle}>{I18n.t('sort_by')}</Text>
         </View>
-        <FlatList data={items} renderItem={renderItems} />
+        <FlatList data={sortItems} renderItem={renderItems} />
       </View>
     </RBSheet>
   );

@@ -19,6 +19,7 @@ import {
   size,
   family,
   header,
+  cost_list,
 } from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
@@ -45,6 +46,7 @@ import {
   setMapSegment,
   setUpdateDrive,
   CreateDriveRequest,
+  setCityCostPerSeat,
 } from '../../../redux/actions/map.actions';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -56,15 +58,8 @@ const UpdateDrive = () => {
   let dispatch = useDispatch();
   const favourteLocationRef = useRef(null);
   const calendarSheetRef = useRef(null);
-  const returnCalendarSheetRef = useRef(null);
-  const {
-    origin,
-    availableSeats,
-    dateTimeStamp,
-    returnDateTimeStamp,
-    returnOrigin,
-    settings,
-  } = useSelector(state => state.map);
+  const {origin, availableSeats, dateTimeStamp, cityCost, settings} =
+    useSelector(state => state.map);
 
   const time = useSelector(state => state.map.time);
   const [destination, setDestination] = useState('');
@@ -75,37 +70,39 @@ const UpdateDrive = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [normalTime, setnormalTime] = useState(new Date());
-  const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
   const destinationMap = useSelector(state => state.map.destination);
   const returnTime = useSelector(state => state.map);
-  const returnDestinationMap = useSelector(
-    state => state.map.returnDestination,
-  );
-  const [cost, setcost] = useState(null);
   const [costConfirmation, setcostConfirmation] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: '20 NOK', value: 20},
-    {label: '30 NOK', value: 30},
-    {label: '40 NOK', value: 40},
-    {label: '50 NOK', value: 50},
-    {label: '60 NOK', value: 60},
-    {label: '70 NOK', value: 70},
-    {label: '80 NOK', value: 80},
-  ]);
+  const [items, setItems] = useState(cost_list);
   useEffect(() => {
     setValue(returnTime?.cost_per_seat);
     dispatch(setDateTimeStamp(returnTime?.idToUpdateDrive?.date));
     setDate(returnTime?.idToUpdateDrive?.date);
     setnormalTime(returnTime?.idToUpdateDrive?.date);
-    setcost(returnTime?.idToUpdateDrive?.costPerSeat);
-    // dispatch(setSeats(total_seats));
+    dispatch(
+      setCityCostPerSeat(
+        {
+          distance: returnTime?.idToUpdateDrive?.distance,
+          price: returnTime?.idToUpdateDrive?.costPerSeat,
+          pricePerKM:
+            returnTime?.idToUpdateDrive?.costPerSeat /
+            returnTime?.idToUpdateDrive?.availableSeats,
+        },
+        () => {},
+      ),
+    );
+    return () => {
+      dispatch(setCityCostPerSeat(null));
+    };
   }, []);
+
   //Handle Update Drive
   const handleCreateDrive = () => {
     setIsLoading(true);
     const date = moment(dateTimeStamp).format('YYYY-MM-DD');
+    const stamp = moment(`${date}T${time}`).valueOf();
     try {
       const body = {
         startLocation: {
@@ -116,7 +113,7 @@ const UpdateDrive = () => {
           latitude: destinationMap?.location?.lat,
           longitude: destinationMap?.location?.lng,
         },
-        date: moment(`${date}T${time}`).valueOf(),
+        date: stamp,
         availableSeats: availableSeats,
         path: 0,
         costPerSeat: value + settings?.adminCommission,
@@ -131,7 +128,6 @@ const UpdateDrive = () => {
               onPress: () => {
                 navigation.navigate('DriverHome');
                 setIsLoading(false);
-                setcost(0);
               },
             },
           ]);
@@ -145,13 +141,17 @@ const UpdateDrive = () => {
   const handleCreateCityDrive = () => {
     if (costConfirmation) {
       let totalCost;
-      if (cost != returnTime?.idToUpdateDrive?.costPerSeat) {
-        totalCost = cost + settings?.adminCommission;
+      if (cityCost?.price != returnTime?.idToUpdateDrive?.costPerSeat) {
+        totalCost =
+          parseInt(cityCost?.price) + parseInt(settings?.adminCommission);
       } else {
-        totalCost = cost;
+        totalCost =
+          parseInt(returnTime?.idToUpdateDrive?.costPerSeat) +
+          parseInt(settings?.adminCommission);
       }
       setIsLoading(true);
       const date = moment(dateTimeStamp).format('YYYY-MM-DD');
+      const stamp = moment(`${date}T${time}`).valueOf();
       try {
         const body = {
           startLocation: {
@@ -162,10 +162,10 @@ const UpdateDrive = () => {
             latitude: destinationMap?.location?.lat,
             longitude: destinationMap?.location?.lng,
           },
-          date: moment(`${date}T${time}`).valueOf(),
+          date: stamp,
           availableSeats: availableSeats,
           path: 0,
-          costPerSeat: totalCost.toFixed(0),
+          costPerSeat: totalCost?.toFixed(0),
 
           startDes: origin?.description,
           destDes: destinationMap?.description,
@@ -178,7 +178,6 @@ const UpdateDrive = () => {
                 onPress: () => {
                   navigation.navigate('DriverHome');
                   setIsLoading(false);
-                  setcost(0);
                 },
               },
             ]);
@@ -221,8 +220,15 @@ const UpdateDrive = () => {
       };
       const res = await post(`drives/city`, body, await header());
       if (res?.data) {
-        setcost(res?.data?.price);
-        navigation?.navigate('CostPerSeat', {data: res.data});
+        if (!cityCost) {
+          dispatch(
+            setCityCostPerSeat(res.data, () => {
+              navigation?.navigate('CostPerSeat');
+            }),
+          );
+        } else {
+          navigation?.navigate('CostPerSeat');
+        }
       }
     } else {
       Alert.alert('Error!', 'Please add start and sestination location!');
@@ -336,13 +342,15 @@ const UpdateDrive = () => {
               styles.dropBtn,
               {
                 backgroundColor:
-                  cost != returnTime?.idToUpdateDrive?.costPerSeat
+                  cityCost?.price != returnTime?.idToUpdateDrive?.costPerSeat
                     ? colors.navy_blue
                     : colors.g1,
               },
             ]}>
             <Text style={styles.dropText}>
-              {cost ? `${cost.toFixed()} NOK` : I18n.t('cost_per_seat')}
+              {cityCost?.pricePerKM
+                ? `${parseInt(cityCost?.pricePerKM)} NOK`
+                : I18n.t('cost_per_seat')}
             </Text>
           </TouchableOpacity>
         ) : (

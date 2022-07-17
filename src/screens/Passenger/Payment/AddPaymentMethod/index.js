@@ -208,7 +208,6 @@ const index = ({navigation, route}) => {
           bookRide?.drive?._id || bookRide?.pool_match?._id,
           setBookLoading,
           response => {
-            console.log(response);
             navigation?.replace('PassengerHome');
           },
         ),

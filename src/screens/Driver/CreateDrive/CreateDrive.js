@@ -19,6 +19,7 @@ import {
   recurringDateConvertor,
   returnRecurringDateConvertor,
   returnDateConvertor,
+  cost_list,
 } from '../../../utilities';
 import {useNavigation} from '@react-navigation/core';
 import HeartIcon from 'react-native-vector-icons/EvilIcons';
@@ -62,7 +63,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import styles from './styles';
 import {Alert} from 'react-native';
-const CreateDrive = () => {
+const CreateDrive = props => {
   let navigation = useNavigation();
   let dispatch = useDispatch();
 
@@ -101,24 +102,12 @@ const CreateDrive = () => {
   );
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: '10 NOK', value: 10},
-    {label: '15 NOK', value: 15},
-    {label: '20 NOK', value: 20},
-    {label: '25 NOK', value: 25},
-    {label: '30 NOK', value: 30},
-    {label: '35 NOK', value: 35},
-    {label: '40 NOK', value: 40},
-    {label: '45 NOK', value: 45},
-    {label: '50 NOK', value: 50},
-    {label: '60 NOK', value: 60},
-    {label: '70 NOK', value: 70},
-    {label: '80 NOK', value: 80},
-  ]);
+  const [items, setItems] = useState(cost_list);
 
   // Release Redux States
   useEffect(() => {
-    setValue(items[2].value);
+    setValue(items[0].value);
+    setScreen(props?.route?.params?.recurring);
     return () => {
       dispatch(setAvailableSeats(0));
       dispatch(setOrigin(null));
@@ -153,7 +142,7 @@ const CreateDrive = () => {
             destinationMap.location.lat,
             destinationMap.location.lng,
           ],
-          date: screen ? recurring_stamp : stamp,
+          date: screen ? recurring_stamp : [stamp],
           availableSeats: availableSeats,
           path: 0,
           costPerSeat: value + settings?.adminCommission,
@@ -223,7 +212,7 @@ const CreateDrive = () => {
         returnDestinationMap.location.lat,
         returnDestinationMap.location.lng,
       ],
-      date: screen ? return_recurring_stamp : stamp,
+      date: screen ? return_recurring_stamp : [stamp],
       availableSeats: availableSeats,
       path: 0,
       costPerSeat: value + settings?.adminCommission,
@@ -258,7 +247,7 @@ const CreateDrive = () => {
           }}
           screen={screen}
           title1={I18n.t('single_trip')}
-          title2={I18n.t('recurring_ride')}
+          title2={I18n.t('recurring_drive')}
         />
         <LocationInput
           onPressStart={() =>

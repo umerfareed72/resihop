@@ -11,7 +11,14 @@ import {
   BlankField,
 } from '../../../components';
 import {get, post} from '../../../services';
-import {appIcons, appImages, colors, header, WP} from '../../../utilities';
+import {
+  appIcons,
+  appImages,
+  colors,
+  header,
+  sortItemsDriver,
+  WP,
+} from '../../../utilities';
 import I18n from '../../../utilities/translations';
 import * as Types from '../../../redux/types/map.types';
 import {useDispatch, useSelector} from 'react-redux';
@@ -44,9 +51,7 @@ function index(props) {
 
   //Redux States
   const dispatch = useDispatch(null);
-  const selectTime = val => {
-    settime(val);
-  };
+
   const selectRideStatus = val => {
     setStatus(val);
   };
@@ -54,9 +59,6 @@ function index(props) {
     setRideType(val);
   };
 
-  const selectdDate = val => {
-    setdate(val);
-  };
   const getDrivesByOrder = item => {
     dispatch(
       MyRidesSortOrder('drives?recurring=true&', item?.value, res => {
@@ -90,7 +92,6 @@ function index(props) {
         });
       }
     } catch (error) {
-      console.log(error);
       setisLoading(false);
       dispatch({
         type: Types.Get_Reccuring_Drives_Failure,
@@ -126,13 +127,13 @@ function index(props) {
                   description: addressComponent,
                 }),
               );
-              props?.navigation.navigate(route);
+              props?.navigation.navigate(route, {recurring: true});
             })
             .catch(error => console.warn(error));
         },
         error => {
           // See error code charts below.
-          console.log(error.code, error.message);
+          // console.log(error.code, error.message);
         },
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
@@ -149,10 +150,9 @@ function index(props) {
   const onPressCancel = async () => {
     try {
       setisLoading(true);
-
-      let uniqueItems = [...new Set(selectedCard)];
+      let uniqueitems = [...new Set(selectedCard)];
       const requestBody = {
-        drives: uniqueItems,
+        drives: [].concat(...uniqueitems?.map(item => item?.drives_)),
       };
       const res = await post(
         `${DRIVE_CONST}/cancel`,
@@ -161,7 +161,7 @@ function index(props) {
       );
       if (res.data) {
         setisLoading(false);
-        Alert.alert('Success', 'Rides deleted successfully', [
+        Alert.alert('Success', 'Drives deleted successfully', [
           {
             text: 'OK',
             onPress: () => {
@@ -201,7 +201,6 @@ function index(props) {
         availableSeats,
         status?.value,
         res => {
-          console.log(res);
           filterModalRef.current.close();
           sortModalRef.current.close();
           dispatch({
@@ -237,7 +236,7 @@ function index(props) {
                     ride={item}
                     onPressCard={() => {
                       if (multiDelete) {
-                        setSelectedCard(item?.id);
+                        setSelectedCard(item);
                       } else {
                         onPressDrive(item);
                       }
@@ -280,7 +279,11 @@ function index(props) {
           onApplyFilter();
         }}
       />
-      <SortModal show={sortModalRef} onPress={getDrivesByOrder} />
+      <SortModal
+        sortItems={sortItemsDriver}
+        show={sortModalRef}
+        onPress={getDrivesByOrder}
+      />
       {multiDelete && (
         <CancelRideModal
           onPressCancel={() => {

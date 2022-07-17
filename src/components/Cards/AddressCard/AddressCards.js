@@ -34,6 +34,8 @@ import moment from 'moment';
 import {fonts} from '../../../theme';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useIsFocused} from '@react-navigation/native';
+import {DateTimePickerCard} from '../DateTimerPickerCard/DateTimePickerCard';
+import {ReturnDateTimerPicker} from '../ReturnDateTimePicker/ReturnDateTimerPicker';
 
 export const AddressCards = ({
   modalName,
@@ -48,7 +50,6 @@ export const AddressCards = ({
   let dispatch = useDispatch();
   const calenderSheetRef = useRef(null);
   const returnCalendarSheetRef = useRef(null);
-
   const startReturnGoogleAutoComplete = useRef(null);
   const destinationReturnGoogleAutoComplete = useRef(null);
 
@@ -57,30 +58,31 @@ export const AddressCards = ({
   const [currentAddress, setCurrentAddress] = useState('');
   const [favBtn, setFavBtn] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [normalTime, setNormalTime] = useState('');
+  const [normalTime, setNormalTime] = useState(new Date());
   const [normalFirstReturnTime, setNormalFirstReturnTime] = useState('');
 
   const [currentReturnStart, setCurrentReturnStart] = useState('');
   const [currentReturnDestination, setCurrentReturnDestination] = useState('');
   const [firstReturnTimePicker, setFirstReturnTimePicker] = useState(false);
-  const [secondReturnTimePicker, setSecondReturnTimePicker] = useState(false);
 
-  const {availableSeats, time, city_ride} = useSelector(state => state.map);
-  const dateTimeStamp = useSelector(state => state.map.dateTimeStamp);
-  const returnDateTimeStamp = useSelector(
-    state => state.map.returnDateTimeStamp,
-  );
-  const {origin, recurring_dates, return_recurring_dates} = useSelector(
-    state => state.map,
-  );
+  const {
+    availableSeats,
+    time,
+    city_ride,
+    dateTimeStamp,
+    returnDateTimeStamp,
+    origin,
+    recurring_dates,
+    return_recurring_dates,
+    returnOrigin,
+  } = useSelector(state => state.map);
+
   const destinationMap = useSelector(state => state.map.destination);
-  const returnOrigin = useSelector(state => state.map.returnOrigin);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
   const user = useSelector(state => state.auth.userdata);
   const returnTime = useSelector(state => state.map);
-  const isFocus = useIsFocused(null);
   const showTimePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -103,19 +105,10 @@ export const AddressCards = ({
     setFirstReturnTimePicker(false);
   };
 
-  const hideSecondReturnTimePicker = () => {
-    setSecondReturnTimePicker(false);
-  };
-
   const handleConfirmFirstReturnTime = date => {
     setNormalFirstReturnTime(moment(date).format());
     dispatch(setReturnFirstTime(date));
     hideFirstReturnTimePicker();
-  };
-
-  const handleConfirmSecondReturnTime = date => {
-    // dispatch(setReturnFirstTime(moment(date).format('HH:mm')));
-    // hideFirstReturnTimePicker();
   };
 
   useEffect(() => {
@@ -149,7 +142,7 @@ export const AddressCards = ({
         setCurrentReturnDestination(returnDestinationMap.description);
       }
     }
-
+    setNormalFirstReturnTime(returnTime?.orignalreturnFirstTime);
     return () => {
       dispatch(setMapSegment(null));
     };
@@ -551,141 +544,89 @@ export const AddressCards = ({
             </>
           ) : modalName === 'returnTrip' ? (
             <>
-              <View style={{marginLeft: 26}}>
-                <Text style={styles.returntimeTxt}>
-                  {I18n.t('departure_time')}
-                </Text>
-              </View>
-              <View style={[styles.selectionInputWrapper, {marginBottom: 20}]}>
-                <TouchableOpacity
-                  onPress={() => showFirstReturnTimePicker()}
-                  style={[styles.noLater, {justifyContent: 'center'}]}>
-                  <Text style={styles.dateTxt}>
-                    {returnTime?.returnFirstTime != 'Invalid date'
-                      ? returnTime?.returnFirstTime
-                      : `XX:XX`}
-                  </Text>
-                </TouchableOpacity>
-                <Text>{I18n.t('to')}</Text>
-                <TouchableOpacity
-                  style={[styles.noLater, {justifyContent: 'center'}]}>
-                  <Text style={styles.dateTxt}>
-                    {returnTime?.returnSecondTime != 'Invalid date'
-                      ? returnTime?.returnSecondTime
-                      : `XX:XX`}
-                  </Text>
-                </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={firstReturnTimePicker}
-                  date={
-                    normalFirstReturnTime
-                      ? new Date(normalFirstReturnTime)
-                      : new Date()
-                  }
-                  is24Hour={true}
-                  locale="en_GB"
-                  mode="time"
-                  onConfirm={handleConfirmFirstReturnTime}
-                  onCancel={hideFirstReturnTimePicker}
-                />
-                <DateTimePickerModal
-                  isVisible={secondReturnTimePicker}
-                  is24Hour={true}
-                  locale="en_GB"
-                  mode="time"
-                  onConfirm={handleConfirmSecondReturnTime}
-                  onCancel={hideSecondReturnTimePicker}
-                />
-              </View>
-              <View style={{marginBottom: 20}}>
-                <TouchableOpacity
-                  onPress={() => returnCalendarSheetRef.current.open()}
-                  style={[
-                    styles.noLater,
-                    {
-                      justifyContent: 'center',
-                      width: '90%',
-                      alignSelf: 'center',
-                    },
-                  ]}>
-                  <Text style={styles.dateTxt}>
-                    {returnDateTimeStamp !== null
-                      ? moment(returnDateTimeStamp).format('DD MMM')
-                      : 'Date'}
-                  </Text>
-                </TouchableOpacity>
-                <Image
-                  source={appImages.calendar}
-                  resizeMode="contain"
-                  style={[styles.calendarIcon, {right: 30}]}
-                />
-              </View>
+              <ReturnDateTimerPicker
+                timeTitle={I18n.t('departure_time')}
+                timeDesc={I18n.t('departure_time_desc')}
+                onPressDate={() => returnCalendarSheetRef.current.open()}
+                onPressStartTime={() => showFirstReturnTimePicker()}
+                startTime={
+                  normalFirstReturnTime
+                    ? moment(normalFirstReturnTime).format('HH:mm')
+                    : moment(new Date()).format('HH:mm')
+                }
+                endTime={
+                  returnTime?.returnSecondTime !=
+                  moment(new Date()).format('HH:mm')
+                    ? returnTime?.returnSecondTime
+                    : moment(new Date())
+                        .add(returnTime?.settings?.returnRange, 'minutes')
+                        .format('HH:mm')
+                }
+                dateText={
+                  returnDateTimeStamp !== null
+                    ? moment(returnDateTimeStamp).format('DD MMM')
+                    : moment(returnDateTimeStamp).format('DD MMM') !=
+                      'Invalid date'
+                    ? moment(returnDateTimeStamp).format('DD MMM')
+                    : !recurring
+                    ? moment(new Date()).format('DD MMM')
+                    : 'XX:XX'
+                }
+              />
+              <DateTimePickerModal
+                isVisible={firstReturnTimePicker}
+                date={
+                  normalFirstReturnTime
+                    ? new Date(normalFirstReturnTime)
+                    : new Date()
+                }
+                mode="time"
+                is24Hour={true}
+                locale="en_GB"
+                onConfirm={handleConfirmFirstReturnTime}
+                onCancel={hideFirstReturnTimePicker}
+              />
               <ReturnCalendarSheet
+                recurring={recurring}
+                mindate={dateTimeStamp || new Date()}
                 ride={{
                   next: return_recurring_dates?.map(item => {
                     return {date: item};
                   }),
                 }}
-                date={returnDateTimeStamp}
-                recurring={recurring}
+                date={returnDateTimeStamp || dateTimeStamp || new Date()}
                 calendarSheetRef={returnCalendarSheetRef}
               />
             </>
           ) : (
             <>
-              <View style={styles.selectWrapper}>
-                <Text style={[styles.selectTxt]}>
-                  {I18n.t('need_to_arrive')}
-                </Text>
-                <Text style={styles.selectTxt}>{I18n.t('select_date')}</Text>
-              </View>
-              <View style={styles.selectionInputWrapper}>
-                <TouchableOpacity
-                  onPress={() => showTimePicker()}
-                  style={[styles.noLater, {justifyContent: 'center'}]}>
-                  <Text
-                    style={{
-                      fontFamily: family.product_sans_regular,
-                      fontSize: size.normal,
-                      color: colors.btnGray,
-                    }}>
-                    {time ? time : `XX:XX`}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    calenderSheetRef.current.open();
-                  }}
-                  style={[styles.noLater, {marginRight: 11}]}>
-                  <Text
-                    style={{
-                      fontFamily: family.product_sans_regular,
-                      fontSize: size.normal,
-                      color: colors.btnGray,
-                    }}>
-                    {dateTimeStamp !== null
-                      ? moment(dateTimeStamp).format('DD MMM')
-                      : 'Date'}
-                  </Text>
-                  <Image
-                    source={appImages.calendar}
-                    resizeMode="contain"
-                    style={styles.calendarIcon}
-                  />
-                </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  date={normalTime ? new Date(normalTime) : new Date()}
-                  is24Hour={true}
-                  locale="en_GB"
-                  mode="time"
-                  onConfirm={handleConfirm}
-                  onCancel={hideTimePicker}
-                />
-              </View>
+              <DateTimePickerCard
+                datetitle={
+                  !recurring ? I18n.t('select_date') : I18n.t('select_dates')
+                }
+                timeTitle={I18n.t('need_to_arrive')}
+                onPressDate={() => calenderSheetRef.current.open()}
+                dateText={
+                  dateTimeStamp !== null
+                    ? moment(dateTimeStamp).format('DD MMM')
+                    : !recurring
+                    ? moment(new Date()).format('DD MMM')
+                    : 'XX:XX'
+                }
+                onPressTime={() => showTimePicker()}
+                timeText={time ? time : moment(new Date()).format('HH:mm')}
+              />
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                is24Hour={true}
+                locale="en_GB"
+                mode="time"
+                onConfirm={handleConfirm}
+                onCancel={hideTimePicker}
+                date={new Date(normalTime)}
+              />
             </>
           )}
-
           <TouchableOpacity
             style={[
               styles.nextBtnContainer,
@@ -699,25 +640,27 @@ export const AddressCards = ({
                 backgroundColor: handleBackgroundColor(
                   currentAddress,
                   availableSeats,
-                  time,
-                  dateTimeStamp,
                   modalName,
+                  currentReturnStart,
+                  currentReturnDestination,
                 ),
               },
             ]}
             disabled={handleDisable(
               currentAddress,
               availableSeats,
-              time,
-              dateTimeStamp,
               modalName,
               currentReturnStart,
               currentReturnDestination,
-              returnTime,
             )}
             onPress={onPress}>
             <Text style={styles.nextTxt}>{I18n.t('next')}</Text>
           </TouchableOpacity>
+          {modalName == 'startLocation' && (
+            <Text style={styles.textPara}>
+              (Drag pin location marker to set start location)
+            </Text>
+          )}
         </View>
       ) : null}
       <CalendarSheet
@@ -726,7 +669,7 @@ export const AddressCards = ({
             return {date: item};
           }),
         }}
-        date={dateTimeStamp}
+        date={dateTimeStamp || new Date()}
         recurring={recurring}
         calendarSheetRef={calenderSheetRef}
       />
@@ -736,6 +679,12 @@ export const AddressCards = ({
 };
 
 const styles = StyleSheet.create({
+  textPara: {
+    fontSize: size.xsmall,
+    textAlign: 'center',
+    marginTop: 10,
+    color: colors.black,
+  },
   upperModalContainer: {
     //height: 467,
     paddingBottom: 26,
@@ -963,27 +912,21 @@ const getModalName = modalName => {
 const handleBackgroundColor = (
   currentAddress,
   availableSeats,
-  time,
-  dateTimeStamp,
   modalName,
   currentReturnStart,
   currentReturnDestination,
-  returnTime,
 ) => {
   if (modalName === 'startLocation' && (!currentAddress || !availableSeats)) {
     return colors.btnGray;
   }
 
-  if (
-    modalName === 'destination' &&
-    (!currentAddress || !time || !dateTimeStamp)
-  ) {
+  if (modalName === 'destination' && !currentAddress) {
     return colors.btnGray;
   }
 
   if (
     modalName === 'returnTrip' &&
-    (!currentReturnStart || !currentReturnDestination || !returnTime)
+    (!currentReturnStart || !currentReturnDestination)
   ) {
     return colors.btnGray;
   }
@@ -994,26 +937,22 @@ const handleBackgroundColor = (
 const handleDisable = (
   currentAddress,
   availableSeats,
-  time,
-  dateTimeStamp,
   modalName,
   currentReturnStart,
   currentReturnDestination,
-  returnTime,
 ) => {
   if (modalName === 'startLocation' && currentAddress && availableSeats) {
     return false;
   }
 
-  if (modalName === 'destination' && currentAddress && time && dateTimeStamp) {
+  if (modalName === 'destination' && currentAddress) {
     return false;
   }
 
   if (
     modalName === 'returnTrip' &&
     currentReturnStart &&
-    currentReturnDestination &&
-    returnTime
+    currentReturnDestination
   ) {
     return false;
   }
