@@ -4,61 +4,68 @@ import {appIcons, colors, family, size} from '../../../utilities';
 import {fonts} from '../../../theme';
 import {useNavigation} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
+import {useSelector} from 'react-redux';
 
 export const PickUpInfoCard = ({title}) => {
   const navigation = useNavigation();
+  const {origin, destination, distanceAndTime} = useSelector(
+    state => state.map,
+  );
+
   return (
     <View style={[styles.container]}>
-      <View style={{marginHorizontal: 22, marginTop: 38}}>
-        <Text style={styles.walking}>{I18n.t('walking')}</Text>
-        <Text style={styles.estimated}>{I18n.t('estimated')}</Text>
+      <View style={{marginHorizontal: 22, marginTop: 20}}>
+        {/* <Text style={styles.walking}>{I18n.t('walking')}</Text> */}
+        <Text
+          style={
+            styles.estimated
+          }>{`Destination ${distanceAndTime?.distance?.toFixed(
+          0,
+        )} KM (${distanceAndTime?.duration?.toFixed(0)} Min)`}</Text>
       </View>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
+          {origin?.description || '123 abc apartment abc street abc...'}
         </Text>
         <View style={styles.addressCircle} />
       </View>
       <View style={[styles.addressContainer, {marginTop: 21}]}>
         <Text style={styles.addressTxt}>
-          123 abc apartment abc street abc...
+          {destination?.description || '123 abc apartment abc street abc...'}
         </Text>
         <View style={styles.addressSquare} />
       </View>
-      {title === 'Send Request' ? (
-        <View style={styles.titlecontainer}>
+      <View style={styles.titlecontainer}>
+        <Text
+          style={{
+            width: '60%',
+            fontFamily: family.product_sans_regular,
+            color: '#777777',
+            fontSize: size.xxsmall,
+          }}>
+          {I18n.t('call_driver')}
+        </Text>
+        <TouchableOpacity style={styles.btnContainer1}>
+          <Image
+            source={appIcons.call}
+            style={{
+              height: 13,
+              width: 13,
+              resizeMode: 'contain',
+              marginRight: 5,
+            }}
+          />
           <Text
             style={{
-              width: '60%',
+              fontSize: 12,
               fontFamily: family.product_sans_regular,
-              color: '#777777',
-              fontSize: size.xxsmall,
+              color: colors.white,
             }}>
-            {I18n.t('call_driver')}
+            {I18n.t('call_now')}
           </Text>
-          <TouchableOpacity style={styles.btnContainer1}>
-            <Image
-              source={appIcons.call}
-              style={{
-                height: 13,
-                width: 13,
-                resizeMode: 'contain',
-                marginRight: 5,
-              }}
-            />
-            <Text
-              style={{
-                fontSize: 12,
-                fontFamily: family.product_sans_regular,
-                color: colors.white,
-              }}>
-              {I18n.t('call_now')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        false
-      )}
+        </TouchableOpacity>
+      </View>
+
       <TouchableOpacity
         style={styles.btnContainer}
         onPress={() => {

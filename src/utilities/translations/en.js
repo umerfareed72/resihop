@@ -335,7 +335,7 @@ export default {
 
   //Offer Return Drive Card
   offer_return: 'Offer return drive',
-  estimated: 'Estimated arrival 10 KM (20 Min)',
+  estimated: 'Estimated arrival',
 
   //Pick up info card
   walking: 'Walking 300 M (5 Min)',

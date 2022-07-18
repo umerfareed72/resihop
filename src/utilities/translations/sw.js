@@ -534,7 +534,7 @@ export default {
 
   //Offer Return Drive Card
   offer_return: 'Tilby returreise',
-  estimated: 'Forventet ankomst 10 KM (20 Minutter)',
+  estimated: 'Forventet ankomst',
 
   //Pick up info card
   walking: 'Gå 300 M (5 Minutter)',

@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {colors, appIcons} from '../../../utilities';
 import {MapViewComponent} from '../../../components';
 import {fonts} from '../../../theme';
+import {useSelector} from 'react-redux';
 
 const PickUpInfo = ({navigation}) => {
   return (

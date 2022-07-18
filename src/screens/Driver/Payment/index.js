@@ -190,14 +190,15 @@ const index = ({navigation, route}) => {
                     create_Connected_Account();
                   }}
                   bgColor={colors.green}
-                  title={'Create Connected Account'}
+                  title={'Create Takeout Account'}
                   txtColor={colors.white}
                 />
               </View>
             </View>
           ) : (
             <Text style={{textAlign: 'center', fontSize: 18, marginTop: 30}}>
-              Hurry! You have subscription of stripe connected account.
+              Hurry! You got subscription of stripe connected account
+              successfully.
             </Text>
           )}
         </View>

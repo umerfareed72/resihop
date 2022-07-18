@@ -323,7 +323,11 @@ export const RideStatusCards = ({
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.borderBtnContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation?.navigate('PickUpInfo');
+                }}
+                style={styles.borderBtnContainer}>
                 <Image
                   source={appImages.pin}
                   resizeMode="contain"
