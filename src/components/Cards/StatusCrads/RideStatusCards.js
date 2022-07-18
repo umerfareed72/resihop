@@ -104,7 +104,11 @@ export const RideStatusCards = ({
     };
     dispatch(
       create_agoral_channel(requestBody, res => {
-        navigation?.navigate('CallNow');
+        navigation?.navigate('CallNow', {
+          firstName: rides?.selected_ride_history?.drive?.user?.firstName,
+          lastName: rides?.selected_ride_history?.drive?.user?.lastName,
+          picture: rides?.selected_ride_history?.drive?.user?.picture?.url,
+        });
       }),
     );
   };

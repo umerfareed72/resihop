@@ -4,13 +4,32 @@ import {appIcons, colors, family, size} from '../../../utilities';
 import {fonts} from '../../../theme';
 import {useNavigation} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {create_agoral_channel} from '../../../redux/actions/app.action';
 
 export const PickUpInfoCard = ({title}) => {
   const navigation = useNavigation();
-  const {origin, destination, distanceAndTime} = useSelector(
+  const {origin, destination, distanceAndTime, bookRide} = useSelector(
     state => state.map,
   );
+  const {profile_info} = useSelector(state => state.auth);
+
+  const dispatch = useDispatch(null);
+
+  const onCallPress = () => {
+    const requestBody = {
+      to: profile_info?._id,
+    };
+    dispatch(
+      create_agoral_channel(requestBody, res => {
+        navigation?.navigate('CallNow', {
+          firstName: bookRide?.drive?.user?.drive?.user?.firstName,
+          lastName: bookRide?.drive?.user?.drive?.user?.lastName,
+          picture: bookRide?.drive?.user?.drive?.user?.picture?.url,
+        });
+      }),
+    );
+  };
 
   return (
     <View style={[styles.container]}>
@@ -45,7 +64,7 @@ export const PickUpInfoCard = ({title}) => {
           }}>
           {I18n.t('call_driver')}
         </Text>
-        <TouchableOpacity style={styles.btnContainer1}>
+        <TouchableOpacity onPress={onCallPress} style={styles.btnContainer1}>
           <Image
             source={appIcons.call}
             style={{
