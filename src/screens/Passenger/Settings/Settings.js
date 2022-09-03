@@ -66,14 +66,7 @@ const Settings = ({navigation}) => {
       onPress: () => navigation.navigate('Privacy'),
     },
     {
-      title: I18n.t('set_rate'),
-      onPress: () => {
-        setShow(!show);
-      },
-    },
-    {
       title: I18n.t('set_app_version'),
-      onPress: () => alert('Clicked'),
     },
   ];
 

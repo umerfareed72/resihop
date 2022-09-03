@@ -361,7 +361,9 @@ const index = () => {
             },
           ]}>
           <Text style={styles.dropText}>
-            {cityCost ? `${cityCost?.pricePerKM} NOK` : I18n.t('cost_per_seat')}
+            {cityCost
+              ? `${(cityCost?.price / availableSeats).toFixed(2) || 0} NOK`
+              : I18n.t('cost_per_seat')}
           </Text>
         </TouchableOpacity>
 

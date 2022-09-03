@@ -42,9 +42,7 @@ export const StartMatchingSheet = ({setModal, setHeight, mapRef}) => {
         minimumValue={100}
         value={sliderValue}
         maximumValue={3000}
-        thumbImage={
-          Platform?.OS === 'ios' ? appIcons.sliderImage : appIcons.slide
-        }
+        thumbTintColor={colors.green}
         minimumTrackTintColor={colors.green}
         maximumTrackTintColor={colors.g1}
         onValueChange={value => setSliderValue(parseInt(value))}

@@ -38,6 +38,7 @@ const CostPerSeat = ({navigation, route}) => {
       }),
     );
   };
+
   return (
     <>
       <CustomHeader
@@ -126,7 +127,7 @@ const CostPerSeat = ({navigation, route}) => {
                       <TextInput
                         placeholderTextColor={colors.black}
                         placeholder={'Amount'}
-                        value={values.costPerSeat}
+                        value={(values.totalCost / availableSeats)?.toFixed(2)}
                         onChangeText={handleChange('costPerSeat')}
                         onBlur={handleBlur('costPerSeat')}
                         onEndEditing={() => {
