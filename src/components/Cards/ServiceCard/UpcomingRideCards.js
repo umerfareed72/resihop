@@ -83,7 +83,9 @@ export const UpcomingRideCards = ({
         </View>
         <View style={styles.dateWrapper}>
           {item.costPerSeat ? (
-            <Text style={styles.fair}>{`NOK ${item.costPerSeat}`}</Text>
+            <Text style={styles.fair}>{`NOK ${item.costPerSeat?.toFixed(
+              2,
+            )}`}</Text>
           ) : (
             <View />
           )}
