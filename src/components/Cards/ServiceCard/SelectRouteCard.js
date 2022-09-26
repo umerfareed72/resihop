@@ -26,7 +26,6 @@ export const SelectRouteCard = ({setModal, setHeight, onPressCreateDrive}) => {
   const availableSeats = useSelector(state => state.map.availableSeats);
   const origin = useSelector(state => state.map.origin);
   const destinationMap = useSelector(state => state.map.destination);
-  const searchRideResponse = useSelector(state => state.map.searchRideResponse);
 
   useEffect(() => {
     let array = [];
@@ -45,10 +44,11 @@ export const SelectRouteCard = ({setModal, setHeight, onPressCreateDrive}) => {
       }),
     );
   }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.detail}>
-        {`${distanceAndTime?.duration} (${distanceAndTime?.distance}) | ${searchRideResponse?.length} Passengers`}
+        {`${distanceAndTime?.duration} (${distanceAndTime?.distance}) | ${availableSeats} Passengers`}
       </Text>
       <View style={styles.addressContainer}>
         <Text style={styles.addressTxt}>{origin?.description}</Text>

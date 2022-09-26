@@ -9,7 +9,7 @@ export const Constants = {
   windowHeight: Dimensions.get('window').height,
 };
 export const publishableKey =
-  'pk_test_51HHZGDJdTAy1qfYOFzlK3i3oPJDG3d4D1LgXHDsivAXq9hr3CCK20CP4pLUMymj8KiKsQezvdWp6reLvCkYm3hVt007hOHMr1A';
+  'pk_test_51HHZGDJdTAy1qfYOtEFkP80hp1RLdpjqRZAwghVeUyCxLHbIidIHrev0Wbw68SWIBfMZqeQ13kGRxqX5wH1K1SAq00Adx0pMEc';
 export const appId = 'd7b355e2e491452a9a984bec7b87b43f';
 
 export let authHeader = {

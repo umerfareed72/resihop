@@ -132,7 +132,7 @@ const DriveStatus = ({route}) => {
       date: stamp,
       availableSeats: availableSeats + bookedSeats,
       path: 0,
-      costPerSeat: parseInt(cost) + parseInt(settings?.adminCommission),
+      costPerSeat: parseInt(cost),
 
       interCity: false,
       startDes: startDes,

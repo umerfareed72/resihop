@@ -41,6 +41,7 @@ import {
 } from '../../components';
 import {useNavigation} from '@react-navigation/core';
 import Geocoder from 'react-native-geocoding';
+import {check_driver_registered} from '../../redux/actions/payment.action';
 
 export const MapViewComponent = ({
   rideModals,
@@ -73,6 +74,7 @@ export const MapViewComponent = ({
     returnRide,
     settings,
   } = useSelector(state => state.map);
+  const {profile_info} = useSelector(state => state.auth);
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
   );
@@ -84,7 +86,6 @@ export const MapViewComponent = ({
   var watchId;
   const mapRef = useRef(null);
   const [zoomLevel, setzoomLevel] = useState(20);
-
   useEffect(() => {
     getLocation();
     if (startRide) {
@@ -336,6 +337,12 @@ export const MapViewComponent = ({
           duration: mins,
         }),
       );
+      dispatch(
+        check_driver_registered(res => {
+          console.log(res);
+        }),
+      );
+
       return () => {
         dispatch(setRoutes(null));
         dispatch(setReturnRide(null));
@@ -345,61 +352,72 @@ export const MapViewComponent = ({
   }, []);
 
   const handleCreateDrive = () => {
-    const body = {
-      startLocation: routes?.startLocation,
-      destinationLocation: routes?.destinationLocation,
-      date: routes?.date,
-      availableSeats: routes?.availableSeats,
-      path: selectedPath,
-      costPerSeat: routes?.costPerSeat,
-      interCity: routes?.interCity,
-      startDes: routes?.startDes,
-      destDes: routes?.destDes,
-    };
-    dispatch(
-      CreateDriveRequest(body, setIsLoading, async response => {
-        if (response?.error) {
-          if (response?.message) {
-            Alert.alert('Error', response?.message);
+    if (profile_info?.stripe_customer) {
+      const body = {
+        startLocation: routes?.startLocation,
+        destinationLocation: routes?.destinationLocation,
+        date: routes?.date,
+        availableSeats: routes?.availableSeats,
+        path: selectedPath,
+        costPerSeat: routes?.costPerSeat,
+        interCity: routes?.interCity,
+        startDes: routes?.startDes,
+        destDes: routes?.destDes,
+      };
+      dispatch(
+        CreateDriveRequest(body, setIsLoading, async response => {
+          if (response?.error) {
+            if (response?.message) {
+              Alert.alert('Error', response?.message);
+            } else {
+              Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+            }
           } else {
-            Alert.alert('Error', response?.message[0]?.messages[0]?.message);
-          }
-        } else {
-          if (returnRide) {
-            const returnBody = {
-              startLocation: returnRide?.startLocation,
-              destinationLocation: returnRide?.destinationLocation,
-              date: returnRide?.date,
-              availableSeats: returnRide?.availableSeats,
-              path: selectedPath,
-              costPerSeat: returnRide?.costPerSeat,
-              interCity: returnRide?.interCity,
-              startDes: returnRide?.startDes,
-              destDes: returnRide?.destDes,
-            };
-            dispatch(
-              CreateDriveRequest(returnBody, setIsLoading, async response => {
-                if (response?.error) {
-                  if (response?.message) {
-                    Alert.alert('Error', response?.message);
+            if (returnRide) {
+              const returnBody = {
+                startLocation: returnRide?.startLocation,
+                destinationLocation: returnRide?.destinationLocation,
+                date: returnRide?.date,
+                availableSeats: returnRide?.availableSeats,
+                path: selectedPath,
+                costPerSeat: returnRide?.costPerSeat,
+                interCity: returnRide?.interCity,
+                startDes: returnRide?.startDes,
+                destDes: returnRide?.destDes,
+              };
+              dispatch(
+                CreateDriveRequest(returnBody, setIsLoading, async response => {
+                  if (response?.error) {
+                    if (response?.message) {
+                      Alert.alert('Error', response?.message);
+                    } else {
+                      Alert.alert(
+                        'Error',
+                        response?.message[0]?.messages[0]?.message,
+                      );
+                    }
                   } else {
-                    Alert.alert(
-                      'Error',
-                      response?.message[0]?.messages[0]?.message,
-                    );
+                    navigation.navigate('DriverHome');
                   }
-                } else {
-                  navigation.navigate('DriverHome');
-                }
-              }),
-            );
-          } else {
-            navigation.navigate('DriverHome');
+                }),
+              );
+            } else {
+              navigation.navigate('DriverHome');
+            }
           }
-        }
-      }),
-    );
+        }),
+      );
+    } else {
+      Alert.alert('Error', 'Please create takeout account first!', [
+        {
+          onPress: () => {
+            navigation?.navigate('DriverPayment');
+          },
+        },
+      ]);
+    }
   };
+
   //On Drag Set location
   const onDragSetLocation = e => {
     const coords = e.nativeEvent.coordinate;
@@ -418,6 +436,7 @@ export const MapViewComponent = ({
         console.log(error);
       });
   };
+
   return (
     <>
       <MapView

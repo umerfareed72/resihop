@@ -76,6 +76,7 @@ const UpdateDrive = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState(cost_list);
+
   useEffect(() => {
     setValue(returnTime?.cost_per_seat);
     dispatch(setDateTimeStamp(returnTime?.idToUpdateDrive?.date));
@@ -116,7 +117,7 @@ const UpdateDrive = () => {
         date: stamp,
         availableSeats: availableSeats,
         path: 0,
-        costPerSeat: value + settings?.adminCommission,
+        costPerSeat: value,
         startDes: origin?.description,
         destDes: destinationMap?.description,
       };
@@ -142,12 +143,9 @@ const UpdateDrive = () => {
     if (costConfirmation) {
       let totalCost;
       if (cityCost?.price != returnTime?.idToUpdateDrive?.costPerSeat) {
-        totalCost =
-          parseInt(cityCost?.price) + parseInt(settings?.adminCommission);
+        totalCost = parseInt(cityCost?.price);
       } else {
-        totalCost =
-          parseInt(returnTime?.idToUpdateDrive?.costPerSeat) +
-          parseInt(settings?.adminCommission);
+        totalCost = parseInt(returnTime?.idToUpdateDrive?.costPerSeat);
       }
       setIsLoading(true);
       const date = moment(dateTimeStamp).format('YYYY-MM-DD');

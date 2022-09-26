@@ -119,8 +119,7 @@ const index = () => {
   }, []);
 
   const handleCreateDrive = async () => {
-    const totalCost =
-      parseInt(cityCost?.price) + parseInt(settings?.adminCommission);
+    const totalCost = parseInt(cityCost?.price);
     setIsLoading(true);
     if (origin && destinationMap != null) {
       let resp = await fetch(
@@ -188,8 +187,7 @@ const index = () => {
   };
   //Hanlde Return Drive
   const handleReturnCreateDrive = () => {
-    const totalCost =
-      parseInt(cityCost?.price) + parseInt(settings?.adminCommission);
+    const totalCost = parseInt(cityCost?.price);
 
     const stamp = returnDateConvertor(returnDateTimeStamp, returnFirstTime);
     const body = {

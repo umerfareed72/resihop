@@ -62,21 +62,6 @@ const index = ({navigation}) => {
   const [isLoading, setisLoading] = useState(false);
   const isFocus = useIsFocused(null);
   const auth = useSelector(state => state.auth);
-  const selectTime = val => {
-    settime(val);
-  };
-  const selecttransType = val => {
-    setTransactionType(val);
-  };
-
-  const selectdCost = val => {
-    setCost(val);
-  };
-  const resetFilter = () => {
-    settime('');
-    setCost('');
-    setTransactionType('');
-  };
 
   useEffect(() => {
     if (isFocus) {

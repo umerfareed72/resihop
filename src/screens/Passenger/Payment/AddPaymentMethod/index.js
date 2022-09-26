@@ -118,6 +118,7 @@ const index = ({navigation, route}) => {
         );
       }
     } catch (error) {
+      console.log(error);
       Alert.alert('Error', error?.response?.message);
       setLoading(false);
     }
@@ -140,6 +141,7 @@ const index = ({navigation, route}) => {
       amountPayable:
         bookRide?.drive?.costPerSeat * createRideRequest?.requiredSeats ||
         bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats,
+      driveID: bookRide?.drive?._id || createRideRequest?.drive?._id,
     };
     dispatch(
       checkout_current_card(requestBody, res => {
@@ -163,33 +165,40 @@ const index = ({navigation, route}) => {
   };
 
   const confirm_payment = async data => {
-    try {
-      const {error, paymentIntent} = await confirmPayment(data?.clientSecret, {
-        type: 'Card',
-        setupFutureUsage: 'OffSession',
-        billingDetails: {
-          name: cardDetail?.name,
-          addressCity: cardDetail?.addressCity,
-          addressCountry: cardDetail?.addressCountry,
-          addressLine1: cardDetail?.addressLine1,
-          addressLine2: cardDetail?.addressLine2,
-          addressPostalCode: cardDetail?.addressPostalCode,
-          addressState: cardDetail?.addressState,
-          email: cardDetail?.email,
-        },
-        paymentMethodId: cardDetail?.id,
-      });
-      if (paymentIntent) {
-        modalRef.current.open();
-        setpaymentSuccessonSuccess(true);
-      }
-      if (error) {
+    if (data?.clientSecret) {
+      try {
+        const {error, paymentIntent} = await confirmPayment(
+          data?.clientSecret,
+          {
+            type: 'Card',
+            setupFutureUsage: 'OffSession',
+            billingDetails: {
+              name: cardDetail?.name,
+              addressCity: cardDetail?.addressCity,
+              addressCountry: cardDetail?.addressCountry,
+              addressLine1: cardDetail?.addressLine1,
+              addressLine2: cardDetail?.addressLine2,
+              addressPostalCode: cardDetail?.addressPostalCode,
+              addressState: cardDetail?.addressState,
+              email: cardDetail?.email,
+            },
+            paymentMethodId: cardDetail?.id,
+          },
+        );
+        if (paymentIntent) {
+          modalRef.current.open();
+          setpaymentSuccessonSuccess(true);
+        }
+        if (error) {
+          console.log(error);
+          modalRef.current.open();
+          setpaymentSuccessonFailed(true);
+        }
+      } catch (error) {
         console.log(error);
-        modalRef.current.open();
-        setpaymentSuccessonFailed(true);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      Alert.alert('Error', 'Umable to Pay!');
     }
   };
 
