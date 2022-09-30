@@ -42,6 +42,7 @@ import {
 import {useNavigation} from '@react-navigation/core';
 import Geocoder from 'react-native-geocoding';
 import {check_driver_registered} from '../../redux/actions/payment.action';
+import {Linking} from 'react-native';
 
 export const MapViewComponent = ({
   rideModals,
@@ -437,6 +438,18 @@ export const MapViewComponent = ({
       });
   };
 
+  //onPress Passenger
+  const onPressPassenger = async (lat, lng, address) => {
+    const scheme = Platform.select({ios: 'maps:0,0?q=', android: 'geo:0,0?q='});
+    const latLng = `${lat},${lng}`;
+    const label = address;
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`,
+    });
+    Linking.openURL(url);
+  };
+
   return (
     <>
       <MapView
@@ -564,6 +577,13 @@ export const MapViewComponent = ({
           ? searchRideResponse?.map(ride => {
               return (
                 <Marker
+                  onPress={() => {
+                    onPressPassenger(
+                      ride?.startLat,
+                      ride?.startLng,
+                      ride?.startDes,
+                    );
+                  }}
                   identifier="ride"
                   coordinate={{
                     latitude: ride.startLat,

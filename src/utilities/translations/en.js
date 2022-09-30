@@ -357,7 +357,7 @@ export default {
   start_matching: 'Start matching',
   seats: 'Seats',
   ride: 'Ride',
-  address_placeholder: '123 abc apartment abc street abc...',
+  address_placeholder: 'Enter address',
   availableSeats: 'Available seats',
   no_driver: 'Currently no more drivers available',
   message: 'Message',

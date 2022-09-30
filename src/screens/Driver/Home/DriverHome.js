@@ -421,7 +421,7 @@ const DriverHome = ({navigation}) => {
               onPress={() => {
                 AsyncStorage.setItem('city', 'yes');
                 dispatch(setCity(true));
-                navigation?.navigate('DriverCityToCity');
+                getLocation('DriverCityToCity');
               }}
               style={styles.interiorContainer}>
               <Image

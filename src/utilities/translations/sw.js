@@ -556,7 +556,7 @@ export default {
   start_matching: 'Start Matching',
   seats: 'Seter',
   ride: 'Reise',
-  address_placeholder: '123 abc leilighet abc gate abc...',
+  address_placeholder: 'Ange adress',
   availableSeats: 'Tilgjenglige seter',
   no_driver: 'For øyeblikket ingen sjåfører tilgjenglige',
   message: 'Melding',

@@ -68,7 +68,6 @@ export const AddressCards = ({
   const {
     availableSeats,
     time,
-    city_ride,
     dateTimeStamp,
     returnDateTimeStamp,
     origin,
@@ -181,6 +180,7 @@ export const AddressCards = ({
       }),
     );
   };
+
   return (
     <>
       {modalName === 'startLocation' ||
@@ -197,125 +197,60 @@ export const AddressCards = ({
               <View style={styles.locationMainWrapper}>
                 <View>
                   <View style={{marginBottom: 20}}>
-                    {city_ride ? (
-                      <GooglePlacesAutocomplete
-                        ref={startReturnGoogleAutoComplete}
-                        placeholder={I18n.t('address_placeholder')}
-                        styles={styles.googleInput}
-                        onPress={(data, details = null) => {
-                          dispatch(
-                            setReturnOrigin({
-                              location: details.geometry.location,
-                              description: data.description,
-                            }),
-                          );
-                        }}
-                        query={{
-                          key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                          language: 'en',
-                          types: '(cities)', // default: 'geocode'
-                        }}
-                        debounce={400}
-                        fetchDetails={true}
-                        nearbyPlacesAPI="GooglePlacesSearch"
-                        enablePoweredByContainer={false}
-                        returnKeyType={'search'}
-                        filterReverseGeocodingByTypes={[
-                          'locality',
-                          'administrative_area_level_3',
-                        ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
-                        textInputProps={{
-                          onChangeText: setCurrentReturnStart,
-                        }}
-                      />
-                    ) : (
-                      <GooglePlacesAutocomplete
-                        ref={startReturnGoogleAutoComplete}
-                        placeholder={I18n.t('address_placeholder')}
-                        styles={styles.googleInput}
-                        onPress={(data, details = null) => {
-                          dispatch(
-                            setReturnOrigin({
-                              location: details.geometry.location,
-                              description: data.description,
-                            }),
-                          );
-                        }}
-                        debounce={400}
-                        fetchDetails={true}
-                        nearbyPlacesAPI="GooglePlacesSearch"
-                        enablePoweredByContainer={false}
-                        returnKeyType={'search'}
-                        query={{
-                          key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                          language: 'en',
-                        }}
-                        textInputProps={{
-                          onChangeText: setCurrentReturnStart,
-                        }}
-                      />
-                    )}
+                    <GooglePlacesAutocomplete
+                      ref={startReturnGoogleAutoComplete}
+                      placeholder={I18n.t('address_placeholder')}
+                      styles={styles.googleInput}
+                      onPress={(data, details = null) => {
+                        dispatch(
+                          setReturnOrigin({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+                      }}
+                      debounce={400}
+                      fetchDetails={true}
+                      nearbyPlacesAPI="GooglePlacesSearch"
+                      enablePoweredByContainer={false}
+                      returnKeyType={'search'}
+                      query={{
+                        key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                        language: 'en',
+                      }}
+                      textInputProps={{
+                        onChangeText: setCurrentReturnStart,
+                      }}
+                    />
+
                     <View style={styles.startDot} />
                   </View>
                   <View>
-                    {city_ride ? (
-                      <GooglePlacesAutocomplete
-                        ref={destinationReturnGoogleAutoComplete}
-                        styles={styles.googleInput}
-                        placeholder={I18n.t('address_placeholder')}
-                        onPress={(data, details = null) => {
-                          dispatch(
-                            setReturnMapDestination({
-                              location: details.geometry.location,
-                              description: data.description,
-                            }),
-                          );
-                        }}
-                        debounce={400}
-                        fetchDetails={true}
-                        nearbyPlacesAPI="GooglePlacesSearch"
-                        enablePoweredByContainer={false}
-                        returnKeyType={'search'}
-                        query={{
-                          key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                          language: 'en',
-                          types: '(cities)', // default: 'geocode'
-                        }}
-                        filterReverseGeocodingByTypes={[
-                          'locality',
-                          'administrative_area_level_3',
-                        ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
-                        textInputProps={{
-                          onChangeText: setCurrentReturnDestination,
-                        }}
-                      />
-                    ) : (
-                      <GooglePlacesAutocomplete
-                        ref={destinationReturnGoogleAutoComplete}
-                        placeholder={I18n.t('address_placeholder')}
-                        styles={styles.googleInput}
-                        onPress={(data, details = null) => {
-                          dispatch(
-                            setReturnMapDestination({
-                              location: details.geometry.location,
-                              description: data.description,
-                            }),
-                          );
-                        }}
-                        debounce={400}
-                        fetchDetails={true}
-                        nearbyPlacesAPI="GooglePlacesSearch"
-                        enablePoweredByContainer={false}
-                        returnKeyType={'search'}
-                        query={{
-                          key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                          language: 'en',
-                        }}
-                        textInputProps={{
-                          onChangeText: setCurrentReturnDestination,
-                        }}
-                      />
-                    )}
+                    <GooglePlacesAutocomplete
+                      ref={destinationReturnGoogleAutoComplete}
+                      placeholder={I18n.t('address_placeholder')}
+                      styles={styles.googleInput}
+                      onPress={(data, details = null) => {
+                        dispatch(
+                          setReturnMapDestination({
+                            location: details.geometry.location,
+                            description: data.description,
+                          }),
+                        );
+                      }}
+                      debounce={400}
+                      fetchDetails={true}
+                      nearbyPlacesAPI="GooglePlacesSearch"
+                      enablePoweredByContainer={false}
+                      returnKeyType={'search'}
+                      query={{
+                        key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                        language: 'en',
+                      }}
+                      textInputProps={{
+                        onChangeText: setCurrentReturnDestination,
+                      }}
+                    />
 
                     <View style={styles.destSquare} />
                   </View>
@@ -323,118 +258,58 @@ export const AddressCards = ({
               </View>
             ) : (
               <>
-                {city_ride ? (
-                  <GooglePlacesAutocomplete
-                    ref={googleAutoComplete}
-                    styles={styles.googleInput}
-                    placeholder={I18n.t('address_placeholder')}
-                    onPress={(data, details = null) => {
-                      if (modalName === 'startLocation') {
-                        dispatch(
-                          setOrigin({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
+                <GooglePlacesAutocomplete
+                  ref={googleAutoComplete}
+                  styles={styles.googleInput}
+                  placeholder={I18n.t('address_placeholder')}
+                  onPress={(data, details = null) => {
+                    if (modalName === 'startLocation') {
+                      dispatch(
+                        setOrigin({
+                          location: details.geometry.location,
+                          description: data.description,
+                        }),
+                      );
 
-                        dispatch(
-                          setReturnMapDestination({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
-                      }
+                      dispatch(
+                        setReturnMapDestination({
+                          location: details.geometry.location,
+                          description: data.description,
+                        }),
+                      );
+                    }
 
-                      if (modalName === 'destination') {
-                        dispatch(
-                          setMapDestination({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
+                    if (modalName === 'destination') {
+                      dispatch(
+                        setMapDestination({
+                          location: details.geometry.location,
+                          description: data.description,
+                        }),
+                      );
 
-                        dispatch(
-                          setReturnOrigin({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
-                      }
-                    }}
-                    query={{
-                      key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                      language: 'en',
-                      types: '(cities)',
-                    }}
-                    debounce={400}
-                    fetchDetails={true}
-                    nearbyPlacesAPI="GooglePlacesSearch"
-                    enablePoweredByContainer={false}
-                    returnKeyType={'search'}
-                    filterReverseGeocodingByTypes={[
-                      'locality',
-                      'administrative_area_level_3',
-                    ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3']
-                    textInputProps={{
-                      onChangeText: setCurrentAddress,
-                      autoCorrect: false,
-                      autoCapitalize: false,
-                    }}
-                  />
-                ) : (
-                  <GooglePlacesAutocomplete
-                    ref={googleAutoComplete}
-                    styles={styles.googleInput}
-                    placeholder={I18n.t('address_placeholder')}
-                    onPress={(data, details = null) => {
-                      if (modalName === 'startLocation') {
-                        dispatch(
-                          setOrigin({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
-
-                        dispatch(
-                          setReturnMapDestination({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
-                      }
-
-                      if (modalName === 'destination') {
-                        dispatch(
-                          setMapDestination({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
-
-                        dispatch(
-                          setReturnOrigin({
-                            location: details.geometry.location,
-                            description: data.description,
-                          }),
-                        );
-                      }
-                    }}
-                    debounce={400}
-                    fetchDetails={true}
-                    nearbyPlacesAPI="GooglePlacesSearch"
-                    enablePoweredByContainer={false}
-                    returnKeyType={'search'}
-                    query={{
-                      key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
-                      language: 'en',
-                    }}
-                    textInputProps={{
-                      onChangeText: setCurrentAddress,
-                      autoCorrect: false,
-                      autoCapitalize: false,
-                    }}
-                  />
-                )}
+                      dispatch(
+                        setReturnOrigin({
+                          location: details.geometry.location,
+                          description: data.description,
+                        }),
+                      );
+                    }
+                  }}
+                  debounce={400}
+                  fetchDetails={true}
+                  nearbyPlacesAPI="GooglePlacesSearch"
+                  enablePoweredByContainer={false}
+                  returnKeyType={'search'}
+                  query={{
+                    key: 'AIzaSyBq3-UEY9QO9X45s8w54-mrwjBQekzDlsA',
+                    language: 'en',
+                  }}
+                  textInputProps={{
+                    onChangeText: setCurrentAddress,
+                    autoCorrect: false,
+                    autoCapitalize: false,
+                  }}
+                />
 
                 <View
                   style={
@@ -891,7 +766,7 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       paddingLeft: 45,
       fontSize: 13,
-      color: colors.inputTxtGray,
+      color: colors.black,
       fontFamily: fonts.regular,
     },
   },
