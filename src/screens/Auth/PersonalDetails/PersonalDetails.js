@@ -38,47 +38,6 @@ import useAppState from '../../../hooks/useAppState';
 import {get} from '../../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const gender = {
-  Male: I18n.t('male'),
-  Female: I18n.t('female'),
-  Other: I18n.t('other'),
-};
-const littleChips = [
-  {
-    key: 0,
-    text: I18n.t('fav_driver'),
-    isSelected: true,
-  },
-  {
-    key: 1,
-    text: I18n.t('fav_passenger'),
-    isSelected: false,
-  },
-  {
-    key: 2,
-    text: I18n.t('both'),
-    isSelected: false,
-  },
-];
-
-const littleChips2 = [
-  {
-    key: 0,
-    text: gender.Male,
-    isSelected: false,
-  },
-  {
-    key: 1,
-    text: gender.Female,
-    isSelected: false,
-  },
-  {
-    key: 2,
-    text: gender.Other,
-    isSelected: false,
-  },
-];
-
 function PersonalDetails(props) {
   const dispatch = useDispatch(null);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
@@ -89,7 +48,7 @@ function PersonalDetails(props) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState('Driver');
-  const [genderType, setGenderType] = useState(gender.Male);
+  const [genderType, setGenderType] = useState(I18n.t('male'));
   const [pic, setPic] = useState(undefined);
   const [bankdIdToken, setBankIdToken] = useState(null);
   const [userDetail, setUserDetail] = useState(null);
@@ -101,6 +60,42 @@ function PersonalDetails(props) {
   const refCodeSheet = useRef(null);
   const bank_url = useRef();
   const acr = 'urn:grn:authn:se:bankid:same-device';
+
+  const littleChips = [
+    {
+      key: 0,
+      text: I18n.t('fav_driver'),
+      isSelected: true,
+    },
+    {
+      key: 1,
+      text: I18n.t('fav_passenger'),
+      isSelected: false,
+    },
+    {
+      key: 2,
+      text: I18n.t('both'),
+      isSelected: false,
+    },
+  ];
+
+  const littleChips2 = [
+    {
+      key: 0,
+      text: I18n.t('male'),
+      isSelected: false,
+    },
+    {
+      key: 1,
+      text: I18n.t('female'),
+      isSelected: false,
+    },
+    {
+      key: 2,
+      text: I18n.t('other'),
+      isSelected: false,
+    },
+  ];
 
   const appState = useAppState(async () => {
     if (acr === 'urn:grn:authn:se:bankid:same-device') {

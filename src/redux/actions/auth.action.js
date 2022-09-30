@@ -76,7 +76,7 @@ export const userEmailSignup =
           });
           callBack(response?.data);
         })
-        .catch(err => {
+        .catch(error => {
           setIsLoading(false);
           dispatch({
             type: Types.Signup_Failure,
@@ -89,6 +89,7 @@ export const userEmailSignup =
           );
         });
     } catch (error) {
+      console.log(error);
       console.log('Error:', JSON.stringify(error));
       alert('Something went wrong');
     }

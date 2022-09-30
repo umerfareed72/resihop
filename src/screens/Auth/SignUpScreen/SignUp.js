@@ -59,12 +59,11 @@ function SignUp(props) {
   async function signIn() {
     try {
       const mobilePhone = `%2b${
-        country ? country.callingCode : '47'
+        country ? country.callingCode[0] : '47'
       }${phoneNum}`;
       const getUser = await get(`users?mobile=${mobilePhone}`);
       if (getUser?.data?.length == 0) {
         const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
-        console.log(phone);
         const confirmation = await auth().signInWithPhoneNumber(phone);
         if (confirmation) {
           setIsLoading(false);
@@ -118,8 +117,8 @@ function SignUp(props) {
   };
 
   const userRegistrationApi = async () => {
-    setIsLoading(true);
-    const phone = `+${country ? country.callingCode : '47'}${phoneNum}`;
+    // setIsLoading(true);
+    const phone = `+${country ? country.callingCode[0] : '47'}${phoneNum}`;
     const requestBody = {
       username: phone,
       email: `${phone}@resihop.com`,
@@ -131,7 +130,6 @@ function SignUp(props) {
       cca2: cca2,
       code: countryCode,
     };
-
     dispatch(
       userEmailSignup(requestBody, CountryData, setIsLoading, res => {
         if (res) {
