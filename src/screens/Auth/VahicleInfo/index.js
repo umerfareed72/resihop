@@ -77,16 +77,21 @@ function index(props) {
     }
   });
   const openBankId = async () => {
-    setIsLoading(true);
-    const result = await axios.get(
-      `https://res-ihop-test.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5088&redirect_uri=https://dev-49tni-0p.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
-        Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
-      }`,
-    );
-    if (result?.data) {
-      bank_url.current = result?.data?.completeUrl;
-      Linking.openURL(result?.data?.launchLinks?.universalLink);
-    } else {
+    try {
+      setIsLoading(true);
+      const result = await axios.get(
+        `https://resihop-prod.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5243&redirect_uri=https://dev-nr-jwnve.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+          Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+        }`,
+      );
+      if (result?.data) {
+        bank_url.current = result?.data?.completeUrl;
+        Linking.openURL(result?.data?.launchLinks?.universalLink);
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
       setIsLoading(false);
     }
   };
