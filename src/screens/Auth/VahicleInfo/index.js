@@ -80,7 +80,7 @@ function index(props) {
     try {
       setIsLoading(true);
       const result = await axios.get(
-        `https://resihop-prod.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5243&redirect_uri=https://dev-nr-jwnve.us.auth0.com/login/callback&acr_values=urn:grn:authn:se:bankid:same-device&scope=openid&state=etats&login_hint=${
+        `https://resihop-prod.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5243&redirect_uri=https://dev-nr-jwnve.us.auth0.com/login/callback&acr_values=urn:grn:authn:no:bankid:same-device&scope=openid&state=etats&login_hint=${
           Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
         }`,
       );
