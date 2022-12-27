@@ -39,7 +39,8 @@ export const OtpValidator = ({
           style={styles.pickerCon}
           onPress={() => {
             setCountryModalOpen(true);
-          }}>
+          }}
+        >
           <CountryPicker
             countryCode={defaultCountryCode}
             withCallingCode
