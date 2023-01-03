@@ -619,4 +619,10 @@ export default {
   change_phone: 'endre telefonnummer',
   driver_home: 'Sjåfør hjem',
   passenger_home: 'Passasjer hjem',
+  delete_account:'Radera ditt konto?',
+  confirmation:'Bekräftelse',
+  ask:'Vill du radera kontot?',
+  deleted_profile:'Profilen har raderats',
+  success:'Framgång'
+  
 };

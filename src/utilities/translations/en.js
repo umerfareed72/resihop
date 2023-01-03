@@ -422,4 +422,9 @@ export default {
   enter_your_personal_details_text: 'Enter Your Personal Detail',
   driver_home: 'Driver Home',
   passenger_home: 'Passenger Home',
+  delete_account:'Delete your account?',
+  confirmation:'Confirmation',
+  ask:'Do you want to delete account?',
+  success:'Success',
+  deleted_profile:'Profile deleted successfully'
 };
