@@ -1,7 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
-import {TouchableOpacity} from 'react-native';
-import {appIcons, colors, family, size} from '../../utilities';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { appIcons, colors, family, size } from '../../utilities';
+import { Icon } from 'react-native-elements';
+import { theme } from '../../theme';
 
 export const AgreeButton = ({
   onPress,
@@ -18,16 +20,21 @@ export const AgreeButton = ({
       onPress={onPress}
       style={[
         styles.btnContainer,
-        {backgroundColor: bgColor, width: width, borderWidth: borderWidth},
+        { backgroundColor: bgColor, width: width, borderWidth: borderWidth },
       ]}>
       <Text
         style={[
           styles.btnText,
-          {color: txtColor, fontFamily: fontFamily, fontWeight: fontWeight},
+          { color: txtColor, fontFamily: fontFamily, fontWeight: fontWeight },
         ]}>
         {title}
       </Text>
-      <Image source={appIcons.next} style={styles.btnInner} />
+      <Icon
+        name={'arrowright'}
+        type={'antdesign'}
+        style={{ marginRight: 20, marginTop: 5 }}
+        color={theme.colors.white}
+      />
     </TouchableOpacity>
   );
 };

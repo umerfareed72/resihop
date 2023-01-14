@@ -317,6 +317,7 @@ function PersonalDetails(props) {
         setIsLoading(false);
       });
   };
+  
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>

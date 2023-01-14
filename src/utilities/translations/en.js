@@ -23,7 +23,7 @@ export default {
   invalid_otp_msg: 'Your phone number is not valid',
 
   // Personal Info Screen
-  personal_info_success: 'Your personal were details successfully saved',
+  personal_info_success: 'Your personal details successfully saved',
   male: 'male',
   female: 'female',
   other: 'other',
