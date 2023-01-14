@@ -206,7 +206,6 @@ function VehicleInformation(props) {
                           }
                         }
                       }}
-                      inputContainerStyle={{width: '100%'}}
                       placeholder={I18n.t('license_plate')}
                       autoFocus={false}
                       autoCapitalize="none"

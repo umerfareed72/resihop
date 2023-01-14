@@ -8,6 +8,7 @@ import {
   Alert,
   Linking,
   Platform,
+  AppState,
 } from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -34,7 +35,6 @@ import {baseURL, checkConnected, colors} from '../../../utilities';
 import {GetToken, header} from '../../../utilities/constants';
 
 import {SwitchDrive, updateInfo} from '../../../redux/actions/auth.action';
-import useAppState from '../../../hooks/useAppState';
 import {get} from '../../../services';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -97,32 +97,44 @@ function PersonalDetails(props) {
     },
   ];
 
-  const appState = useAppState(async () => {
-    if (acr === 'urn:grn:authn:se:bankid:same-device') {
-      const result = await fetch(bank_url?.current).then(response => {
-        return response;
-      });
-      const token = result?.url.split('id_token=');
-      if (token) {
-        setBankIdToken(token[1]);
+
+
+
+  useEffect(() => {
+    AppState.addEventListener('change', handleChange);  
+  
+    return () => {
+      AppState.removeEventListener('change', handleChange);  
+    }
+  }, []);
+  
+  
+  const handleChange = async(newState) => {
+    if (newState === "active") {
+      if (acr === 'urn:grn:authn:se:bankid:same-device') {
+        const result = await fetch(bank_url?.current).then(response => {
+          return response;
+        });
+        const token = result?.url.split('id_token=');
+        if (token) {
+          setBankIdToken(token[1]);
+        } else {
+          setIsLoading(false);
+        }
       } else {
         setIsLoading(false);
       }
-    } else {
-      setIsLoading(false);
     }
-  });
+  }
   const openBankId = async values => {
     try {
       setUserDetail(values);
-      setIsLoading(true);
       const result = await axios.get(
         `https://resihop-prod.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5243&redirect_uri=https://dev-nr-jwnve.us.auth0.com/login/callback&acr_values=urn:grn:authn:no:bankid:same-device&scope=openid&state=etats&login_hint=${
           Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
         }`,
       );
       if (result?.data) {
-        console.log(result?.data);
         bank_url.current = result?.data?.completeUrl;
         Linking.openURL(result?.data?.launchLinks?.universalLink);
       } else {

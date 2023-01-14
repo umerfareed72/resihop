@@ -10,6 +10,7 @@ import {
   View,
   Alert,
   Platform,
+  AppState,
 } from 'react-native';
 import {Button, Divider, Icon, Input, Text} from 'react-native-elements';
 import {CustomHeader, Loader, SigninViaBankID} from '../../../components';
@@ -61,21 +62,33 @@ function index(props) {
   const bank_url = React.useRef();
   const dispatch = useDispatch(null);
   const acr = 'urn:grn:authn:se:bankid:same-device';
-  const appState = useAppState(async () => {
-    if (acr === 'urn:grn:authn:se:bankid:same-device') {
-      const result = await fetch(bank_url?.current).then(response => {
-        return response;
-      });
-      const token = result?.url.split('id_token=');
-      if (token) {
-        setBankIdToken(token[1]);
+
+  useEffect(() => {
+    AppState.addEventListener('change', handleChange);  
+  
+    return () => {
+      AppState.removeEventListener('change', handleChange);  
+    }
+  }, []);
+  
+  
+  const handleChange = async(newState) => {
+    if (newState === "active") {
+      if (acr === 'urn:grn:authn:se:bankid:same-device') {
+        const result = await fetch(bank_url?.current).then(response => {
+          return response;
+        });
+        const token = result?.url.split('id_token=');
+        if (token) {
+          setBankIdToken(token[1]);
+        } else {
+          setIsLoading(false);
+        }
       } else {
         setIsLoading(false);
       }
-    } else {
-      setIsLoading(false);
     }
-  });
+  }
   const openBankId = async () => {
     try {
       setIsLoading(true);
@@ -258,7 +271,6 @@ function index(props) {
                           }
                         }
                       }}
-                      inputContainerStyle={{width: '100%'}}
                       placeholder={I18n.t('license_plate')}
                       autoFocus={false}
                       autoCapitalize="none"

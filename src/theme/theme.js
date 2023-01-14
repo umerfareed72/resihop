@@ -216,6 +216,7 @@ export const theme = {
     inputErrorContainerStyle: {
       borderBottomColor: 'rgba(0, 0, 0,0.3) ',
       paddingVertical: Platform.OS === 'android' ? 0 : 10,
+    
     },
     selectionColor: colors.primary,
     containerStyle: {

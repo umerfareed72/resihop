@@ -59,23 +59,23 @@
 		</dict>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Resihop will use Media Library info</string>
+	<string>Resihop usw media library to upload pictures.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Resihop Camera Open</string>
+	<string>Resihop use camera for profile picture uploading</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Resihop Location</string>
+	<string>Resihop use location service to get user current picking and droping point.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Resihop always location</string>
+	<string>Resihop use location service to get user current picking and droping point.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Location usage</string>
+	<string>Resihop use location service to get user current picking and droping point.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>I want to know where your here.</string>
+	<string>Resihop use location service to get user current picking and droping point.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The purpose for accessing the microphone, such as for a call or interactive live streaming.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Resihop gallery</string>
+	<string>Resihop use gallery to upload pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Resihop Gallery Picker</string>
+	<string>Resihop usw media library to upload pictures.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
