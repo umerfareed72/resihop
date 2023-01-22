@@ -75,7 +75,6 @@ export const MapViewComponent = ({
     returnRide,
     settings,
   } = useSelector(state => state.map);
-  const [connectedAccount, setConnectedAccount] = useState('');
 
   const returnDestinationMap = useSelector(
     state => state.map.returnDestination,
@@ -88,7 +87,7 @@ export const MapViewComponent = ({
   var watchId;
   const mapRef = useRef(null);
   const [zoomLevel, setzoomLevel] = useState(20);
-  
+
   useEffect(() => {
     getLocation();
     if (startRide) {
@@ -340,12 +339,7 @@ export const MapViewComponent = ({
           duration: mins,
         }),
       );
-      dispatch(
-        check_driver_registered(res => {
-          setConnectedAccount(res)
-          console.log(res);
-        }),
-      );
+
 
       return () => {
         dispatch(setRoutes(null));
@@ -356,70 +350,79 @@ export const MapViewComponent = ({
   }, []);
 
   const handleCreateDrive = () => {
-    if (connectedAccount == 'active') {
-      const body = {
-        startLocation: routes?.startLocation,
-        destinationLocation: routes?.destinationLocation,
-        date: routes?.date,
-        availableSeats: routes?.availableSeats,
-        path: selectedPath,
-        costPerSeat: routes?.costPerSeat,
-        interCity: routes?.interCity,
-        startDes: routes?.startDes,
-        destDes: routes?.destDes,
-      };
-      dispatch(
-        CreateDriveRequest(body, setIsLoading, async response => {
-          if (response?.error) {
-            if (response?.message) {
-              Alert.alert('Error', response?.message);
-            } else {
-              Alert.alert('Error', response?.message[0]?.messages[0]?.message);
-            }
-          } else {
-            if (returnRide) {
-              const returnBody = {
-                startLocation: returnRide?.startLocation,
-                destinationLocation: returnRide?.destinationLocation,
-                date: returnRide?.date,
-                availableSeats: returnRide?.availableSeats,
-                path: selectedPath,
-                costPerSeat: returnRide?.costPerSeat,
-                interCity: returnRide?.interCity,
-                startDes: returnRide?.startDes,
-                destDes: returnRide?.destDes,
-              };
-              dispatch(
-                CreateDriveRequest(returnBody, setIsLoading, async response => {
-                  if (response?.error) {
-                    if (response?.message) {
-                      Alert.alert('Error', response?.message);
-                    } else {
-                      Alert.alert(
-                        'Error',
-                        response?.message[0]?.messages[0]?.message,
-                      );
-                    }
-                  } else {
-                    navigation.navigate('DriverHome');
-                  }
-                }),
-              );
-            } else {
-              navigation.navigate('DriverHome');
-            }
-          }
-        }),
-      );
-    } else {
-      Alert.alert('Error', 'Please create connected account first!', [
-        {
-          onPress: () => {
-            navigation?.navigate('DriverPayment');
-          },
-        },
-      ]);
-    }
+    dispatch(
+      check_driver_registered(res => {
+        if (res == 'inactive' || res == undefined) {
+          Alert.alert('Error', 'Please create payout account first!', [
+            {
+              onPress: () => {
+                navigation?.navigate('DriverPayment');
+              },
+            },
+          ]);
+        } else {
+          const body = {
+            startLocation: routes?.startLocation,
+            destinationLocation: routes?.destinationLocation,
+            date: routes?.date,
+            availableSeats: routes?.availableSeats,
+            path: selectedPath,
+            costPerSeat: routes?.costPerSeat,
+            interCity: routes?.interCity,
+            startDes: routes?.startDes,
+            destDes: routes?.destDes,
+          };
+          dispatch(
+            CreateDriveRequest(body, setIsLoading, async response => {
+              if (response?.error) {
+                if (response?.message) {
+                  Alert.alert('Error', response?.message);
+                } else {
+                  Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+                }
+              } else {
+                if (returnRide) {
+                  const returnBody = {
+                    startLocation: returnRide?.startLocation,
+                    destinationLocation: returnRide?.destinationLocation,
+                    date: returnRide?.date,
+                    availableSeats: returnRide?.availableSeats,
+                    path: selectedPath,
+                    costPerSeat: returnRide?.costPerSeat,
+                    interCity: returnRide?.interCity,
+                    startDes: returnRide?.startDes,
+                    destDes: returnRide?.destDes,
+                  };
+                  dispatch(
+                    CreateDriveRequest(returnBody, setIsLoading, async response => {
+                      if (response?.error) {
+                        if (response?.message) {
+                          Alert.alert('Error', response?.message);
+                        } else {
+                          Alert.alert(
+                            'Error',
+                            response?.message[0]?.messages[0]?.message,
+                          );
+                        }
+                      } else {
+                        navigation.navigate('DriverHome');
+                      }
+                    }),
+                  );
+                } else {
+                  navigation.navigate('DriverHome');
+                }
+              }
+            }),
+          );
+
+
+
+        }
+
+
+      }),
+    );
   };
 
   //On Drag Set location

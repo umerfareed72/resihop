@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -20,11 +20,11 @@ import {
 } from '../../../components';
 import I18n from '../../../utilities/translations';
 import styles from './styles';
-import {appIcons, checkConnected, colors, header} from '../../../utilities';
-import {useIsFocused} from '@react-navigation/native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {createToken, confirmPayment} from '@stripe/stripe-react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { appIcons, checkConnected, colors, header } from '../../../utilities';
+import { useIsFocused } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { createToken, confirmPayment } from '@stripe/stripe-react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   add_stripe_card,
   checkout_current_card,
@@ -33,29 +33,17 @@ import {
   move_from_drawer,
   save_current_card,
 } from '../../../redux/actions/payment.action';
-import {BookRide} from '../../../redux/actions/map.actions';
-import {Alert} from 'react-native';
-import {FlatList} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {LinkHelper} from '../../../utilities/helpers/LinkHelper';
-import {post} from '../../../services';
-const index = ({navigation, route}) => {
+import { LinkHelper } from '../../../utilities/helpers/LinkHelper';
+import { post } from '../../../services';
+const index = ({ navigation, route }) => {
   const [cardScreen, setCardScreen] = useState(false);
 
   const [cardDetail, setcardDetail] = useState('');
   const [checkAccount, setCheckAccount] = useState('');
-
   const [Loading, setLoading] = useState(false);
-  const modalRef = useRef(null);
-  const isFocus = useIsFocused();
 
   //Redux State
-  const auth = useSelector(state => state.auth);
-  const payment = useSelector(state => state.payment);
-  const bookRide = useSelector(state => state.map.bookRide);
-  const createRideRequest = useSelector(
-    state => state.map.createRideRequestResponse,
-  );
   const dispatch = useDispatch(null);
 
   //Create Account
@@ -129,6 +117,7 @@ const index = ({navigation, route}) => {
         title={I18n.t('my_payment_method')}
         backButton={true}
         navigation={navigation}
+        
       />
       <KeyboardAwareScrollView style={styles.container}>
         <View style={styles.contentContainer}>
@@ -183,22 +172,21 @@ const index = ({navigation, route}) => {
             />
           )}
           {checkAccount == 'inactive' || checkAccount == undefined ? (
-            <View style={{paddingVertical: 30}}>
-              <View style={{paddingVertical: 20}}>
+            <View style={{ paddingVertical: 30 }}>
+              <View style={{ paddingVertical: 20 }}>
                 <PaymentButtons
                   onPress={() => {
                     create_Connected_Account();
                   }}
                   bgColor={colors.green}
-                  title={'Create Takeout Account'}
+                  title={'Create Payout Account'}
                   txtColor={colors.white}
                 />
               </View>
             </View>
           ) : (
-            <Text style={{textAlign: 'center', fontSize: 18, marginTop: 30}}>
-              Hurry! You got subscription of stripe connected account
-              successfully.
+            <Text style={{ textAlign: 'center', fontSize: 18, marginTop: 30 }}>
+              Hurry! You have successfully added your payout account.
             </Text>
           )}
         </View>
