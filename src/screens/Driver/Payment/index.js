@@ -117,7 +117,7 @@ const index = ({ navigation, route }) => {
         title={I18n.t('my_payment_method')}
         backButton={true}
         navigation={navigation}
-        
+
       />
       <KeyboardAwareScrollView style={styles.container}>
         <View style={styles.contentContainer}>
