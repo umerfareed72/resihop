@@ -143,8 +143,8 @@ export default {
   terms_and_condition_text: 'Vilkår og betingelser',
 
   walkthrough_msg_one: `Offer empty places in the car on the way to work and get compensation from those who travel. Don't worry, we take care of all connections, you just input you route.`,
-  lorem_epsom1: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,`,
-  lorem_epsom2: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
+  lorem_epsom1: ``,
+  lorem_epsom2: ``,
   welcome_to_resihop_msg: 'Velkommen til Res ihop',
   ok: 'OK',
   //Review Screen
@@ -153,8 +153,8 @@ export default {
   //Approval Screen
   waiting_approval: 'Venter på godkjenning',
 
-  lorem_epsom3: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
-  lorem_epsom4: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
+  lorem_epsom3: ``,
+  lorem_epsom4: ``,
 
   approved_desc:
     'Du kan alltid bytte tilbake til sjåfør i appen med bare et klikk!',
@@ -180,7 +180,7 @@ export default {
   upcoming_rides: 'Kommende reise',
 
   lorem:
-    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+    '',
   first_ride: 'Opprett din første reise',
 
   success_payment: 'Transaksjonen gjennomført!',
@@ -619,10 +619,10 @@ export default {
   change_phone: 'endre telefonnummer',
   driver_home: 'Sjåfør hjem',
   passenger_home: 'Passasjer hjem',
-  delete_account:'Radera ditt konto?',
-  confirmation:'Bekräftelse',
-  ask:'Vill du radera kontot?',
-  deleted_profile:'Profilen har raderats',
-  success:'Framgång'
-  
+  delete_account: 'Radera ditt konto?',
+  confirmation: 'Bekräftelse',
+  ask: 'Vill du radera kontot?',
+  deleted_profile: 'Profilen har raderats',
+  success: 'Framgång'
+
 };

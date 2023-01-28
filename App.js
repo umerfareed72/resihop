@@ -1,15 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 
-import {LogBox, View} from 'react-native';
-import MainStackNavigator from './src/navigations/MainStackNavigator';
-import {NativeBaseProvider} from 'native-base';
-import {Provider} from 'react-redux';
-import {persistor, store} from './src/redux/store/store';
-import {PersistGate} from 'redux-persist/integration/react';
-import {StripeProvider} from '@stripe/stripe-react-native';
-import {APIKEY, options, publishableKey} from './src/utilities';
-import {CONSTANTS, RNCallKeep} from 'react-native-callkeep';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { NativeBaseProvider } from 'native-base';
+import { LogBox, View } from 'react-native';
 import Geocoder from 'react-native-geocoding';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import MainStackNavigator from './src/navigations/MainStackNavigator';
+import { persistor, store } from './src/redux/store/store';
+import { APIKEY, publishableKey } from './src/utilities';
 
 const App = props => {
   LogBox.ignoreAllLogs(true);
@@ -25,7 +24,7 @@ const App = props => {
         merchantIdentifier="merchant.identifier">
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <MainStackNavigator />
             </View>
           </PersistGate>

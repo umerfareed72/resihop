@@ -7,12 +7,12 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import {Button, Text} from 'react-native-elements';
-import {theme} from '../../theme';
-import {appIcons, colors, WP} from '../../utilities';
+import { Button, Text } from 'react-native-elements';
+import { theme } from '../../theme';
+import { appIcons, colors, WP } from '../../utilities';
 import I18n from '../../utilities/translations';
 
-function landingUser({navigation}) {
+function landingUser({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
   sayingText: {
     color: theme.colors.grey,

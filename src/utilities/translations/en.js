@@ -79,8 +79,8 @@ export default {
   cost_detail: '(You can always change it when setting new drive)',
   terms_and_condition_text: 'Terms and Conditions',
   walkthrough_msg_one: `Offer empty places in the car on the way to work and get compensation from those who travel. Don't worry, we take care of all connections, you simply input you route.`,
-  lorem_epsom1: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,`,
-  lorem_epsom2: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
+  lorem_epsom1: ``,
+  lorem_epsom2: ``,
   welcome_to_resihop_msg: 'Welcome to Res ihop',
   ok: 'OK',
   //Review Screen
@@ -88,8 +88,8 @@ export default {
 
   //Approval Screen
   waiting_approval: 'Waiting for approval',
-  lorem_epsom3: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
-  lorem_epsom4: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut`,
+  lorem_epsom3: ``,
+  lorem_epsom4: ``,
 
   approved_desc:
     'You can always switch back to Driver in the app with just one click!',
@@ -108,7 +108,7 @@ export default {
   city_to_city: 'City to city ride',
   upcoming_rides: 'My Upcoming rides',
   lorem:
-    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+    '',
   first_ride: 'Create your First Ride',
   success_payment: 'Transaction Successful!',
   failed_payment: 'Your amount exceeds Balance',
@@ -422,9 +422,9 @@ export default {
   enter_your_personal_details_text: 'Enter Your Personal Detail',
   driver_home: 'Driver Home',
   passenger_home: 'Passenger Home',
-  delete_account:'Delete your account?',
-  confirmation:'Confirmation',
-  ask:'Do you want to delete account?',
-  success:'Success',
-  deleted_profile:'Profile deleted successfully'
+  delete_account: 'Delete your account?',
+  confirmation: 'Confirmation',
+  ask: 'Do you want to delete account?',
+  success: 'Success',
+  deleted_profile: 'Profile deleted successfully'
 };

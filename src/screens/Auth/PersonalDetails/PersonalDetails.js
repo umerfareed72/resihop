@@ -1,42 +1,29 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Keyboard,
-  KeyboardAvoidingView,
-  Alert,
-  Linking,
-  Platform,
-  AppState,
-} from 'react-native';
-import {Formik} from 'formik';
-import * as Yup from 'yup';
-import {theme} from '../../../theme';
+import { Formik } from 'formik';
 import _ from 'lodash/string';
-import {Button, Icon, Input, Text} from 'react-native-elements';
-
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  CustomHeader,
-  Header,
-  IncorrectRefCode,
-  Loader,
-  NetInfoModal,
-  Chips,
-  GenderChips,
-  UploadImage,
-  SigninViaBankID,
-} from '../../../components';
-import I18n from '../../../utilities/translations';
-import {useDispatch, useSelector} from 'react-redux';
-import axios from 'axios';
-import {baseURL, checkConnected, colors} from '../../../utilities';
-import {GetToken, header} from '../../../utilities/constants';
+  Alert, AppState, Keyboard,
+  KeyboardAvoidingView, Linking,
+  Platform, StyleSheet, View
+} from 'react-native';
+import { Button, Icon, Input, Text } from 'react-native-elements';
+import * as Yup from 'yup';
+import { theme } from '../../../theme';
 
-import {SwitchDrive, updateInfo} from '../../../redux/actions/auth.action';
-import {get} from '../../../services';
+import axios from 'axios';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  Chips, CustomHeader, GenderChips, IncorrectRefCode,
+  Loader,
+  NetInfoModal, SigninViaBankID, UploadImage
+} from '../../../components';
+import { baseURL, checkConnected } from '../../../utilities';
+import { GetToken, header } from '../../../utilities/constants';
+import I18n from '../../../utilities/translations';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SwitchDrive, updateInfo } from '../../../redux/actions/auth.action';
+import { get } from '../../../services';
 
 function PersonalDetails(props) {
   const dispatch = useDispatch(null);
@@ -98,14 +85,14 @@ function PersonalDetails(props) {
   ];
 
   useEffect(() => {
-    AppState.addEventListener('change', handleChange);  
-  
+    AppState.addEventListener('change', handleChange);
+
     return () => {
-      AppState.removeEventListener('change', handleChange);  
+      AppState.removeEventListener('change', handleChange);
     }
   }, []);
-  
-  const handleChange = async(newState) => {
+
+  const handleChange = async (newState) => {
     if (newState === "active") {
       if (acr === 'urn:grn:authn:se:bankid:same-device') {
         const result = await fetch(bank_url?.current).then(response => {
@@ -126,8 +113,7 @@ function PersonalDetails(props) {
     try {
       setUserDetail(values);
       const result = await axios.get(
-        `https://resihop-prod.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5243&redirect_uri=https://resihop.page.link/login/callback&acr_values=urn:grn:authn:no:bankid:same-device&scope=openid&state=etats&login_hint=${
-          Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
+        `https://resihop-prod.criipto.id/dXJuOmdybjphdXRobjpzZTpiYW5raWQ6c2FtZS1kZXZpY2U=/oauth2/authorize?response_type=id_token&client_id=urn:my:application:identifier:5243&redirect_uri=https://resihop.page.link/login/callback&acr_values=urn:grn:authn:no:bankid:same-device&scope=openid&state=etats&login_hint=${Platform.OS == 'android' ? 'appswitch:android' : 'appswitch:ios'
         }`,
       );
       if (result?.data) {
@@ -147,6 +133,7 @@ function PersonalDetails(props) {
       userDetailsApi(userDetail);
     }
   }, [bankdIdToken]);
+
   //Add Personal Details
   const userDetailsApi = async inputData => {
     const lang = await AsyncStorage.getItem('lang');
@@ -161,7 +148,7 @@ function PersonalDetails(props) {
       } else {
         user = 'BOTH';
       }
-      const {firstName, lastName, email} = inputData;
+      const { firstName, lastName, email } = inputData;
       if (!pic) {
         const requestBody = {
           firstName: firstName,
@@ -210,7 +197,7 @@ function PersonalDetails(props) {
                     },
                   },
                 ],
-                {cancelable: false},
+                { cancelable: false },
               );
             },
             error => {
@@ -273,7 +260,7 @@ function PersonalDetails(props) {
                         },
                       },
                     ],
-                    {cancelable: false},
+                    { cancelable: false },
                   );
                 },
                 error => {
@@ -290,6 +277,7 @@ function PersonalDetails(props) {
       setIsLoading(false);
     }
   };
+
   //Image Uploading
   const imageUpload = async (data, callBack) => {
     var form = new FormData();
@@ -317,10 +305,10 @@ function PersonalDetails(props) {
         setIsLoading(false);
       });
   };
-  
+
   return (
     <>
-      <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
+      <View style={{ flex: 1, backgroundColor: 'white', margin: 5 }}>
         <CustomHeader backButton={false} navigation={props?.navigation} />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <Formik
@@ -513,18 +501,18 @@ function PersonalDetails(props) {
                           <Icon
                             name={'arrowright'}
                             type={'antdesign'}
-                            style={{marginRight: 20}}
+                            style={{ marginRight: 20 }}
                             color={theme.colors.white}
                           />
                         }
                         iconPosition={'right'}
                         buttonStyle={[
                           theme.Button.buttonStyle,
-                          {justifyContent: 'space-between'},
+                          { justifyContent: 'space-between' },
                         ]}
                         titleStyle={[
                           theme.Button.titleStyle,
-                          {paddingLeft: 20},
+                          { paddingLeft: 20 },
                         ]}
                         disabledTitleStyle={theme.Button.disabledTitleStyle}
                         containerStyle={{
