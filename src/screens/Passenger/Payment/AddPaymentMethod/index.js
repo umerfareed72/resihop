@@ -1,41 +1,27 @@
-import React, {useEffect, useRef, useState} from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import { confirmPayment, createToken } from '@stripe/stripe-react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  Text,
+  Alert, Dimensions, FlatList, Image, Text,
   TouchableOpacity,
-  View,
-  Image,
-  Dimensions,
-  Linking,
-  FlatList,
+  View
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   AddWalletModal,
-  BankCard,
-  CustomHeader,
-  Header,
-  PaymentButtons,
-  PaymentCard,
-  PaymentHistory,
-  Loader,
-  BlankField,
+  BankCard, BlankField, CustomHeader, Loader, PaymentButtons, PaymentHistory
 } from '../../../../components';
-import I18n from '../../../../utilities/translations';
-import styles from './style';
-import {appIcons, checkConnected, colors} from '../../../../utilities';
-import AddCard from './AddCard';
-import {useIsFocused} from '@react-navigation/native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {createToken, confirmPayment} from '@stripe/stripe-react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { BookRide } from '../../../../redux/actions/map.actions';
 import {
   add_stripe_card,
   checkout_current_card,
-  get_card_list,
-  move_from_drawer,
-  save_current_card,
+  get_card_list, save_current_card
 } from '../../../../redux/actions/payment.action';
-import {BookRide} from '../../../../redux/actions/map.actions';
-import {Alert} from 'react-native';
+import { appIcons, checkConnected, colors } from '../../../../utilities';
+import I18n from '../../../../utilities/translations';
+import AddCard from './AddCard';
+import styles from './style';
 
 const index = ({navigation, route}) => {
   const [cardScreen, setCardScreen] = useState(false);
@@ -59,6 +45,7 @@ const index = ({navigation, route}) => {
     state => state.map.createRideRequestResponse,
   );
   const dispatch = useDispatch(null);
+  
   //onpress
   const onPressModalButton = () => {
     if (paymentSuccess) {
