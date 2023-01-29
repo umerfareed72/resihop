@@ -1,71 +1,45 @@
-import React, {useState, useRef, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { useIsFocused } from '@react-navigation/core';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  Platform,
-  ScrollView,
-  FlatList,
-  Linking,
-  Alert,
+  Alert, FlatList, Image, Linking, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
-import {
-  colors,
-  appIcons,
-  appImages,
-  family,
-  requestPermission,
-  header,
-  sortItemsDriver,
-} from '../../../utilities';
+import Geocoder from 'react-native-geocoding';
+import Geolocation from 'react-native-geolocation-service';
+import PushNotification from 'react-native-push-notification';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
-import MyStatusBar from '../../../components/Header/statusBar';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   BlankTrip,
   CancelRideModal,
   Loader,
   RideFilterModal,
   SortModal,
-  UpcomingRideCards,
+  UpcomingRideCards
 } from '../../../components';
-import I18n from '../../../utilities/translations';
-import {fonts} from '../../../theme';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  MyDrives,
-  setIDToUpdateDrive,
-  setOrigin,
-  setMapDestination,
-  SearchDrives,
-  SearchRides,
-  MyRidesSortOrder,
-  setReturnMapDestination,
-  get_settings,
-  setCity,
-  setAvailableSeats,
-  MyRidesFiltering,
-  MyDrivesFiltering,
-} from '../../../redux/actions/map.actions';
-import {useDispatch, useSelector} from 'react-redux';
+import MyStatusBar from '../../../components/Header/statusBar';
+import { Call_Status } from '../../../redux/actions/app.action';
 import {
   getProfileInfo,
   getUserInfo,
-  updateInfo,
+  updateInfo
 } from '../../../redux/actions/auth.action';
-import {useIsFocused} from '@react-navigation/core';
+import {
+  get_settings, MyDrivesFiltering, MyRidesSortOrder, SearchDrives,
+  SearchRides, setAvailableSeats, setCity, setIDToUpdateDrive, setMapDestination, setOrigin, setReturnMapDestination
+} from '../../../redux/actions/map.actions';
 import mapTypes from '../../../redux/types/map.types';
-import Geocoder from 'react-native-geocoding';
-import Geolocation from 'react-native-geolocation-service';
-import {checkAppPermission} from '../../../utilities/helpers/permissions';
-import {post} from '../../../services';
-import {DRIVE_CONST} from '../../../utilities/routes';
-import PushNotification from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import {Call_Status} from '../../../redux/actions/app.action';
+import { post } from '../../../services';
+import { fonts } from '../../../theme';
+import {
+  appIcons,
+  appImages, colors, family, header, requestPermission
+} from '../../../utilities';
+import { checkAppPermission } from '../../../utilities/helpers/permissions';
+import { DRIVE_CONST } from '../../../utilities/routes';
+import I18n from '../../../utilities/translations';
 
 const DriverHome = ({navigation}) => {
   const filterModalRef = useRef(null);
@@ -86,6 +60,35 @@ const DriverHome = ({navigation}) => {
   const [selectedCard, setSelectedCard] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const {availableSeats} = useSelector(state => state.map);
+
+
+  const sortItemsDriver = [
+    {
+      id: 1,
+      title: I18n.t('sort_by_date_as'),
+  
+      value: 'date:asc',
+    },
+    {
+      id: 2,
+      title: I18n.t('sort_by_date_ds'),
+  
+      value: 'date:desc',
+    },
+    {
+      id: 3,
+      title: I18n.t('sort_by_date_ao'),
+  
+      value: 'destDes:asc',
+    },
+    {
+      id: 4,
+      title: I18n.t('sort_by_date_oa'),
+      value: 'destDes:desc',
+    },
+  ];
+  
+
 
   useEffect(() => {
     PushNotification.configure({

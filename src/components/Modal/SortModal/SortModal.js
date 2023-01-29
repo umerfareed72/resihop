@@ -1,55 +1,23 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Image,
-  FlatList,
+  FlatList, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {
-  size,
-  color,
-  WP,
   colors,
-  family,
-  appImages,
-  appIcons,
+  family, size, WP
 } from '../../../utilities';
 import I18n from '../../../utilities/translations';
-const items = [
-  {
-    id: 1,
-    title: I18n.t('sort_by_date_as'),
-    value: 'tripDate:asc',
-  },
-  {
-    id: 2,
-    title: I18n.t('sort_by_date_ds'),
-    value: 'tripDate:desc',
-  },
-  {
-    id: 3,
-    title: I18n.t('sort_by_date_ao'),
-    value: 'destDes:asc',
-  },
-  {
-    id: 4,
-    title: I18n.t('sort_by_date_oa'),
-    value: 'destDes:desc',
-  },
-];
 
-export const SortModal = ({show, onPress, sortItems = items}) => {
+
+export const SortModal = ({ show, onPress, sortItems  }) => {
   //Onpress Sort Order Item
   const onItemPress = item => {
     onPress(item);
     show?.current?.close();
   };
 
-  const renderItems = ({item}) => {
+  const renderItems = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.itemContainer}

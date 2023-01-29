@@ -1,5 +1,8 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {SafeAreaView, View, FlatList} from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, FlatList, Linking, SafeAreaView, View } from 'react-native';
+import Geocoder from 'react-native-geocoding';
+import Geolocation from 'react-native-geolocation-service';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   BlankTrip,
   CancelRideModal,
@@ -7,34 +10,28 @@ import {
   Loader,
   RecurringRideCard,
   RideFilterModal,
-  SortModal,
-  BlankField,
+  SortModal
 } from '../../../components';
-import {get, post} from '../../../services';
-import {
-  appIcons,
-  appImages,
-  colors,
-  header,
-  sortItemsDriver,
-  WP,
-} from '../../../utilities';
-import I18n from '../../../utilities/translations';
-import * as Types from '../../../redux/types/map.types';
-import {useDispatch, useSelector} from 'react-redux';
 import {
   MyDrivesFiltering,
   MyRidesSortOrder,
   setAvailableSeats,
   setOrigin,
-  setReturnMapDestination,
+  setReturnMapDestination
 } from '../../../redux/actions/map.actions';
-import {Linking} from 'react-native';
-import {Alert} from 'react-native';
-import {checkAppPermission} from '../../../utilities/helpers/permissions';
-import Geolocation from 'react-native-geolocation-service';
-import Geocoder from 'react-native-geocoding';
-import {DRIVE_CONST} from '../../../utilities/routes';
+import * as Types from '../../../redux/types/map.types';
+import { get, post } from '../../../services';
+import {
+  appIcons, colors,
+  header,
+  WP
+} from '../../../utilities';
+import { checkAppPermission } from '../../../utilities/helpers/permissions';
+import { DRIVE_CONST } from '../../../utilities/routes';
+import I18n from '../../../utilities/translations';
+
+
+
 
 function index(props) {
   const filterModalRef = useRef(null);
@@ -51,6 +48,36 @@ function index(props) {
 
   //Redux States
   const dispatch = useDispatch(null);
+
+
+   const sortItemsDriver = [
+    {
+      id: 1,
+      title: I18n.t('sort_by_date_as'),
+  
+      value: 'date:asc',
+    },
+    {
+      id: 2,
+      title: I18n.t('sort_by_date_ds'),
+  
+      value: 'date:desc',
+    },
+    {
+      id: 3,
+      title: I18n.t('sort_by_date_ao'),
+  
+      value: 'destDes:asc',
+    },
+    {
+      id: 4,
+      title: I18n.t('sort_by_date_oa'),
+      value: 'destDes:desc',
+    },
+  ];
+  
+
+
 
   const selectRideStatus = val => {
     setStatus(val);

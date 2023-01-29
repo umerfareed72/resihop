@@ -107,25 +107,5 @@ export const cost_list = [
   { label: '55 NOK', value: 55 },
   { label: '60 NOK', value: 60 },
 ];
-export const sortItemsDriver = [
-  {
-    id: 1,
-    title: I18n.t('sort_by_date_as'),
-    value: 'date:asc',
-  },
-  {
-    id: 2,
-    title: I18n.t('sort_by_date_ds'),
-    value: 'date:desc',
-  },
-  {
-    id: 3,
-    title: I18n.t('sort_by_date_ao'),
-    value: 'destDes:asc',
-  },
-  {
-    id: 4,
-    title: I18n.t('sort_by_date_oa'),
-    value: 'destDes:desc',
-  },
-];
+
+
