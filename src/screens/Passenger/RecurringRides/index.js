@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { SafeAreaView, View, FlatList, Linking } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState, useRef, useEffect} from 'react';
+import {SafeAreaView, View, FlatList, Linking} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   BlankTrip,
   CancelRideModal,
@@ -11,10 +11,10 @@ import {
   SortModal,
   BlankField,
 } from '../../../components';
-import { get, post } from '../../../services';
+import {get, post} from '../../../services';
 import * as Types from '../../../redux/types/map.types';
-import { appIcons, appImages, colors, header, WP } from '../../../utilities';
-import { useIsFocused } from '@react-navigation/core';
+import {appIcons, appImages, colors, header, WP} from '../../../utilities';
+import {useIsFocused} from '@react-navigation/core';
 import I18n from '../../../utilities/translations';
 import {
   MyRidesFiltering,
@@ -24,11 +24,11 @@ import {
   setOrigin,
   setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
-import { checkAppPermission } from '../../../utilities/helpers/permissions';
-import { Alert } from 'react-native';
+import {checkAppPermission} from '../../../utilities/helpers/permissions';
+import {Alert} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
-import { RIDES_CONST } from '../../../utilities/routes';
+import {RIDES_CONST} from '../../../utilities/routes';
 
 function index(props) {
   const filterModalRef = useRef(null);
@@ -38,7 +38,7 @@ function index(props) {
   const [ridetype, setRideType] = useState('');
   const [status, setStatus] = useState('');
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
-  const { recurring_ride, availableSeats } = useSelector(state => state.map);
+  const {recurring_ride, availableSeats} = useSelector(state => state.map);
   const [isLoading, setisLoading] = useState(false);
   const [multiDelete, setmultiDelete] = useState(false);
   const [selectedCard, setSelectedCard] = useState([]);
@@ -139,19 +139,19 @@ function index(props) {
     if (permission) {
       Geolocation.getCurrentPosition(
         position => {
-          const { latitude, longitude } = position?.coords;
+          const {latitude, longitude} = position?.coords;
           Geocoder.from(latitude, longitude)
             .then(json => {
               var addressComponent = json.results[0]?.formatted_address;
               dispatch(
                 setOrigin({
-                  location: { lat: latitude, lng: longitude },
+                  location: {lat: latitude, lng: longitude},
                   description: addressComponent,
                 }),
               );
               dispatch(
                 setReturnMapDestination({
-                  location: { lat: latitude, lng: longitude },
+                  location: {lat: latitude, lng: longitude},
                   description: addressComponent,
                 }),
               );
@@ -165,7 +165,7 @@ function index(props) {
           // See error code charts below.
           console.log(error.code, error.message);
         },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     } else {
       Alert.alert('Error', 'Location Permission Denied', [
@@ -244,7 +244,7 @@ function index(props) {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+      <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
         <CustomHeader
           onPressbtnImage={() => sortModalRef.current.open()}
           onPressbtnImage1={() => filterModalRef.current.open()}
@@ -254,13 +254,13 @@ function index(props) {
           navigation={props?.navigation}
           backButton={true}
         />
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           {recurring_ride != '' ? (
             <FlatList
-              style={{ height: '80%' }}
+              style={{height: '80%'}}
               showsVerticalScrollIndicator={false}
               data={recurring_ride}
-              renderItem={({ item }) => {
+              renderItem={({item}) => {
                 return (
                   <RecurringRideCard
                     multiDelete={multiDelete}

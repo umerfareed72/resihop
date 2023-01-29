@@ -47,12 +47,31 @@ const index = ({navigation}) => {
   const rides = useSelector(state => state.map);
   const [loading, setloading] = useState(false);
   const dispatch = useDispatch(null);
-  const selectTime = val => {
-    settime(val);
-  };
-  const selectRideStatus = val => {
-    setStatus(val);
-  };
+  const sortRideritems = [
+    {
+      id: 1,
+      title: I18n.t('sort_by_date_as'),
+      value: 'tripDate:asc',
+    },
+    {
+      id: 2,
+      title: I18n.t('sort_by_date_ds'),
+
+      value: 'tripDate:desc',
+    },
+    {
+      id: 3,
+      title: I18n.t('sort_by_date_ao'),
+      value: 'destDes:asc',
+    },
+    {
+      id: 4,
+      title: I18n.t('sort_by_date_oa'),
+      value: 'destDes:desc',
+    },
+  ];
+
+
 
   const selectRideType = val => {
     setRideType(val);
@@ -169,7 +188,7 @@ const index = ({navigation}) => {
           sortModalRef.current.close();
         }}
       />
-      <SortModal show={sortModalRef} onPress={getRidesByOrder} />
+      <SortModal show={sortModalRef} onPress={getRidesByOrder}  sortItems={sortRideritems}/>
       {loading ? <Loader /> : null}
     </>
   );

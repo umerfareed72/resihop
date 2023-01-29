@@ -62,9 +62,33 @@ const index = ({navigation}) => {
   const drives = useSelector(state => state.map);
   const dispatch = useDispatch(null);
   const isFocus = useIsFocused();
-  const selectTime = val => {
-    settime(val);
-  };
+  const sortItemsDriver = [
+    {
+      id: 1,
+      title: I18n.t('sort_by_date_as'),
+  
+      value: 'date:asc',
+    },
+    {
+      id: 2,
+      title: I18n.t('sort_by_date_ds'),
+  
+      value: 'date:desc',
+    },
+    {
+      id: 3,
+      title: I18n.t('sort_by_date_ao'),
+  
+      value: 'destDes:asc',
+    },
+    {
+      id: 4,
+      title: I18n.t('sort_by_date_oa'),
+      value: 'destDes:desc',
+    },
+  ];
+  
+
   const selectRideType = val => {
     setRideType(val);
   };
@@ -167,7 +191,7 @@ const index = ({navigation}) => {
           sortModalRef.current.close();
         }}
       />
-      <SortModal show={sortModalRef} onPress={getRidesByOrder} />
+      <SortModal sortItems={sortItemsDriver} show={sortModalRef} onPress={getRidesByOrder} />
       {isLoading ? <Loader /> : false}
     </>
   );
