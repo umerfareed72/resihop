@@ -1,42 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+import React, {useEffect, useState} from 'react';
+import {Linking, Text, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import {useDispatch} from 'react-redux';
 import {
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-  Dimensions,
-  Linking,
-} from 'react-native';
-import {
-  AddWalletModal,
-  BankCard,
   CustomHeader,
-  Header,
-  PaymentButtons,
-  PaymentCard,
-  PaymentHistory,
   Loader,
-  BlankField,
+  PaymentButtons,
+  PaymentHistory,
 } from '../../../components';
+import {check_driver_registered} from '../../../redux/actions/payment.action';
+import {post} from '../../../services';
+import {appIcons, colors, header} from '../../../utilities';
+import {LinkHelper} from '../../../utilities/helpers/LinkHelper';
 import I18n from '../../../utilities/translations';
 import styles from './styles';
-import { appIcons, checkConnected, colors, header } from '../../../utilities';
-import { useIsFocused } from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-import { createToken, confirmPayment } from '@stripe/stripe-react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  add_stripe_card,
-  checkout_current_card,
-  check_driver_registered,
-  get_card_list,
-  move_from_drawer,
-  save_current_card,
-} from '../../../redux/actions/payment.action';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
-import { LinkHelper } from '../../../utilities/helpers/LinkHelper';
-import { post } from '../../../services';
-const index = ({ navigation, route }) => {
+const index = ({navigation, route}) => {
   const [cardScreen, setCardScreen] = useState(false);
 
   const [cardDetail, setcardDetail] = useState('');
@@ -117,7 +96,6 @@ const index = ({ navigation, route }) => {
         title={I18n.t('my_payment_method')}
         backButton={true}
         navigation={navigation}
-
       />
       <KeyboardAwareScrollView style={styles.container}>
         <View style={styles.contentContainer}>
@@ -172,8 +150,8 @@ const index = ({ navigation, route }) => {
             />
           )}
           {checkAccount == 'inactive' || checkAccount == undefined ? (
-            <View style={{ paddingVertical: 30 }}>
-              <View style={{ paddingVertical: 20 }}>
+            <View style={{paddingVertical: 30}}>
+              <View style={{paddingVertical: 20}}>
                 <PaymentButtons
                   onPress={() => {
                     create_Connected_Account();
@@ -185,7 +163,7 @@ const index = ({ navigation, route }) => {
               </View>
             </View>
           ) : (
-            <Text style={{ textAlign: 'center', fontSize: 18, marginTop: 30 }}>
+            <Text style={{textAlign: 'center', fontSize: 18, marginTop: 30}}>
               Hurry! You have successfully added your payout account.
             </Text>
           )}

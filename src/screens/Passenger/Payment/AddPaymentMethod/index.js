@@ -1,24 +1,34 @@
-import { useIsFocused } from '@react-navigation/native';
-import { confirmPayment, createToken } from '@stripe/stripe-react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import {confirmPayment, createToken} from '@stripe/stripe-react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  Alert, Dimensions, FlatList, Image, Text,
+  Alert,
+  Dimensions,
+  FlatList,
+  Image,
+  Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-import { useDispatch, useSelector } from 'react-redux';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   AddWalletModal,
-  BankCard, BlankField, CustomHeader, Loader, PaymentButtons, PaymentHistory
+  BankCard,
+  BlankField,
+  CustomHeader,
+  Loader,
+  PaymentButtons,
+  PaymentHistory,
 } from '../../../../components';
-import { BookRide } from '../../../../redux/actions/map.actions';
+import {BookRide} from '../../../../redux/actions/map.actions';
 import {
   add_stripe_card,
   checkout_current_card,
-  get_card_list, save_current_card
+  get_card_list,
+  save_current_card,
 } from '../../../../redux/actions/payment.action';
-import { appIcons, checkConnected, colors } from '../../../../utilities';
+import {appIcons, checkConnected, colors} from '../../../../utilities';
 import I18n from '../../../../utilities/translations';
 import AddCard from './AddCard';
 import styles from './style';
@@ -45,7 +55,7 @@ const index = ({navigation, route}) => {
     state => state.map.createRideRequestResponse,
   );
   const dispatch = useDispatch(null);
-  
+
   //onpress
   const onPressModalButton = () => {
     if (paymentSuccess) {

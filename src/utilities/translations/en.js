@@ -107,8 +107,7 @@ export default {
 
   city_to_city: 'City to city ride',
   upcoming_rides: 'My Upcoming rides',
-  lorem:
-    '',
+  lorem: '',
   first_ride: 'Create your First Ride',
   success_payment: 'Transaction Successful!',
   failed_payment: 'Your amount exceeds Balance',
@@ -362,7 +361,7 @@ export default {
   no_driver: 'Currently no more drivers available',
   message: 'Message',
   //
-  ride_delete_h2: 'do you want to cancel Ride?',
+  ride_delete_h2: 'Do you want to cancel Ride?',
   ride_delete_h1: 'Cancel',
   drive_delete_h2: 'Do you want to cancel Drive?',
 
@@ -426,5 +425,5 @@ export default {
   confirmation: 'Confirmation',
   ask: 'Do you want to delete account?',
   success: 'Success',
-  deleted_profile: 'Profile deleted successfully'
+  deleted_profile: 'Profile deleted successfully',
 };

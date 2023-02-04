@@ -64,16 +64,14 @@ function index(props) {
   const acr = 'urn:grn:authn:se:bankid:same-device';
 
   useEffect(() => {
-    AppState.addEventListener('change', handleChange);  
-  
+    AppState.addEventListener('change', handleChange);
     return () => {
-      AppState.removeEventListener('change', handleChange);  
-    }
+      AppState.removeEventListener('change', handleChange);
+    };
   }, []);
-  
-  
-  const handleChange = async(newState) => {
-    if (newState === "active") {
+
+  const handleChange = async newState => {
+    if (newState === 'active') {
       if (acr === 'urn:grn:authn:se:bankid:same-device') {
         const result = await fetch(bank_url?.current).then(response => {
           return response;
@@ -88,8 +86,8 @@ function index(props) {
         setIsLoading(false);
       }
     }
-  }
-  
+  };
+
   const openBankId = async () => {
     try {
       const result = await axios.get(
@@ -117,7 +115,7 @@ function index(props) {
   //Get Latest Car Detail
   const getVahicleDetail = () => {
     if (licencePlateNumber != '') {
-      console.log(licencePlateNumber);
+      Keyboard.dismiss();
       const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
       setIsLoading(true);
       axios

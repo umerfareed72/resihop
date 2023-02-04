@@ -59,7 +59,7 @@ function VehicleInformation(props) {
   //Get Latest Car Detail
   const getVahicleDetail = () => {
     if (licencePlateNumber != '') {
-      console.log(licencePlateNumber);
+      Keyboard.dismiss();
       const url = `https://www.regcheck.org.uk/api/reg.asmx/CheckNorway?RegistrationNumber=${licencePlateNumber}&username=Lillaskuggan`;
       setIsLoading(true);
       axios

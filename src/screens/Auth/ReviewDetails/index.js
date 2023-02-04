@@ -1,61 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import {Alert} from 'react-native';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import {CustomHeader, Loader} from '../../../components';
-import {post} from '../../../services';
 import {theme} from '../../../theme';
-import {colors, header} from '../../../utilities';
 import I18n from '../../../utilities/translations';
 function index(props) {
-  const [info, setInfo] = useState([
-    {
-      id: 6,
-      fieldName: 'Preset cost for each passenger',
-      fieldValue: 'NOK 20',
-    },
-  ]);
   const [isLoading, setIsLoading] = useState(false);
   const userid = useSelector(state => state.auth?.userdata?.user?._id);
   const {plateNumber, CarMake, CarModel, Colour, EngineSize, PresetCost} =
     props?.route?.params;
-  //Add vehicle info
-  const addVehicelInfo = async () => {
-    setIsLoading(true);
-    const requestBody = {
-      user: userid,
-      color: Colour,
-      licencePlateNumber: plateNumber,
-      vehicleModelName: CarModel,
-      vehicleCompanyName: CarMake,
-      CO2Emissions: EngineSize,
-      presetCostPerPassenger: PresetCost,
-      // bankID: bankdIdToken,
-    };
-    try {
-      const response = await post(`vehicles`, requestBody, await header());
-      if (response?.data) {
-        setIsLoading(false);
-        Alert.alert(
-          'Success',
-          I18n.t('vehicle_info_success'),
-          [
-            {
-              text: 'OK',
-              onPress: () => {
-                props?.navigation?.replace('ApprovalStatus');
-              },
-            },
-          ],
-          {cancelable: false},
-        );
-      }
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-    }
-  };
+
   return (
     <>
       <View style={{flex: 1, backgroundColor: 'white', margin: 5}}>
@@ -118,7 +73,9 @@ function index(props) {
               }}>
               <Button
                 title={I18n.t('ok')}
-                onPress={() => addVehicelInfo()}
+                onPress={() => {
+                  props?.navigation?.goBack();
+                }}
                 buttonStyle={[theme.Button.buttonStyle]}
                 disabled={PresetCost != null && CarMake != '' ? false : true}
                 titleStyle={[theme.Button.titleStyle, {fontSize: 13}]}
@@ -126,30 +83,6 @@ function index(props) {
                 containerStyle={{
                   width: '90%',
                   alignSelf: 'center',
-                }}
-              />
-              <Button
-                title={I18n.t('edit')}
-                onPress={() => {
-                  props.navigation.navigate('VahicleInformation');
-                }}
-                buttonStyle={[
-                  theme.Button.buttonStyle,
-                  {
-                    backgroundColor: 'white',
-                    borderColor: colors.primary,
-                    borderWidth: 1,
-                  },
-                ]}
-                titleStyle={[
-                  theme.Button.titleStyle,
-                  {fontSize: 15, color: 'black'},
-                ]}
-                disabledTitleStyle={theme.Button.disabledTitleStyle}
-                containerStyle={{
-                  width: '90%',
-                  alignSelf: 'center',
-                  marginTop: '10%',
                 }}
               />
             </View>

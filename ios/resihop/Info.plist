@@ -48,7 +48,7 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<string/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -101,6 +101,7 @@
 		<string>ProductSans-Bold.ttf</string>
 		<string>ProductSans-Regular.ttf</string>
 		<string>BebasNeue Bold.ttf</string>
+		<string>BebasNeue-Regular.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

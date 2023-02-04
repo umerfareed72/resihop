@@ -1,33 +1,24 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 import React, {useEffect} from 'react';
-import {
-  View,
-  Image,
-  StyleSheet,
-  Alert,
-  Text,
-  PermissionsAndroid,
-} from 'react-native';
+import {Alert, Image, StyleSheet, Text, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import MyStatusBar from '../../components/Header/statusBar';
+import {isVehcile} from '../../redux/actions/auth.action';
 import {
   appImages,
   colors,
   LocalNotification,
   Notification_Listner,
-  options,
   registerAppWithFCM,
   requestPermission,
 } from '../../utilities';
 import I18n from '../../utilities/translations';
-import MyStatusBar from '../../components/Header/statusBar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
-import messaging from '@react-native-firebase/messaging';
-import {isVehcile} from '../../redux/actions/auth.action';
 
 function splash(props) {
   //Rdux States
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth);
-  console.log('Auth---', auth?.userdata);
   //Component Did Mount
   useEffect(() => {
     handleNavigation();
@@ -63,7 +54,7 @@ function splash(props) {
             auth?.userInfo?.type === 'PASSENGER' ||
             auth?.userdata?.user?.type === 'PASSENGER'
           ) {
-            props?.navigation.replace('PassengerDashboard');
+            props?.navigation.replace('VehicleStack');
           } else {
             if (auth?.profile_info?.vehicle) {
               props?.navigation.replace('DriverDashboard');

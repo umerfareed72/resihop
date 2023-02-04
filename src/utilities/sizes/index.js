@@ -27,4 +27,5 @@ export const size = {
 export const family = {
   product_sans_bold: 'ProductSans-Bold',
   product_sans_regular: 'ProductSans-Regular',
+  base_nue_regular: 'BebasNeue-Regular',
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   PermissionsAndroid,
@@ -9,14 +9,14 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import Geolocation, {
   getCurrentPosition,
 } from 'react-native-geolocation-service';
-import { appImages, colors, appIcons, profileIcon } from '../../utilities';
+import {appImages, colors, appIcons, profileIcon} from '../../utilities';
 
 import MapViewDirections from 'react-native-maps-directions';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {
   CreateDriveRequest,
   setDistanceAndTime,
@@ -39,10 +39,10 @@ import {
   OfferReturnDriveCard,
   PickUpInfoCard,
 } from '../../components';
-import { useNavigation } from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/core';
 import Geocoder from 'react-native-geocoding';
-import { check_driver_registered } from '../../redux/actions/payment.action';
-import { Linking } from 'react-native';
+import {check_driver_registered} from '../../redux/actions/payment.action';
+import {Linking} from 'react-native';
 
 export const MapViewComponent = ({
   rideModals,
@@ -196,7 +196,7 @@ export const MapViewComponent = ({
           error => {
             console.log(error.code, error.message);
           },
-          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
         );
       }
     } catch (error) {
@@ -243,8 +243,8 @@ export const MapViewComponent = ({
             style
               ? style
               : height
-                ? { height: height, ...StyleSheet.absoluteFillObject }
-                : { ...StyleSheet.absoluteFillObject }
+              ? {height: height, ...StyleSheet.absoluteFillObject}
+              : {...StyleSheet.absoluteFillObject}
           }>
           <Marker
             identifier="currentPosition"
@@ -340,7 +340,6 @@ export const MapViewComponent = ({
         }),
       );
 
-
       return () => {
         dispatch(setRoutes(null));
         dispatch(setReturnRide(null));
@@ -378,7 +377,10 @@ export const MapViewComponent = ({
                 if (response?.message) {
                   Alert.alert('Error', response?.message);
                 } else {
-                  Alert.alert('Error', response?.message[0]?.messages[0]?.message);
+                  Alert.alert(
+                    'Error',
+                    response?.message[0]?.messages[0]?.message,
+                  );
                 }
               } else {
                 if (returnRide) {
@@ -394,20 +396,24 @@ export const MapViewComponent = ({
                     destDes: returnRide?.destDes,
                   };
                   dispatch(
-                    CreateDriveRequest(returnBody, setIsLoading, async response => {
-                      if (response?.error) {
-                        if (response?.message) {
-                          Alert.alert('Error', response?.message);
+                    CreateDriveRequest(
+                      returnBody,
+                      setIsLoading,
+                      async response => {
+                        if (response?.error) {
+                          if (response?.message) {
+                            Alert.alert('Error', response?.message);
+                          } else {
+                            Alert.alert(
+                              'Error',
+                              response?.message[0]?.messages[0]?.message,
+                            );
+                          }
                         } else {
-                          Alert.alert(
-                            'Error',
-                            response?.message[0]?.messages[0]?.message,
-                          );
+                          navigation.navigate('DriverHome');
                         }
-                      } else {
-                        navigation.navigate('DriverHome');
-                      }
-                    }),
+                      },
+                    ),
                   );
                 } else {
                   navigation.navigate('DriverHome');
@@ -415,12 +421,7 @@ export const MapViewComponent = ({
               }
             }),
           );
-
-
-
         }
-
-
       }),
     );
   };
@@ -433,7 +434,7 @@ export const MapViewComponent = ({
         var addressComponent = json.results[0]?.formatted_address;
         dispatch(
           setOrigin({
-            location: { lat: coords.latitude, lng: coords.longitude },
+            location: {lat: coords.latitude, lng: coords.longitude},
             description: addressComponent,
           }),
         );
@@ -446,7 +447,7 @@ export const MapViewComponent = ({
 
   //onPress Passenger
   const onPressPassenger = async (lat, lng, address) => {
-    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+    const scheme = Platform.select({ios: 'maps:0,0?q=', android: 'geo:0,0?q='});
     const latLng = `${lat},${lng}`;
     const label = address;
     const url = Platform.select({
@@ -477,8 +478,8 @@ export const MapViewComponent = ({
           style
             ? style
             : height
-              ? { height: height, ...StyleSheet.absoluteFillObject }
-              : { ...StyleSheet.absoluteFillObject }
+            ? {height: height, ...StyleSheet.absoluteFillObject}
+            : {...StyleSheet.absoluteFillObject}
         }>
         {origin && destination && !routes?.selectedRoutes && (
           <MapViewDirections
@@ -581,65 +582,66 @@ export const MapViewComponent = ({
 
         {searchRideResponse !== null && searchRideResponse?.length > 0
           ? searchRideResponse?.map(ride => {
-            return (
-              <Marker
-                onPress={() => {
-                  onPressPassenger(
-                    ride?.startLat,
-                    ride?.startLng,
-                    ride?.startDes,
-                  );
-                }}
-                identifier="ride"
-                coordinate={{
-                  latitude: ride.startLat,
-                  longitude: ride.startLng,
-                }}>
-                <View style={styles.rideImageCon}>
-                  <Image
-                    style={styles.rideImage}
-                    source={{
-                      uri: ride?.user?.picture?.url || profileIcon,
-                    }}
-                  />
-                </View>
-              </Marker>
-            );
-          })
+              return (
+                <Marker
+                  onPress={() => {
+                    onPressPassenger(
+                      ride?.startLat,
+                      ride?.startLng,
+                      ride?.startDes,
+                    );
+                  }}
+                  identifier="ride"
+                  coordinate={{
+                    latitude: ride.startLat,
+                    longitude: ride.startLng,
+                  }}>
+                  <View style={styles.rideImageCon}>
+                    <Image
+                      style={styles.rideImage}
+                      source={{
+                        uri: ride?.user?.picture?.url || profileIcon,
+                      }}
+                    />
+                  </View>
+                </Marker>
+              );
+            })
           : null}
 
         {/* Search Driver List */}
         {searchDrivesResponse !== null && searchDrivesResponse?.length > 0
           ? searchDrivesResponse.map(driver => (
-            <Marker
-              identifier="driver"
-              coordinate={{
-                latitude: driver?.drive?.startLocation?.latitude,
-                longitude: driver?.drive?.startLocation?.longitude,
-              }}
-              onPress={() => {
-                zoomToDriver(driver);
-                dispatch(SetNearestDriver(driver));
-              }}>
-              <View
-                style={[
-                  styles.driverCard,
-                  {
-                    backgroundColor:
-                      parseInt(driver.distance * 111 * 1000) === minDistance
-                        ? colors.green
-                        : colors.blue,
-                    display:
-                      driver.distance * 111 * 1000 < walkingDistance
-                        ? 'flex'
-                        : 'none',
-                  },
-                ]}>
-                <Text style={styles.driverTxt}>{`${driver.drive.costPerSeat
+              <Marker
+                identifier="driver"
+                coordinate={{
+                  latitude: driver?.drive?.startLocation?.latitude,
+                  longitude: driver?.drive?.startLocation?.longitude,
+                }}
+                onPress={() => {
+                  zoomToDriver(driver);
+                  dispatch(SetNearestDriver(driver));
+                }}>
+                <View
+                  style={[
+                    styles.driverCard,
+                    {
+                      backgroundColor:
+                        parseInt(driver.distance * 111 * 1000) === minDistance
+                          ? colors.green
+                          : colors.blue,
+                      display:
+                        driver.distance * 111 * 1000 < walkingDistance
+                          ? 'flex'
+                          : 'none',
+                    },
+                  ]}>
+                  <Text style={styles.driverTxt}>{`${
+                    driver.drive.costPerSeat
                   } NOk | ${parseInt(driver.distance * 111 * 1000)} M`}</Text>
-              </View>
-            </Marker>
-          ))
+                </View>
+              </Marker>
+            ))
           : null}
       </MapView>
 

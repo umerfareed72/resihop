@@ -34,7 +34,7 @@ export const fonts = {
   regular:
     Platform.OS === 'ios' ? 'ProductSans-regular' : 'product_sans_regular',
   bold: Platform.OS === 'ios' ? 'ProductSans-bold' : 'product_sans_bold',
-  bebasBold: Platform.OS === 'ios' ? 'Bebas Neue Bold' : 'BebasNeue Bold',
+  bebasBold: Platform.OS === 'ios' ? 'BebasNeue-Regular' : 'BebasNeue-Regular',
 };
 
 export const theme = {
@@ -216,7 +216,6 @@ export const theme = {
     inputErrorContainerStyle: {
       borderBottomColor: 'rgba(0, 0, 0,0.3) ',
       paddingVertical: Platform.OS === 'android' ? 0 : 10,
-    
     },
     selectionColor: colors.primary,
     containerStyle: {
