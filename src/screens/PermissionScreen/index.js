@@ -58,9 +58,7 @@ function index({navigation}) {
           <Text style={[theme.Text.h1Bold, styles.heading]}>
             {I18n.t('welcome_to_resihop_msg')}
           </Text>
-          <Text style={[theme.Text.h4Normal, styles.sayingText]}>
-            {I18n.t('lorum_epsom2')}
-          </Text>
+          <Text style={[theme.Text.h4Normal, styles.sayingText]}></Text>
         </View>
         <View style={styles.permissionContainer}>
           {permissions.map(item => {
