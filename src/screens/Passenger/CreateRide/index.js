@@ -159,10 +159,11 @@ const index = props => {
       dispatch(
         CreateRideRequest(body, setIsLoading, toggleEnabled, response => {
           if (response.error) {
-            console.log(response?.message);
             Alert.alert(
               'Error',
-              response?.message || response?.message[0]?.messages[0]?.message,
+              Array.isArray(response?.message)
+                ? response?.message[0]?.messages[0]?.message
+                : response?.message,
             );
           } else {
             navigation.navigate('StartMatching', {

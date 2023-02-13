@@ -1,49 +1,72 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
+  FlatList,
+  Image,
+  Linking,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import HamburgerMenu from 'react-native-vector-icons/Entypo';
 import Bell from 'react-native-vector-icons/FontAwesome';
 import {
-  BlankTrip, CancelRideModal,
-  Loader, RideFilterModal,
-  SortModal, UpcomingRideCards
+  BlankTrip,
+  CancelRideModal,
+  Loader,
+  RideFilterModal,
+  SortModal,
+  UpcomingRideCards,
 } from '../../../components';
 import MyStatusBar from '../../../components/Header/statusBar';
-import { fonts } from '../../../theme';
+import {fonts} from '../../../theme';
 import {
-  appIcons, colors, family, header, requestPermission, sortRideritems
+  appIcons,
+  colors,
+  family,
+  header,
+  requestPermission,
+  sortRideritems,
 } from '../../../utilities';
 import I18n from '../../../utilities/translations';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import { useIsFocused } from '@react-navigation/native';
-import { Alert } from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
+import {Alert} from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
 import PushNotification from 'react-native-push-notification';
-import { useDispatch, useSelector } from 'react-redux';
-import { Call_Status } from '../../../redux/actions/app.action';
+import {useDispatch, useSelector} from 'react-redux';
+import {Call_Status} from '../../../redux/actions/app.action';
 import {
   getProfileInfo,
   getUserInfo,
   SwitchDrive,
-  updateInfo
+  updateInfo,
 } from '../../../redux/actions/auth.action';
 import {
-  get_settings, MyRidesFiltering, MyRidesSortOrder, SearchDrives,
-  SearchRides, setAvailableSeats, setCity, setMapDestination, setOrigin, setReturnMapDestination
+  get_settings,
+  MyRidesFiltering,
+  MyRidesSortOrder,
+  SearchDrives,
+  SearchRides,
+  setAvailableSeats,
+  setCity,
+  setMapDestination,
+  setOrigin,
+  setReturnMapDestination,
 } from '../../../redux/actions/map.actions';
-import { move_from_drawer } from '../../../redux/actions/payment.action';
+import {move_from_drawer} from '../../../redux/actions/payment.action';
 import mapTypes from '../../../redux/types/map.types';
-import { post } from '../../../services';
-import { checkAppPermission } from '../../../utilities/helpers/permissions';
-import { RIDES_CONST } from '../../../utilities/routes';
+import {post} from '../../../services';
+import {checkAppPermission} from '../../../utilities/helpers/permissions';
+import {RIDES_CONST} from '../../../utilities/routes';
 
 //Data
 
-const PassengerHome = ({ navigation }) => {
+const PassengerHome = ({navigation}) => {
   let dispatch = useDispatch();
   let isFocused = useIsFocused();
   const filterModalRef = useRef(null);
@@ -54,11 +77,10 @@ const PassengerHome = ({ navigation }) => {
   const [seats, setSeats] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [selectedCard, setSelectedCard] = useState([]);
   const auth = useSelector(state => state.auth);
-  const { myRidesData, availableSeats } = useSelector(state => state.map);
+  const {myRidesData, availableSeats} = useSelector(state => state.map);
   const userId = useSelector(state => state.auth?.userdata?.user?.id);
   const [multiDelete, setmultiDelete] = useState(false);
   const [isLoading, setisLoading] = useState(false);
-
 
   const sortRideritems = [
     {
@@ -102,7 +124,7 @@ const PassengerHome = ({ navigation }) => {
             );
           }
           if (notification?.notification?.title == 'Agora Call Accept') {
-            dispatch(Call_Status('answered', () => { }));
+            dispatch(Call_Status('answered', () => {}));
           }
           if (notification?.notification?.title == 'Agora Call Reject') {
             dispatch(
@@ -130,7 +152,7 @@ const PassengerHome = ({ navigation }) => {
     if (isFocused) {
       getRides();
       getUserdata();
-      dispatch(move_from_drawer(true, () => { }));
+      dispatch(move_from_drawer(true, () => {}));
       dispatch(get_settings());
     }
     return () => {
@@ -155,19 +177,19 @@ const PassengerHome = ({ navigation }) => {
     if (permission) {
       Geolocation.getCurrentPosition(
         position => {
-          const { latitude, longitude } = position?.coords;
+          const {latitude, longitude} = position?.coords;
           Geocoder.from(latitude, longitude)
             .then(json => {
               var addressComponent = json.results[0]?.formatted_address;
               dispatch(
                 setOrigin({
-                  location: { lat: latitude, lng: longitude },
+                  location: {lat: latitude, lng: longitude},
                   description: addressComponent,
                 }),
               );
               dispatch(
                 setReturnMapDestination({
-                  location: { lat: latitude, lng: longitude },
+                  location: {lat: latitude, lng: longitude},
                   description: addressComponent,
                 }),
               );
@@ -184,7 +206,7 @@ const PassengerHome = ({ navigation }) => {
           // See error code charts below.
           console.log(error.code, error.message);
         },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     } else {
       setisLoading(false);
@@ -225,7 +247,6 @@ const PassengerHome = ({ navigation }) => {
   };
 
   const resetFilter = () => {
-    setdate('');
     setRideType('');
     dispatch(setAvailableSeats(0));
     setStatus('');
@@ -253,7 +274,7 @@ const PassengerHome = ({ navigation }) => {
     if (item?.status === 'DISPUTED') {
     } else if (item?.status === 'COMPLETED' && item?.rated_drive) {
     } else {
-      navigation.navigate('RideStatus', { item: item });
+      navigation.navigate('RideStatus', {item: item});
     }
   };
 
@@ -395,7 +416,7 @@ const PassengerHome = ({ navigation }) => {
                 style={styles.cardInterior}
                 resizeMode="contain"
               />
-              <Text style={[styles.cardTxt, { marginTop: 14 }]}>
+              <Text style={[styles.cardTxt, {marginTop: 14}]}>
                 {I18n.t('create_ride')}
               </Text>
             </View>
@@ -472,7 +493,7 @@ const PassengerHome = ({ navigation }) => {
               data={myRidesData}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <UpcomingRideCards
                   multiDelete={multiDelete}
                   item={item}
@@ -508,7 +529,11 @@ const PassengerHome = ({ navigation }) => {
           onApplyFilter();
         }}
       />
-      <SortModal sortItems={sortRideritems} show={sortModalRef} onPress={getRidesByOrder} />
+      <SortModal
+        sortItems={sortRideritems}
+        show={sortModalRef}
+        onPress={getRidesByOrder}
+      />
       {multiDelete && (
         <CancelRideModal
           onPressCancel={() => {
