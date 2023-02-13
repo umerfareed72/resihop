@@ -1,58 +1,57 @@
-import React, {useState, useRef, useEffect} from 'react';
+import {useNavigation} from '@react-navigation/core';
+import moment from 'moment';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
   Alert,
+  Image,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {useDispatch, useSelector} from 'react-redux';
+import ToggleSwitch from 'toggle-switch-react-native';
 import {
-  colors,
-  appIcons,
+  AppButton,
+  CalendarSheet,
+  ChooseRide,
+  CustomHeader,
+  DateTimePickerCard,
+  Loader,
+  LocationInput,
+  ReturnCalendarSheet,
+  ReturnDateTimerPicker,
+  ReturnLocationInput,
+} from '../../../components';
+import {
+  CreateRideRequest,
+  setAvailableSeats,
+  setDateTimeStamp,
+  SetDriversResponse,
+  setMapDestination,
+  setMapSegment,
+  setOrigin,
+  setRecurringDates,
+  setReturnDateTimeStamp,
+  setReturnFirstTime,
+  setReturnMapDestination,
+  setReturnOrigin,
+  setReturnRecurringDates,
+  setTime,
+} from '../../../redux/actions/map.actions';
+import {
   appImages,
+  colors,
   dateConvertor,
   recurringDateConvertor,
   returnDateConvertor,
   returnRecurringDateConvertor,
 } from '../../../utilities';
-import {useNavigation} from '@react-navigation/core';
-import ToggleSwitch from 'toggle-switch-react-native';
-import FavouriteLocations from '../../FavouriteLocations';
-import {
-  CustomHeader,
-  Loader,
-  CalendarSheet,
-  ReturnCalendarSheet,
-  ChooseRide,
-  AppButton,
-  LocationInput,
-  DateTimePickerCard,
-  ReturnLocationInput,
-  ReturnDateTimerPicker,
-} from '../../../components';
 import I18n from '../../../utilities/translations';
-import {useSelector, useDispatch} from 'react-redux';
-import {
-  setAvailableSeats,
-  setOrigin,
-  setMapDestination,
-  CreateRideRequest,
-  setDateTimeStamp,
-  setTime,
-  SetDriversResponse,
-  setReturnFirstTime,
-  setMapSegment,
-  setReturnOrigin,
-  setReturnMapDestination,
-  setRecurringDates,
-  setReturnRecurringDates,
-  setReturnDateTimeStamp,
-} from '../../../redux/actions/map.actions';
-import moment from 'moment';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import FavouriteLocations from '../../FavouriteLocations';
 import styles from './styles';
 const index = props => {
   let navigation = useNavigation();
