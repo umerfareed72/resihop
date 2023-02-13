@@ -138,7 +138,10 @@ const index = ({navigation, route}) => {
       amountPayable:
         bookRide?.drive?.costPerSeat * createRideRequest?.requiredSeats ||
         bookRide?.pool_match?.costPerSeat * bookRide?.requiredSeats,
-      driveID: bookRide?.drive?._id || createRideRequest?.drive?._id,
+      driveID:
+        bookRide?.drive?._id ||
+        createRideRequest?.drive?._id ||
+        bookRide?.pool_match?._id,
     };
     dispatch(
       checkout_current_card(requestBody, res => {

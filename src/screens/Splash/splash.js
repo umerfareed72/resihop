@@ -54,7 +54,7 @@ function splash(props) {
             auth?.userInfo?.type === 'PASSENGER' ||
             auth?.userdata?.user?.type === 'PASSENGER'
           ) {
-            props?.navigation.replace('VehicleStack');
+            props?.navigation.replace('PassengerDashboard');
           } else {
             if (auth?.profile_info?.vehicle) {
               props?.navigation.replace('DriverDashboard');
