@@ -1,17 +1,11 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  PermissionsAndroid,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {BottomSheet, Button, Text} from 'react-native-elements';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {Icon} from 'react-native-elements/dist/icons/Icon';
 import {theme} from '../../theme';
 import I18n from '../../utilities/translations';
-import {Alert} from 'react-native';
 const MediaPicker = ({show = false, onClosePress, onImageSelected}) => {
   const options = {
     mediaType: 'photo',
@@ -29,20 +23,13 @@ const MediaPicker = ({show = false, onClosePress, onImageSelected}) => {
 
   const onCameraPressed = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        launchCamera(options, response => {
-          if (response.assets !== undefined) {
-            return onImageSelected(response.assets[0]);
-          } else {
-            return undefined;
-          }
-        });
-      } else {
-        Alert.alert('Error', 'Camera permission denied!');
-      }
+      launchCamera(options, response => {
+        if (response.assets !== undefined) {
+          return onImageSelected(response.assets[0]);
+        } else {
+          return undefined;
+        }
+      });
     } catch (error) {
       console.log(error);
     }

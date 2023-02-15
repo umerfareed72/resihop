@@ -140,7 +140,7 @@ android {
         applicationId 'com.reactnative.resihop'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
+        versionCode 3
         versionName '1.0'
         multiDexEnabled true
         manifestPlaceholders = [auth0Domain: 'dev-49tni-0p.us.auth0.com', auth0Scheme: "${applicationId}"]
