@@ -1,4 +1,4 @@
-import React, { Component, useRef, useState } from 'react';
+import React, {Component, useRef, useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -7,18 +7,28 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { CustomHeader, RatingCardModal } from '../../../components';
-import { checkConnected, colors, family, header, HP, size, WP } from '../../../utilities';
+import {CustomHeader, RatingCardModal} from '../../../components';
+import {
+  checkConnected,
+  colors,
+  family,
+  header,
+  HP,
+  size,
+  WP,
+} from '../../../utilities';
 import I18n from '../../..//utilities/translations';
-import { Icon } from 'react-native-elements';
-import { useSelector } from 'react-redux';
+import {Icon} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
 import _delete from '../../../services/delete';
+import {logout} from '../../../redux/actions/auth.action';
 
-const Settings = ({ navigation }) => {
+const Settings = ({navigation}) => {
   const [rating, setRating] = useState(0);
   const [show, setShow] = useState(false);
-  const { userInfo } = useSelector(state => state?.auth)
-  const ItemsView = ({ data }) => {
+  const {userInfo} = useSelector(state => state?.auth);
+  const dispatch = useDispatch(null);
+  const ItemsView = ({data}) => {
     return (
       <TouchableOpacity onPress={data?.onPress}>
         <View style={styles.itemView}>
@@ -67,23 +77,23 @@ const Settings = ({ navigation }) => {
     {
       title: I18n.t('set_privacy'),
       onPress: () => navigation.navigate('Privacy'),
-
     },
     {
       title: I18n.t('delete_account'),
 
       onPress: () => {
-        Alert.alert(
-          I18n.t('confirmation'),
-          I18n.t('ask'),
-          [
-            { text: I18n.t('yes'), onPress: () => { deleteAccount() } },
-            {
-              text: I18n.t('no'),
-              onPress: () => console.log("Cancel Pressed"),
+        Alert.alert(I18n.t('confirmation'), I18n.t('ask'), [
+          {
+            text: I18n.t('yes'),
+            onPress: () => {
+              deleteAccount();
             },
-          ]
-        );
+          },
+          {
+            text: I18n.t('no'),
+            onPress: () => console.log('Cancel Pressed'),
+          },
+        ]);
       },
     },
     {
@@ -92,34 +102,40 @@ const Settings = ({ navigation }) => {
   ];
 
   const deleteAccount = async () => {
-    const check = await checkConnected()
+    const check = await checkConnected();
     if (check) {
       try {
-        const responseData = await _delete(`users/${userInfo?.id}`, await header());
+        const responseData = await _delete(
+          `users/${userInfo?.id}`,
+          await header(),
+        );
         if (responseData?.data) {
-          Alert.alert(I18n.t('success'), I18n.t('deleted_profile'), [{
-            text: I18n.t('ok'),
-            onPress: () => {
-              navigation.reset({
-                index: 0,
-                routes: [{ name: 'AuthStack' }],
-              });
-            }
-          }]
-          )
+          dispatch(
+            logout(() => {
+              Alert.alert(I18n.t('success'), I18n.t('deleted_profile'), [
+                {
+                  text: I18n.t('ok'),
+                  onPress: () => {
+                    navigation.reset({
+                      index: 0,
+                      routes: [{name: 'AuthStack'}],
+                    });
+                  },
+                },
+              ]);
+            }),
+          );
         }
       } catch (error) {
         navigation.reset({
           index: 0,
-          routes: [{ name: 'AuthStack' }],
+          routes: [{name: 'AuthStack'}],
         });
       }
-
     } else {
       Alert.alert('Error', 'Check Internet Connection!');
     }
-
-  }
+  };
   return (
     <>
       <CustomHeader

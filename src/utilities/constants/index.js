@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Dimensions, PermissionsAndroid } from 'react-native';
+import {Dimensions, PermissionsAndroid} from 'react-native';
 import * as Yup from 'yup';
 import I18n from '../translations';
 
@@ -9,7 +9,8 @@ export const Constants = {
 };
 export const publishableKey =
   'pk_test_51HHZGDJdTAy1qfYOtEFkP80hp1RLdpjqRZAwghVeUyCxLHbIidIHrev0Wbw68SWIBfMZqeQ13kGRxqX5wH1K1SAq00Adx0pMEc';
-export const prod_published_key = 'pk_live_51HHZGDJdTAy1qfYOxWfLP99zHThBLwAh54KzfcC7T680X1ubgCX9Bb7RrNXhkDZUWKlKAwUEBlmVFPXPccS92e2T00OrVVXd42'
+export const prod_published_key =
+  'pk_live_51HHZGDJdTAy1qfYOxWfLP99zHThBLwAh54KzfcC7T680X1ubgCX9Bb7RrNXhkDZUWKlKAwUEBlmVFPXPccS92e2T00OrVVXd42';
 export const appId = 'd7b355e2e491452a9a984bec7b87b43f';
 export let authHeader = {
   'Content-Type': 'application/json',
@@ -25,7 +26,7 @@ export let GetToken = async () => {
 };
 export let image_options = {
   title: 'Select Avatar',
-  customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+  customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
   storageOptions: {
     skipBackup: true,
     path: 'images',
@@ -97,15 +98,13 @@ export const CostFormSchema = Yup.object().shape({
   costPerSeat: Yup.number().required('Required'),
 });
 export const cost_list = [
-  { label: '20 NOK', value: 20 },
-  { label: '25 NOK', value: 25 },
-  { label: '30 NOK', value: 30 },
-  { label: '35 NOK', value: 35 },
-  { label: '40 NOK', value: 40 },
-  { label: '45 NOK', value: 45 },
-  { label: '50 NOK', value: 50 },
-  { label: '55 NOK', value: 55 },
-  { label: '60 NOK', value: 60 },
+  {label: '20 NOK', value: 20},
+  {label: '25 NOK', value: 25},
+  {label: '30 NOK', value: 30},
+  {label: '35 NOK', value: 35},
+  {label: '40 NOK', value: 40},
+  {label: '45 NOK', value: 45},
+  {label: '50 NOK', value: 50},
+  {label: '55 NOK', value: 55},
+  {label: '60 NOK', value: 60},
 ];
-
-
